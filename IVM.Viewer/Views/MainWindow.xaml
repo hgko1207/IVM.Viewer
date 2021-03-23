@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:IVM.Viewer"
         mc:Ignorable="d"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
@@ -13,13 +15,51 @@
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
     
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
         <Grid>
-            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <dxb:MainMenuControl Height="24" FontSize="14">
+                <dxb:BarSubItem Content="Folder">
+                    <dxb:BarButtonItem Content="Open Folder"/>
+                    <dxb:BarButtonItem Content="Set Folder"/>
+                </dxb:BarSubItem>
+            </dxb:MainMenuControl>
+
+            <dxg:GridControl Grid.Row="1" SelectionMode="Row">
+                <dxg:GridControl.View>
+                    <dxg:TableView AutoWidth="True"/>
+                </dxg:GridControl.View>
+
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn Header="#" FieldName=""/>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+
+            <dxg:GridControl Grid.Row="2" SelectionMode="Row" RenderOptions.EdgeMode="Aliased">
+                <dxg:GridControl.View>
+                    <dxg:TableView AutoWidth="True"/>
+                </dxg:GridControl.View>
+
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn Header="#" FieldName=""/>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="300"/>
+            </Grid.RowDefinitions>
         </Grid>
     </Grid>
 </dx:ThemedWindow>
