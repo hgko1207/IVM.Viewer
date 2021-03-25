@@ -43,6 +43,11 @@
         <Setter Property="NavigationStyle" Value="Row"/>
     </Style>
 
+    <Style TargetType="{x:Type dxg:BaseGridHeader}">
+        <Setter Property="Background" Value="#41454A" />
+        <Setter Property="Height" Value="30"/>
+    </Style>
+
     <Style TargetType="{x:Type dxg:GridColumn}">
         <Setter Property="HorizontalHeaderContentAlignment" Value="Center"/>
         <Setter Property="EditSettings">
@@ -51,42 +56,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-
-    <!-- Gradient Style -->
-    
-    <LinearGradientBrush x:Key="DisabledButtonBackground" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#FF40403E" Offset="0"/>
-        <GradientStop Color="#FF383936" Offset="0.65"/>
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="OrangeGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#FFC77421" Offset="0.2"/>
-        <GradientStop Color="#FFDC9044" Offset="0.5"/>
-        <GradientStop Color="#FFC77421" Offset="0.8"/>
-    </LinearGradientBrush>
-    
-
-    <!-- Button Style -->
-
-    <Style x:Key="ButtonBase" TargetType="dx:SimpleButton">
-        <Setter Property="CornerRadius" Value="4"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="#FF262626"/>
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{StaticResource DisabledButtonBackground}"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <Style x:Key="OrangeGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="Background" Value="{StaticResource OrangeGradientButtonBackground}"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource OrangeGradientActiveButtonBackground}"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
+   
 </ResourceDictionary>

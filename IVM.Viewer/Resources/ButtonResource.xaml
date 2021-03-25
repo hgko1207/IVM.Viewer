@@ -1,0 +1,117 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                    xmlns:local="clr-namespace:IVM.Viewer.Resources">
+
+    <!-- 색상 정의 -->
+    
+    <LinearGradientBrush x:Key="DisabledButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF40403E" Offset="0"/>
+        <GradientStop Color="#FF383936" Offset="0.65"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="BrownGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF6A3A22" Offset="0.2" />
+        <GradientStop Color="#FF9C5C2C" Offset="0.5" />
+        <GradientStop Color="#FF6A3A22" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BrownGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF9C5C2C" Offset="0.2" />
+        <GradientStop Color="#FF6A3A22" Offset="0.5" />
+        <GradientStop Color="#FF9C5C2C" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GrayGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF424340" Offset="0.2" />
+        <GradientStop Color="#FF4D4D4B" Offset="0.5" />
+        <GradientStop Color="#FF424340" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GrayGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF4D4D4B" Offset="0.2" />
+        <GradientStop Color="#FF424340" Offset="0.5" />
+        <GradientStop Color="#FF4D4D4B" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="RedGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF5E2322" Offset="0.2" />
+        <GradientStop Color="#FF973836" Offset="0.5" />
+        <GradientStop Color="#FF5E2322" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="RedGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF973836" Offset="0.2" />
+        <GradientStop Color="#FF5E2322" Offset="0.5" />
+        <GradientStop Color="#FF973836" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GreenGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF40602A" Offset="0.2" />
+        <GradientStop Color="#FF527E35" Offset="0.5" />
+        <GradientStop Color="#FF40602A" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GreenGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF527E35" Offset="0.2" />
+        <GradientStop Color="#FF40602A" Offset="0.5" />
+        <GradientStop Color="#FF527E35" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BlueGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF2A4779" Offset="0.2" />
+        <GradientStop Color="#FF305495" Offset="0.5" />
+        <GradientStop Color="#FF2A4779" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="BlueGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF305495" Offset="0.2" />
+        <GradientStop Color="#FF2A4779" Offset="0.5" />
+        <GradientStop Color="#FF305495" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="OrangeGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFC77421" Offset="0.2" />
+        <GradientStop Color="#FFDC9044" Offset="0.5" />
+        <GradientStop Color="#FFC77421" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="OrangeGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FFDC9044" Offset="0.2" />
+        <GradientStop Color="#FFC77421" Offset="0.5" />
+        <GradientStop Color="#FFDC9044" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PurpleGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF7937AB" Offset="0.2" />
+        <GradientStop Color="#FF9C55D3" Offset="0.5" />
+        <GradientStop Color="#FF7937AB" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PurpleGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF9C55D3" Offset="0.2" />
+        <GradientStop Color="#FF7937AB" Offset="0.5" />
+        <GradientStop Color="#FF9C55D3" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="LightGrayGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF6A6A6A" Offset="0.2" />
+        <GradientStop Color="#FF9B9B9B" Offset="0.5" />
+        <GradientStop Color="#FF6A6A6A" Offset="0.8" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="LightGrayGradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF9B9B9B" Offset="0.2" />
+        <GradientStop Color="#FF6A6A6A" Offset="0.5" />
+        <GradientStop Color="#FF9B9B9B" Offset="0.8" />
+    </LinearGradientBrush>
+
+
+    <!-- Button Style -->
+
+    <Style x:Key="ButtonBase" TargetType="dx:SimpleButton">
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#FF262626"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource DisabledButtonBackground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="OrangeGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="Background" Value="{StaticResource OrangeGradientButtonBackground}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource OrangeGradientActiveButtonBackground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>
