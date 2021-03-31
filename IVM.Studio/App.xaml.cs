@@ -1,4 +1,6 @@
-﻿using Prism.Ioc;
+﻿using IVM.Studio.Services;
+using IVM.Studio.Views;
+using Prism.Ioc;
 using Prism.Unity;
 using System.Windows;
 
@@ -21,6 +23,7 @@ namespace IVM.Studio
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterSingleton<FileService>();
         }
     }
 }
