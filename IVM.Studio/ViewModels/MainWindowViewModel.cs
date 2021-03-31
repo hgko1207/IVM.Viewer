@@ -1,7 +1,7 @@
-﻿using IVM.Viewer.MvvM;
+﻿using IVM.Studio.MvvM;
 using Unity;
 
-namespace IVM.Viewer.ViewModels
+namespace IVM.Studio.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {

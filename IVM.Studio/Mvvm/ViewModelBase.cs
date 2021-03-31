@@ -2,7 +2,7 @@
 using Prism.Mvvm;
 using Unity;
 
-namespace IVM.Viewer.MvvM
+namespace IVM.Studio.MvvM
 {
     public abstract class ViewModelBase : BindableBase
     {
