@@ -83,8 +83,8 @@
                         </dxdo:LayoutPanel>
                     </dxdo:LayoutGroup>
                 </dxdo:LayoutGroup>
-                    
-                <dxdo:LayoutPanel Caption="Image Sequence" ShowCaption="True" AllowClose="False" ItemWidth="800">
+
+                <dxdo:LayoutPanel Caption="Image Sequence" ShowCaption="True" AllowClose="False" AllowHide="False" ItemWidth="800">
 
                 </dxdo:LayoutPanel>
             </dxdo:LayoutGroup>
@@ -92,28 +92,128 @@
             <dxdo:LayoutPanel Caption="Image" ShowCaption="False" AllowClose="False" AllowHide="False"/>
 
             <dxdo:LayoutGroup Caption="LayoutGroup2">
-                <dxdo:LayoutPanel Caption="Annotation" AllowDrop="False" AllowDrag="False" AllowClose="False">
+                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
 
-                </dxdo:LayoutPanel>
-                
-                <dxdo:LayoutPanel Caption="Image Magnification" AllowDrop="False" AllowDrag="False" AllowClose="False">
+                        <StackPanel Margin="15">
+                            <TextBlock Text="Rotation" />
 
-                </dxdo:LayoutPanel>
+                            <StackPanel>
+                                
+                            </StackPanel>
+                            
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                <Button Content="Undo"/>
+                                <Button Content="Eodo" Margin="5 0 0 0"/>
+                            </StackPanel>
+                        </StackPanel>
 
-                <dxdo:LayoutPanel Caption="Scale Bar" AllowDrop="False" AllowDrag="False" AllowClose="False">
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="15 15" />
 
+                        <StackPanel Margin="15" Grid.Column="2">
+                            <TextBlock Text="Crop" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                                <Button Content="Crop"/>
+                                <Button Content="Undo" Margin="5 0 0 0"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="3" Margin="15 15" />
+
+                        <StackPanel Margin="15" Grid.Column="4">
+                            <TextBlock Text="Pen" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="5" Margin="15 15" />
+
+                        <StackPanel Margin="15" Grid.Column="6">
+                            <TextBlock Text="Eraser" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="7" Margin="15 15" />
+
+                        <StackPanel Margin="15" Grid.Column="8">
+                            <TextBlock Text="Text" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="9" Margin="15 15" />
+
+                        <StackPanel Margin="15" Grid.Column="10">
+                            <TextBlock Text="Image Magnification" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="11" Margin="15 15" />
+
+                        <StackPanel Margin="15" Grid.Column="12">
+                            <TextBlock Text="Scale Bar" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                <Button Content="Preview"/>
+                                <Button Content="Apply" Margin="5 0 0 0"/>
+                                <Button Content="Undo" Margin="5 0 0 0"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="13" Margin="15 15" />
+
+                        <StackPanel Margin="15" Grid.Column="14">
+                            <TextBlock Text="Mosaic Magnification" />
+
+                            <StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
                 </dxdo:LayoutPanel>
             </dxdo:LayoutGroup>
             <dxdo:LayoutGroup Caption="LayoutGroup3">
-                <dxdo:LayoutPanel Caption="Image Adjustment" ShowCaption="True" AllowDrop="True" AllowDrag="True" AllowClose="False">
+                <dxdo:LayoutPanel Caption="Image Adjustment" ShowCaption="True" AllowClose="False" AllowHide="False">
 
                 </dxdo:LayoutPanel>
 
-                <dxdo:LayoutPanel Caption="Display Adjustment" ShowCaption="True" AllowDrop="True" AllowDrag="True" AllowClose="False">
-
-                </dxdo:LayoutPanel>
-
-                <dxdo:LayoutPanel Caption="Processing" ShowCaption="True" AllowDrop="True" AllowDrag="True" AllowClose="False">
+                <dxdo:LayoutPanel Caption="Display Adjustment" ShowCaption="True" AllowClose="False" AllowHide="False">
 
                 </dxdo:LayoutPanel>
             </dxdo:LayoutGroup>

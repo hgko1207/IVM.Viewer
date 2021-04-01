@@ -81,6 +81,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\FolderInfo.cs" />
+    <Compile Include="Models\ImageSequence.cs" />
+    <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Services\FileService.cs" />
+    <Compile Include="Utils\CSVSerializableAttribute.cs" />
+    <Compile Include="Utils\ImageSequenceConverter.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
@@ -116,9 +122,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Images\ColorMap_Autumn.jpg" />
     <Resource Include="Resources\Images\ColorMap_Bone.jpg" />

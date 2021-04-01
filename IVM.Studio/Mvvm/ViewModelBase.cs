@@ -1,6 +1,6 @@
 ﻿using Prism.Events;
+using Prism.Ioc;
 using Prism.Mvvm;
-using Unity;
 
 namespace IVM.Studio.MvvM
 {
@@ -14,14 +14,14 @@ namespace IVM.Studio.MvvM
         }
 
         protected IEventAggregator EventAggregator { get; }
-        protected IUnityContainer Container { get; }
+        protected IContainerExtension Container { get; }
 
-        public ViewModelBase(IUnityContainer container)
+        public ViewModelBase(IContainerExtension container)
         {
             this.Container = Container;
         }
 
-        public ViewModelBase(IUnityContainer container, IEventAggregator eventAggregator)
+        public ViewModelBase(IContainerExtension container, IEventAggregator eventAggregator)
         {
             this.Container = Container;
             this.EventAggregator = eventAggregator;

@@ -1,29 +1,55 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.MvvM;
+using IVM.Studio.Services;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using Unity;
 
 namespace IVM.Studio.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<FolderInfo> folderInfoList;
         public ObservableCollection<FolderInfo> FolderInfoList => folderInfoList ?? (folderInfoList = new ObservableCollection<FolderInfo>());
+
+        private FolderInfo selectedFileInfo;
+        public FolderInfo SelectedFileInfo
+        {
+            get => selectedFileInfo;
+            set
+            {
+                if (SetProperty(ref selectedFileInfo, value) && value != null)
+                {
+                    //StopSlideshow();
+                    //EnableImageSliders(currentFolderPath, value.Name);
+                    //DisplaySlide(true);
+                }
+            }
+        }
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
 
         private string currentFolderPath;
 
-        public MainWindowViewModel()
+        private readonly IEnumerable<string> imageFileExtensions;
+        private readonly IEnumerable<string> videoFileExtensions;
+        private IEnumerable<string> extensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
+
+        public MainWindowViewModel(IContainerExtension container) : base(container)
         {
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
+
+            imageFileExtensions = new[] { ".ivm" };
+            videoFileExtensions = new[] { ".avi" };
         }
 
         /// <summary>
@@ -37,6 +63,8 @@ namespace IVM.Studio.ViewModels
 
             if (folderBrowserDialog.ShowDialog().GetValueOrDefault())
                 currentFolderPath = folderBrowserDialog.SelectedPath;
+
+            Refresh();
         }
 
         /// <summary>
@@ -56,7 +84,29 @@ namespace IVM.Studio.ViewModels
             bool first = true;
             foreach (DirectoryInfo imageFolder in directory.EnumerateDirectories())
             {
-                string folderName = imageFolder.Name;
+                if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, extensions, true).Any())
+                    continue;
+
+                FolderInfo folderInfo = new FolderInfo() { Category = "Folder", Filename = imageFolder.Name };
+                FolderInfoList.Add(folderInfo);
+
+                if (first)
+                {
+                    SelectedFileInfo = folderInfo;
+                    first = false;
+                }
+            }
+
+            foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, extensions, false))
+            {
+                FolderInfo folderInfo = new FolderInfo() { Category = "File", Filename = fileInfo.Name };
+                FolderInfoList.Add(folderInfo);
+
+                if (first)
+                {
+                    SelectedFileInfo = folderInfo;
+                    first = false;
+                }
             }
         }
     }
