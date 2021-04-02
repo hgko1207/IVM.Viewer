@@ -1,4 +1,4 @@
-# IVM Viewer
+# IVM Studio
 
 ## 기능
 
