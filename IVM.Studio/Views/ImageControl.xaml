@@ -1,0 +1,150 @@
+﻿<UserControl x:Class="IVM.Studio.Views.ImageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IVM.Studio.Views"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="450" d:DesignWidth="1600" Background="Gray">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="15">
+            <TextBlock Text="Rotation" />
+
+            <StackPanel Margin="0 10" Orientation="Horizontal">
+                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="{dx:DXImage SvgImages/PDF Viewer/RotateClockwise.svg}" ToolTip="Rotation Left"/>
+                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="{dx:DXImage SvgImages/PDF Viewer/RotateCounterclockwise.svg}" ToolTip="Rotation Right"/>
+                <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
+                    <material:PackIcon Kind="ReflectHorizontal" Width="32" Height="32"/>
+                </dx:SimpleButton>
+                <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
+                    <material:PackIcon Kind="ReflectVertical" Width="32" Height="28"/>
+                </dx:SimpleButton>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                <Button Content="Undo"/>
+                <Button Content="Eodo" Margin="5 0 0 0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="2">
+            <TextBlock Text="Crop" />
+
+            <StackPanel Margin="0 10" Orientation="Horizontal">
+                <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
+                    <material:PackIcon Kind="CropFree" Width="32" Height="32"/>
+                </dx:SimpleButton>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Button Content="Crop"/>
+                <Button Content="Undo" Margin="5 0 0 0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="3" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="4">
+            <TextBlock Text="Pen" />
+
+            <StackPanel Margin="0 15" Orientation="Horizontal" >
+                <dxe:PopupColorEdit ColumnCount="10" Color="Yellow" DefaultColor="Yellow" ShowMoreColorsButton="True" AllowDefaultButton="False"
+                                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color"/>
+                <TextBlock Text="Thickness" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                <dxe:ComboBoxEdit ItemsSource="{Binding PenThicknessList}" EditValue="{Binding SelectedPenThickness}" Width="35" IsTextEditable="False"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="5" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="6">
+            <TextBlock Text="Eraser" />
+
+            <StackPanel Margin="0 15" Orientation="Horizontal">
+                <TextBlock Text="Size" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                <dxe:ComboBoxEdit ItemsSource="{Binding EraserSizeList}" EditValue="{Binding SelectedEraserSize}" Width="40" IsTextEditable="False"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="7" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="8">
+            <TextBlock Text="Text" />
+
+            <StackPanel Margin="0 15" Orientation="Horizontal">
+                <dxe:PopupColorEdit ColumnCount="10" Color="White" DefaultColor="White" ShowMoreColorsButton="True" AllowDefaultButton="False"
+                                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color"/>
+                <TextBlock Text="Font" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                <dxe:ComboBoxEdit ItemsSource="{Binding FontSizeList}" EditValue="{Binding SelectedFontSize}" ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0"/>
+                <dxe:ComboBoxEdit ItemsSource="{Binding FontItemList}" EditValue="{Binding SelectedFontItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                <Button Content="Clear"/>
+                <Button Content="Undo" Margin="5 0 0 0"/>
+                <Button Content="Redo" Margin="5 0 0 0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="9" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="10">
+            <TextBlock Text="Image Magnification" />
+
+            <StackPanel Margin="0 10" Orientation="Horizontal">
+
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="11" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="12">
+            <TextBlock Text="Scale Bar" />
+
+            <StackPanel Margin="0 10" Orientation="Horizontal">
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                <Button Content="Preview"/>
+                <Button Content="Apply" Margin="5 0 0 0"/>
+                <Button Content="Undo" Margin="5 0 0 0"/>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="13" Margin="15 15" />
+
+        <StackPanel Margin="15" Grid.Column="14">
+            <TextBlock Text="Mosaic Magnification" />
+
+            <StackPanel Margin="0 10" Orientation="Horizontal">
+
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

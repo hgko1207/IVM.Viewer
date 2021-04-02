@@ -8,214 +8,278 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="900" Width="1600"
+        Title="IVM Studio" Height="800" Width="1440"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
     
     <dxdo:DockLayoutManager ViewStyle="Default">
         <dxdo:LayoutGroup Caption="LayoutRoot" Orientation="Vertical">
-            <dxdo:LayoutGroup Caption="LayoutGroup1">
-                <dxdo:LayoutGroup Caption="MenuGroup" Orientation="Vertical">
-                    <dxdo:LayoutPanel ShowCaption="False" ItemHeight="24" ShowBorder="False">
-                        <dxb:MainMenuControl FontSize="14">
-                            <dxb:BarSubItem Content=" OpenFolder " Command="{Binding OpenFolderCommand}"/>
-                            <dxb:BarSubItem Content=" Refresh " Command="{Binding RefreshCommand}"/>
-                            <dxb:BarSubItem Content=" Captrue "/>
-                            <dxb:BarSubItem Content=" Export "/>
-                            <dxb:BarSubItem Content=" 3D "/>
-                        </dxb:MainMenuControl>
-                    </dxdo:LayoutPanel>
-                        
-                    <dxdo:LayoutGroup Caption="GridGroup">
-                        <dxdo:LayoutPanel Caption="Information" AllowClose="False" AllowHide="False">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="auto"/>
-                                </Grid.RowDefinitions>
+            <dxdo:LayoutPanel ShowCaption="False" ItemHeight="24" ShowBorder="False">
+                <dxb:MainMenuControl FontSize="14">
+                    <dxb:BarSubItem Content=" OpenFolder " Command="{Binding OpenFolderCommand}"/>
+                    <dxb:BarSubItem Content=" Refresh " Command="{Binding RefreshCommand}"/>
+                    <dxb:BarSubItem Content=" Captrue "/>
+                    <dxb:BarSubItem Content=" Export "/>
+                    <dxb:BarSubItem Content=" 3D "/>
+                </dxb:MainMenuControl>
+            </dxdo:LayoutPanel>
 
-                                <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="2 0">
-                                    <dxg:GridControl.View>
-                                        <dxg:TableView AutoWidth="True"/>
-                                    </dxg:GridControl.View>
+            <dxdo:LayoutGroup Caption="LayoutContent">
+                <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical" ItemWidth="300">
+                    <dxdo:LayoutPanel Caption="Information" AllowClose="False" AllowHide="False">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
 
-                                    <dxg:GridControl.Columns>
-                                        <dxg:GridColumn Header="#" FieldName=""/>
-                                        <dxg:GridColumn Header="Category" FieldName="Category"/>
-                                        <dxg:GridColumn Header="Filename" FieldName="Filename"/>
-                                    </dxg:GridControl.Columns>
-                                </dxg:GridControl>
-
-                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                                    <Button Content="Previous" Width="75"/>
-                                    <Button Content="Next" Width="75" Margin="5 0 0 0"/>
-                                </StackPanel>
-                            </Grid>
-                        </dxdo:LayoutPanel>
-
-                        <dxdo:LayoutPanel Caption="Imaging Condition" AllowClose="False" AllowHide="False">
-                            <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="2 0 2 2">
+                            <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="2 0">
                                 <dxg:GridControl.View>
                                     <dxg:TableView AutoWidth="True"/>
                                 </dxg:GridControl.View>
 
-                                <dxg:GridControl.Bands>
-                                    <dxg:GridControlBand Header="">
-                                        <dxg:GridColumn FieldName="Seq" Header="#" ReadOnly="True"/>
-                                    </dxg:GridControlBand>
-                                    <dxg:GridControlBand Header="Laser Power(%)">
-                                        <dxg:GridColumn FieldName="Seq" Header="405" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="Seq" Header="488" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="Seq" Header="561" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="Seq" Header="640" ReadOnly="True"/>
-                                    </dxg:GridControlBand>
-                                    <dxg:GridControlBand Header="Detector Gain">
-                                        <dxg:GridColumn FieldName="Seq" Header="DAPI" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="Seq" Header="GFP" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="Seq" Header="RFP" ReadOnly="True"/>
-                                        <dxg:GridColumn FieldName="Seq" Header="NIR" ReadOnly="True"/>
-                                    </dxg:GridControlBand>
-                                </dxg:GridControl.Bands>
+                                <dxg:GridControl.Columns>
+                                    <dxg:GridColumn Header="#" FieldName=""/>
+                                    <dxg:GridColumn Header="Category" FieldName="Category"/>
+                                    <dxg:GridColumn Header="Filename" FieldName="Filename"/>
+                                </dxg:GridControl.Columns>
                             </dxg:GridControl>
-                        </dxdo:LayoutPanel>
-                    </dxdo:LayoutGroup>
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 10">
+                                <Button Content="Previous" Width="75"/>
+                                <Button Content="Next" Width="75" Margin="5 0 0 0"/>
+                            </StackPanel>
+                        </Grid>
+                    </dxdo:LayoutPanel>
+
+                    <dxdo:LayoutPanel Caption="Imaging Condition" AllowClose="False" AllowHide="False">
+                        <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="2 0 2 2">
+                            <dxg:GridControl.View>
+                                <dxg:TableView AutoWidth="True"/>
+                            </dxg:GridControl.View>
+
+                            <dxg:GridControl.Bands>
+                                <dxg:GridControlBand Header="">
+                                    <dxg:GridColumn FieldName="Seq" Header="#" ReadOnly="True"/>
+                                </dxg:GridControlBand>
+                                <dxg:GridControlBand Header="Laser Power(%)">
+                                    <dxg:GridColumn FieldName="Seq" Header="405" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="Seq" Header="488" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="Seq" Header="561" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="Seq" Header="640" ReadOnly="True"/>
+                                </dxg:GridControlBand>
+                                <dxg:GridControlBand Header="Detector Gain">
+                                    <dxg:GridColumn FieldName="Seq" Header="DAPI" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="Seq" Header="GFP" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="Seq" Header="RFP" ReadOnly="True"/>
+                                    <dxg:GridColumn FieldName="Seq" Header="NIR" ReadOnly="True"/>
+                                </dxg:GridControlBand>
+                            </dxg:GridControl.Bands>
+                        </dxg:GridControl>
+                    </dxdo:LayoutPanel>
                 </dxdo:LayoutGroup>
 
-                <dxdo:LayoutPanel Caption="Image Sequence" ShowCaption="True" AllowClose="False" AllowHide="False" ItemWidth="800">
+                <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
+                    <dxdo:LayoutGroup ItemHeight="auto">
+                        <!--<dxdo:LayoutPanel ShowCaption="False" AllowClose="False">
+                        <ContentControl prism:RegionManager.RegionName="ImageControlPage" />
+                    </dxdo:LayoutPanel>-->
 
-                </dxdo:LayoutPanel>
-            </dxdo:LayoutGroup>
+                        <dxdo:LayoutPanel Caption="Image Control" AllowClose="False" AllowHide="False" ItemWidth="auto">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
 
-            <dxdo:LayoutPanel Caption="Image" ShowCaption="False" AllowClose="False" AllowHide="False"/>
+                                <StackPanel Margin="15">
+                                    <TextBlock Text="Rotation" />
 
-            <dxdo:LayoutGroup Caption="LayoutGroup2">
-                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
+                                    <StackPanel Margin="0 10" Orientation="Horizontal">
+                                        <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="{dx:DXImage SvgImages/PDF Viewer/RotateClockwise.svg}" ToolTip="Rotation Left"/>
+                                        <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="{dx:DXImage SvgImages/PDF Viewer/RotateCounterclockwise.svg}" ToolTip="Rotation Right"/>
+                                        <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
+                                            <material:PackIcon Kind="ReflectHorizontal" Width="32" Height="32"/>
+                                        </dx:SimpleButton>
+                                        <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
+                                            <material:PackIcon Kind="ReflectVertical" Width="32" Height="28"/>
+                                        </dx:SimpleButton>
+                                    </StackPanel>
 
-                        <StackPanel Margin="15">
-                            <TextBlock Text="Rotation" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                        <Button Content="Undo"/>
+                                        <Button Content="Eodo" Margin="5 0 0 0"/>
+                                    </StackPanel>
+                                </StackPanel>
 
+                                <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="10 15" />
+
+                                <StackPanel Margin="15" Grid.Column="2">
+                                    <TextBlock Text="Crop" />
+
+                                    <StackPanel Margin="0 10" Orientation="Horizontal">
+                                        <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
+                                            <material:PackIcon Kind="CropFree" Width="32" Height="32"/>
+                                        </dx:SimpleButton>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                                        <Button Content="Crop"/>
+                                        <Button Content="Undo" Margin="5 0 0 0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </dxdo:LayoutPanel>
+
+                        <dxdo:LayoutPanel Caption="Annotation" AllowClose="False" AllowHide="False" ItemWidth="auto">
                             <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Margin="15 15 15 5" Grid.Column="0">
+                                        <TextBlock Text="Pen" />
+
+                                        <StackPanel Margin="0 15 0 10" Orientation="Horizontal" >
+                                            <dxe:PopupColorEdit ColumnCount="10" Color="Yellow" DefaultColor="Yellow" ShowMoreColorsButton="True" AllowDefaultButton="False"
+                                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color"/>
+                                            <TextBlock Text="Thickness" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                            <dxe:ComboBoxEdit ItemsSource="{Binding PenThicknessList}" EditValue="{Binding SelectedPenThickness}" Width="35" IsTextEditable="False"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="10 10" />
+
+                                    <StackPanel Margin="15 15 15 5" Grid.Column="2">
+                                        <TextBlock Text="Eraser"/>
+
+                                        <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
+                                            <TextBlock Text="Size" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                            <dxe:ComboBoxEdit ItemsSource="{Binding EraserSizeList}" EditValue="{Binding SelectedEraserSize}" Width="40" IsTextEditable="False"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="3" Margin="10 10" />
+
+                                    <StackPanel Margin="15 15 15 5" Grid.Column="4">
+                                        <TextBlock Text="Text" />
+
+                                        <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
+                                            <dxe:PopupColorEdit ColumnCount="10" Color="White" DefaultColor="White" ShowMoreColorsButton="True" AllowDefaultButton="False"
+                                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color"/>
+                                            <TextBlock Text="Font" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                            <dxe:ComboBoxEdit ItemsSource="{Binding FontSizeList}" EditValue="{Binding SelectedFontSize}" ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0"/>
+                                            <dxe:ComboBoxEdit ItemsSource="{Binding FontItemList}" EditValue="{Binding SelectedFontItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                    <Button Content="Clear"/>
+                                    <Button Content="Undo" Margin="5 0 0 0"/>
+                                    <Button Content="Redo" Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </dxdo:LayoutPanel>
+
+                        <dxdo:LayoutPanel Caption="Scale Bar" AllowClose="False" AllowHide="False">
+                            <StackPanel Margin="15 15 15 5" Grid.Column="12">
+                                <TextBlock Text="Scale Bar" />
+
+                                <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
+                                    <dxe:SpinEdit Value="0" MinValue="-100" MaxValue="100" AllowRoundOutOfRangeValue="True" IsFloatValue="False"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 10 5 5">
+                                    <Button Content="Preview"/>
+                                    <Button Content="Apply" Margin="5 0 0 0"/>
+                                    <Button Content="Undo" Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </dxdo:LayoutPanel>
+                    </dxdo:LayoutGroup>
+
+                    <dxdo:LayoutGroup>
+                        <dxdo:LayoutPanel Caption="Image Adjustment" AllowClose="False" AllowHide="False">
+                            <StackPanel Margin="10">
+                                <StackPanel Orientation="Horizontal">
+                                    <dx:SimpleButton Style="{StaticResource BlackGradientButton}" Content="ALL" Height="40" Width="70"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                    <dx:SimpleButton Style="{StaticResource BlackGradientButton}" Height="40" Width="70">
+                                        <dx:SimpleButton.Content>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
+                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                            </StackPanel>
+                                        </dx:SimpleButton.Content>
+                                    </dx:SimpleButton>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                    <dx:SimpleButton Style="{StaticResource GreenGradientButton}" Height="40" Width="70">
+                                        <dx:SimpleButton.Content>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
+                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                            </StackPanel>
+                                        </dx:SimpleButton.Content>
+                                    </dx:SimpleButton>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                    <dx:SimpleButton Style="{StaticResource RedGradientButton}" Height="40" Width="70">
+                                        <dx:SimpleButton.Content>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
+                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                            </StackPanel>
+                                        </dx:SimpleButton.Content>
+                                    </dx:SimpleButton>
+                                </StackPanel>
                                 
+                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                                    <dx:SimpleButton Style="{StaticResource BlueGradientButton}" Height="40" Width="70">
+                                        <dx:SimpleButton.Content>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
+                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                            </StackPanel>
+                                        </dx:SimpleButton.Content>
+                                    </dx:SimpleButton>
+                                </StackPanel>
                             </StackPanel>
-                            
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                                <Button Content="Undo"/>
-                                <Button Content="Eodo" Margin="5 0 0 0"/>
-                            </StackPanel>
-                        </StackPanel>
+                        </dxdo:LayoutPanel>
+                    </dxdo:LayoutGroup>
 
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="15 15" />
+                    <dxdo:LayoutGroup>
+                        <dxdo:LayoutPanel Caption="Display Adjustment" AllowClose="False" AllowHide="False">
 
-                        <StackPanel Margin="15" Grid.Column="2">
-                            <TextBlock Text="Crop" />
+                        </dxdo:LayoutPanel>
 
-                            <StackPanel>
-
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                                <Button Content="Crop"/>
-                                <Button Content="Undo" Margin="5 0 0 0"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="3" Margin="15 15" />
-
-                        <StackPanel Margin="15" Grid.Column="4">
-                            <TextBlock Text="Pen" />
-
-                            <StackPanel>
+                        <dxdo:LayoutPanel Caption="Image Magnification" AllowClose="False" AllowHide="False">
+                            <StackPanel Margin="15" Orientation="Horizontal">
 
                             </StackPanel>
-                        </StackPanel>
+                        </dxdo:LayoutPanel>
+                    </dxdo:LayoutGroup>
 
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="5" Margin="15 15" />
+                    <dxdo:LayoutPanel Caption="Image Sequence" AllowClose="False" AllowHide="False">
 
-                        <StackPanel Margin="15" Grid.Column="6">
-                            <TextBlock Text="Eraser" />
-
-                            <StackPanel>
-
-                            </StackPanel>
-                        </StackPanel>
-
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="7" Margin="15 15" />
-
-                        <StackPanel Margin="15" Grid.Column="8">
-                            <TextBlock Text="Text" />
-
-                            <StackPanel>
-
-                            </StackPanel>
-                        </StackPanel>
-
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="9" Margin="15 15" />
-
-                        <StackPanel Margin="15" Grid.Column="10">
-                            <TextBlock Text="Image Magnification" />
-
-                            <StackPanel>
-
-                            </StackPanel>
-                        </StackPanel>
-
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="11" Margin="15 15" />
-
-                        <StackPanel Margin="15" Grid.Column="12">
-                            <TextBlock Text="Scale Bar" />
-
-                            <StackPanel>
-
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                                <Button Content="Preview"/>
-                                <Button Content="Apply" Margin="5 0 0 0"/>
-                                <Button Content="Undo" Margin="5 0 0 0"/>
-                            </StackPanel>
-                        </StackPanel>
-
-                        <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="13" Margin="15 15" />
-
-                        <StackPanel Margin="15" Grid.Column="14">
-                            <TextBlock Text="Mosaic Magnification" />
-
-                            <StackPanel>
-
-                            </StackPanel>
-                        </StackPanel>
-                    </Grid>
-                </dxdo:LayoutPanel>
-            </dxdo:LayoutGroup>
-            <dxdo:LayoutGroup Caption="LayoutGroup3">
-                <dxdo:LayoutPanel Caption="Image Adjustment" ShowCaption="True" AllowClose="False" AllowHide="False">
-
-                </dxdo:LayoutPanel>
-
-                <dxdo:LayoutPanel Caption="Display Adjustment" ShowCaption="True" AllowClose="False" AllowHide="False">
-
-                </dxdo:LayoutPanel>
+                    </dxdo:LayoutPanel>
+                </dxdo:LayoutGroup>
             </dxdo:LayoutGroup>
         </dxdo:LayoutGroup>
     </dxdo:DockLayoutManager>

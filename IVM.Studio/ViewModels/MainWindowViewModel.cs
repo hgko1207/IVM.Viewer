@@ -1,10 +1,12 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.MvvM;
 using IVM.Studio.Services;
+using IVM.Studio.Views;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -43,8 +45,15 @@ namespace IVM.Studio.ViewModels
         private readonly IEnumerable<string> videoFileExtensions;
         private IEnumerable<string> extensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
 
-        public MainWindowViewModel(IContainerExtension container) : base(container)
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="regionManager"></param>
+        public MainWindowViewModel(IContainerExtension container, IRegionManager regionManager) : base(container)
         {
+            regionManager.RegisterViewWithRegion("ImageControlPage", typeof(ImageControl));
+
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
 
