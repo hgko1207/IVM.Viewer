@@ -8,14 +8,26 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
+/**
+ * @Class Name : FileService.cs
+ * @Description : 파일 관리 서비스
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.03.29     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.03.29
+ * @version 1.0
+ */
 namespace IVM.Studio.Services
 {
-    class FileService
+    public class FileService
     {
         /// <summary>
         /// 주어진 이미지/비디오 파일에 해당되는 메타데이터를 찾습니다.
         /// </summary>
-        /// <param name="SlidesRootPath"></param>
+        /// <param name="rootPath"></param>
         /// <param name="file"></param>
         /// <returns>적절한 메타데이터가 존재하지 않는 경우 null을 반환합니다.</returns>
         public Metadata ReadMetadataFromImage(string rootPath, FileInfo file)
@@ -76,7 +88,7 @@ namespace IVM.Studio.Services
         /// 주어진 폴더 안의 이미지를 열거합니다.
         /// </summary>
         /// <param name="directory"></param>
-        /// <param name="approvedExtensions"></param>
+        /// <param name="extensions"></param>
         /// <param name="recursively">true 이면 재귀적으로 모든 하위 폴더를 포함해서 검사합니다.</param>
         /// <returns></returns>
         public IEnumerable<FileInfo> GetImagesInFolder(DirectoryInfo directory, IEnumerable<string> extensions, bool recursively)

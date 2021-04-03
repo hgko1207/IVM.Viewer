@@ -3,6 +3,7 @@
                     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
                     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
                     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+                    xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
                     xmlns:local="clr-namespace:IVM.Viewer.Resources">
 
     <!-- Common Style -->
@@ -11,22 +12,36 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type dx:ThemedWindowTitle}">
-                    <TextBlock x:Name="TitleText"  
-                           Margin="0,2"
-                           HorizontalAlignment="Center"  
-                           FontSize="16"  
-                           FontWeight="Bold"  
-                           Foreground="#FFFFFF"  
+                    <TextBlock x:Name="TitleText"
+                           Margin="6,0"
+                           HorizontalAlignment="Left"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Foreground="#FFFFFF"
                            Text="{TemplateBinding Content}"
                            TextTrimming="WordEllipsis"/>
 
                     <ControlTemplate.Triggers>
-                        <DataTrigger Value="Ribbon"  
-                                 Binding="{Binding Path=ActualWindowKind, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type dx:ThemedWindow}}}">
+                        <DataTrigger Value="Ribbon" Binding="{Binding Path=ActualWindowKind, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type dx:ThemedWindow}}}">
                             <Setter TargetName="TitleText" Property="Foreground" Value="#FFFFFF"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type dxdo:LayoutPanel}">
+        <Setter Property="Appearance">
+            <Setter.Value>
+                <dxdo:Appearance>
+                    <dxdo:Appearance.Normal>
+                        <dxdo:AppearanceObject Foreground="#EAEAEA" Background="#1F201D" FontSize="14"/>
+                    </dxdo:Appearance.Normal>
+                    <dxdo:Appearance.Active>
+                        <dxdo:AppearanceObject Foreground="#EAEAEA" Background="#1F201D" FontSize="14"/>
+                    </dxdo:Appearance.Active>
+                </dxdo:Appearance>
             </Setter.Value>
         </Setter>
     </Style>

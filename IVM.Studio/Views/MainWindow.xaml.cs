@@ -39,9 +39,10 @@ namespace IVM.Studio.Views
                 for (int j = 0; j < col; ++j)
                 {
                     Rectangle rect = new Rectangle();
-                    rect.Width = 65;
-                    rect.Height = 65;
-                    rect.Fill = new SolidColorBrush(Colors.Black);
+                    rect.Width = 70;
+                    rect.Height = 70;
+                    rect.Fill = (SolidColorBrush)(new BrushConverter().ConvertFrom("#262626"));
+                    rect.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#424242"));
                     rect.SetValue(Grid.RowProperty, i);
                     rect.SetValue(Grid.ColumnProperty, j);
 

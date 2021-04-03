@@ -5,7 +5,6 @@ using IVM.Studio.Views;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
-using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +14,18 @@ using System.Windows.Input;
 using Unity;
 using static IVM.Studio.Models.Common;
 
+/**
+ * @Class Name : MainWindowViewModel.cs
+ * @Description : 메인 화면 뷰 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.03.29     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.03.29
+ * @version 1.0
+ */
 namespace IVM.Studio.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
@@ -72,6 +83,7 @@ namespace IVM.Studio.ViewModels
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
+        public ICommand DisplayAllCommand { get; private set; }
 
         private string currentFolderPath;
 
@@ -90,6 +102,7 @@ namespace IVM.Studio.ViewModels
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
+            DisplayAllCommand = new DelegateCommand(DisplayAll);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -171,6 +184,14 @@ namespace IVM.Studio.ViewModels
                     first = false;
                 }
             }
+        }
+
+        /// <summary>
+        /// Display 창 호출 이벤트
+        /// </summary>
+        private void DisplayAll()
+        {
+            Container.Resolve<WindowByChannelService>().ShowDisplay(0, true);
         }
     }
 }
