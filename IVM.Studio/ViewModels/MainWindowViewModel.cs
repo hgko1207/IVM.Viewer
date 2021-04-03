@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using Unity;
+using static IVM.Studio.Models.Common;
 
 namespace IVM.Studio.ViewModels
 {
@@ -34,6 +35,39 @@ namespace IVM.Studio.ViewModels
                     //DisplaySlide(true);
                 }
             }
+        }
+
+        public List<int> PenThicknessList { get; }
+        public List<int> EraserSizeList { get; }
+        public List<int> FontSizeList { get; }
+        public List<FontItem> FontItemList { get; }
+
+        private int selectedPenThickness;
+        public int SelectedPenThickness
+        {
+            get => selectedPenThickness;
+            set => SetProperty(ref selectedPenThickness, value);
+        }
+
+        public int selectedEraserSize;
+        public int SelectedEraserSize
+        {
+            get => selectedEraserSize;
+            set => SetProperty(ref selectedEraserSize, value);
+        }
+
+        public int selectedFontSize;
+        public int SelectedFontSize
+        {
+            get => selectedFontSize;
+            set => SetProperty(ref selectedFontSize, value);
+        }
+
+        public FontItem selectedFontItem;
+        public FontItem SelectedFontItem
+        {
+            get => selectedFontItem;
+            set => SetProperty(ref selectedFontItem, value);
         }
 
         public ICommand OpenFolderCommand { get; private set; }
@@ -59,6 +93,26 @@ namespace IVM.Studio.ViewModels
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
+
+            PenThicknessList = new List<int>();
+            for (int i = 1; i <= 10; i++)
+                PenThicknessList.Add(i);
+
+            EraserSizeList = new List<int>();
+            for (int i = 1; i <= 50; i++)
+                EraserSizeList.Add(i);
+
+            FontSizeList = new List<int>();
+            for (int i = 1; i <= 100; i++)
+                FontSizeList.Add(i);
+
+            FontItemList = new List<FontItem>();
+            FontItemList.Add(new FontItem() { Type = "1", Name = "맑은 고딕" });
+
+            SelectedPenThickness = 1;
+            SelectedEraserSize = 30;
+            SelectedFontSize = 40;
+            SelectedFontItem = FontItemList[0];
         }
 
         /// <summary>

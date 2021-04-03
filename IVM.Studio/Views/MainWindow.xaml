@@ -14,7 +14,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="800" Width="1440"
+        Title="IVM Studio" Height="900" Width="1480"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
     
     <dxdo:DockLayoutManager ViewStyle="Default">
@@ -51,8 +51,8 @@
                             </dxg:GridControl>
 
                             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 10">
-                                <Button Content="Previous" Width="75"/>
-                                <Button Content="Next" Width="75" Margin="5 0 0 0"/>
+                                <Button Content="&lt;&lt; Previous" Width="90"/>
+                                <Button Content="Next >>" Width="90" Margin="5 0 0 0"/>
                             </StackPanel>
                         </Grid>
                     </dxdo:LayoutPanel>
@@ -98,7 +98,7 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Margin="15">
+                                <StackPanel Margin="10">
                                     <TextBlock Text="Rotation" />
 
                                     <StackPanel Margin="0 10" Orientation="Horizontal">
@@ -120,7 +120,7 @@
 
                                 <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="10 15" />
 
-                                <StackPanel Margin="15" Grid.Column="2">
+                                <StackPanel Margin="10" Grid.Column="2">
                                     <TextBlock Text="Crop" />
 
                                     <StackPanel Margin="0 10" Orientation="Horizontal">
@@ -138,7 +138,7 @@
                         </dxdo:LayoutPanel>
 
                         <dxdo:LayoutPanel Caption="Annotation" AllowClose="False" AllowHide="False" ItemWidth="auto">
-                            <StackPanel>
+                            <StackPanel Margin="5 0">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
@@ -148,37 +148,37 @@
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <StackPanel Margin="15 15 15 5" Grid.Column="0">
+                                    <StackPanel Margin="10 10 10 5" Grid.Column="0">
                                         <TextBlock Text="Pen" />
 
                                         <StackPanel Margin="0 15 0 10" Orientation="Horizontal" >
                                             <dxe:PopupColorEdit ColumnCount="10" Color="Yellow" DefaultColor="Yellow" ShowMoreColorsButton="True" AllowDefaultButton="False"
                                                     MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color"/>
-                                            <TextBlock Text="Thickness" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                            <TextBlock Text="Thickness :" VerticalAlignment="Center" Margin="10 0 5 0"/>
                                             <dxe:ComboBoxEdit ItemsSource="{Binding PenThicknessList}" EditValue="{Binding SelectedPenThickness}" Width="35" IsTextEditable="False"/>
                                         </StackPanel>
                                     </StackPanel>
 
                                     <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="10 10" />
 
-                                    <StackPanel Margin="15 15 15 5" Grid.Column="2">
+                                    <StackPanel Margin="5 10 5 5" Grid.Column="2">
                                         <TextBlock Text="Eraser"/>
 
                                         <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
-                                            <TextBlock Text="Size" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                            <TextBlock Text="Size :" VerticalAlignment="Center" Margin="10 0 5 0"/>
                                             <dxe:ComboBoxEdit ItemsSource="{Binding EraserSizeList}" EditValue="{Binding SelectedEraserSize}" Width="40" IsTextEditable="False"/>
                                         </StackPanel>
                                     </StackPanel>
 
                                     <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="3" Margin="10 10" />
 
-                                    <StackPanel Margin="15 15 15 5" Grid.Column="4">
+                                    <StackPanel Margin="10 10 10 5" Grid.Column="4">
                                         <TextBlock Text="Text" />
 
                                         <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
                                             <dxe:PopupColorEdit ColumnCount="10" Color="White" DefaultColor="White" ShowMoreColorsButton="True" AllowDefaultButton="False"
                                                     MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color"/>
-                                            <TextBlock Text="Font" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                            <TextBlock Text="Font :" VerticalAlignment="Center" Margin="10 0 5 0"/>
                                             <dxe:ComboBoxEdit ItemsSource="{Binding FontSizeList}" EditValue="{Binding SelectedFontSize}" ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0"/>
                                             <dxe:ComboBoxEdit ItemsSource="{Binding FontItemList}" EditValue="{Binding SelectedFontItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
                                         </StackPanel>
@@ -194,14 +194,37 @@
                         </dxdo:LayoutPanel>
 
                         <dxdo:LayoutPanel Caption="Scale Bar" AllowClose="False" AllowHide="False">
-                            <StackPanel Margin="15 15 15 5" Grid.Column="12">
-                                <TextBlock Text="Scale Bar" />
+                            <StackPanel Margin="10 10 10 5">
 
-                                <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
-                                    <dxe:SpinEdit Value="0" MinValue="-100" MaxValue="100" AllowRoundOutOfRangeValue="True" IsFloatValue="False"/>
+                                <StackPanel Margin="0 0 0 5" Orientation="Horizontal">
+                                    <TextBlock Text="Image" VerticalAlignment="Center" Width="50"/>
+
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem>100</dxe:ComboBoxEditItem>
+                                    </dxe:ComboBoxEdit>
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem>100 µm</dxe:ComboBoxEditItem>
+                                    </dxe:ComboBoxEdit>
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem>Times New Roman</dxe:ComboBoxEditItem>
+                                    </dxe:ComboBoxEdit>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 10 5 5">
+                                <StackPanel Margin="0 5 0 5" Orientation="Horizontal">
+                                    <TextBlock Text="Mosaic" VerticalAlignment="Center" Width="50"/>
+
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem>100</dxe:ComboBoxEditItem>
+                                    </dxe:ComboBoxEdit>
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem>100 µm</dxe:ComboBoxEditItem>
+                                    </dxe:ComboBoxEdit>
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Margin="0 0 5 0" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem>Times New Roman</dxe:ComboBoxEditItem>
+                                    </dxe:ComboBoxEdit>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 15 5 5">
                                     <Button Content="Preview"/>
                                     <Button Content="Apply" Margin="5 0 0 0"/>
                                     <Button Content="Undo" Margin="5 0 0 0"/>
@@ -214,70 +237,133 @@
                         <dxdo:LayoutPanel Caption="Image Adjustment" AllowClose="False" AllowHide="False">
                             <StackPanel Margin="10">
                                 <StackPanel Orientation="Horizontal">
-                                    <dx:SimpleButton Style="{StaticResource BlackGradientButton}" Content="ALL" Height="40" Width="70"/>
+                                    <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="ALL" Height="40" Width="75"/>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <dx:SimpleButton Style="{StaticResource BlackGradientButton}" Height="40" Width="70">
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Height="40" Width="75">
                                         <dx:SimpleButton.Content>
                                             <StackPanel Orientation="Vertical">
                                                 <TextBlock TextAlignment="Center" Text="DAPI"/>
-                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                                <TextBlock TextAlignment="Center" Text="(425-465)" Margin="0 -2 0 0"/>
                                             </StackPanel>
                                         </dx:SimpleButton.Content>
                                     </dx:SimpleButton>
+
+                                    <dxe:CheckEdit Margin="10 0 0 0"/>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <dx:SimpleButton Style="{StaticResource GreenGradientButton}" Height="40" Width="70">
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <dx:SimpleButton Style="{StaticResource GreenGradientButton}" Height="40" Width="75">
                                         <dx:SimpleButton.Content>
                                             <StackPanel Orientation="Vertical">
-                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
-                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                                <TextBlock TextAlignment="Center" Text="GFP"/>
+                                                <TextBlock TextAlignment="Center" Text="(500-550)" Margin="0 -2 0 0"/>
                                             </StackPanel>
                                         </dx:SimpleButton.Content>
                                     </dx:SimpleButton>
+
+                                    <dxe:CheckEdit Margin="10 0 0 0"/>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <dx:SimpleButton Style="{StaticResource RedGradientButton}" Height="40" Width="70">
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <dx:SimpleButton Style="{StaticResource RedGradientButton}" Height="40" Width="75">
                                         <dx:SimpleButton.Content>
                                             <StackPanel Orientation="Vertical">
-                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
-                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                                <TextBlock TextAlignment="Center" Text="RFP"/>
+                                                <TextBlock TextAlignment="Center" Text="(582-618)" Margin="0 -2 0 0"/>
                                             </StackPanel>
                                         </dx:SimpleButton.Content>
                                     </dx:SimpleButton>
+
+                                    <dxe:CheckEdit Margin="10 0 0 0"/>
                                 </StackPanel>
                                 
-                                <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
-                                    <dx:SimpleButton Style="{StaticResource BlueGradientButton}" Height="40" Width="70">
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <dx:SimpleButton Style="{StaticResource BlueGradientButton}" Height="40" Width="75">
                                         <dx:SimpleButton.Content>
                                             <StackPanel Orientation="Vertical">
-                                                <TextBlock TextAlignment="Center" Text="DAPI"/>
-                                                <TextBlock TextAlignment="Center" FontSize="10" Text="(425-465)"/>
+                                                <TextBlock TextAlignment="Center" Text="NIR"/>
+                                                <TextBlock TextAlignment="Center" Text="(663-733)" Margin="0 -2 0 0"/>
                                             </StackPanel>
                                         </dx:SimpleButton.Content>
                                     </dx:SimpleButton>
+
+                                    <dxe:CheckEdit Margin="10 0 0 0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </dxdo:LayoutPanel>
+
+                        <dxdo:LayoutPanel Caption="Image Magnification" AllowClose="False" AllowHide="False" ItemWidth="300">
+                            
+                        </dxdo:LayoutPanel>
+                    </dxdo:LayoutGroup>
+
+                    <dxdo:LayoutGroup ItemHeight="200">
+                        <dxdo:LayoutPanel Caption="Display Adjustment" AllowClose="False" AllowHide="False">
+                            <StackPanel Margin="15">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Z-Stack" VerticalAlignment="Center" Width="120"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
+                                    <TextBlock Text="Multi-Spot" VerticalAlignment="Center" Width="120"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
+                                    <TextBlock Text="Time-lapse" VerticalAlignment="Center" Width="120"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
+                                    <TextBlock Text="Mosaic" VerticalAlignment="Center" Width="120"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
+                                    <TextBlock Text="Sildeshow FPS" VerticalAlignment="Center" Width="120"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </dxdo:LayoutPanel>
+
+                        <dxdo:LayoutPanel Caption="Processing" AllowClose="False" AllowHide="False">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="15">
+                                    <TextBlock Text="Z-Stack Projection" VerticalAlignment="Center" Width="130"/>
+
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem Content="Maximal Intensity"/> 
+                                    </dxe:ComboBoxEdit>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="15 30 15 10">
+                                    <TextBlock Text="Auto-Mosaic" VerticalAlignment="Center" Width="130"/>
+
+                                    <TextBlock Text="Edge Crop" VerticalAlignment="Center"/>
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="5 0 0 0">
+                                        <dxe:ComboBoxEditItem Content="Minimum"/>
+                                    </dxe:ComboBoxEdit>
+
+                                    <TextBlock Text="Overlap (%)" VerticalAlignment="Center" Margin="15 0 0 0"/>
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="5 0 0 0">
+                                        <dxe:ComboBoxEditItem Content="35"/>
+                                    </dxe:ComboBoxEdit>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="15 5 15 10">
+                                    <TextBlock Text="Registration Ref. CH" VerticalAlignment="Center" Width="130"/>
+
+                                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0">
+                                        <dxe:ComboBoxEditItem Content="NIR (663-733)"/>
+                                    </dxe:ComboBoxEdit>
                                 </StackPanel>
                             </StackPanel>
                         </dxdo:LayoutPanel>
                     </dxdo:LayoutGroup>
 
-                    <dxdo:LayoutGroup>
-                        <dxdo:LayoutPanel Caption="Display Adjustment" AllowClose="False" AllowHide="False">
-
-                        </dxdo:LayoutPanel>
-
-                        <dxdo:LayoutPanel Caption="Image Magnification" AllowClose="False" AllowHide="False">
-                            <StackPanel Margin="15" Orientation="Horizontal">
-
-                            </StackPanel>
-                        </dxdo:LayoutPanel>
-                    </dxdo:LayoutGroup>
-
-                    <dxdo:LayoutPanel Caption="Image Sequence" AllowClose="False" AllowHide="False">
-
+                    <dxdo:LayoutPanel Caption="Image Sequence" AllowClose="False" AllowHide="False" ItemHeight="190">
+                        <Grid x:Name="ImageSequenceGroup" Margin="0 5 0 0">
+                            <Grid.RowDefinitions/>
+                            <Grid.ColumnDefinitions/>
+                        </Grid>
                     </dxdo:LayoutPanel>
                 </dxdo:LayoutGroup>
             </dxdo:LayoutGroup>
