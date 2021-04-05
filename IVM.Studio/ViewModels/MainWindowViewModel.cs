@@ -4,6 +4,7 @@ using IVM.Studio.Services;
 using IVM.Studio.Views;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Regions;
 using System.Collections.Generic;
@@ -117,7 +118,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         /// <param name="container"></param>
         /// <param name="regionManager"></param>
-        public MainWindowViewModel(IContainerExtension container, IRegionManager regionManager) : base(container)
+        public MainWindowViewModel(IContainerExtension container, IEventAggregator eventAggregator, IRegionManager regionManager) : base(container, eventAggregator)
         {
             regionManager.RegisterViewWithRegion("ImageControlPage", typeof(ImageControl));
 
