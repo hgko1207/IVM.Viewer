@@ -81,11 +81,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DisplayWindow.xaml">
+    <Page Include="Views\ChannelViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ImageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -106,15 +110,19 @@
     <Compile Include="Services\WindowByChannelService.cs" />
     <Compile Include="Utils\CSVSerializableAttribute.cs" />
     <Compile Include="Utils\ImageSequenceConverter.cs" />
-    <Compile Include="ViewModels\DisplayWindowViewModel.cs" />
+    <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\ImageControlViewModel.cs" />
+    <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
-    <Compile Include="Views\DisplayWindow.xaml.cs">
-      <DependentUpon>DisplayWindow.xaml</DependentUpon>
+    <Compile Include="Views\ChannelViewerWindow.xaml.cs">
+      <DependentUpon>ChannelViewerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainViewerWindow.xaml.cs">
+      <DependentUpon>MainViewerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -149,7 +157,10 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\rotate_left.png" />
+    <Resource Include="Resources\Images\rotate_right.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\ColorMap_Autumn.jpg" />
     <Resource Include="Resources\Images\ColorMap_Bone.jpg" />
@@ -188,6 +199,17 @@
     <PackageReference Include="Prism.Wpf">
       <Version>8.0.0.1909</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\reflect_horizontal_left.png" />
+    <Resource Include="Resources\Images\reflect_horizontal_right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\reflect_vertical_bottom.png" />
+    <Resource Include="Resources\Images\reflect_vertical_top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\crop_circle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

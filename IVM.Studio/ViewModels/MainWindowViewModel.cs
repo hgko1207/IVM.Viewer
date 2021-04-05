@@ -60,25 +60,46 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref selectedPenThickness, value);
         }
 
-        public int selectedEraserSize;
+        private int selectedEraserSize;
         public int SelectedEraserSize
         {
             get => selectedEraserSize;
             set => SetProperty(ref selectedEraserSize, value);
         }
 
-        public int selectedFontSize;
+        private int selectedFontSize;
         public int SelectedFontSize
         {
             get => selectedFontSize;
             set => SetProperty(ref selectedFontSize, value);
         }
 
-        public FontItem selectedFontItem;
+        private FontItem selectedFontItem;
         public FontItem SelectedFontItem
         {
             get => selectedFontItem;
             set => SetProperty(ref selectedFontItem, value);
+        }
+
+        private bool allChecked;
+        public bool AllChecked
+        {
+            get => allChecked;
+            set
+            {
+                if (SetProperty(ref allChecked, value))
+                {
+                    if (value)
+                    {
+                        MainViewerWindow window = new MainViewerWindow();
+                        window.Show();
+                    }
+                    else
+                    {
+                        EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
+                    }
+                }
+            }
         }
 
         public ICommand OpenFolderCommand { get; private set; }
@@ -191,7 +212,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void DisplayAll()
         {
-            Container.Resolve<WindowByChannelService>().ShowDisplay(0, true);
+            //Container.Resolve<WindowByChannelService>().ShowDisplay(0, true);
         }
     }
 }

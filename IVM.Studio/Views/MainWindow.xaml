@@ -14,7 +14,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="900" Width="1480"
+        Title="IVM Studio" Height="900" Width="1520"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
     
     <dxdo:DockLayoutManager ViewStyle="Default">
@@ -32,55 +32,59 @@
             <dxdo:LayoutGroup Caption="LayoutContent">
                 <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical" ItemWidth="300">
                     <dxdo:LayoutPanel Caption="Information" AllowClose="False" AllowHide="False">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
+                        <Border BorderBrush="#424242" BorderThickness="0 1 0 0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
 
-                            <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="2 0">
+                                <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="5">
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView AutoWidth="True"/>
+                                    </dxg:GridControl.View>
+
+                                    <dxg:GridControl.Columns>
+                                        <dxg:GridColumn Header="#" FieldName=""/>
+                                        <dxg:GridColumn Header="Category" FieldName="Category"/>
+                                        <dxg:GridColumn Header="Filename" FieldName="Filename"/>
+                                    </dxg:GridControl.Columns>
+                                </dxg:GridControl>
+
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 10">
+                                    <Button Content="&lt;&lt; Previous" Width="90"/>
+                                    <Button Content="Next >>" Width="90" Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </dxdo:LayoutPanel>
+
+                    <dxdo:LayoutPanel Caption="Imaging Condition" AllowClose="False" AllowHide="False">
+                        <Border BorderBrush="#424242" BorderThickness="0 1 0 0">
+                            <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="5">
                                 <dxg:GridControl.View>
                                     <dxg:TableView AutoWidth="True"/>
                                 </dxg:GridControl.View>
 
-                                <dxg:GridControl.Columns>
-                                    <dxg:GridColumn Header="#" FieldName=""/>
-                                    <dxg:GridColumn Header="Category" FieldName="Category"/>
-                                    <dxg:GridColumn Header="Filename" FieldName="Filename"/>
-                                </dxg:GridControl.Columns>
+                                <dxg:GridControl.Bands>
+                                    <dxg:GridControlBand Header="">
+                                        <dxg:GridColumn FieldName="Seq" Header="#" ReadOnly="True"/>
+                                    </dxg:GridControlBand>
+                                    <dxg:GridControlBand Header="Laser Power(%)">
+                                        <dxg:GridColumn FieldName="Seq" Header="405" ReadOnly="True"/>
+                                        <dxg:GridColumn FieldName="Seq" Header="488" ReadOnly="True"/>
+                                        <dxg:GridColumn FieldName="Seq" Header="561" ReadOnly="True"/>
+                                        <dxg:GridColumn FieldName="Seq" Header="640" ReadOnly="True"/>
+                                    </dxg:GridControlBand>
+                                    <dxg:GridControlBand Header="Detector Gain">
+                                        <dxg:GridColumn FieldName="Seq" Header="DAPI" ReadOnly="True"/>
+                                        <dxg:GridColumn FieldName="Seq" Header="GFP" ReadOnly="True"/>
+                                        <dxg:GridColumn FieldName="Seq" Header="RFP" ReadOnly="True"/>
+                                        <dxg:GridColumn FieldName="Seq" Header="NIR" ReadOnly="True"/>
+                                    </dxg:GridControlBand>
+                                </dxg:GridControl.Bands>
                             </dxg:GridControl>
-
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 10">
-                                <Button Content="&lt;&lt; Previous" Width="90"/>
-                                <Button Content="Next >>" Width="90" Margin="5 0 0 0"/>
-                            </StackPanel>
-                        </Grid>
-                    </dxdo:LayoutPanel>
-
-                    <dxdo:LayoutPanel Caption="Imaging Condition" AllowClose="False" AllowHide="False">
-                        <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="2 0 2 2">
-                            <dxg:GridControl.View>
-                                <dxg:TableView AutoWidth="True"/>
-                            </dxg:GridControl.View>
-
-                            <dxg:GridControl.Bands>
-                                <dxg:GridControlBand Header="">
-                                    <dxg:GridColumn FieldName="Seq" Header="#" ReadOnly="True"/>
-                                </dxg:GridControlBand>
-                                <dxg:GridControlBand Header="Laser Power(%)">
-                                    <dxg:GridColumn FieldName="Seq" Header="405" ReadOnly="True"/>
-                                    <dxg:GridColumn FieldName="Seq" Header="488" ReadOnly="True"/>
-                                    <dxg:GridColumn FieldName="Seq" Header="561" ReadOnly="True"/>
-                                    <dxg:GridColumn FieldName="Seq" Header="640" ReadOnly="True"/>
-                                </dxg:GridControlBand>
-                                <dxg:GridControlBand Header="Detector Gain">
-                                    <dxg:GridColumn FieldName="Seq" Header="DAPI" ReadOnly="True"/>
-                                    <dxg:GridColumn FieldName="Seq" Header="GFP" ReadOnly="True"/>
-                                    <dxg:GridColumn FieldName="Seq" Header="RFP" ReadOnly="True"/>
-                                    <dxg:GridColumn FieldName="Seq" Header="NIR" ReadOnly="True"/>
-                                </dxg:GridControlBand>
-                            </dxg:GridControl.Bands>
-                        </dxg:GridControl>
+                        </Border>
                     </dxdo:LayoutPanel>
                 </dxdo:LayoutGroup>
 
@@ -100,20 +104,18 @@
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel Margin="10">
-                                        <TextBlock Text="Rotation" />
+                                        <TextBlock Text="Rotation" FontWeight="Bold"/>
 
                                         <StackPanel Margin="0 10" Orientation="Horizontal">
-                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="{dx:DXImage SvgImages/PDF Viewer/RotateClockwise.svg}" ToolTip="Rotation Left"/>
-                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="{dx:DXImage SvgImages/PDF Viewer/RotateCounterclockwise.svg}" ToolTip="Rotation Right"/>
-                                            <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
-                                                <material:PackIcon Kind="ReflectHorizontal" Width="32" Height="32"/>
-                                            </dx:SimpleButton>
-                                            <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
-                                                <material:PackIcon Kind="ReflectVertical" Width="32" Height="28"/>
-                                            </dx:SimpleButton>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_right.png" ToolTip="Rotation Right"/>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_left.png" ToolTip="Rotation Left" Margin="8 0 0 0"/>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_left.png" ToolTip="Reflect Horizontal Left" Margin="8 0 0 0"/>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_right.png" ToolTip="Reflect Horizontal Right" Margin="8 0 0 0"/>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0"/>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0"/>
                                         </StackPanel>
 
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 5">
                                             <Button Content="Undo"/>
                                             <Button Content="Eodo" Margin="5 0 0 0"/>
                                         </StackPanel>
@@ -122,15 +124,16 @@
                                     <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="10 15" />
 
                                     <StackPanel Margin="10" Grid.Column="2">
-                                        <TextBlock Text="Crop" />
+                                        <TextBlock Text="Crop" FontWeight="Bold"/>
 
                                         <StackPanel Margin="0 10" Orientation="Horizontal">
-                                            <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Rotation Right" Padding="0">
-                                                <material:PackIcon Kind="CropFree" Width="32" Height="32"/>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Crop Rectangle" Padding="0">
+                                                <material:PackIcon Kind="CropFree" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                             </dx:SimpleButton>
+                                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/crop_circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
                                         </StackPanel>
 
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
                                             <Button Content="Crop"/>
                                             <Button Content="Undo" Margin="5 0 0 0"/>
                                         </StackPanel>
@@ -151,8 +154,8 @@
                                             <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <StackPanel Margin="10 10 10 5" Grid.Column="0">
-                                            <TextBlock Text="Pen" />
+                                        <StackPanel Margin="5 10 5 5" Grid.Column="0">
+                                            <TextBlock Text="Pen" FontWeight="Bold"/>
 
                                             <StackPanel Margin="0 15 0 10" Orientation="Horizontal" >
                                                 <dxe:PopupColorEdit ColumnCount="10" Color="Yellow" DefaultColor="Yellow" ShowMoreColorsButton="True" AllowDefaultButton="False"
@@ -165,18 +168,18 @@
                                         <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="1" Margin="10 10" />
 
                                         <StackPanel Margin="5 10 5 5" Grid.Column="2">
-                                            <TextBlock Text="Eraser"/>
+                                            <TextBlock Text="Eraser" FontWeight="Bold"/>
 
                                             <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
-                                                <TextBlock Text="Size :" VerticalAlignment="Center" Margin="10 0 5 0"/>
+                                                <TextBlock Text="Size :" VerticalAlignment="Center" Margin="0 0 5 0"/>
                                                 <dxe:ComboBoxEdit ItemsSource="{Binding EraserSizeList}" EditValue="{Binding SelectedEraserSize}" Width="40" IsTextEditable="False"/>
                                             </StackPanel>
                                         </StackPanel>
 
                                         <ContentControl Template="{StaticResource VerticalLine}" Grid.Column="3" Margin="10 10" />
 
-                                        <StackPanel Margin="10 10 10 5" Grid.Column="4">
-                                            <TextBlock Text="Text" />
+                                        <StackPanel Margin="5 10 5 5" Grid.Column="4">
+                                            <TextBlock Text="Text" FontWeight="Bold"/>
 
                                             <StackPanel Margin="0 15 0 10" Orientation="Horizontal">
                                                 <dxe:PopupColorEdit ColumnCount="10" Color="White" DefaultColor="White" ShowMoreColorsButton="True" AllowDefaultButton="False"
@@ -243,7 +246,7 @@
                             <Border BorderBrush="#424242" BorderThickness="0 1 0 0">
                                 <StackPanel Margin="10">
                                     <StackPanel Orientation="Horizontal">
-                                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="ALL" Height="40" Width="75" Command="{Binding DisplayAllCommand}"/>
+                                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" ButtonKind="Toggle" IsChecked="{Binding AllChecked}" Content="ALL" Height="40" Width="75" Command="{Binding DisplayAllCommand}"/>
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">

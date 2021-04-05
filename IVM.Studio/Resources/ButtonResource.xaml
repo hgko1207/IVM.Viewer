@@ -42,6 +42,10 @@
         <GradientStop Color="#FF424340" Offset="0.5" />
         <GradientStop Color="#FF4D4D4B" Offset="0.8" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GrayGradientCheckedButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF40403E" Offset="0"/>
+        <GradientStop Color="#FF383936" Offset="0.65"/>
+    </LinearGradientBrush>
     
     <LinearGradientBrush x:Key="RedGradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#FF5E2322" Offset="0.2" />
@@ -165,6 +169,9 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource GrayGradientActiveButtonBackground}" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{StaticResource GrayGradientCheckedButtonBackground}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

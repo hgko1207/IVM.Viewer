@@ -23,14 +23,14 @@ namespace IVM.Studio.Services
 {
     public class WindowByChannelService
     {
-        private DisplayWindow[] displayWindows;
+        private ChannelViewerWindow[] channelViewerWindows;
 
         /// <summary>
         /// 생성자
         /// </summary>
         public WindowByChannelService()
         {
-            displayWindows = new DisplayWindow[4] {
+            channelViewerWindows = new ChannelViewerWindow[4] {
                 null, null, null, null
             };
         }
@@ -45,9 +45,9 @@ namespace IVM.Studio.Services
             if (channel < 0 || channel >= 4)
                 return;
 
-            if (displayWindows[channel] == null)
+            if (channelViewerWindows[channel] == null)
             {
-                displayWindows[channel] = new DisplayWindow();
+                channelViewerWindows[channel] = new ChannelViewerWindow();
                 ChangeOwner(channel, alwaysTop);
             }
 
@@ -56,15 +56,15 @@ namespace IVM.Studio.Services
             if (pos != null)
             {
                 List<double> parsedPosition = pos.Split(';').Select(s => Convert.ToDouble(s)).ToList();
-                displayWindows[channel].Top = parsedPosition[0];
-                displayWindows[channel].Left = parsedPosition[1];
-                displayWindows[channel].Width = parsedPosition[2];
-                displayWindows[channel].Height = parsedPosition[3];
+                channelViewerWindows[channel].Top = parsedPosition[0];
+                channelViewerWindows[channel].Left = parsedPosition[1];
+                channelViewerWindows[channel].Width = parsedPosition[2];
+                channelViewerWindows[channel].Height = parsedPosition[3];
             }
 
             // 띄우기
-            displayWindows[channel].Show();
-            if (displayWindows[channel].DataContext is DisplayWindowViewModel vm)
+            channelViewerWindows[channel].Show();
+            if (channelViewerWindows[channel].DataContext is ChannelViewerWindowViewModel vm)
             {
                 vm.Title = $"Display #{channel + 1}";
                 vm.Channel = channel;
@@ -80,11 +80,11 @@ namespace IVM.Studio.Services
             if (channel < 0 || channel >= 4) 
                 return;
 
-            if (displayWindows[channel] != null)
+            if (channelViewerWindows[channel] != null)
             {
                 // 위치 저장
                 string key = $"Channel{channel}Position";
-                string value = $"{displayWindows[channel].Top};{displayWindows[channel].Left};{displayWindows[channel].Width};{displayWindows[channel].Height}";
+                string value = $"{channelViewerWindows[channel].Top};{channelViewerWindows[channel].Left};{channelViewerWindows[channel].Width};{channelViewerWindows[channel].Height}";
 
                 Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 KeyValueConfigurationElement element = config.AppSettings.Settings[key];
@@ -97,8 +97,8 @@ namespace IVM.Studio.Services
                 ConfigurationManager.RefreshSection("appSettings");
 
                 // 닫기
-                displayWindows[channel].Close();
-                displayWindows[channel] = null;
+                channelViewerWindows[channel].Close();
+                channelViewerWindows[channel] = null;
             }
         }
 
@@ -109,11 +109,11 @@ namespace IVM.Studio.Services
         /// <param name="image"></param>
         public void DisplayImage(int channel, ImageSource image)
         {
-            if (channel < 0 || channel >= 4 || displayWindows[channel] == null)
+            if (channel < 0 || channel >= 4 || channelViewerWindows[channel] == null)
                 return;
 
-            displayWindows[channel].Dispatcher.Invoke(() => {
-                if (displayWindows[channel].DataContext is DisplayWindowViewModel vm)
+            channelViewerWindows[channel].Dispatcher.Invoke(() => {
+                if (channelViewerWindows[channel].DataContext is ChannelViewerWindowViewModel vm)
                 {
                     vm.DisplayImage = image;
                 }
@@ -127,17 +127,17 @@ namespace IVM.Studio.Services
         /// <param name="enableAlwaysTop"></param>
         public void ChangeOwner(int channel, bool enableAlwaysTop)
         {
-            if (channel < 0 || channel >= 4 || displayWindows[channel] == null)
+            if (channel < 0 || channel >= 4 || channelViewerWindows[channel] == null)
                 return;
 
             if (enableAlwaysTop)
             {
-                displayWindows[channel].Owner = Application.Current.MainWindow;
-                displayWindows[channel].Activate();
+                channelViewerWindows[channel].Owner = Application.Current.MainWindow;
+                channelViewerWindows[channel].Activate();
             }
             else
             {
-                displayWindows[channel].Owner = null;
+                channelViewerWindows[channel].Owner = null;
                 Application.Current.MainWindow.Activate();
             }
         }

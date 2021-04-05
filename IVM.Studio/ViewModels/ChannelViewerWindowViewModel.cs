@@ -5,8 +5,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 /**
- * @Class Name : DisplayWindowViewModel.cs
- * @Description : 영상 화면 뷰 모델
+ * @Class Name : ChannelViewerWindowViewModel.cs
+ * @Description : 채널별 영상 화면 뷰 모델
  * @
  * @ 수정일         수정자              수정내용
  * @ ----------   ---------   -------------------------------
@@ -18,7 +18,7 @@ using System.Windows.Media;
  */
 namespace IVM.Studio.ViewModels
 {
-    public class DisplayWindowViewModel : ViewModelBase
+    public class ChannelViewerWindowViewModel : ViewModelBase
     {
         private ImageSource displayImage;
         public ImageSource DisplayImage
@@ -35,7 +35,7 @@ namespace IVM.Studio.ViewModels
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public DisplayWindowViewModel(IContainerExtension container) : base(container)
+        public ChannelViewerWindowViewModel(IContainerExtension container) : base(container)
         {
             Title = "Display";
 
