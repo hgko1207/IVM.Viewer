@@ -105,7 +105,6 @@ namespace IVM.Studio.ViewModels
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
-        public ICommand DisplayAllCommand { get; private set; }
 
         private string currentFolderPath;
 
@@ -124,7 +123,6 @@ namespace IVM.Studio.ViewModels
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
-            DisplayAllCommand = new DelegateCommand(DisplayAll);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -206,14 +204,6 @@ namespace IVM.Studio.ViewModels
                     first = false;
                 }
             }
-        }
-
-        /// <summary>
-        /// Display 창 호출 이벤트
-        /// </summary>
-        private void DisplayAll()
-        {
-            //Container.Resolve<WindowByChannelService>().ShowDisplay(0, true);
         }
     }
 }

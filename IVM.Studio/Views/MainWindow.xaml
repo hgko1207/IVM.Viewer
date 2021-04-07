@@ -246,11 +246,11 @@
                             <Border BorderBrush="#424242" BorderThickness="0 1 0 0">
                                 <StackPanel Margin="10">
                                     <StackPanel Orientation="Horizontal">
-                                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" ButtonKind="Toggle" IsChecked="{Binding AllChecked}" Content="ALL" Height="40" Width="75" Command="{Binding DisplayAllCommand}"/>
+                                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" ButtonKind="Toggle" IsChecked="{Binding AllChecked}" Content="ALL" Height="40" Width="75"/>
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Height="40" Width="75">
+                                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" ButtonKind="Toggle" Height="40" Width="75">
                                             <dx:SimpleButton.Content>
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock TextAlignment="Center" Text="DAPI"/>
@@ -263,7 +263,7 @@
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <dx:SimpleButton Style="{StaticResource GreenGradientButton}" Height="40" Width="75">
+                                        <dx:SimpleButton Style="{StaticResource GreenGradientButton}" ButtonKind="Toggle" Height="40" Width="75">
                                             <dx:SimpleButton.Content>
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock TextAlignment="Center" Text="GFP"/>
@@ -289,7 +289,7 @@
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                                        <dx:SimpleButton Style="{StaticResource BlueGradientButton}" Height="40" Width="75">
+                                        <dx:SimpleButton Style="{StaticResource BlueGradientButton}" ButtonKind="Toggle" Height="40" Width="75">
                                             <dx:SimpleButton.Content>
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock TextAlignment="Center" Text="NIR"/>
@@ -342,16 +342,18 @@
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Z-Stack" VerticalAlignment="Center" Width="110"/>
 
-                                        <dxe:TrackBarEdit TickItemDisplayMode="Tick" ValueToolTipPlacement="TopLeft" HorizontalAlignment="Stretch"
-                                                      Minimum="0" Maximum="300" Width="350">
+                                        <dxe:TrackBarEdit TickItemDisplayMode="TickAndText" HorizontalAlignment="Stretch"
+                                                      Minimum="0" Maximum="100" Width="400">
                                             <dxe:TrackBarEdit.StyleSettings>
-                                                <dxe:TrackBarZoomStyleSettings />
+                                                <dxe:TrackBarStyleSettings/>
                                             </dxe:TrackBarEdit.StyleSettings>
                                         </dxe:TrackBarEdit>
                                     </StackPanel>
 
                                     <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
                                         <TextBlock Text="Multi-Spot" VerticalAlignment="Center" Width="110"/>
+
+                                        <Slider Minimum="0" Maximum="10" IsSnapToTickEnabled="True" Width="400" Style="{StaticResource CustomSliderStyle}"/>
                                     </StackPanel>
 
                                     <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
