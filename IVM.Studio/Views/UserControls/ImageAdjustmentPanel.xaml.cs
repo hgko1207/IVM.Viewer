@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace IVM.Studio.Views
+namespace IVM.Studio.Views.UserControls
 {
     /// <summary>
-    /// ImageControl.xaml에 대한 상호 작용 논리
+    /// ImageAdjustmentPanel.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ImageControl : UserControl
+    public partial class ImageAdjustmentPanel : UserControl
     {
-        public ImageControl()
+        public ImageAdjustmentPanel()
         {
             InitializeComponent();
         }

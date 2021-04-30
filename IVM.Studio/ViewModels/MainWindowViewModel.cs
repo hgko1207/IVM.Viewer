@@ -2,6 +2,7 @@
 using IVM.Studio.MvvM;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
+using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Events;
@@ -120,6 +121,7 @@ namespace IVM.Studio.ViewModels
         public MainWindowViewModel(IContainerExtension container, IEventAggregator eventAggregator, IRegionManager regionManager) : base(container, eventAggregator)
         {
             regionManager.RegisterViewWithRegion("ImageControlPage", typeof(ImageControl));
+            regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustmentPanel));
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);

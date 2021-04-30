@@ -3,7 +3,7 @@ using Prism.Ioc;
 using System.Collections.Generic;
 using static IVM.Studio.Models.Common;
 
-namespace IVM.Studio.ViewModels
+namespace IVM.Studio.ViewModels.UserControls
 {
     public class ImageControlViewModel : ViewModelBase
     {
