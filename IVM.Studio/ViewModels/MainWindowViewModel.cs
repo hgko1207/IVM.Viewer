@@ -121,7 +121,8 @@ namespace IVM.Studio.ViewModels
         public MainWindowViewModel(IContainerExtension container, IEventAggregator eventAggregator, IRegionManager regionManager) : base(container, eventAggregator)
         {
             regionManager.RegisterViewWithRegion("ImageControlPage", typeof(ImageControl));
-            regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustmentPanel));
+            regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment));
+            regionManager.RegisterViewWithRegion("AnnotationPanel", typeof(Annotation));
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);

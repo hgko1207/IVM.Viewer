@@ -85,7 +85,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\ImageAdjustmentPanel.xaml">
+    <Page Include="Views\UserControls\ImageAdjustment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -115,7 +115,7 @@
     <Compile Include="Utils\CSVSerializableAttribute.cs" />
     <Compile Include="Utils\ImageSequenceConverter.cs" />
     <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\ImageAdjustmentPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -123,8 +123,8 @@
     <Compile Include="Views\ChannelViewerWindow.xaml.cs">
       <DependentUpon>ChannelViewerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\ImageAdjustmentPanel.xaml.cs">
-      <DependentUpon>ImageAdjustmentPanel.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\ImageAdjustment.xaml.cs">
+      <DependentUpon>ImageAdjustment.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>

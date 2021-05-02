@@ -3,13 +3,13 @@ using Prism.Ioc;
 
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class ImageAdjustmentPanelViewModel : ViewModelBase
+    public class AnnotationViewModel : ViewModelBase
     {
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public ImageAdjustmentPanelViewModel(IContainerExtension container) : base(container)
+        public AnnotationViewModel(IContainerExtension container) : base(container)
         {
         }
     }
