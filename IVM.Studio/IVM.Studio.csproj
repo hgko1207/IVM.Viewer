@@ -85,6 +85,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\Annotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\Colormap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\ImageAdjustment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,6 +123,7 @@
     <Compile Include="Utils\CSVSerializableAttribute.cs" />
     <Compile Include="Utils\ImageSequenceConverter.cs" />
     <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\AnnotationViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
@@ -122,6 +131,12 @@
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Views\ChannelViewerWindow.xaml.cs">
       <DependentUpon>ChannelViewerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Annotation.xaml.cs">
+      <DependentUpon>Annotation.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\Colormap.xaml.cs">
+      <DependentUpon>Colormap.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ImageAdjustment.xaml.cs">
       <DependentUpon>ImageAdjustment.xaml</DependentUpon>

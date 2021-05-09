@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="IVM.Studio.Views.UserControls.ImageAdjustment"
+﻿<UserControl x:Class="IVM.Studio.Views.UserControls.Colormap"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,24 +6,29 @@
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              mc:Ignorable="d" 
-             Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10" >
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10">
-            <TextBlock Text="Channel" VerticalAlignment="Center"/>
+            <TextBlock Text="Type" VerticalAlignment="Center"/>
 
             <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="10 0">
                 <dxe:ComboBoxEditItem Content="DAPI (425-465)"/>
             </dxe:ComboBoxEdit>
 
-            <TextBlock Text="Brightness" VerticalAlignment="Center" Margin="16 0 0 0"/>
+            <TextBlock Text="Channel" VerticalAlignment="Center" Margin="16 0 0 0"/>
 
-            <TextBlock Text="Contrast" VerticalAlignment="Center" Margin="16 0 0 0"/>
+            <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="10 0">
+                <dxe:ComboBoxEditItem Content="DAPI (425-465)"/>
+            </dxe:ComboBoxEdit>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal">
+            
         </StackPanel>
     </Grid>
 </UserControl>

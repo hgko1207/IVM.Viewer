@@ -120,9 +120,9 @@ namespace IVM.Studio.ViewModels
         /// <param name="regionManager"></param>
         public MainWindowViewModel(IContainerExtension container, IEventAggregator eventAggregator, IRegionManager regionManager) : base(container, eventAggregator)
         {
-            regionManager.RegisterViewWithRegion("ImageControlPage", typeof(ImageControl));
-            regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment));
+            regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment)); 
             regionManager.RegisterViewWithRegion("AnnotationPanel", typeof(Annotation));
+            regionManager.RegisterViewWithRegion("ColormapPanel", typeof(Colormap));
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);

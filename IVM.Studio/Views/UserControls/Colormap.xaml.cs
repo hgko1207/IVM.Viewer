@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace IVM.Studio.Views.UserControls
 {
     /// <summary>
-    /// ImageAdjustment.xaml에 대한 상호 작용 논리
+    /// Colormap.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ImageAdjustment : UserControl
+    public partial class Colormap : UserControl
     {
-        public ImageAdjustment()
+        public Colormap()
         {
             InitializeComponent();
         }
