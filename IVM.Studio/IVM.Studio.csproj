@@ -124,6 +124,7 @@
     <Compile Include="Utils\ImageSequenceConverter.cs" />
     <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\AnnotationViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ColormapViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />

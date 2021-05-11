@@ -4,26 +4,202 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              mc:Ignorable="d" 
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="10" >
+    
+    <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10">
-            <TextBlock Text="Channel" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10 0 5">
+            <TextBlock Text="Channel" FontWeight="Bold" VerticalAlignment="Center" Margin="6 0 0 0"/>
 
             <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="10 0">
                 <dxe:ComboBoxEditItem Content="DAPI (425-465)"/>
+                <dxe:ComboBoxEditItem Content="GFP (500-550)"/>
             </dxe:ComboBoxEdit>
 
-            <TextBlock Text="Brightness" VerticalAlignment="Center" Margin="16 0 0 0"/>
+            <TextBlock Text="Brightness" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
+            <dxe:SpinEdit Width="45" Value="1" IsFloatValue="False" Margin="10 0 0 0"/>
 
-            <TextBlock Text="Contrast" VerticalAlignment="Center" Margin="16 0 0 0"/>
+            <TextBlock Text="Contrast" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
+            <dxe:SpinEdit Width="45" Value="1" IsFloatValue="False" Margin="10 0 0 0"/>
         </StackPanel>
+
+        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 5" />
+
+        <Grid Grid.Row="2" Margin="0 5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Channel" HorizontalAlignment="Center" Grid.ColumnSpan="4" Margin="0 0 0 8" Style="{StaticResource TitleText}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Color" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="Visible" HorizontalAlignment="Center"/>
+
+                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock TextAlignment="Center" Text="Master" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" Text="(4 channels)" Margin="0 -3 0 0" FontSize="11"/>
+                </StackPanel>
+
+                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset"/>
+                <dx:SimpleButton Grid.Row="3" Grid.Column="3" Style="{StaticResource GrayGradientButton}" ButtonKind="Toggle" IsChecked="{Binding AllChecked}" Content="ALL" Width="50"/>
+            </Grid>
+
+            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 2" />
+
+            <Grid Grid.Column="2">
+                <TextBlock Text="Level" HorizontalAlignment="Center" Margin="0 0 0 5" Style="{StaticResource TitleText}"/>
+            </Grid>
+
+            <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 2" />
+
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.ColumnSpan="3" Text="Window" HorizontalAlignment="Center" Margin="0 0 0 5" Style="{StaticResource TitleText}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Ch." HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Hist." HorizontalAlignment="Center"/>
+
+                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource GrayGradientButton}" Content="All"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="All"/>
+            </Grid>
+        </Grid>
+
+        <ContentControl Grid.Row="3" Template="{StaticResource HorizontalLine}" Margin="0 5" />
+
+        <Grid Grid.Row="4" Margin="0 5" MinHeight="160">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock TextAlignment="Center" Text="DAPI" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" Text="(425-465)" Margin="0 -4 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="B&amp;W"/>
+                <dx:SimpleButton Grid.Row="0" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="OFF"/>
+
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock TextAlignment="Center" Text="GFP" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" Text="(500-550)" Margin="0 -4 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Green" Margin="2 0 0 0"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="OFF"/>
+
+                <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock TextAlignment="Center" Text="RFP" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" Text="(582-618)" Margin="0 -4 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Red" Margin="2 0 0 0"/>
+                <dx:SimpleButton Grid.Row="4" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="OFF"/>
+
+                <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                    <TextBlock TextAlignment="Center" Text="NIR" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" Text="(663-733)" Margin="0 -4 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Blue" Margin="2 0 0 0"/>
+                <dx:SimpleButton Grid.Row="6" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="OFF"/>
+            </Grid>
+
+            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 2" />
+
+            <Grid Grid.Column="2">
+
+            </Grid>
+
+            <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 2" />
+
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <dx:SimpleButton Grid.Row="0" Grid.Column="0" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+                <dx:SimpleButton Grid.Row="0" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+
+                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+
+                <dx:SimpleButton Grid.Row="4" Grid.Column="0" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+                <dx:SimpleButton Grid.Row="4" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+
+                <dx:SimpleButton Grid.Row="6" Grid.Column="0" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+                <dx:SimpleButton Grid.Row="6" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="OFF" ButtonKind="Toggle"/>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

@@ -85,10 +85,24 @@
     <ControlTemplate x:Key="VerticalLine" TargetType="{x:Type ContentControl}">
         <Border BorderThickness="1" BorderBrush="#404040" VerticalAlignment="Stretch">
             <Border.Effect>
-                <DropShadowEffect ShadowDepth="3" Color="Black" Direction="315" Opacity="0.5" BlurRadius="5"/>
+                <DropShadowEffect ShadowDepth="2" Color="Black" Direction="315" Opacity="0.5" BlurRadius="5"/>
             </Border.Effect>
         </Border>
     </ControlTemplate>
+
+    <ControlTemplate x:Key="HorizontalLine" TargetType="{x:Type ContentControl}">
+        <Border BorderThickness="1" BorderBrush="#404040" HorizontalAlignment="Stretch">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="2" Color="Black" Direction="315" Opacity="0.5" BlurRadius="5"/>
+            </Border.Effect>
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="TitleText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="#FFC000"/>
+    </Style>
 
     <!-- Slider Style -->
 
