@@ -191,7 +191,11 @@
         <Setter Property="Height" Value="30"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Content" Value="ON"/>
                 <Setter Property="Background" Value="{StaticResource OrangeGradientButtonBackground}"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Content" Value="OFF"/>
             </Trigger>
         </Style.Triggers>
     </Style>

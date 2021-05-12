@@ -104,12 +104,16 @@
         <Setter Property="Foreground" Value="#FFC000"/>
     </Style>
 
+    <Style TargetType="{x:Type dxe:ComboBoxEdit}">
+        <Setter Property="IsTextEditable" Value="False"/>
+    </Style>
+
     <!-- Slider Style -->
 
-    <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush2" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderForegroundSolidColorBrush2" Color="#ff1e91ea" />
-
+    <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush2" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush" Color="Black" />
+    
     <LinearGradientBrush x:Key="CustomSliderForegroundSolidColorBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#65351F" Offset="0.2" />
         <GradientStop Color="#9B5B2B" Offset="0.5" />

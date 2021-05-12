@@ -33,7 +33,7 @@
 
         <dxdo:DockLayoutManager Grid.Row="1" ViewStyle="Default" Background="#1F201D">
             <dxdo:LayoutGroup Caption="LayoutContent">
-                <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical" ItemWidth="500">
+                <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical" ItemWidth="580">
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Image Data">
                             <Grid>
