@@ -1,16 +1,12 @@
 ﻿using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace IVM.Studio.Models
+namespace IVM.Studio.Models.Events
 {
-    public class Events
-    {
-        
-    }
-
     public class MainViewerCloseEvent : PubSubEvent { }
+
+    /// <summary>표시중인 이미지를 갱신하는 이벤트입니다. 밝기, 대비 등의 색상 정보가 변화하거나 반전, 회전 등으로 이미지 정보가 변화할 때마다 발생합니다.</summary>
+    public class RefreshImageEvent : PubSubEvent { }
+
+    /// <summary>채널별 윈도우가 종료되었을때 발생하는 이벤트입니다.</summary>
+    public class ChWindowClosedEvent : PubSubEvent<int> { }
 }

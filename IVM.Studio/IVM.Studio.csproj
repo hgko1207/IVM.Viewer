@@ -113,6 +113,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ColorChannelModel.cs" />
+    <Compile Include="Models\ColorMap.cs" />
     <Compile Include="Models\Common.cs" />
     <Compile Include="Models\Events.cs" />
     <Compile Include="Models\FolderInfo.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="Services\WindowByChannelService.cs" />
     <Compile Include="Utils\CSVSerializableAttribute.cs" />
     <Compile Include="Utils\ImageSequenceConverter.cs" />
+    <Compile Include="Utils\ValueConverters.cs" />
     <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\AnnotationViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ColormapViewModel.cs" />

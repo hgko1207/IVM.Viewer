@@ -13,7 +13,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     
     <StackPanel Margin="10">
-        <StackPanel Orientation="Horizontal" Margin="5 0">
+        <StackPanel Orientation="Horizontal" Margin="5 5 5 0" Height="30">
             <TextBlock Text="Draw" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <dxe:SpinEdit Value="10" IsFloatValue="False" Width="50" Margin="10 0 5 0"/>
@@ -22,7 +22,7 @@
             </dxe:ComboBoxEdit>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Margin="5 15 5 0">
+        <StackPanel Orientation="Horizontal" Margin="5 15 5 0" Height="30">
             <TextBlock Text="Text" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <dxe:SpinEdit Value="40" IsFloatValue="False" Width="50" Margin="10 0 5 0"/>
@@ -43,14 +43,14 @@
             <TextBlock Text="Scale Bar" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Size" VerticalAlignment="Center"/>
-                <dxe:SpinEdit Value="100" IsFloatValue="False" Width="50" Margin="10 0 0 0"/>
+                <TextBlock Text="Size" VerticalAlignment="Center" FontSize="13"/>
+                <dxe:SpinEdit Value="100" IsFloatValue="False" Width="60" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
                 <TextBlock Text="μm" VerticalAlignment="Center" Margin="4 0 0 0"/>
 
-                <TextBlock Text="Height" VerticalAlignment="Center" Margin="20 0 0 0"/>
-                <dxe:SpinEdit Value="2" IsFloatValue="False" Width="50" Margin="10 0 0 0"/>
+                <TextBlock Text="Height" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                <dxe:SpinEdit Value="2" IsFloatValue="False" Width="50" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
 
-                <TextBlock Text="Text" VerticalAlignment="Center" Margin="35 0 0 0"/>
+                <TextBlock Text="Text" VerticalAlignment="Center" FontSize="13" Margin="35 0 0 0"/>
                 <dxe:ComboBoxEdit SelectedIndex="0" Width="50" Margin="10 0 5 0">
                     <dxe:ComboBoxEditItem Content="μm"/>
                     <dxe:ComboBoxEditItem Content="mm"/>
@@ -78,14 +78,14 @@
                     <dxe:ComboBoxEditItem Content="Text"/>
                 </dxe:ComboBoxEdit>
 
-                <TextBlock Text="Start" VerticalAlignment="Center" Margin="20 0 0 0"/>
-                <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0"/>
+                <TextBlock Text="Start" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
 
-                <TextBlock Text="Interval" VerticalAlignment="Center" Margin="20 0 0 0"/>
-                <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0"/>
+                <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
 
-                <TextBlock Text="Suffix" VerticalAlignment="Center" Margin="20 0 0 0"/>
-                <dxe:TextEdit Margin="10 0 0 0" EditValue="μm" Width="50" HorizontalContentAlignment="Right"/>
+                <TextBlock Text="Suffix" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                <dxe:TextEdit Margin="10 0 0 0" EditValue="μm" Width="45" HorizontalContentAlignment="Right"/>
                 
                 <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Display" Margin="15 0 0 0"/>
             </StackPanel>

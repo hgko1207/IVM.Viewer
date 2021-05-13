@@ -72,16 +72,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="IconButton" TargetType="{x:Type dx:SimpleButton}">
-        <Setter Property="Width" Value="26"/>
-        <Setter Property="Height" Value="26"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-    </Style>
-
     <ControlTemplate x:Key="VerticalLine" TargetType="{x:Type ContentControl}">
         <Border BorderThickness="1" BorderBrush="#404040" VerticalAlignment="Stretch">
             <Border.Effect>
@@ -104,6 +94,17 @@
         <Setter Property="Foreground" Value="#FFC000"/>
     </Style>
 
+    <Style x:Key="HistogramEdit" TargetType="{x:Type dxe:SpinEdit}">
+        <Setter Property="Width" Value="45"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="MinValue" Value="1"/>
+        <Setter Property="MaxValue" Value="255"/>
+    </Style>
+
+    <Style TargetType="{x:Type dxe:SpinEdit}">
+        <Setter Property="IsFloatValue" Value="False"/>
+    </Style>
+
     <Style TargetType="{x:Type dxe:ComboBoxEdit}">
         <Setter Property="IsTextEditable" Value="False"/>
     </Style>
@@ -112,7 +113,7 @@
 
     <SolidColorBrush x:Key="CustomSliderForegroundSolidColorBrush2" Color="#ff1e91ea" />
     <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush2" Color="#55ffffff" />
-    <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush" Color="Black" />
+    <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush" Color="#1E211B" />
     
     <LinearGradientBrush x:Key="CustomSliderForegroundSolidColorBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#65351F" Offset="0.2" />
@@ -126,6 +127,12 @@
         <GradientStop Color="#3B3C39" Offset="0.8" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="CustomSelectSliderThumBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#663521" Offset="0.2" />
+        <GradientStop Color="#9C5B2C" Offset="0.5" />
+        <GradientStop Color="#643621" Offset="0.8" />
+    </LinearGradientBrush>
+
     <Style x:Key="CustomSliderThumbStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Focusable" Value="false"/>
         <Setter Property="SnapsToDevicePixels" Value="true"/>
@@ -137,7 +144,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Canvas SnapsToDevicePixels="true">
-                        <Grid Height="20" Width="30">
+                        <!--<Grid Height="20" Width="30">
                             <Rectangle x:Name="Background" 
                                 Fill="{StaticResource CustomSliderThumBrush}" Stroke="#FFDADADA"
                                 Height="20" Width="30"
@@ -145,12 +152,17 @@
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                 Foreground="White" FontSize="10"
                                 Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}}}"/>
+                        </Grid>-->
+                        <Grid Height="20" Width="10">
+                            <Rectangle x:Name="Background" 
+                                Fill="{StaticResource CustomSelectSliderThumBrush}" Stroke="#1F201D"
+                                RadiusX="2" RadiusY="2"/>
                         </Grid>
                     </Canvas>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
+                        <!--<Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Fill" TargetName="Background" Value="Orange"/>
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger Property="IsDragging" Value="true">
                             <Setter Property="Fill" TargetName="Background" Value="{StaticResource CustomSliderThumBrush}"/>
                         </Trigger>
@@ -172,17 +184,17 @@
                 
                 <DockPanel LastChildFill="True">
                     <Border x:Name="PART_SelectionRange" Height="5" ClipToBounds="True" Visibility="Visible">
-                        <Rectangle Margin="10 0 -10 0" RadiusX="1" RadiusY="1" Fill="{StaticResource CustomSliderForegroundSolidColorBrush}" />
+                        <Rectangle Margin="5 0 -10 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderForegroundSolidColorBrush}" />
                     </Border>
                     <Border ClipToBounds="True" Height="5" Visibility="Visible">
-                        <Rectangle Margin="20 0 10 0" RadiusX="1" RadiusY="1" Fill="{StaticResource CustomSliderBackgroundSolidColorBrush}" />
+                        <Rectangle Margin="5 0 5 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderBackgroundSolidColorBrush}" />
                     </Border>
                 </DockPanel>
                 
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
                         <Thumb Style="{StaticResource CustomSliderThumbStyle}" VerticalAlignment="Center"
-                               Width="{TemplateBinding MinHeight}" Height="{TemplateBinding MinHeight}" OverridesDefaultStyle="True" Focusable="False" />
+                               Width="{TemplateBinding MinWidth}" Height="{TemplateBinding MinHeight}" OverridesDefaultStyle="True" Focusable="False" />
                     </Track.Thumb>
                 </Track>
             </Grid>
@@ -192,6 +204,7 @@
     <Style x:Key="CustomSliderStyle" TargetType="{x:Type Slider}">
         <Setter Property="Template" Value="{StaticResource CustomSliderControlTemplate}" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="MinWidth" Value="10" />
         <Setter Property="MinHeight" Value="20" />
         <Setter Property="Height" Value="20" />
         <Setter Property="MaxHeight" Value="20" />

@@ -28,10 +28,10 @@
             </dxe:ComboBoxEdit>
 
             <TextBlock Text="Brightness" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
-            <dxe:SpinEdit Width="45" Value="1" IsFloatValue="False" Margin="10 0 0 0"/>
+            <dxe:SpinEdit Width="50" Value="1" Margin="10 0 0 0"/>
 
             <TextBlock Text="Contrast" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
-            <dxe:SpinEdit Width="45" Value="1" IsFloatValue="False" Margin="10 0 0 0"/>
+            <dxe:SpinEdit Width="50" Value="1" Margin="10 0 0 0"/>
         </StackPanel>
 
         <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="5 5" />
@@ -106,9 +106,9 @@
                 <TextBlock Grid.Row="1" Grid.Column="4" Text="White" HorizontalAlignment="Center"/>
 
                 <Slider Grid.Row="2" Grid.Column="2" Minimum="1" Maximum="255" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
-
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Width="45" Height="28" Value="1" MinValue="1" MaxValue="255" IsFloatValue="False" Margin="0 -4 0 0"/>
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Width="45" Height="28" Value="255" MinValue="1" MaxValue="255" IsFloatValue="False" Margin="0 -4 0 0"/>
+                
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Value="1" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Value="255" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}"/>
             </Grid>
 
             <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
@@ -199,7 +199,40 @@
             <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 2" />
 
             <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="2"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+
+                <dxe:TrackBarEdit Grid.Row="0" Grid.Column="2" Minimum="1" Maximum="255" SelectionStart="1" SelectionEnd="255" TickPlacement="None" Margin="5 0">
+                    <dxe:TrackBarEdit.StyleSettings>
+                        <dxe:TrackBarRangeStyleSettings/>
+                    </dxe:TrackBarEdit.StyleSettings>
+                </dxe:TrackBarEdit>
+
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
             </Grid>
 
             <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 2" />

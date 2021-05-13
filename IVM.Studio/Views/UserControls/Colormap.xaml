@@ -4,11 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
+             xmlns:utils="clr-namespace:IVM.Studio.Utils"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <utils:ColorMapConverter x:Key="ColorMapConverter" />
+        <utils:ColorMapCollectionConverter x:Key="ColorMapCollectionConverter" />
+    </UserControl.Resources>
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -16,21 +24,30 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5 10 5 10">
-            <TextBlock Text="Type" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5 10" Height="30">
+            <TextBlock Text="Type" VerticalAlignment="Center" FontSize="13"/>
 
-            <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="10 0">
-                <dxe:ComboBoxEditItem Content="DAPI (425-465)"/>
+            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="250" ApplyItemTemplateToSelectedItem="True" DataContext="{Binding CurrentSelectedChannel}" 
+                              SelectedItem="{Binding ColorMap, Converter={StaticResource ColorMapConverter}}"
+                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=StackPanel}, Path=DataContext.ColorMaps, Converter={StaticResource ColorMapCollectionConverter}}">
+                <dxe:ComboBoxEdit.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5 0">
+                            <TextBlock Text="{Binding ColorMap}" Width="90" VerticalAlignment="Center"/>
+                            <Image Source="{Binding Image}" Width="160"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </dxe:ComboBoxEdit.ItemTemplate>
             </dxe:ComboBoxEdit>
 
-            <TextBlock Text="Channel" VerticalAlignment="Center" Margin="16 0 0 0"/>
+            <TextBlock Text="Channel" VerticalAlignment="Center" FontSize="13" Margin="30 0 0 0"/>
 
-            <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" SelectedIndex="0" Margin="10 0 0 0">
+            <dxe:ComboBoxEdit SelectedIndex="0" Margin="10 0 0 0" Width="130">
                 <dxe:ComboBoxEditItem Content="DAPI (425-465)"/>
             </dxe:ComboBoxEdit>
         </StackPanel>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">
             <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Apply"/>
             <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0"/>
         </StackPanel>
