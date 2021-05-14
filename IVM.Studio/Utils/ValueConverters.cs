@@ -13,6 +13,26 @@ namespace IVM.Studio.Utils
     {
     }
 
+    [ValueConversion(typeof(bool), typeof(string))]
+    public class PlayAndPauseConverter : IValueConverter
+    {
+        private string play = "{dx:DXImage Images/Arrows/Next_32x32.png}";
+        private string pause = "{dx:DXImage Images/Arrows/Stop_32x32.png}";
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (bool)value ? pause : play;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string icon)
+                return icon == pause;
+            else
+                return false;
+        }
+    }
+
     //[ValueConversion(typeof(ColorMap), typeof(Image))]
     //public class ColorMapConverter : IValueConverter
     //{

@@ -14,7 +14,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="960" Width="1680"
+        Title="IVM Studio" Height="1040" Width="1680" Top="0"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
 
     <Grid>
@@ -87,23 +87,23 @@
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
-                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="340">
                         <dxdo:DocumentPanel Caption="Image Adjustment">
-                            <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel" />
+                            <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Annotation">
-                            <ContentControl prism:RegionManager.RegionName="AnnotationPanel" />
+                            <ContentControl prism:RegionManager.RegionName="AnnotationPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Colormap">
-                            <ContentControl prism:RegionManager.RegionName="ColormapPanel" />
+                            <ContentControl prism:RegionManager.RegionName="ColormapPanel"/>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Display Control">
-                            
+                            <ContentControl prism:RegionManager.RegionName="DisplayControlPanel"/>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>

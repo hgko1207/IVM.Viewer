@@ -124,6 +124,7 @@ namespace IVM.Studio.ViewModels
             regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment)); 
             regionManager.RegisterViewWithRegion("AnnotationPanel", typeof(Annotation));
             regionManager.RegisterViewWithRegion("ColormapPanel", typeof(Colormap));
+            regionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControl));
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);

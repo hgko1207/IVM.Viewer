@@ -113,6 +113,18 @@
         <GradientStop Color="#FF9B9B9B" Offset="0.8" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="GradientActiveButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#65351F" Offset="0.2" />
+        <GradientStop Color="#9B5B2B" Offset="0.5" />
+        <GradientStop Color="#65351F" Offset="0.8" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GradientButtonBackground" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FF3A3D37" Offset="0.2" />
+        <GradientStop Color="#FF454543" Offset="0.5" />
+        <GradientStop Color="#FF343532" Offset="0.8" />
+    </LinearGradientBrush>
+
 
     <!-- Button Style -->
 
@@ -164,7 +176,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="GrayGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
+    <Style x:Key="GrayGradientButton" TargetType="{x:Type dx:SimpleButton}" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="Background" Value="{StaticResource GrayGradientButtonBackground}" />
         <Setter Property="Height" Value="30"/>
         <Style.Triggers>
@@ -177,7 +189,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="OrangeGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
+    <Style x:Key="OrangeGradientButton" TargetType="{x:Type dx:SimpleButton}" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="Background" Value="{StaticResource OrangeGradientButtonBackground}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -186,16 +198,35 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="ToggleButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
+    <Style x:Key="ToggleButton" TargetType="{x:Type dx:SimpleButton}" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="Background" Value="{StaticResource GrayGradientButtonBackground}"/>
+        <Setter Property="ButtonKind" Value="Toggle"/>
         <Setter Property="Height" Value="30"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Content" Value="ON"/>
-                <Setter Property="Background" Value="{StaticResource OrangeGradientButtonBackground}"/>
+                <Setter Property="Background" Value="{StaticResource GradientActiveButtonBackground}"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="False">
                 <Setter Property="Content" Value="OFF"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="PlayAndPauseButton" TargetType="{x:Type dx:SimpleButton}" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="Background" Value="{StaticResource GrayGradientButtonBackground}"/>
+        <Setter Property="ButtonKind" Value="Toggle"/>
+        <Setter Property="BorderThickness" Value="0.4"/>
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="Height" Value="25"/>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{StaticResource GradientActiveButtonBackground}"/>
+                <!--<Setter Property="Glyph" Value="{dx:DXImage Images/Arrows/Next_32x32.png}"/>-->
+                <Setter Property="Glyph" Value="/Resources/Images/Play_16x16.png"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Glyph" Value="/Resources/Images/Pause_16x16.png"/>
             </Trigger>
         </Style.Triggers>
     </Style>

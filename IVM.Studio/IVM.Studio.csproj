@@ -93,6 +93,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\DisplayControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\ImageAdjustment.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -128,6 +132,7 @@
     <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\AnnotationViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ColormapViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\DisplayControlViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
@@ -141,6 +146,9 @@
     </Compile>
     <Compile Include="Views\UserControls\Colormap.xaml.cs">
       <DependentUpon>Colormap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DisplayControl.xaml.cs">
+      <DependentUpon>DisplayControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ImageAdjustment.xaml.cs">
       <DependentUpon>ImageAdjustment.xaml</DependentUpon>
@@ -237,6 +245,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\crop_circle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Play_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Pause_16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

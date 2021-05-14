@@ -88,12 +88,6 @@
         </Border>
     </ControlTemplate>
 
-    <Style x:Key="TitleText" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="#FFC000"/>
-    </Style>
-
     <Style x:Key="HistogramEdit" TargetType="{x:Type dxe:SpinEdit}">
         <Setter Property="Width" Value="45"/>
         <Setter Property="Height" Value="28"/>
@@ -107,6 +101,31 @@
 
     <Style TargetType="{x:Type dxe:ComboBoxEdit}">
         <Setter Property="IsTextEditable" Value="False"/>
+    </Style>
+
+    <!-- Text Style -->
+
+    <SolidColorBrush x:Key="TextBlockBackground" Color="#FF373836" />
+    <SolidColorBrush x:Key="TextBlockForeground" Color="#FF7F7F7F"/>
+
+    <Style x:Key="TitleText" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="#FFFFC100"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="GeneralTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextBlockForeground}" />
+        <Setter Property="Padding" Value="5,0"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="GeneralBorder" TargetType="Border">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Background" Value="{StaticResource TextBlockBackground}"/>
     </Style>
 
     <!-- Slider Style -->
@@ -184,10 +203,10 @@
                 
                 <DockPanel LastChildFill="True">
                     <Border x:Name="PART_SelectionRange" Height="5" ClipToBounds="True" Visibility="Visible">
-                        <Rectangle Margin="5 0 -10 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderForegroundSolidColorBrush}" />
+                        <Rectangle Margin="0 0 -10 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderForegroundSolidColorBrush}" />
                     </Border>
                     <Border ClipToBounds="True" Height="5" Visibility="Visible">
-                        <Rectangle Margin="5 0 5 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderBackgroundSolidColorBrush}" />
+                        <Rectangle Margin="0 0 0 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderBackgroundSolidColorBrush}" />
                     </Border>
                 </DockPanel>
                 
