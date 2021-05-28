@@ -4,6 +4,8 @@ using Prism.Ioc;
 using Prism.Unity;
 using System.Windows;
 using DevExpress.Xpf.Core;
+using Prism.Mvvm;
+using IVM.Studio.Mvvm;
 
 namespace IVM.Studio
 {
@@ -31,6 +33,11 @@ namespace IVM.Studio
         {
             containerRegistry.RegisterSingleton<FileService>(); 
             containerRegistry.RegisterSingleton<WindowByChannelService>();
+        }
+
+        protected override void ConfigureViewModelLocator()
+        {
+            ViewModelLocationProvider.SetDefaultViewModelFactory(new ViewModelResolver(() => Container).UseDefaultConfigure().ResolveViewModelForView);
         }
     }
 }

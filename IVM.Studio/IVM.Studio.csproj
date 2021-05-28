@@ -117,6 +117,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\Guards.cs" />
+    <Compile Include="Infrastructure\IGenericInterface.cs" />
     <Compile Include="Models\ColorChannelModel.cs" />
     <Compile Include="Models\ColorMap.cs" />
     <Compile Include="Models\Common.cs" />
@@ -124,6 +126,9 @@
     <Compile Include="Models\FolderInfo.cs" />
     <Compile Include="Models\ImageSequence.cs" />
     <Compile Include="Models\Metadata.cs" />
+    <Compile Include="Infrastructure\IViewLoadedAndUnloadedAware.cs" />
+    <Compile Include="Mvvm\IViewModelResolver.cs" />
+    <Compile Include="Mvvm\ViewModelResolver.cs" />
     <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\WindowByChannelService.cs" />
     <Compile Include="Utils\CSVSerializableAttribute.cs" />

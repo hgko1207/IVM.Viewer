@@ -1,6 +1,10 @@
 ﻿using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+using Prism.Regions;
+using System;
+using System.Windows.Threading;
+using Unity;
 
 /**
  * @Class Name : ViewModelBase.cs
@@ -26,7 +30,29 @@ namespace IVM.Studio.MvvM
         }
 
         protected IContainerExtension Container { get; }
-        protected IEventAggregator EventAggregator { get; }
+
+        private IEventAggregator eventAggregator;
+        /// <summary>
+        /// The EventAggregator
+        /// </summary>
+        public IEventAggregator EventAggregator
+        {
+            get { return eventAggregator; }
+            private set { this.SetProperty<IEventAggregator>(ref this.eventAggregator, value); }
+        }
+
+        private IRegionManager regionManager;
+        /// <summary>
+        /// The region manager
+        /// </summary>
+        public IRegionManager RegionManager
+        {
+            get { return regionManager; }
+            private set { this.SetProperty<IRegionManager>(ref this.regionManager, value); }
+        }
+
+        public Dispatcher Dispatcher { get; set; }
+        protected virtual void Invoke(Action action) => Dispatcher.Invoke(action);
 
         /// <summary>
         /// 생성자
@@ -35,17 +61,8 @@ namespace IVM.Studio.MvvM
         public ViewModelBase(IContainerExtension container)
         {
             this.Container = container;
-        }
-
-        /// <summary>
-        /// 생성자
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="eventAggregator"></param>
-        public ViewModelBase(IContainerExtension container, IEventAggregator eventAggregator)
-        {
-            this.Container = Container;
-            this.EventAggregator = eventAggregator;
+            EventAggregator = container.Resolve<IEventAggregator>();
+            RegionManager = container.Resolve<IRegionManager>();
         }
     }
 }

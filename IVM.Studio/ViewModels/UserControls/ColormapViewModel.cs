@@ -1,7 +1,6 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.MvvM;
-using Prism.Events;
 using Prism.Ioc;
 using System;
 using System.Collections.Generic;
@@ -43,7 +42,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public ColormapViewModel(IContainerExtension container, IEventAggregator eventAggregator) : base(container, eventAggregator)
+        public ColormapViewModel(IContainerExtension container) : base(container)
         {
             colorChannelInfoCollection = new ObservableCollection<ColorChannelModel> {
                 new ColorChannelModel(0, true, Colors.Red, false, 0, 1, 0, 255, container, EventAggregator),

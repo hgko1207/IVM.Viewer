@@ -1,14 +1,13 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
+using IVM.Studio.Mvvm;
 using IVM.Studio.MvvM;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Ioc;
-using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -31,7 +30,7 @@ using static IVM.Studio.Models.Common;
  */
 namespace IVM.Studio.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<MainWindow>
     {
         private ObservableCollection<FolderInfo> folderInfoList;
         public ObservableCollection<FolderInfo> FolderInfoList => folderInfoList ?? (folderInfoList = new ObservableCollection<FolderInfo>());
@@ -118,13 +117,12 @@ namespace IVM.Studio.ViewModels
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="regionManager"></param>
-        public MainWindowViewModel(IContainerExtension container, IEventAggregator eventAggregator, IRegionManager regionManager) : base(container, eventAggregator)
+        public MainWindowViewModel(IContainerExtension container) : base(container)
         {
-            regionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment)); 
-            regionManager.RegisterViewWithRegion("AnnotationPanel", typeof(Annotation));
-            regionManager.RegisterViewWithRegion("ColormapPanel", typeof(Colormap));
-            regionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControl));
+            RegionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment));
+            RegionManager.RegisterViewWithRegion("AnnotationPanel", typeof(Annotation));
+            RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(Colormap));
+            RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControl));
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
@@ -151,6 +149,14 @@ namespace IVM.Studio.ViewModels
             SelectedEraserSize = 30;
             SelectedFontSize = 40;
             SelectedFontItem = FontItemList[0];
+        }
+
+        public void OnLoaded(MainWindow view)
+        {
+        }
+
+        public void OnUnloaded(MainWindow view)
+        {
         }
 
         /// <summary>
@@ -210,5 +216,6 @@ namespace IVM.Studio.ViewModels
                 }
             }
         }
+
     }
 }
