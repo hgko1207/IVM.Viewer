@@ -12,17 +12,22 @@
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
         xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:util="clr-namespace:IVM.Studio.Utils"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
         Title="IVM Studio" Height="1040" Width="1680" Top="0"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
+
+    <Window.Resources>
+        <util:IndexFromOneConverter x:Key="IndexFromOneConverter"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <dxdo:LayoutPanel Grid.Row="0" ShowCaption="False" ItemHeight="24" ShowBorder="False">
             <dxb:MainMenuControl FontSize="14">
                 <dxb:BarSubItem Content=" File " Command="{Binding OpenFolderCommand}"/>
@@ -37,26 +42,37 @@
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Image Data">
                             <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="127*"/>
+                                    <ColumnDefinition Width="451*"/>
+                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
 
-                                <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10">
+                                <dxg:GridControl ItemsSource="{Binding SlideInfoCollection}" SelectedItem="{Binding SelectedSlideInfo}" SelectionMode="Row" ShowBorder="True" 
+                                                 RenderOptions.EdgeMode="Aliased" Margin="10" Grid.ColumnSpan="2">
                                     <dxg:GridControl.View>
                                         <dxg:TableView AutoWidth="True"/>
                                     </dxg:GridControl.View>
 
                                     <dxg:GridControl.Columns>
-                                        <dxg:GridColumn Header="#" FieldName="" Width="50"/>
+                                        <dxg:GridColumn Width="40" Header="#">
+                                            <dxg:GridColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding RowData.RowHandle.Value, Converter={StaticResource IndexFromOneConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </dxg:GridColumn.CellTemplate>
+                                        </dxg:GridColumn>
                                         <dxg:GridColumn Header="Category" FieldName="Category"/>
-                                        <dxg:GridColumn Header="Filename" FieldName="Filename"/>
+                                        <dxg:GridColumn Header="Filename" FieldName="Name"/>
                                     </dxg:GridControl.Columns>
                                 </dxg:GridControl>
 
-                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 10">
-                                    <Button Content="Previous" Width="80"/>
-                                    <Button Content="Next" Width="80" Margin="8 0 0 0"/>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,10" Grid.Column="1">
+                                    <Button Content="Previous" Width="80" Command="{Binding PreviousSlideCommand}"/>
+                                    <Button Content="Next" Width="80" Margin="8 0 0 0" Command="{Binding NextSlideCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </dxdo:DocumentPanel>
@@ -67,16 +83,21 @@
                                     <RowDefinition/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                
-                                <dxg:GridControl SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10">
+
+                                <dxg:GridControl ItemsSource="{Binding MetadataCollection}" SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10">
                                     <dxg:GridControl.View>
-                                        <dxg:TableView AutoWidth="True"/>
+                                        <dxg:TableView AutoWidth="True" ShowColumnHeaders="False" AllowCellMerge="True"/>
                                     </dxg:GridControl.View>
 
-                                    <dxg:GridControl.Columns>
-                                        <dxg:GridColumn Header="Name" FieldName="Category"/>
-                                        <dxg:GridColumn Header="Filename" FieldName="Filename"/>
-                                    </dxg:GridControl.Columns>
+                                    <dxg:GridControl.Bands>
+                                        <dxg:GridControlBand Header="Name" HorizontalHeaderContentAlignment="Center">
+                                            <dxg:GridColumn FieldName="Group"/>
+                                        </dxg:GridControlBand>
+                                        <dxg:GridControlBand Header="Filename" HorizontalHeaderContentAlignment="Center">
+                                            <dxg:GridColumn FieldName="Name1"/>
+                                            <dxg:GridColumn FieldName="Value1"/>
+                                        </dxg:GridControlBand>
+                                    </dxg:GridControl.Bands>
                                 </dxg:GridControl>
 
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 10">

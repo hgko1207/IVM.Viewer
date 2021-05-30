@@ -1,4 +1,5 @@
-﻿using IVM.Studio.Models;
+﻿using DevExpress.Xpf.WindowsUI;
+using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.MvvM;
@@ -8,10 +9,12 @@ using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using Unity;
 using static IVM.Studio.Models.Common;
@@ -32,56 +35,25 @@ namespace IVM.Studio.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<MainWindow>
     {
-        private ObservableCollection<FolderInfo> folderInfoList;
-        public ObservableCollection<FolderInfo> FolderInfoList => folderInfoList ?? (folderInfoList = new ObservableCollection<FolderInfo>());
+        private ObservableCollection<SlideInfo> slideInfoCollection;
+        public ObservableCollection<SlideInfo> SlideInfoCollection => slideInfoCollection ?? (slideInfoCollection = new ObservableCollection<SlideInfo>());
 
-        private FolderInfo selectedFileInfo;
-        public FolderInfo SelectedFileInfo
+        private SlideInfo selectedSlideInfo;
+        public SlideInfo SelectedSlideInfo
         {
-            get => selectedFileInfo;
+            get => selectedSlideInfo;
             set
             {
-                if (SetProperty(ref selectedFileInfo, value) && value != null)
+                if (SetProperty(ref selectedSlideInfo, value) && value != null)
                 {
-                    //StopSlideshow();
-                    //EnableImageSliders(currentFolderPath, value.Name);
-                    //DisplaySlide(true);
+                    StopSlideshow();
+                    EnableImageSliders(currentSlidesPath, value.Name);
+                    DisplaySlide(true);
                 }
             }
         }
 
-        public List<int> PenThicknessList { get; }
-        public List<int> EraserSizeList { get; }
-        public List<int> FontSizeList { get; }
-        public List<FontItem> FontItemList { get; }
-
-        private int selectedPenThickness;
-        public int SelectedPenThickness
-        {
-            get => selectedPenThickness;
-            set => SetProperty(ref selectedPenThickness, value);
-        }
-
-        private int selectedEraserSize;
-        public int SelectedEraserSize
-        {
-            get => selectedEraserSize;
-            set => SetProperty(ref selectedEraserSize, value);
-        }
-
-        private int selectedFontSize;
-        public int SelectedFontSize
-        {
-            get => selectedFontSize;
-            set => SetProperty(ref selectedFontSize, value);
-        }
-
-        private FontItem selectedFontItem;
-        public FontItem SelectedFontItem
-        {
-            get => selectedFontItem;
-            set => SetProperty(ref selectedFontItem, value);
-        }
+        public ObservableCollection<MetadataModel> MetadataCollection = new ObservableCollection<MetadataModel>();
 
         private bool allChecked;
         public bool AllChecked
@@ -106,12 +78,16 @@ namespace IVM.Studio.ViewModels
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
+        public ICommand PreviousSlideCommand { get; private set; }
+        public ICommand NextSlideCommand { get; private set; }
 
-        private string currentFolderPath;
+        private string currentSlidesPath;
 
         private readonly IEnumerable<string> imageFileExtensions;
         private readonly IEnumerable<string> videoFileExtensions;
         private IEnumerable<string> extensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
+
+        private FileInfo currentFile;
 
         /// <summary>
         /// 생성자
@@ -126,31 +102,17 @@ namespace IVM.Studio.ViewModels
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
+            PreviousSlideCommand = new DelegateCommand(PreviousSlide);
+            NextSlideCommand = new DelegateCommand(NextSlide);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
-
-            PenThicknessList = new List<int>();
-            for (int i = 1; i <= 10; i++)
-                PenThicknessList.Add(i);
-
-            EraserSizeList = new List<int>();
-            for (int i = 1; i <= 50; i++)
-                EraserSizeList.Add(i);
-
-            FontSizeList = new List<int>();
-            for (int i = 1; i <= 100; i++)
-                FontSizeList.Add(i);
-
-            FontItemList = new List<FontItem>();
-            FontItemList.Add(new FontItem() { Type = "1", Name = "맑은 고딕" });
-
-            SelectedPenThickness = 1;
-            SelectedEraserSize = 30;
-            SelectedFontSize = 40;
-            SelectedFontItem = FontItemList[0];
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="view"></param>
         public void OnLoaded(MainWindow view)
         {
         }
@@ -165,11 +127,11 @@ namespace IVM.Studio.ViewModels
         private void OpenFolder()
         {
             VistaFolderBrowserDialog folderBrowserDialog = new VistaFolderBrowserDialog();
-            if (!string.IsNullOrEmpty(currentFolderPath))
-                folderBrowserDialog.SelectedPath = currentFolderPath;
+            if (!string.IsNullOrEmpty(currentSlidesPath))
+                folderBrowserDialog.SelectedPath = currentSlidesPath;
 
             if (folderBrowserDialog.ShowDialog().GetValueOrDefault())
-                currentFolderPath = folderBrowserDialog.SelectedPath;
+                currentSlidesPath = folderBrowserDialog.SelectedPath;
 
             Refresh();
         }
@@ -179,12 +141,12 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void Refresh()
         {
-            FolderInfoList.Clear();
+            SlideInfoCollection.Clear();
 
-            if (string.IsNullOrEmpty(currentFolderPath))
+            if (string.IsNullOrEmpty(currentSlidesPath))
                 return;
 
-            DirectoryInfo directory = new DirectoryInfo(currentFolderPath);
+            DirectoryInfo directory = new DirectoryInfo(currentSlidesPath);
             if (!directory.Exists)
                 return;
 
@@ -194,28 +156,111 @@ namespace IVM.Studio.ViewModels
                 if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, extensions, true).Any())
                     continue;
 
-                FolderInfo folderInfo = new FolderInfo() { Category = "Folder", Filename = imageFolder.Name };
-                FolderInfoList.Add(folderInfo);
+                SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name };
+                SlideInfoCollection.Add(slideInfo);
 
                 if (first)
                 {
-                    SelectedFileInfo = folderInfo;
+                    SelectedSlideInfo = slideInfo;
                     first = false;
                 }
             }
 
             foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, extensions, false))
             {
-                FolderInfo folderInfo = new FolderInfo() { Category = "File", Filename = fileInfo.Name };
-                FolderInfoList.Add(folderInfo);
+                SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name };
+                SlideInfoCollection.Add(slideInfo);
 
                 if (first)
                 {
-                    SelectedFileInfo = folderInfo;
+                    SelectedSlideInfo = slideInfo;
                     first = false;
                 }
             }
         }
 
+        /// <summary>
+        /// Previous 버튼 클릭 시
+        /// </summary>
+        private void PreviousSlide()
+        {
+            int idx = SlideInfoCollection.IndexOf(SelectedSlideInfo);
+            if (idx <= 0)
+                return;
+
+            SelectedSlideInfo = SlideInfoCollection[idx - 1];
+        }
+
+        /// <summary>
+        /// Next 버튼 클릭 시
+        /// </summary>
+        private void NextSlide()
+        {
+            int idx = SlideInfoCollection.IndexOf(SelectedSlideInfo);
+            if (idx < 0 || idx >= SlideInfoCollection.Count - 1)
+                return;
+
+            SelectedSlideInfo = SlideInfoCollection[idx + 1];
+        }
+
+        /// <summary>
+        /// 이미지 또는 동영상 슬라이드를 화면에 출력합니다.
+        /// </summary>
+        /// <param name="slideChanged"></param>
+        private void DisplaySlide(bool slideChanged)
+        {
+            string slidePath = Path.Combine(currentSlidesPath, SelectedSlideInfo.Name);
+
+            FileInfo file = null;
+            if (SelectedSlideInfo.Category == "File")
+                file = new FileInfo(slidePath);
+            else
+                file = Container.Resolve<FileService>().FindImageInSlide(new DirectoryInfo(slidePath), extensions, 0, 0, 0, 0);
+
+            // 파일 실존하는지 확인
+            if (file == null || !file.Exists)
+            {
+                StopSlideshow();
+                WinUIMessageBox.Show("파일이 존재하지 않습니다.", "슬라이드 이동", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // 표시중인 파일과 같은 이름이면 무시
+            if (currentFile?.FullName == file.FullName)
+                return;
+
+            currentFile = file;
+
+            // 메타 데이터 로드
+            Metadata metadata = Container.Resolve<FileService>().ReadMetadataOfImage(currentSlidesPath, currentFile);
+
+            // 디스플레이
+            if (extensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                DisplayImageWithMetadata(metadata);
+            }
+            else if (extensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            {
+
+            }
+        }
+
+        private void StopSlideshow()
+        {
+        }
+
+        private void EnableImageSliders(string currentSlidesPath, string name)
+        {
+        }
+
+        private void DisplayImageWithMetadata(Metadata metadata)
+        {
+            MetadataCollection.Clear();
+
+            if (metadata != null)
+            {
+                MetadataCollection.Add(new MetadataModel() { Group = "Filename", Name1 = metadata.FileName, Value1 = metadata.FileName });
+            }
+        }
     }
 }
