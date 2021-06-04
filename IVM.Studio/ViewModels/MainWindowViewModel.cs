@@ -17,7 +17,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Unity;
-using static IVM.Studio.Models.Common;
 
 /**
  * @Class Name : MainWindowViewModel.cs
@@ -81,6 +80,9 @@ namespace IVM.Studio.ViewModels
         public ICommand PreviousSlideCommand { get; private set; }
         public ICommand NextSlideCommand { get; private set; }
 
+        public ICommand RotationCommand { get; private set; }
+        public ICommand ReflectCommand { get; private set; }
+
         private string currentSlidesPath;
 
         private readonly IEnumerable<string> imageFileExtensions;
@@ -104,6 +106,9 @@ namespace IVM.Studio.ViewModels
             RefreshCommand = new DelegateCommand(Refresh);
             PreviousSlideCommand = new DelegateCommand(PreviousSlide);
             NextSlideCommand = new DelegateCommand(NextSlide);
+
+            RotationCommand = new DelegateCommand<string>(Rotation);
+            ReflectCommand = new DelegateCommand<string>(Reflect);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -260,6 +265,40 @@ namespace IVM.Studio.ViewModels
             if (metadata != null)
             {
                 MetadataCollection.Add(new MetadataModel() { Group = "Filename", Name1 = metadata.FileName, Value1 = metadata.FileName });
+            }
+        }
+
+        /// <summary>
+        /// 회전
+        /// </summary>
+        /// <param name="type"></param>
+        private void Rotation(string type)
+        {
+            switch (type)
+            {
+                case "Left":
+                    break;
+                case "Right":
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 전환
+        /// </summary>
+        /// <param name="type"></param>
+        private void Reflect(string type)
+        {
+            switch (type)
+            {
+                case "HorizontalLeft":
+                    break;
+                case "HorizontalRight":
+                    break;
+                case "VerticalTop":
+                    break;
+                case "VerticalBottom":
+                    break;
             }
         }
     }

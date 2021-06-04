@@ -139,12 +139,12 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Rotate" VerticalAlignment="Center" FontWeight="Bold"/>
 
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_right.png" ToolTip="Rotation Right" Margin="20 0 0 0"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_left.png" ToolTip="Rotation Left" Margin="8 0 0 0"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_left.png" ToolTip="Reflect Horizontal Left" Margin="8 0 0 0"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_right.png" ToolTip="Reflect Horizontal Right" Margin="8 0 0 0"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_right.png" ToolTip="Rotation Right" Margin="20 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Right"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_left.png" ToolTip="Rotation Left" Margin="8 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Left"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_left.png" ToolTip="Reflect Horizontal Left" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalLeft"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_right.png" ToolTip="Reflect Horizontal Right" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalRight"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
                                 <Button Content="Apply All" Margin="16 0 0 0"/>
                                 <Button Content="Reset" Margin="8 0 0 0"/>
