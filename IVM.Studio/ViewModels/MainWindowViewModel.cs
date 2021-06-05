@@ -83,6 +83,8 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(Colormap));
             RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControl));
 
+            container.Resolve<DataManager>().Init(container, EventAggregator);
+
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
             PreviousSlideCommand = new DelegateCommand(PreviousSlide);
@@ -224,11 +226,14 @@ namespace IVM.Studio.ViewModels
             if (extensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
                 DisplayImageWithMetadata(metadata);
+                EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
             else if (extensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
-
+                EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
+
+            Container.Resolve<DataManager>().SelectedSlideInfo = SelectedSlideInfo;
         }
 
         private void StopSlideshow()
@@ -239,6 +244,10 @@ namespace IVM.Studio.ViewModels
         {
         }
 
+        /// <summary>
+        /// 메타데이터 표출
+        /// </summary>
+        /// <param name="metadata"></param>
         private void DisplayImageWithMetadata(Metadata metadata)
         {
             MetadataCollection.Clear();
@@ -250,7 +259,7 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 회전
+        /// 회전 이벤트
         /// </summary>
         /// <param name="type"></param>
         private void Rotation(string type)
@@ -265,7 +274,7 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 전환
+        /// 전환 이벤트
         /// </summary>
         /// <param name="type"></param>
         private void Reflect(string type)

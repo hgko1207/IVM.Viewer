@@ -1,6 +1,7 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.MvvM;
+using IVM.Studio.Services;
 using Prism.Ioc;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,12 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class ColormapViewModel : ViewModelBase
     {
-        public IEnumerable<string> ColorMapString => Enum.GetValues(typeof(Colors)).Cast<Colors>().Select(s => s.ToString());
+        private ColorChannelModel currentSelectedChannel;
+        public ColorChannelModel CurrentSelectedChannel
+        {
+            get => currentSelectedChannel;
+            set => SetProperty(ref currentSelectedChannel, value);
+        }
 
         public IEnumerable<ColorMap> ColorMaps
         {
@@ -25,32 +31,13 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        private ColorChannelModel currentSelectedChannel;
-        public ColorChannelModel CurrentSelectedChannel
-        {
-            get => currentSelectedChannel;
-            set
-            {
-                if (SetProperty(ref currentSelectedChannel, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
-            }
-        }
-
-        private ObservableCollection<ColorChannelModel> colorChannelInfoCollection { get; }
-
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
         public ColormapViewModel(IContainerExtension container) : base(container)
         {
-            colorChannelInfoCollection = new ObservableCollection<ColorChannelModel> {
-                new ColorChannelModel(0, true, Colors.Red, false, 0, 1, 0, 255, container, EventAggregator),
-                new ColorChannelModel(1, true, Colors.Green, false, 0, 1, 0, 255, container, EventAggregator),
-                new ColorChannelModel(2, true, Colors.Blue, false, 0, 1, 0, 255, container, EventAggregator),
-                new ColorChannelModel(3, false, Colors.None, false, 0, 1, 0, 255, container, EventAggregator)
-            };
-            CurrentSelectedChannel = colorChannelInfoCollection[0];
+            CurrentSelectedChannel = Container.Resolve<DataManager>().CurrentSelectedChannel;
         }
     }
 }

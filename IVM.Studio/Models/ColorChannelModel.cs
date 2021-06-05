@@ -1,10 +1,11 @@
 ﻿using IVM.Studio.Models.Events;
+using IVM.Studio.Services;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using WPFDrawing = System.Windows.Media;
+using System.Windows.Media;
 
 namespace IVM.Studio.Models
 {
@@ -48,9 +49,9 @@ namespace IVM.Studio.Models
                 if (SetProperty(ref display, value))
                 {
                     if (value)
-                        ContainerExtension.Resolve<Services.WindowByChannelService>().ShowDisplay(Index, AlwaysTopEnabled);
+                        ContainerExtension.Resolve<WindowByChannelService>().ShowDisplay(Index, AlwaysTopEnabled);
                     else
-                        ContainerExtension.Resolve<Services.WindowByChannelService>().CloseDisplay(Index);
+                        ContainerExtension.Resolve<WindowByChannelService>().CloseDisplay(Index);
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
                 }
             }
@@ -103,19 +104,19 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref alwaysTopEnabled, value))
-                    ContainerExtension.Resolve<Services.WindowByChannelService>().ChangeOwner(Index, value);
+                    ContainerExtension.Resolve<WindowByChannelService>().ChangeOwner(Index, value);
             }
         }
 
-        private WPFDrawing.ImageSource histogramImage;
-        public WPFDrawing.ImageSource HistogramImage
+        private ImageSource histogramImage;
+        public ImageSource HistogramImage
         {
             get => histogramImage;
             set => SetProperty(ref histogramImage, value);
         }
 
-        private int colorLevelLowerValue;
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 낮은 쪽 값입니다.</summary>
+        private int colorLevelLowerValue;
         public int ColorLevelLowerValue
         {
             get => colorLevelLowerValue;
@@ -125,8 +126,8 @@ namespace IVM.Studio.Models
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
-        private int colorLevelUpperValue;
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 높은 쪽 값입니다.</summary>
+        private int colorLevelUpperValue;
         public int ColorLevelUpperValue
         {
             get => colorLevelUpperValue;

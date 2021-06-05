@@ -74,6 +74,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\DataManager.cs" />
+    <Compile Include="Services\ImageService.cs" />
+    <Compile Include="Services\SlideShowService.cs" />
+    <Compile Include="ViewModels\VideoViewerWindowViewModel.cs" />
+    <Compile Include="Views\VideoViewerWindow.xaml.cs">
+      <DependentUpon>VideoViewerWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Resources\ButtonResource.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -106,7 +113,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainViewerWindow.xaml">
+    <Page Include="Views\ImageViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -145,7 +152,7 @@
     <Compile Include="ViewModels\UserControls\DisplayControlViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
-    <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\ImageViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Views\ChannelViewerWindow.xaml.cs">
@@ -166,13 +173,17 @@
     <Compile Include="Views\UserControls\ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainViewerWindow.xaml.cs">
-      <DependentUpon>MainViewerWindow.xaml</DependentUpon>
+    <Compile Include="Views\ImageViewerWindow.xaml.cs">
+      <DependentUpon>ImageViewerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\VideoViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

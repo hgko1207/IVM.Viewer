@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using System.IO;
 
 namespace IVM.Studio.Models.Events
 {
@@ -10,4 +11,21 @@ namespace IVM.Studio.Models.Events
 
     /// <summary>채널별 윈도우가 종료되었을때</summary>
     public class ChWindowClosedEvent : PubSubEvent<int> { }
+
+    /// <summary>주어진 이미지를 읽어들여 이미지 페이지에 표시하는 이벤트</summary>
+    public class DisplayImageEvent : PubSubEvent<DisplayParam> { }
+    public class DisplayVideoEvent : PubSubEvent<DisplayParam> { }
+    public class DisplayParam
+    {
+        public readonly FileInfo FileInfo;
+        public readonly Metadata Metadata;
+        public readonly bool SlideChanged;
+
+        public DisplayParam(FileInfo fileInfo, Metadata metadata, bool slideChanged)
+        {
+            this.FileInfo = fileInfo;
+            this.Metadata = metadata;
+            this.SlideChanged = slideChanged;
+        }
+    }
 }

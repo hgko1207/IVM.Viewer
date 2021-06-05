@@ -71,8 +71,8 @@
                     <TextBlock TextAlignment="Center" Text="(4 channels)" Margin="0 -3 0 0" FontSize="11"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset"/>
-                <dx:SimpleButton Grid.Row="3" Grid.Column="3" Style="{StaticResource GrayGradientButton}" ButtonKind="Toggle" IsChecked="{Binding AllChecked}" Content="ALL" Width="50"/>
+                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset" Command="{Binding ColorResetCommand}"/>
+                <dx:SimpleButton Grid.Row="3" Grid.Column="3" Style="{StaticResource GrayGradientButton}" Content="ALL" Width="50" Command="{Binding AllVisibleCommand}"/>
             </Grid>
 
             <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
@@ -132,8 +132,8 @@
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Ch." HorizontalAlignment="Center"/>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="Hist." HorizontalAlignment="Center"/>
 
-                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource GrayGradientButton}" Content="All"/>
-                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="All"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="All" IsChecked="{Binding AllChecked}" />
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="All"/>
             </Grid>
         </Grid>
 

@@ -31,8 +31,11 @@ namespace IVM.Studio
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterSingleton<FileService>(); 
+            containerRegistry.RegisterSingleton<FileService>();
+            containerRegistry.RegisterSingleton<ImageService>();
             containerRegistry.RegisterSingleton<WindowByChannelService>();
+            containerRegistry.RegisterSingleton<SlideShowService>();
+            containerRegistry.RegisterSingleton<DataManager>();
         }
 
         protected override void ConfigureViewModelLocator()
