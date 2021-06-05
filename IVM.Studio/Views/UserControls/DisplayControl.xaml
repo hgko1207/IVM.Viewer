@@ -63,7 +63,9 @@
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
-            
+
+            <Slider Grid.Row="2" Grid.Column="2" Minimum="1" Maximum="255" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+
             <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock Style="{StaticResource GeneralTextBlock}">81/144</TextBlock>
             </Border>

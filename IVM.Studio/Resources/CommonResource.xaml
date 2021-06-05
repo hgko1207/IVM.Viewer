@@ -130,11 +130,11 @@
 
     <!-- Slider Style -->
 
-    <SolidColorBrush x:Key="CustomSliderForegroundSolidColorBrush2" Color="#ff1e91ea" />
-    <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush2" Color="#55ffffff" />
-    <SolidColorBrush x:Key="CustomSliderBackgroundSolidColorBrush" Color="#1E211B" />
+    <SolidColorBrush x:Key="CustomSliderForegroundBrush2" Color="#ff1e91ea" />
+    <SolidColorBrush x:Key="CustomSliderBackgroundBrush2" Color="#55ffffff" />
+    <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#1E211B" />
     
-    <LinearGradientBrush x:Key="CustomSliderForegroundSolidColorBrush" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="CustomSliderForegroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Color="#65351F" Offset="0.2" />
         <GradientStop Color="#9B5B2B" Offset="0.5" />
         <GradientStop Color="#65351F" Offset="0.8" />
@@ -203,10 +203,10 @@
                 
                 <DockPanel LastChildFill="True">
                     <Border x:Name="PART_SelectionRange" Height="5" ClipToBounds="True" Visibility="Visible">
-                        <Rectangle Margin="0 0 -10 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderForegroundSolidColorBrush}" />
+                        <Rectangle Margin="0 0 -10 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderForegroundBrush}" />
                     </Border>
                     <Border ClipToBounds="True" Height="5" Visibility="Visible">
-                        <Rectangle Margin="0 0 0 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderBackgroundSolidColorBrush}" />
+                        <Rectangle Margin="0 0 0 0" RadiusX="2" RadiusY="2" Fill="{StaticResource CustomSliderBackgroundBrush}" />
                     </Border>
                 </DockPanel>
                 

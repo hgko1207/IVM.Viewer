@@ -22,6 +22,7 @@
 
         public int MultiSpotMaximum { get; set; }
 
+
         public int TimeLapseValue { get; set; }
 
         public int TimeLapseMinimum { get; set; }

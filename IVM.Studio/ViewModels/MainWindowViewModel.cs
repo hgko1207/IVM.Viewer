@@ -54,26 +54,7 @@ namespace IVM.Studio.ViewModels
 
         public ObservableCollection<MetadataModel> MetadataCollection = new ObservableCollection<MetadataModel>();
 
-        private bool allChecked;
-        public bool AllChecked
-        {
-            get => allChecked;
-            set
-            {
-                if (SetProperty(ref allChecked, value))
-                {
-                    if (value)
-                    {
-                        MainViewerWindow window = new MainViewerWindow();
-                        window.Show();
-                    }
-                    else
-                    {
-                        EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
-                    }
-                }
-            }
-        }
+        
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }

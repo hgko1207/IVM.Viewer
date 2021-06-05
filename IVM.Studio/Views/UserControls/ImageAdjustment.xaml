@@ -7,6 +7,8 @@
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              mc:Ignorable="d" 
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
     
@@ -98,8 +100,8 @@
 
                     <TextBlock Text="Level" Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Lock" Height="28" Command="{Binding LockCommand}"/>
-                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetCommand}"/>
+                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Lock" Height="28" Command="{Binding LevelLockCommand}"/>
+                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding LevelResetCommand}"/>
                 </Grid>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Black" HorizontalAlignment="Center"/>
@@ -170,7 +172,7 @@
                 </StackPanel>
 
                 <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="B&amp;W"/>
-                <dx:SimpleButton Grid.Row="0" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle"/>
+                <dx:SimpleButton Grid.Row="0" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" IsChecked="{Binding DAPIWindowOpen}"/>
 
                 <!-- GFP -->
                 <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
