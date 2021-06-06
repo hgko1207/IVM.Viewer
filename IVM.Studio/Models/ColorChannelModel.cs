@@ -9,9 +9,16 @@ using System.Windows.Media;
 
 namespace IVM.Studio.Models
 {
+    public enum ChannelType 
+    {
+        DAPI, GFP, RFP, NIR
+    }
+
     public class ColorChannelModel : BindableBase, IEquatable<ColorChannelModel>
     {
         public int Index { get; }
+
+        public ChannelType ChannelType { get; set; }
 
         private bool visible;
         public bool Visible
@@ -23,6 +30,7 @@ namespace IVM.Studio.Models
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
+
         private string channelName;
         public string ChannelName
         {
@@ -138,16 +146,18 @@ namespace IVM.Studio.Models
             }
         }
 
-        protected IContainerExtension ContainerExtension;
-        protected IEventAggregator EventAggregator;
+        public IContainerExtension ContainerExtension;
+        public IEventAggregator EventAggregator;
 
-        public ColorChannelModel(int index, bool visible, Colors color, bool display, float brightness, float contrast, 
+        public ColorChannelModel(ChannelType type, string channelName, bool visible, Colors color, bool display, float brightness, float contrast, 
                 int lowerLevel, int upperLevel, IContainerExtension containerExtension, IEventAggregator eventAggregator)
         {
             this.ContainerExtension = containerExtension;
             this.EventAggregator = eventAggregator;
 
-            this.Index = index;
+            this.Index = (int) type;
+            this.ChannelType = type;
+            this.channelName = channelName;
             this.visible = visible;
             this.color = color;
             this.display = display;
@@ -158,7 +168,7 @@ namespace IVM.Studio.Models
             this.colorLevelUpperValue = upperLevel;
             this.alwaysTopEnabled = true;
 
-            EventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(ClosedDisplay);
+            eventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(ClosedDisplay);
         }
 
         public override bool Equals(object obj) => Equals(obj as ColorChannelModel);

@@ -202,6 +202,7 @@
         <Setter Property="Background" Value="{StaticResource GrayGradientButtonBackground}"/>
         <Setter Property="ButtonKind" Value="Toggle"/>
         <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="45"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Content" Value="ON"/>

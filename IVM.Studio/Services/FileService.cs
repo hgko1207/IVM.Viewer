@@ -276,5 +276,34 @@ namespace IVM.Studio.Services
 
             return columns.Values.ToArray();
         }
+
+        public ChannelNameConverter GenerateChannelNameConverter(Metadata metadata)
+        {
+            ChannelNameConverter result = new ChannelNameConverter();
+            for (int i = 0; i < 4; i++)
+            {
+                string ChannelColor, ChannelName;
+                switch (i)
+                {
+                    case 0: ChannelColor = metadata.ChA; ChannelName = "A"; break;
+                    case 1: ChannelColor = metadata.ChB; ChannelName = "B"; break;
+                    case 2: ChannelColor = metadata.ChC; ChannelName = "C"; break;
+                    case 3: ChannelColor = metadata.ChD; ChannelName = "D"; break;
+                    default: continue;
+                }
+
+                switch (ChannelColor)
+                {
+                    case "R": result.AddMatch(0, ChannelName); break;
+                    case "G": result.AddMatch(1, ChannelName); break;
+                    case "B": result.AddMatch(2, ChannelName); break;
+                    case "A": result.AddMatch(3, ChannelName); break;
+                    default: continue;
+                }
+            }
+
+            result.Freeze();
+            return result;
+        }
     }
 }

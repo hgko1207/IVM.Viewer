@@ -12,7 +12,7 @@
     
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
         <Grid>
-            <Image Panel.ZIndex="1" Source="{Binding DisplayImage}" RenderOptions.BitmapScalingMode="HighQuality">
+            <Image Panel.ZIndex="1" Source="{Binding DisplayingImage}" RenderOptions.BitmapScalingMode="HighQuality">
             </Image>
 
             <Canvas Panel.ZIndex="0" x:Name="ImageOverlayCanvas" Background="Transparent">
