@@ -4,7 +4,6 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Windows.Threading;
-using Unity;
 
 /**
  * @Class Name : ViewModelBase.cs
@@ -32,23 +31,17 @@ namespace IVM.Studio.Mvvm
         protected IContainerExtension Container { get; }
 
         private IEventAggregator eventAggregator;
-        /// <summary>
-        /// The EventAggregator
-        /// </summary>
         public IEventAggregator EventAggregator
         {
             get { return eventAggregator; }
-            private set { this.SetProperty<IEventAggregator>(ref this.eventAggregator, value); }
+            private set { this.SetProperty(ref this.eventAggregator, value); }
         }
 
         private IRegionManager regionManager;
-        /// <summary>
-        /// The region manager
-        /// </summary>
         public IRegionManager RegionManager
         {
             get { return regionManager; }
-            private set { this.SetProperty<IRegionManager>(ref this.regionManager, value); }
+            private set { this.SetProperty(ref this.regionManager, value); }
         }
 
         public Dispatcher Dispatcher { get; set; }

@@ -10,11 +10,6 @@ using System.Windows.Media;
 /**
  * @Class Name : WindowByChannelService.cs
  * @Description : 채널별 윈도우 관리 서비스
- * @
- * @ 수정일         수정자              수정내용
- * @ ----------   ---------   -------------------------------
- * @ 2021.04.04     고형균              최초생성
- *
  * @author 고형균
  * @since 2021.04.04
  * @version 1.0

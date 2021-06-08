@@ -3,16 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         xmlns:local="clr-namespace:IVM.Studio.Views"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="600" Left="750" Top="100" Closed="{Binding WindowClosedCommand}">
+        Title="{Binding Title}" Height="650" Width="650" Left="750" Top="100">
     
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
         <Grid>
-            <Image Panel.ZIndex="1" Source="{Binding DisplayingImage}" RenderOptions.BitmapScalingMode="HighQuality">
+            <Image x:Name="ImageViewer" Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="MouseWheel" Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="SizeChanged" Command="{Binding SizeChangedCommand}" PassEventArgsToCommand="True"/>
+                </dxmvvm:Interaction.Behaviors>
             </Image>
 
             <Canvas Panel.ZIndex="0" x:Name="ImageOverlayCanvas" Background="Transparent">

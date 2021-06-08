@@ -1,6 +1,18 @@
 ﻿using IVM.Studio.Utils;
 using System.ComponentModel;
 
+/**
+ * @Class Name : ImageSequence.cs
+ * @Description : 이미지 시퀀스 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.03.31     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.03.31
+ * @version 1.0
+ */
 namespace IVM.Studio.Models
 {
     [TypeConverter(typeof(ImageSequenceConverter))]
@@ -24,12 +36,12 @@ namespace IVM.Studio.Models
             Mode = false;
         }
 
-        public ImageSequence(int TimeLapseNumbering, int MultiPositionNumbering, int MosaicNumbering, int ZStackNumbering)
+        public ImageSequence(int timeLapseNumbering, int multiPositionNumbering, int mosaicNumbering, int zStackNumbering)
         {
-            this.TimeLapseNumbering = TimeLapseNumbering;
-            this.MultiPositionNumbering = MultiPositionNumbering;
-            this.MosaicNumbering = MosaicNumbering;
-            this.ZStackNumbering = ZStackNumbering;
+            this.TimeLapseNumbering = timeLapseNumbering;
+            this.MultiPositionNumbering = multiPositionNumbering;
+            this.MosaicNumbering = mosaicNumbering;
+            this.ZStackNumbering = zStackNumbering;
             Mode = true;
         }
     }

@@ -1,6 +1,18 @@
 ﻿using Prism.Events;
 using System.IO;
 
+/**
+ * @Class Name : Events.cs
+ * @Description : 이벤트 관리 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.05.30     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.05.30
+ * @version 1.0
+ */
 namespace IVM.Studio.Models.Events
 {
     /// <summary> 메인 이미지 윈도우를 종료 할때 </summary>
@@ -33,4 +45,5 @@ namespace IVM.Studio.Models.Events
 
     public class RotationEvent : PubSubEvent<string> { }
     public class ReflectEvent : PubSubEvent<string> { }
+    public class RotationResetEvent : PubSubEvent { }
 }

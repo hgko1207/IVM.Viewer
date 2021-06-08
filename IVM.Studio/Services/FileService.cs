@@ -11,11 +11,6 @@ using System.Text.RegularExpressions;
 /**
  * @Class Name : FileService.cs
  * @Description : 파일 관리 서비스
- * @
- * @ 수정일         수정자              수정내용
- * @ ----------   ---------   -------------------------------
- * @ 2021.03.29     고형균              최초생성
- *
  * @author 고형균
  * @since 2021.03.29
  * @version 1.0

@@ -147,7 +147,7 @@
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
                                 <Button Content="Apply All" Margin="16 0 0 0"/>
-                                <Button Content="Reset" Margin="8 0 0 0"/>
+                                <Button Content="Reset" Margin="8 0 0 0" Command="{Binding RotationResetCommand}"/>
                             </StackPanel>
 
                             <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />

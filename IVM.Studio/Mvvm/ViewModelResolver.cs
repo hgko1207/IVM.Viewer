@@ -4,6 +4,18 @@ using System.Windows;
 using IVM.Studio.Infrastructure;
 using Prism.Ioc;
 
+/**
+ * @Class Name : ViewModelResolver.cs
+ * @Description : 뷰 모델 Resolver
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.05.30     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.05.30
+ * @version 1.0
+ */
 namespace IVM.Studio.Mvvm
 {
     public class ViewModelResolver : IViewModelResolver

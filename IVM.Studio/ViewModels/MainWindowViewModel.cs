@@ -15,7 +15,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using Unity;
 
 /**
  * @Class Name : MainWindowViewModel.cs
@@ -60,6 +59,7 @@ namespace IVM.Studio.ViewModels
 
         public ICommand RotationCommand { get; private set; }
         public ICommand ReflectCommand { get; private set; }
+        public ICommand RotationResetCommand { get; private set; }
 
         private string currentSlidesPath;
 
@@ -89,6 +89,7 @@ namespace IVM.Studio.ViewModels
 
             RotationCommand = new DelegateCommand<string>(Rotation);
             ReflectCommand = new DelegateCommand<string>(Reflect);
+            RotationResetCommand = new DelegateCommand(RotationReset);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -226,6 +227,8 @@ namespace IVM.Studio.ViewModels
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
 
+            Container.Resolve<DataManager>().CurrentFile = currentFile;
+            Container.Resolve<DataManager>().Metadata = metadata;
             Container.Resolve<DataManager>().SelectedSlideInfo = SelectedSlideInfo;
         }
 
@@ -267,6 +270,11 @@ namespace IVM.Studio.ViewModels
         private void Reflect(string type)
         {
             EventAggregator.GetEvent<ReflectEvent>().Publish(type);
+        }
+
+        private void RotationReset()
+        {
+            EventAggregator.GetEvent<RotationResetEvent>().Publish();
         }
     }
 }

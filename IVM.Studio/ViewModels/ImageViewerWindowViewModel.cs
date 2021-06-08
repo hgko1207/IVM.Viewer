@@ -13,6 +13,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Drawing = System.Windows.Media;
 
@@ -39,7 +40,16 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref displayingImage, value);
         }
 
-        public ICommand WindowClosedCommand { get; set; }
+        /// <summary>현재 이미지의 표시 가로 길이입니다. <see cref="double.NaN"/>을 지정하면 현재 뷰포트에 맞춥니다.</summary>
+        private double displayingImageWidth;
+        public double DisplayingImageWidth
+        {
+            get => displayingImageWidth;
+            set => SetProperty(ref displayingImageWidth, value);
+        }
+
+        public ICommand MouseWheelCommand { get; set; }
+        public ICommand SizeChangedCommand { get; set; }
 
         private ImageViewerWindow view;
 
@@ -47,6 +57,10 @@ namespace IVM.Studio.ViewModels
         private Bitmap flippedOriginalImage;
         private Bitmap annotationImage;
         private Bitmap displayingImageGDI;
+
+        /// <summary>뷰에서 표시 될 현재 이미지의 줌 배율입니다. 단위는 퍼센트입니다.</summary>
+        /// <remarks>이미지의 표시 배율을 뷰모델에서 조정할 경우 <see cref="DisplayingImageWidth"/>를 사용합니다.</remarks>
+        private int currentZoomRatio;
 
         /// <summary>이미지 새로고침 이벤트를 비활성화하는 플래그입니다.</summary>
         private bool disableRefreshImageEvent;
@@ -71,14 +85,18 @@ namespace IVM.Studio.ViewModels
         {
             Title = "Image Viewer";
 
-            currentRotate = 0;
+            MouseWheelCommand = new DelegateCommand<MouseWheelEventArgs>(MouseWheel);
+            SizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(SizeChanged);
 
-            WindowClosedCommand = new DelegateCommand(WindowClosed);
+            currentZoomRatio = 100;
+            DisplayingImageWidth = double.NaN;
+            currentRotate = 0;
 
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread);
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect);
+            EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
             EventAggregator.GetEvent<ImageViewerCloseEvent>().Subscribe(Close);
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
@@ -98,6 +116,7 @@ namespace IVM.Studio.ViewModels
         public void OnLoaded(ImageViewerWindow view)
         {
             this.view = view;
+            view.Closed += WindowClosed;
         }
 
         public void OnUnloaded(ImageViewerWindow view)
@@ -308,6 +327,39 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
+        /// 회전 및 반전 초기화
+        /// </summary>
+        private void RotationReset()
+        {
+            currentRotate = 0;
+            horizontalReflect = false;
+            verticalReflect = false;
+
+            InternalDisplayImage();
+        }
+
+        /// <summary>
+        /// 마우스 휠 동작 이벤트
+        /// </summary>
+        private void MouseWheel(MouseWheelEventArgs e)
+        {
+            if (e.Delta is int delta)
+            {
+                
+            }
+        }
+
+        /// <summary>
+        /// 이미지 사이즈 변경 시
+        /// </summary>
+        /// <param name="e"></param>
+        private void SizeChanged(SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width is double value)
+                currentZoomRatio = (int)Math.Round(value / displayingImageGDI.Width * 100);
+        }
+
+        /// <summary>
         /// 종료 이벤트
         /// </summary>
         private void Close()
@@ -315,7 +367,7 @@ namespace IVM.Studio.ViewModels
             view.Close();
         }
 
-        private void WindowClosed()
+        private void WindowClosed(object sender, EventArgs e)
         {
             EventAggregator.GetEvent<ImageViewerClosedEvent>().Publish();
         }

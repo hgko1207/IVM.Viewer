@@ -5,12 +5,22 @@ using System.Collections.Generic;
 using System.IO;
 using WPFDrawing = System.Windows.Media;
 
+/**
+ * @Class Name : DataManager.cs
+ * @Description : 데이터 관리 서비스
+ * @author 고형균
+ * @since 2021.06.05
+ * @version 1.0
+ */
 namespace IVM.Studio.Services
 {
     public class DataManager
     {
         /// <summary>표시 되고 있는 파일</summary>
         public FileInfo CurrentFile { get; set; }
+
+        /// <summary>메타데이터 정보</summary>
+        public Metadata Metadata { get; set; }
 
         /// <summary>선택된 파일 정보</summary>
         public SlideInfo SelectedSlideInfo { get; set; }

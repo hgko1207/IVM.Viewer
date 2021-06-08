@@ -7,6 +7,18 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 
+/**
+ * @Class Name : ColorChannelModel.cs
+ * @Description : 컬러 채널 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.05.30     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.05.30
+ * @version 1.0
+ */
 namespace IVM.Studio.Models
 {
     public enum ChannelType 

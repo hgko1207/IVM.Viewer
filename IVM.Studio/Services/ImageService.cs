@@ -8,6 +8,13 @@ using GDIDrawing = System.Drawing;
 using OpenCvDrawing = OpenCvSharp;
 using WPFDrawing = System.Windows.Media;
 
+/**
+ * @Class Name : ImageService.cs
+ * @Description : 이미지 관리 서비스
+ * @author 고형균
+ * @since 2021.03.29
+ * @version 1.0
+ */
 namespace IVM.Studio.Services
 {
     public class ImageService

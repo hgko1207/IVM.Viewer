@@ -7,6 +7,7 @@ using IVM.Studio.Views;
 using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
@@ -93,7 +94,15 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (SetProperty(ref allWindowOpend, value))
                 {
                     if (value)
+                    {
                         new ImageViewerWindow().Show();
+                        FileInfo currentFile = Container.Resolve<DataManager>().CurrentFile;
+                        if (currentFile != null)
+                        {
+                            Metadata metadata = Container.Resolve<DataManager>().Metadata;
+                            EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                        }
+                    }
                     else
                         EventAggregator.GetEvent<ImageViewerCloseEvent>().Publish();
                 }
@@ -180,7 +189,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void LevelLock()
         {
-
         }
 
         /// <summary>
@@ -188,7 +196,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void LevelReset()
         {
-
         }
 
         private void ImageViewerClosed()
