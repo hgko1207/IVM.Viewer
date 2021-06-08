@@ -1,7 +1,6 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
-using IVM.Studio.MvvM;
 using IVM.Studio.Services;
 using IVM.Studio.Utils;
 using IVM.Studio.Views;
@@ -15,6 +14,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Drawing = System.Windows.Media;
 
+/**
+ * @Class Name : ImageViewerWindowViewModel.cs
+ * @Description : 이미지 뷰어 뷰 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.06.05     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.06.05
+ * @version 1.0
+ */
 namespace IVM.Studio.ViewModels
 {
     public class ImageViewerWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ImageViewerWindow>
@@ -36,7 +47,7 @@ namespace IVM.Studio.ViewModels
         /// <summary>이미지 새로고침 이벤트를 비활성화하는 플래그입니다.</summary>
         private bool disableRefreshImageEvent;
 
-        private Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; }
+        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
 
         private int[] currentTranslationByChannel;
         private bool[] currentVisibilityByChannel;
@@ -62,15 +73,15 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(Close);
 
-            ColorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
+            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
 
-            currentTranslationByChannel = ColorChannelInfoMap.Values.Select(s => (int)s.Color).ToArray();
-            currentVisibilityByChannel = ColorChannelInfoMap.Values.Select(s => s.Visible).ToArray();
+            currentTranslationByChannel = colorChannelInfoMap.Values.Select(s => (int)s.Color).ToArray();
+            currentVisibilityByChannel = colorChannelInfoMap.Values.Select(s => s.Visible).ToArray();
             currentColorMatrix = Container.Resolve<ImageService>().GenerateColorMatrix(
-                    startLevelByChannel: ColorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
-                    endLevelByChannel: ColorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
-                    brightnessByChannel: ColorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
-                    contrastByChannel: ColorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
+                    startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
+                    endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
+                    brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
+                    contrastByChannel: colorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
                     translationByChannel: currentTranslationByChannel,
                     visibilityByChannel: currentVisibilityByChannel
                 );
@@ -99,14 +110,14 @@ namespace IVM.Studio.ViewModels
 
             if (param.SlideChanged)
             {
-                ColorChannelInfoMap[ChannelType.DAPI].Color = Colors.Red;
-                ColorChannelInfoMap[ChannelType.DAPI].Visible = true;
-                ColorChannelInfoMap[ChannelType.GFP].Color = Colors.Green;
-                ColorChannelInfoMap[ChannelType.GFP].Visible = true;
-                ColorChannelInfoMap[ChannelType.RFP].Color = Colors.Blue;
-                ColorChannelInfoMap[ChannelType.RFP].Visible = true;
-                ColorChannelInfoMap[ChannelType.NIR].Color = Colors.Alpha;
-                ColorChannelInfoMap[ChannelType.NIR].Visible = false;
+                colorChannelInfoMap[ChannelType.DAPI].Color = Colors.Red;
+                colorChannelInfoMap[ChannelType.DAPI].Visible = true;
+                colorChannelInfoMap[ChannelType.GFP].Color = Colors.Green;
+                colorChannelInfoMap[ChannelType.GFP].Visible = true;
+                colorChannelInfoMap[ChannelType.RFP].Color = Colors.Blue;
+                colorChannelInfoMap[ChannelType.RFP].Visible = true;
+                colorChannelInfoMap[ChannelType.NIR].Color = Colors.Alpha;
+                colorChannelInfoMap[ChannelType.NIR].Visible = false;
             }
 
             if (param.Metadata != null)
@@ -118,7 +129,7 @@ namespace IVM.Studio.ViewModels
                 ChannelNameConverter converter = Container.Resolve<FileService>().GenerateChannelNameConverter(param.Metadata);
                 foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
                 {
-                    ColorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
+                    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
                 }
             }
             else
@@ -169,7 +180,7 @@ namespace IVM.Studio.ViewModels
             {
                 // 주 이미지 변경
                 {
-                    List<ColorMap?> colormaps = ColorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(s => {
+                    List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(s => {
                         if (s.Visible && s.ColorMapEnabled) return s.ColorMap;
                         else return null;
                     }).ToList();

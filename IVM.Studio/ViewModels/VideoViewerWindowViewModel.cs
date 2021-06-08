@@ -1,8 +1,6 @@
 ﻿using IVM.Studio.Mvvm;
-using IVM.Studio.MvvM;
 using IVM.Studio.Views;
 using Prism.Ioc;
-using System;
 
 /**
  * @Class Name : VideoViewerWindowViewModel.cs

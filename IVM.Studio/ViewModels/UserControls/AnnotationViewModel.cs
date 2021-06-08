@@ -1,6 +1,5 @@
-﻿using IVM.Studio.MvvM;
+﻿using IVM.Studio.Mvvm;
 using Prism.Ioc;
-using Unity;
 
 namespace IVM.Studio.ViewModels.UserControls
 {

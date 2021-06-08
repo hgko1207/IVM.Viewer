@@ -18,7 +18,7 @@ using Unity;
  * @since 2021.03.29
  * @version 1.0
  */
-namespace IVM.Studio.MvvM
+namespace IVM.Studio.Mvvm
 {
     public abstract class ViewModelBase : BindableBase
     {

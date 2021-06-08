@@ -28,4 +28,6 @@ namespace IVM.Studio.Models.Events
             this.SlideChanged = slideChanged;
         }
     }
+
+    public class RotationEvent : PubSubEvent<string> { }
 }

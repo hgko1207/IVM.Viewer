@@ -1,7 +1,7 @@
 ﻿using DevExpress.Xpf.Editors;
 using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
-using IVM.Studio.MvvM;
+using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
 using Prism.Commands;

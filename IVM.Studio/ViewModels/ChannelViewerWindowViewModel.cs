@@ -1,6 +1,5 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
-using IVM.Studio.MvvM;
 using IVM.Studio.Views;
 using Prism.Ioc;
 using System.Windows.Media;
@@ -27,8 +26,6 @@ namespace IVM.Studio.ViewModels
             get => displayImage;
             set => SetProperty(ref displayImage, value);
         }
-
-        public int Channel;
 
         private ChannelViewerWindow view;
 

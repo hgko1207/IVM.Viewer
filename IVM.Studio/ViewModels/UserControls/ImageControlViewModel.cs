@@ -1,4 +1,4 @@
-﻿using IVM.Studio.MvvM;
+﻿using IVM.Studio.Mvvm;
 using Prism.Ioc;
 using System.Collections.Generic;
 using static IVM.Studio.Models.Common;

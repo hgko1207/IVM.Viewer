@@ -1,4 +1,4 @@
-﻿using IVM.Studio.MvvM;
+﻿using IVM.Studio.Mvvm;
 using Prism.Ioc;
 
 namespace IVM.Studio.ViewModels.UserControls
@@ -12,9 +12,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref currentPlayingSlider, value))
-                {
                     RaisePropertyChanged(nameof(ZSSliderPlaying));
-                }
             }
         }
 

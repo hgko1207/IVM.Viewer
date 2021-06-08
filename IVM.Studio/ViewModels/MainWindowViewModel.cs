@@ -2,7 +2,6 @@
 using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
-using IVM.Studio.MvvM;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
@@ -54,8 +53,6 @@ namespace IVM.Studio.ViewModels
 
         public ObservableCollection<MetadataModel> MetadataCollection = new ObservableCollection<MetadataModel>();
 
-        
-
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
         public ICommand PreviousSlideCommand { get; private set; }
@@ -97,10 +94,6 @@ namespace IVM.Studio.ViewModels
             videoFileExtensions = new[] { ".avi" };
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="view"></param>
         public void OnLoaded(MainWindow view)
         {
         }
@@ -135,34 +128,34 @@ namespace IVM.Studio.ViewModels
                 return;
 
             DirectoryInfo directory = new DirectoryInfo(currentSlidesPath);
-            if (!directory.Exists)
-                return;
-
-            bool first = true;
-            foreach (DirectoryInfo imageFolder in directory.EnumerateDirectories())
+            if (directory.Exists)
             {
-                if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, extensions, true).Any())
-                    continue;
-
-                SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name };
-                SlideInfoCollection.Add(slideInfo);
-
-                if (first)
+                bool first = true;
+                foreach (DirectoryInfo imageFolder in directory.EnumerateDirectories())
                 {
-                    SelectedSlideInfo = slideInfo;
-                    first = false;
+                    if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, extensions, true).Any())
+                        continue;
+
+                    SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name };
+                    SlideInfoCollection.Add(slideInfo);
+
+                    if (first)
+                    {
+                        SelectedSlideInfo = slideInfo;
+                        first = false;
+                    }
                 }
-            }
 
-            foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, extensions, false))
-            {
-                SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name };
-                SlideInfoCollection.Add(slideInfo);
-
-                if (first)
+                foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, extensions, false))
                 {
-                    SelectedSlideInfo = slideInfo;
-                    first = false;
+                    SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name };
+                    SlideInfoCollection.Add(slideInfo);
+
+                    if (first)
+                    {
+                        SelectedSlideInfo = slideInfo;
+                        first = false;
+                    }
                 }
             }
         }
