@@ -4,6 +4,7 @@ using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Utils;
 using IVM.Studio.Views;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using System;
@@ -12,6 +13,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Drawing = System.Windows.Media;
 
 /**
@@ -36,6 +38,8 @@ namespace IVM.Studio.ViewModels
             get => displayingImage;
             set => SetProperty(ref displayingImage, value);
         }
+
+        public ICommand WindowClosedCommand { get; set; }
 
         private ImageViewerWindow view;
 
@@ -69,9 +73,13 @@ namespace IVM.Studio.ViewModels
 
             currentRotate = 0;
 
+            WindowClosedCommand = new DelegateCommand(WindowClosed);
+
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread);
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
-            EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(Close);
+            EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation);
+            EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect);
+            EventAggregator.GetEvent<ImageViewerCloseEvent>().Subscribe(Close);
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
 
@@ -87,7 +95,6 @@ namespace IVM.Studio.ViewModels
                 );
         }
 
-
         public void OnLoaded(ImageViewerWindow view)
         {
             this.view = view;
@@ -97,7 +104,9 @@ namespace IVM.Studio.ViewModels
         {
             EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImage);
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
-            EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(Close);
+            EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
+            EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
+            EventAggregator.GetEvent<ImageViewerCloseEvent>().Unsubscribe(Close);
         }
 
         /// <summary>
@@ -250,11 +259,65 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
+        /// 회전 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void Rotation(string type)
+        {
+            switch (type)
+            {
+                case "Left":
+                    currentRotate++;
+                    currentRotate %= 4;
+                    break;
+                case "Right":
+                    currentRotate--;
+                    currentRotate %= 4;
+
+                    if (currentRotate < 0)
+                        currentRotate += 4;
+                    break;
+            }
+
+            InternalDisplayImage();
+        }
+
+        /// <summary>
+        /// 좌우 또는 상하 반전 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void Reflect(string type)
+        {
+            switch (type)
+            {
+                case "HorizontalLeft":
+                    horizontalReflect = false;
+                    break;
+                case "HorizontalRight":
+                    horizontalReflect = true;
+                    break;
+                case "VerticalTop":
+                    verticalReflect = false;
+                    break;
+                case "VerticalBottom":
+                    verticalReflect = true;
+                    break;
+            }
+
+            InternalDisplayImage();
+        }
+
+        /// <summary>
         /// 종료 이벤트
         /// </summary>
         private void Close()
         {
             view.Close();
+        }
+
+        private void WindowClosed()
+        {
+            EventAggregator.GetEvent<ImageViewerClosedEvent>().Publish();
         }
     }
 }

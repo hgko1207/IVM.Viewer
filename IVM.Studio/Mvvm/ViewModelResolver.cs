@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using IVM.Studio.Infrastructure;
-using IVM.Studio.MvvM;
 using Prism.Ioc;
 
 namespace IVM.Studio.Mvvm

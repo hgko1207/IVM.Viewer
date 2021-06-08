@@ -257,32 +257,16 @@ namespace IVM.Studio.ViewModels
         /// <param name="type"></param>
         private void Rotation(string type)
         {
-            switch (type)
-            {
-                case "Left":
-                    break;
-                case "Right":
-                    break;
-            }
+            EventAggregator.GetEvent<RotationEvent>().Publish(type);
         }
 
         /// <summary>
-        /// 전환 이벤트
+        /// 좌우 또는 상하 이벤트
         /// </summary>
         /// <param name="type"></param>
         private void Reflect(string type)
         {
-            switch (type)
-            {
-                case "HorizontalLeft":
-                    break;
-                case "HorizontalRight":
-                    break;
-                case "VerticalTop":
-                    break;
-                case "VerticalBottom":
-                    break;
-            }
+            EventAggregator.GetEvent<ReflectEvent>().Publish(type);
         }
     }
 }

@@ -29,6 +29,8 @@ namespace IVM.Studio.ViewModels
 
         private ChannelViewerWindow view;
 
+        public int Channel;
+
         /// <summary>
         /// 생성자
         /// </summary>

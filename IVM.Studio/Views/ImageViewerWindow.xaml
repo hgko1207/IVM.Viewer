@@ -8,7 +8,7 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="600" Width="600" Left="750" Top="100">
+        Title="{Binding Title}" Height="600" Width="600" Left="750" Top="100" Closed="{Binding WindowClosedCommand}">
     
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
         <Grid>

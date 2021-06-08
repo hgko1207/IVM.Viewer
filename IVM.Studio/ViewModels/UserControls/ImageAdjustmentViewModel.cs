@@ -10,6 +10,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
+/**
+ * @Class Name : ImageAdjustmentViewModel.cs
+ * @Description : 이미지 조정 뷰 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.05.10     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.05.10
+ * @version 1.0
+ */
 namespace IVM.Studio.ViewModels.UserControls
 {
     public class ImageAdjustmentViewModel : ViewModelBase
@@ -83,7 +95,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     if (value)
                         new ImageViewerWindow().Show();
                     else
-                        EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
+                        EventAggregator.GetEvent<ImageViewerCloseEvent>().Publish();
                 }
             }
         }
@@ -111,6 +123,8 @@ namespace IVM.Studio.ViewModels.UserControls
             AllVisibleCommand = new DelegateCommand(AllVisible);
             LevelLockCommand = new DelegateCommand(LevelLock);
             LevelResetCommand = new DelegateCommand(LevelReset);
+
+            EventAggregator.GetEvent<ImageViewerClosedEvent>().Subscribe(ImageViewerClosed);
 
             ColorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
@@ -175,6 +189,11 @@ namespace IVM.Studio.ViewModels.UserControls
         private void LevelReset()
         {
 
+        }
+
+        private void ImageViewerClosed()
+        {
+            AllWindowOpend = false;
         }
     }
 }

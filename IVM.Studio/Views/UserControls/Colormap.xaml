@@ -27,7 +27,7 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5 10" Height="30">
             <TextBlock Text="Type" VerticalAlignment="Center" FontSize="13"/>
 
-            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="250" ApplyItemTemplateToSelectedItem="True" DataContext="{Binding CurrentSelectedChannel}" 
+            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="250" ApplyItemTemplateToSelectedItem="True" DataContext="{Binding SelectedChannel}" 
                               SelectedItem="{Binding ColorMap, Converter={StaticResource ColorMapConverter}}"
                               ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=StackPanel}, Path=DataContext.ColorMaps, Converter={StaticResource ColorMapCollectionConverter}}">
                 <dxe:ComboBoxEdit.ItemTemplate>

@@ -2,17 +2,23 @@
 using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.IO;
 using WPFDrawing = System.Windows.Media;
 
 namespace IVM.Studio.Services
 {
     public class DataManager
     {
+        /// <summary>표시 되고 있는 파일</summary>
+        public FileInfo CurrentFile { get; set; }
+
+        /// <summary>선택된 파일 정보</summary>
         public SlideInfo SelectedSlideInfo { get; set; }
 
         public Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; set; }
 
-        public ColorChannelModel CurrentSelectedChannel { get; set; }
+        /// <summary>선택된 패널 정보</summary>
+        public ColorChannelModel SelectedChannel { get; set; }
 
         public WPFDrawing.ImageSource HistogramImage { get; set; }
 
@@ -24,7 +30,7 @@ namespace IVM.Studio.Services
             ColorChannelInfoMap.Add(ChannelType.RFP, new ColorChannelModel(ChannelType.RFP, "RFP (582-618)", true, Colors.Blue, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.NIR, new ColorChannelModel(ChannelType.NIR, "NIR (663-733)", false, Colors.None, false, 0, 1, 0, 255, container, eventAggregator));
 
-            CurrentSelectedChannel = ColorChannelInfoMap[ChannelType.DAPI];
+            SelectedChannel = ColorChannelInfoMap[ChannelType.DAPI];
         }
     }
 }
