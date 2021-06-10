@@ -51,22 +51,22 @@
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
 
-                                <dxg:GridControl ItemsSource="{Binding SlideInfoCollection}" SelectedItem="{Binding SelectedSlideInfo}" SelectionMode="Row" ShowBorder="True" 
-                                                 RenderOptions.EdgeMode="Aliased" Margin="10" Grid.ColumnSpan="2">
+                                <dxg:GridControl ItemsSource="{Binding SlideInfoCollection}" CurrentItem="{Binding SelectedSlideInfo}" SelectedItem="{Binding SelectedSlideInfo}" SelectionMode="Row" 
+                                                 ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10" Grid.ColumnSpan="2">
                                     <dxg:GridControl.View>
-                                        <dxg:TableView AutoWidth="True"/>
+                                        <dxg:TableView AllowScrollToFocusedRow="True" AllowSorting="False" AllowPerPixelScrolling="True" AllowScrollAnimation="True" PreviewKeyDown="OnTableViewPreviewKeyDown"/>
                                     </dxg:GridControl.View>
 
                                     <dxg:GridControl.Columns>
-                                        <dxg:GridColumn Width="40" Header="#">
+                                        <dxg:GridColumn Width="50" Header="#">
                                             <dxg:GridColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding RowData.RowHandle.Value, Converter={StaticResource IndexFromOneConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                                 </DataTemplate>
                                             </dxg:GridColumn.CellTemplate>
                                         </dxg:GridColumn>
-                                        <dxg:GridColumn Header="Category" FieldName="Category"/>
-                                        <dxg:GridColumn Header="Filename" FieldName="Name"/>
+                                        <dxg:GridColumn Header="Category" Width="*" FieldName="Category"/>
+                                        <dxg:GridColumn Header="Filename" Width="2*" FieldName="Name"/>
                                     </dxg:GridControl.Columns>
                                 </dxg:GridControl>
 

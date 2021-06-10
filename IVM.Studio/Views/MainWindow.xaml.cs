@@ -1,4 +1,5 @@
 ﻿using DevExpress.Xpf.Core;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -66,6 +67,11 @@ namespace IVM.Studio.Views
                     this.ImageSequenceGroup.Children.Add(stackPanel);
                 }
             }
+        }
+
+        private void OnTableViewPreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

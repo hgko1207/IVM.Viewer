@@ -345,7 +345,10 @@ namespace IVM.Studio.ViewModels
         {
             if (e.Delta is int delta)
             {
-                
+                if (delta > 0)
+                    ZoomIn();
+                else
+                    ZoomOut();
             }
         }
 
@@ -357,6 +360,38 @@ namespace IVM.Studio.ViewModels
         {
             if (e.NewSize.Width is double value)
                 currentZoomRatio = (int)Math.Round(value / displayingImageGDI.Width * 100);
+        }
+
+        /// <summary>
+        /// ZoomIn
+        /// </summary>
+        private void ZoomIn()
+        {
+            if (originalImage != null)
+            {
+                int newScale = (int)Math.Floor(currentZoomRatio / 10d) * 10 + 10;
+                double newWidth = originalImage.Width * (newScale / 100d);
+                if (newScale <= 400 && newScale >= 10 && newWidth >= 20)
+                {
+                    DisplayingImageWidth = originalImage.Width * (newScale / 100d);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ZoomOut
+        /// </summary>
+        private void ZoomOut()
+        {
+            if (originalImage != null)
+            {
+                int newScale = (int)Math.Ceiling(currentZoomRatio / 10d) * 10 - 10;
+                double newWidth = originalImage.Width * (newScale / 100d);
+                if (newScale <= 400 && newScale >= 10 && newWidth >= 20)
+                {
+                    DisplayingImageWidth = originalImage.Width * (newScale / 100d);
+                }
+            }
         }
 
         /// <summary>

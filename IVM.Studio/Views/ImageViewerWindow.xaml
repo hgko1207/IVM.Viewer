@@ -10,18 +10,20 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="650" Width="650" Left="750" Top="100">
-    
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
-        <Grid>
-            <Image x:Name="ImageViewer" Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
-                <dxmvvm:Interaction.Behaviors>
-                    <dxmvvm:EventToCommand EventName="MouseWheel" Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True"/>
-                    <dxmvvm:EventToCommand EventName="SizeChanged" Command="{Binding SizeChangedCommand}" PassEventArgsToCommand="True"/>
-                </dxmvvm:Interaction.Behaviors>
-            </Image>
 
-            <Canvas Panel.ZIndex="0" x:Name="ImageOverlayCanvas" Background="Transparent">
-            </Canvas>
-        </Grid>
-    </ScrollViewer>
+    <Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
+            <Grid>
+                <Image x:Name="ImageViewer" Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EventToCommand EventName="MouseWheel" Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True"/>
+                        <dxmvvm:EventToCommand EventName="SizeChanged" Command="{Binding SizeChangedCommand}" PassEventArgsToCommand="True"/>
+                    </dxmvvm:Interaction.Behaviors>
+                </Image>
+
+                <Canvas Panel.ZIndex="0" x:Name="ImageOverlayCanvas" Background="Transparent">
+                </Canvas>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
 </dx:ThemedWindow>
