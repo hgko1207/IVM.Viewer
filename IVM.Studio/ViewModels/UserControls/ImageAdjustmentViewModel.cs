@@ -109,6 +109,22 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        private bool allHistogramOpend;
+        public bool AllHistogramOpend
+        {
+            get => allHistogramOpend;
+            set
+            {
+                if (SetProperty(ref allHistogramOpend, value))
+                {
+                    if (value)
+                        new HistogramWindow().Show();
+                    else
+                        EventAggregator.GetEvent<HistogramCloseEvent>().Publish();
+                }
+            }
+        }
+
         public ICommand BrightnessChangedCommand { get; set; }
         public ICommand ContrastChangedCommand { get; set; }
 
@@ -133,7 +149,8 @@ namespace IVM.Studio.ViewModels.UserControls
             LevelLockCommand = new DelegateCommand(LevelLock);
             LevelResetCommand = new DelegateCommand(LevelReset);
 
-            EventAggregator.GetEvent<ImageViewerClosedEvent>().Subscribe(ImageViewerClosed);
+            EventAggregator.GetEvent<ImageViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
+            EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
 
             ColorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
@@ -196,11 +213,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void LevelReset()
         {
-        }
-
-        private void ImageViewerClosed()
-        {
-            AllWindowOpend = false;
         }
     }
 }

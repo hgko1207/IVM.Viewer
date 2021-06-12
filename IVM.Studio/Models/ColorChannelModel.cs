@@ -107,6 +107,7 @@ namespace IVM.Studio.Models
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
+
         private bool colorMapEnabled;
         public bool ColorMapEnabled
         {
@@ -117,6 +118,7 @@ namespace IVM.Studio.Models
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
+
         private bool alwaysTopEnabled;
         public bool AlwaysTopEnabled
         {

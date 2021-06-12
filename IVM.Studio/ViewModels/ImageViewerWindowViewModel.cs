@@ -67,9 +67,16 @@ namespace IVM.Studio.ViewModels
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
 
-        private int[] currentTranslationByChannel;
-        private bool[] currentVisibilityByChannel;
-        private float[][] currentColorMatrix;
+        private int[] currentTranslationByChannel => colorChannelInfoMap.Values.Select(s => (int)s.Color).ToArray();
+        private bool[] currentVisibilityByChannel => colorChannelInfoMap.Values.Select(s => s.Visible).ToArray();
+        private float[][] currentColorMatrix => Container.Resolve<ImageService>().GenerateColorMatrix(
+                    startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
+                    endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
+                    brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
+                    contrastByChannel: colorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
+                    translationByChannel: currentTranslationByChannel,
+                    visibilityByChannel: currentVisibilityByChannel
+                );
 
         private int fOVSizeX;
         private int fOVSizeY;
@@ -97,20 +104,9 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect);
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
-            EventAggregator.GetEvent<ImageViewerCloseEvent>().Subscribe(Close);
+            EventAggregator.GetEvent<ImageViewerCloseEvent>().Subscribe(() => view.Close());
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
-
-            currentTranslationByChannel = colorChannelInfoMap.Values.Select(s => (int)s.Color).ToArray();
-            currentVisibilityByChannel = colorChannelInfoMap.Values.Select(s => s.Visible).ToArray();
-            currentColorMatrix = Container.Resolve<ImageService>().GenerateColorMatrix(
-                    startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
-                    endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
-                    brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
-                    contrastByChannel: colorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
-                    translationByChannel: currentTranslationByChannel,
-                    visibilityByChannel: currentVisibilityByChannel
-                );
         }
 
         public void OnLoaded(ImageViewerWindow view)
@@ -125,7 +121,7 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
             EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
-            EventAggregator.GetEvent<ImageViewerCloseEvent>().Unsubscribe(Close);
+            EventAggregator.GetEvent<ImageViewerCloseEvent>().Unsubscribe(() => view.Close());
         }
 
         /// <summary>
@@ -171,6 +167,10 @@ namespace IVM.Studio.ViewModels
             DisplayImageWithoutMetadata(param.FileInfo);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
         private void DisplayImageWithoutMetadata(FileInfo file)
         {
             // 레지스트레이션 체크
@@ -208,8 +208,8 @@ namespace IVM.Studio.ViewModels
             {
                 // 주 이미지 변경
                 {
-                    List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(s => {
-                        if (s.Visible && s.ColorMapEnabled) return s.ColorMap;
+                    List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c => {
+                        if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
                         else return null;
                     }).ToList();
 
@@ -218,6 +218,14 @@ namespace IVM.Studio.ViewModels
                     {
                         InternalDisplayAnnotatedImage(img2);
                         InternalDisplayHistogram(img2);
+                    }
+                }
+
+                // 채널별 이미지 변경
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        
                     }
                 }
             });
@@ -242,9 +250,6 @@ namespace IVM.Studio.ViewModels
             // 90도, 270도 플립시 이미지의 가로 길이보다 Y좌표가 큰 영역에 쓰지 못하는 문제가 있음. (원인불명)
             using (Bitmap workingImage = new Bitmap(flippedOriginalImage))
             {
-                if (workingImage == null)
-                    return;
-
                 // 어노테이션
                 if (annotationImage != null)
                 {
@@ -395,13 +400,10 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 종료 이벤트
+        /// Window 종료 시킬 때
         /// </summary>
-        private void Close()
-        {
-            view.Close();
-        }
-
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void WindowClosed(object sender, EventArgs e)
         {
             EventAggregator.GetEvent<ImageViewerClosedEvent>().Publish();

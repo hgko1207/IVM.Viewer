@@ -1,6 +1,10 @@
-﻿using IVM.Studio.Mvvm;
+﻿using IVM.Studio.Models.Events;
+using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using IVM.Studio.Views;
 using Prism.Ioc;
+using System;
+using Drawing = System.Windows.Media;
 
 /**
 * @Class Name : HistogramWindowViewModel.cs
@@ -18,6 +22,13 @@ namespace IVM.Studio.ViewModels
 {
     public class HistogramWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<HistogramWindow>
     {
+        private Drawing.ImageSource histogramImage;
+        public Drawing.ImageSource HistogramImage
+        {
+            get => histogramImage;
+            set => SetProperty(ref histogramImage, value);
+        }
+
         private HistogramWindow view;
 
         /// <summary>
@@ -26,15 +37,30 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public HistogramWindowViewModel(IContainerExtension container) : base(container)
         {
+            HistogramImage = Container.Resolve<DataManager>().HistogramImage;
+
+            EventAggregator.GetEvent<HistogramCloseEvent>().Subscribe(() => view.Close());
         }
 
         public void OnLoaded(HistogramWindow view)
         {
             this.view = view;
+            view.Closed += WindowClosed;
         }
 
         public void OnUnloaded(HistogramWindow view)
         {
+            EventAggregator.GetEvent<HistogramCloseEvent>().Unsubscribe(() => view.Close());
+        }
+
+        /// <summary>
+        /// Window 종료 시킬 때
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowClosed(object sender, EventArgs e)
+        {
+            EventAggregator.GetEvent<HistogramClosedEvent>().Publish();
         }
     }
 }

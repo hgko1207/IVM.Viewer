@@ -139,7 +139,7 @@
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="Hist." HorizontalAlignment="Center"/>
 
                 <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="All" IsChecked="{Binding AllWindowOpend}" />
-                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="All"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" Content="All" IsChecked="{Binding AllHistogramOpend}"/>
             </Grid>
         </Grid>
 

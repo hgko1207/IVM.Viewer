@@ -20,6 +20,9 @@ namespace IVM.Studio.Models.Events
     /// <summary> 메인 이미지 윈도우가 종료 될때 </summary>
     public class ImageViewerClosedEvent : PubSubEvent { }
 
+    public class HistogramCloseEvent : PubSubEvent { }
+    public class HistogramClosedEvent : PubSubEvent { }
+
     /// <summary>표시중인 이미지를 갱신하는 이벤트. 밝기, 대비 등의 색상 정보가 변화하거나 반전, 회전 등으로 이미지 정보가 변화할 때마다 발생합니다.</summary>
     public class RefreshImageEvent : PubSubEvent { }
 

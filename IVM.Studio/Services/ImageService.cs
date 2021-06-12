@@ -84,23 +84,23 @@ namespace IVM.Studio.Services
         /// <summary>
         /// 주어진 컬러 매트릭스에 따라 이미지의 색상을 투영합니다.
         /// </summary>
-        public Bitmap TranslateColor(Bitmap Image, float[][] ColorMatrix)
+        public Bitmap TranslateColor(Bitmap image, float[][] colorMatrix)
         {
-            GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(ColorMatrix);
+            GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
             GDIDrawing.Imaging.ImageAttributes attr = new GDIDrawing.Imaging.ImageAttributes();
             attr.SetColorMatrix(cm);
 
             Point[] destPoints = new Point[] {
                 new Point(0, 0),
-                new Point(Image.Width, 0),
-                new Point(0, Image.Height)
+                new Point(image.Width, 0),
+                new Point(0, image.Height)
             };
-            Rectangle srcRect = new Rectangle(0, 0, Image.Width, Image.Height);
-            Bitmap bitmap = new Bitmap(Image.Width, Image.Height);
+            Rectangle srcRect = new Rectangle(0, 0, image.Width, image.Height);
+            Bitmap bitmap = new Bitmap(image.Width, image.Height);
 
-            using (Graphics graphics= Graphics.FromImage(bitmap))
+            using (Graphics graphics = Graphics.FromImage(bitmap))
             {
-                graphics.DrawImage(Image, destPoints, srcRect, GraphicsUnit.Pixel, attr);
+                graphics.DrawImage(image, destPoints, srcRect, GraphicsUnit.Pixel, attr);
                 return bitmap;
             }
         }
@@ -108,15 +108,15 @@ namespace IVM.Studio.Services
         /// <summary>
         /// 주어진 컬러맵에 따라 이미지의 모든 채널의 영상을 각각 투영한 후 맥스 풀링을 하여 출력합니다.
         /// </summary>
-        public Bitmap ApplyColorMaps(Bitmap Image, IList<ColorMap?> ColorMaps)
+        public Bitmap ApplyColorMaps(Bitmap image, IList<ColorMap?> colorMaps)
         {
-            if (ColorMaps.All(s => s == null)) 
-                return (Bitmap)Image.Clone();
+            if (colorMaps.All(s => s == null)) 
+                return (Bitmap)image.Clone();
 
             // 각 채널에 컬러맵 적용하여 리스트에 넣기
-            using (OpenCvDrawing.Mat src = Image.ToMat())
+            using (OpenCvDrawing.Mat src = image.ToMat())
             {
-                IEnumerable<OpenCvDrawing.Mat> results = ColorMaps.Select((s, idx) => {
+                IEnumerable<OpenCvDrawing.Mat> results = colorMaps.Select((s, idx) => {
                     if (s == null) 
                         return src.ExtractChannel(idx != 3 ? 2 - idx : idx);
                     else 
@@ -159,16 +159,16 @@ namespace IVM.Studio.Services
             }
         }
 
-        public OpenCvDrawing.Mat ApplyColorMapMat(OpenCvDrawing.Mat Image, int Channel, ColorMap ColorMap)
+        public OpenCvDrawing.Mat ApplyColorMapMat(OpenCvDrawing.Mat image, int channel, ColorMap colorMap)
         {
             // RGBA(IVM Viewer standard) to BGRA(OpenCV)
-            if (Channel != 3) 
-                Channel = 2 - Channel;
+            if (channel != 3)
+                channel = 2 - channel;
 
-            using (OpenCvDrawing.Mat src = Image.ExtractChannel(Channel))
+            using (OpenCvDrawing.Mat src = image.ExtractChannel(channel))
             {
-                OpenCvDrawing.Mat dst = new OpenCvDrawing.Mat(Image.Size(), OpenCvDrawing.MatType.CV_8UC3);
-                OpenCvDrawing.Cv2.ApplyColorMap(src, dst, (OpenCvDrawing.ColormapTypes)ColorMap);
+                OpenCvDrawing.Mat dst = new OpenCvDrawing.Mat(image.Size(), OpenCvDrawing.MatType.CV_8UC3);
+                OpenCvDrawing.Cv2.ApplyColorMap(src, dst, (OpenCvDrawing.ColormapTypes)colorMap);
                 return dst;
             }
         }
@@ -240,26 +240,26 @@ namespace IVM.Studio.Services
         /// <summary>
         /// 주어진 GDI+ 비트맵을 WPF 이미징 프레임워크에서 사용 가능한 <seealso cref="WPFDrawing.Imaging.BitmapSource"/>로 변환합니다.
         /// </summary>
-        public WPFDrawing.Imaging.BitmapSource ConvertGDIBitmapToWPF(Bitmap Image)
+        public WPFDrawing.Imaging.BitmapSource ConvertGDIBitmapToWPF(Bitmap image)
         {
-            if (Image == null) 
+            if (image == null) 
                 return null;
 
-            Rectangle rect = new Rectangle(0, 0, Image.Width, Image.Height);
-            GDIDrawing.Imaging.BitmapData bitmapData = Image.LockBits(rect, GDIDrawing.Imaging.ImageLockMode.ReadWrite, GDIDrawing.Imaging.PixelFormat.Format32bppArgb);
+            Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);
+            GDIDrawing.Imaging.BitmapData bitmapData = image.LockBits(rect, GDIDrawing.Imaging.ImageLockMode.ReadWrite, GDIDrawing.Imaging.PixelFormat.Format32bppArgb);
 
             try
             {
                 int size = rect.Width * rect.Height * 4;
-                WPFDrawing.Imaging.BitmapSource result = WPFDrawing.Imaging.BitmapSource.Create(Image.Width, Image.Height, 
-                    Image.HorizontalResolution, Image.VerticalResolution, WPFDrawing.PixelFormats.Bgra32,
+                WPFDrawing.Imaging.BitmapSource result = WPFDrawing.Imaging.BitmapSource.Create(image.Width, image.Height,
+                    image.HorizontalResolution, image.VerticalResolution, WPFDrawing.PixelFormats.Bgra32,
                     null, bitmapData.Scan0, size, bitmapData.Stride);
                 result.Freeze();
                 return result;
             }
             finally
             {
-                Image.UnlockBits(bitmapData);
+                image.UnlockBits(bitmapData);
             }
         }
 
