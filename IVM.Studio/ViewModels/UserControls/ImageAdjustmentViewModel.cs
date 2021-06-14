@@ -85,6 +85,38 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        private int allLevelLower;
+        public int AllLevelLower
+        {
+            get => allLevelLower;
+            set
+            {
+                SetProperty(ref allLevelLower, value);
+                bool refresh = false;
+                foreach (ColorChannelModel c in ColorChannelInfoMap.Values)
+                    refresh |= c.UpdateColorLevelLowerWithoutRefresh(value);
+
+                if (refresh)
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            }
+        }
+
+        private int allLevelUpper;
+        public int AllLevelUpper
+        {
+            get => allLevelUpper;
+            set
+            {
+                SetProperty(ref allLevelUpper, value);
+                bool refresh = false;
+                foreach (ColorChannelModel c in ColorChannelInfoMap.Values)
+                    refresh |= c.UpdateColorLevelUpperWithoutRefresh(value);
+
+                if (refresh)
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            }
+        }
+
         private bool allWindowOpend;
         public bool AllWindowOpend
         {
@@ -149,6 +181,7 @@ namespace IVM.Studio.ViewModels.UserControls
             LevelLockCommand = new DelegateCommand(LevelLock);
             LevelResetCommand = new DelegateCommand(LevelReset);
 
+            EventAggregator.GetEvent<SlideChangedEvent>().Subscribe(InitVisible);
             EventAggregator.GetEvent<ImageViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
 
@@ -157,10 +190,8 @@ namespace IVM.Studio.ViewModels.UserControls
             ChannelNames = ColorChannelInfoMap.Values.ToList();
             SelectedChannel = ChannelNames[0];
 
-            DAPIVisible = ColorChannelInfoMap[ChannelType.DAPI].Visible;
-            GFPVisible = ColorChannelInfoMap[ChannelType.GFP].Visible;
-            RFPVisible = ColorChannelInfoMap[ChannelType.RFP].Visible;
-            NIRVisible = ColorChannelInfoMap[ChannelType.NIR].Visible;
+            InitVisible();
+            LevelReset();
         }
 
         /// <summary>
@@ -202,17 +233,30 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// 잠금
+        /// Histgram Level 잠금
         /// </summary>
         private void LevelLock()
         {
         }
 
         /// <summary>
-        /// 초기화
+        /// Histgram Level 초기화
         /// </summary>
         private void LevelReset()
         {
+            AllLevelLower = 1;
+            AllLevelUpper = 255;
+        }
+
+        /// <summary>
+        /// 채널 Visible 초기화
+        /// </summary>
+        private void InitVisible()
+        {
+            DAPIVisible = ColorChannelInfoMap[ChannelType.DAPI].Visible;
+            GFPVisible = ColorChannelInfoMap[ChannelType.GFP].Visible;
+            RFPVisible = ColorChannelInfoMap[ChannelType.RFP].Visible;
+            NIRVisible = ColorChannelInfoMap[ChannelType.NIR].Visible;
         }
     }
 }

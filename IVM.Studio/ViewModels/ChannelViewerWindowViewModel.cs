@@ -52,6 +52,10 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<ChWindowClosedEvent>().Unsubscribe(Close);
         }
 
+        /// <summary>
+        /// Window 종료 이벤트
+        /// </summary>
+        /// <param name="type"></param>
         private void Close(int type)
         {
             view.Close();

@@ -93,6 +93,7 @@
         <Setter Property="Height" Value="28"/>
         <Setter Property="MinValue" Value="1"/>
         <Setter Property="MaxValue" Value="255"/>
+        <Setter Property="IsFloatValue" Value="False"/>
     </Style>
 
     <Style TargetType="{x:Type dxe:SpinEdit}">

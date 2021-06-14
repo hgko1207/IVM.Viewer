@@ -49,4 +49,6 @@ namespace IVM.Studio.Models.Events
     public class RotationEvent : PubSubEvent<string> { }
     public class ReflectEvent : PubSubEvent<string> { }
     public class RotationResetEvent : PubSubEvent { }
+
+    public class SlideChangedEvent : PubSubEvent { }
 }

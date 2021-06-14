@@ -142,6 +142,8 @@ namespace IVM.Studio.ViewModels
                 colorChannelInfoMap[ChannelType.RFP].Visible = true;
                 colorChannelInfoMap[ChannelType.NIR].Color = Colors.Alpha;
                 colorChannelInfoMap[ChannelType.NIR].Visible = false;
+
+                EventAggregator.GetEvent<SlideChangedEvent>().Publish();
             }
 
             if (param.Metadata != null)
@@ -273,10 +275,10 @@ namespace IVM.Studio.ViewModels
         /// <summary>
         /// 히스토그램 생성
         /// </summary>
-        /// <param name="img"></param>
-        private void InternalDisplayHistogram(Bitmap img)
+        /// <param name="imgage"></param>
+        private void InternalDisplayHistogram(Bitmap imgage)
         {
-            using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img, currentTranslationByChannel, currentVisibilityByChannel))
+            using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(imgage, currentTranslationByChannel, currentVisibilityByChannel))
             {
                 Container.Resolve<DataManager>().HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
             }
