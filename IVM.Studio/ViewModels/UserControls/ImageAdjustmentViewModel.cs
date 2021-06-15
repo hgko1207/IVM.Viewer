@@ -48,7 +48,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _DAPIVisible, value))
-                    ColorChannelInfoMap[ChannelType.DAPI].Visible = value;
+                    colorChannelInfoMap[ChannelType.DAPI].Visible = value;
             }
         }
 
@@ -59,7 +59,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _GFPVisible, value))
-                    ColorChannelInfoMap[ChannelType.GFP].Visible = value;
+                    colorChannelInfoMap[ChannelType.GFP].Visible = value;
             }
         }
 
@@ -70,7 +70,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _RFPVisible, value))
-                    ColorChannelInfoMap[ChannelType.RFP].Visible = value;
+                    colorChannelInfoMap[ChannelType.RFP].Visible = value;
             }
         }
 
@@ -81,7 +81,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _NIRVisible, value))
-                    ColorChannelInfoMap[ChannelType.NIR].Visible = value;
+                    colorChannelInfoMap[ChannelType.NIR].Visible = value;
             }
         }
 
@@ -93,9 +93,8 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 SetProperty(ref allLevelLower, value);
                 bool refresh = false;
-                foreach (ColorChannelModel c in ColorChannelInfoMap.Values)
+                foreach (ColorChannelModel c in colorChannelInfoMap.Values)
                     refresh |= c.UpdateColorLevelLowerWithoutRefresh(value);
-
                 if (refresh)
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
@@ -109,9 +108,8 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 SetProperty(ref allLevelUpper, value);
                 bool refresh = false;
-                foreach (ColorChannelModel c in ColorChannelInfoMap.Values)
+                foreach (ColorChannelModel c in colorChannelInfoMap.Values)
                     refresh |= c.UpdateColorLevelUpperWithoutRefresh(value);
-
                 if (refresh)
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
@@ -127,7 +125,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     if (value)
                     {
-                        new ImageViewerWindow().Show();
+                        new ImageViewerWindow() { Topmost = true }.Show();
                         FileInfo currentFile = Container.Resolve<DataManager>().CurrentFile;
                         if (currentFile != null)
                         {
@@ -150,7 +148,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (SetProperty(ref allHistogramOpend, value))
                 {
                     if (value)
-                        new HistogramWindow().Show();
+                        new HistogramWindow() { Topmost = true }.Show();
                     else
                         EventAggregator.GetEvent<HistogramCloseEvent>().Publish();
                 }
@@ -166,7 +164,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand LevelLockCommand { get; private set; }
         public ICommand LevelResetCommand { get; private set; }
 
-        public Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; set; }
+        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
         /// <summary>
         /// 생성자
@@ -185,9 +183,9 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ImageViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
 
-            ColorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
+            colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
-            ChannelNames = ColorChannelInfoMap.Values.ToList();
+            ChannelNames = colorChannelInfoMap.Values.ToList();
             SelectedChannel = ChannelNames[0];
 
             InitVisible();
@@ -200,8 +198,19 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void BrightnessChanged(EditValueChangedEventArgs e)
         {
-            if (e.NewValue is decimal value)
-                ColorChannelInfoMap[SelectedChannel.ChannelType].Brightness = (float)value;
+            decimal v = (decimal)e.NewValue;
+            float value = (float)(v - 50) * 0.05f;
+
+            if (SelectedChannel.ChannelType == ChannelType.ALL)
+            {
+                bool refresh = false;
+                foreach (ColorChannelModel i in colorChannelInfoMap.Values)
+                    refresh |= i.UpdateBrightnessWithoutRefresh((float)value);
+                if (refresh)
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            }
+            else
+                colorChannelInfoMap[SelectedChannel.ChannelType].Brightness = (float)value;
         }
 
         /// <summary>
@@ -211,7 +220,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void ContrastChanged(EditValueChangedEventArgs e)
         {
             if (e.NewValue is decimal value)
-                ColorChannelInfoMap[SelectedChannel.ChannelType].Contrast = (float)value;
+                colorChannelInfoMap[SelectedChannel.ChannelType].Contrast = (float)value;
         }
 
         /// <summary>
@@ -244,7 +253,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void LevelReset()
         {
-            AllLevelLower = 1;
+            AllLevelLower = 0;
             AllLevelUpper = 255;
         }
 
@@ -253,10 +262,10 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void InitVisible()
         {
-            DAPIVisible = ColorChannelInfoMap[ChannelType.DAPI].Visible;
-            GFPVisible = ColorChannelInfoMap[ChannelType.GFP].Visible;
-            RFPVisible = ColorChannelInfoMap[ChannelType.RFP].Visible;
-            NIRVisible = ColorChannelInfoMap[ChannelType.NIR].Visible;
+            DAPIVisible = colorChannelInfoMap[ChannelType.DAPI].Visible;
+            GFPVisible = colorChannelInfoMap[ChannelType.GFP].Visible;
+            RFPVisible = colorChannelInfoMap[ChannelType.RFP].Visible;
+            NIRVisible = colorChannelInfoMap[ChannelType.NIR].Visible;
         }
     }
 }

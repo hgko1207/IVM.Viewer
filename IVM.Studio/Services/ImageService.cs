@@ -33,7 +33,7 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
-        /// 각 채널별 색 투영 정보를 사용하여 <seealso cref="TranslateColor(GDIDrawing.Bitmap, float[][])"/> 함수에서 사용할 컬러 매트릭스를 생성합니다.
+        /// 각 채널별 색 투영 정보를 사용하여 <seealso cref="TranslateColor(Bitmap, float[][])"/> 함수에서 사용할 컬러 매트릭스를 생성합니다.
         /// </summary>
         /// <param name="startLevelByChannel">각 채널의 이미지 레벨 조정시 사용할 시작 레벨입니다. 픽셀의 컬러 레벨이 해당 값 이하인 경우 최소값으로 투영됩니다.</param>
         /// <param name="endLevelByChannel">각 채널의 이미지 레벨 조정시 사용할 끝 레벨입니다. 픽셀의 컬러 레벨이 해당 값 이하인 경우 최대값으로 투영됩니다.</param>
@@ -50,7 +50,7 @@ namespace IVM.Studio.Services
         public float[][] GenerateColorMatrix(int[] startLevelByChannel, int[] endLevelByChannel, float[] brightnessByChannel, float[] contrastByChannel, 
             int[] translationByChannel, bool[] visibilityByChannel)
         {
-            float[] contrast_adjust = contrastByChannel.Select(s => (1 - s) / 2).ToArray();
+            float[] contrastAdjust = contrastByChannel.Select(s => (1 - s) / 2).ToArray();
             float[][] colorMatrix = new float[][] {
                 new float[] { 0, 0, 0, 0, 0 },
                 new float[] { 0, 0, 0, 0, 0 },
@@ -63,11 +63,10 @@ namespace IVM.Studio.Services
             for (int i = 0; i < 4; i++)
             {
                 if (translationByChannel[i] == -1 || !visibilityByChannel[i] || visibleColors.Contains(translationByChannel[i]))
-                {
                     continue;
-                }
+
                 colorMatrix[i][translationByChannel[i]] = contrastByChannel[i] / (endLevelByChannel[i] - startLevelByChannel[i]) * 255;
-                colorMatrix[4][translationByChannel[i]] = brightnessByChannel[i] + contrast_adjust[i] - (float)startLevelByChannel[i] / (endLevelByChannel[i] - startLevelByChannel[i]);
+                colorMatrix[4][translationByChannel[i]] = brightnessByChannel[i] + contrastAdjust[i] - (float)startLevelByChannel[i] / (endLevelByChannel[i] - startLevelByChannel[i]);
                 visibleColors.Add(translationByChannel[i]);
             }
 
@@ -84,22 +83,27 @@ namespace IVM.Studio.Services
         /// <summary>
         /// 주어진 컬러 매트릭스에 따라 이미지의 색상을 투영합니다.
         /// </summary>
+        /// <param name="image"></param>
+        /// <param name="colorMatrix"></param>
+        /// <returns></returns>
         public Bitmap TranslateColor(Bitmap image, float[][] colorMatrix)
         {
             GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
             GDIDrawing.Imaging.ImageAttributes attr = new GDIDrawing.Imaging.ImageAttributes();
             attr.SetColorMatrix(cm);
 
-            Point[] destPoints = new Point[] {
-                new Point(0, 0),
-                new Point(image.Width, 0),
-                new Point(0, image.Height)
-            };
-            Rectangle srcRect = new Rectangle(0, 0, image.Width, image.Height);
             Bitmap bitmap = new Bitmap(image.Width, image.Height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
+                Point[] destPoints = new Point[] {
+                    new Point(0, 0),
+                    new Point(image.Width, 0),
+                    new Point(0, image.Height)
+                };
+
+                Rectangle srcRect = new Rectangle(0, 0, image.Width, image.Height);
+
                 graphics.DrawImage(image, destPoints, srcRect, GraphicsUnit.Pixel, attr);
                 return bitmap;
             }
@@ -159,6 +163,13 @@ namespace IVM.Studio.Services
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="channel"></param>
+        /// <param name="colorMap"></param>
+        /// <returns></returns>
         public OpenCvDrawing.Mat ApplyColorMapMat(OpenCvDrawing.Mat image, int channel, ColorMap colorMap)
         {
             // RGBA(IVM Viewer standard) to BGRA(OpenCV)

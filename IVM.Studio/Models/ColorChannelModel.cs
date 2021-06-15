@@ -23,7 +23,7 @@ namespace IVM.Studio.Models
 {
     public enum ChannelType 
     {
-        DAPI, GFP, RFP, NIR
+        ALL, DAPI, GFP, RFP, NIR
     }
 
     public class ColorChannelModel : BindableBase, IEquatable<ColorChannelModel>
@@ -60,6 +60,7 @@ namespace IVM.Studio.Models
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
+
         private bool display;
         public bool Display
         {
@@ -76,6 +77,7 @@ namespace IVM.Studio.Models
                 }
             }
         }
+
         private float brightness;
         public float Brightness
         {
@@ -86,6 +88,7 @@ namespace IVM.Studio.Models
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
+
         private float contrast;
         public float Contrast
         {
@@ -138,24 +141,25 @@ namespace IVM.Studio.Models
         }
 
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 낮은 쪽 값입니다.</summary>
-        private int colorLevelLowerValue;
+        private int _ColorLevelLowerValue;
         public int ColorLevelLowerValue
         {
-            get => colorLevelLowerValue;
+            get => _ColorLevelLowerValue;
             set
             {
-                if (SetProperty(ref colorLevelLowerValue, value))
+                if (SetProperty(ref _ColorLevelLowerValue, value))
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
+
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 높은 쪽 값입니다.</summary>
-        private int colorLevelUpperValue;
+        private int _ColorLevelUpperValue;
         public int ColorLevelUpperValue
         {
-            get => colorLevelUpperValue;
+            get => _ColorLevelUpperValue;
             set
             {
-                if (SetProperty(ref colorLevelUpperValue, value))
+                if (SetProperty(ref _ColorLevelUpperValue, value))
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
@@ -178,8 +182,8 @@ namespace IVM.Studio.Models
             this.brightness = brightness;
             this.contrast = contrast;
             this.colorMap = ColorMap.Hot;
-            this.colorLevelLowerValue = lowerLevel;
-            this.colorLevelUpperValue = upperLevel;
+            this._ColorLevelLowerValue = lowerLevel;
+            this._ColorLevelUpperValue = upperLevel;
             this.alwaysTopEnabled = true;
 
             eventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(ClosedDisplay);
@@ -211,14 +215,14 @@ namespace IVM.Studio.Models
             return SetProperty(ref contrast, Contrast, nameof(Contrast));
         }
 
-        public bool UpdateColorLevelUpperWithoutRefresh(int ColorLevelUpperValue)
+        public bool UpdateColorLevelUpperWithoutRefresh(int colorLevelUpperValue)
         {
-            return SetProperty(ref colorLevelUpperValue, ColorLevelUpperValue, nameof(ColorLevelUpperValue));
+            return SetProperty(ref _ColorLevelUpperValue, colorLevelUpperValue, nameof(colorLevelUpperValue));
         }
 
-        public bool UpdateColorLevelLowerWithoutRefresh(int ColorLevelLowerValue)
+        public bool UpdateColorLevelLowerWithoutRefresh(int colorLevelLowerValue)
         {
-            return SetProperty(ref colorLevelLowerValue, ColorLevelLowerValue, nameof(ColorLevelLowerValue));
+            return SetProperty(ref _ColorLevelLowerValue, colorLevelLowerValue, nameof(colorLevelLowerValue));
         }
     }
 }

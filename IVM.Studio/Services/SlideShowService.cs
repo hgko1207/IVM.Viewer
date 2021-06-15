@@ -1,4 +1,8 @@
-﻿using Prism.Events;
+﻿using IVM.Studio.Models.Events;
+using Prism.Events;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 /**
  * @Class Name : SlideShowService.cs
@@ -21,6 +25,13 @@ namespace IVM.Studio.Services
      */
     public class SlideShowService
     {
+        private TimeSpan sleep;
+        private int initialCount;
+        private int currentCount;
+        private int repeat;
+
+        public bool NowPlaying => repeat > 0 || currentCount > 0;
+
         protected IEventAggregator EventAggregator;
 
         public SlideShowService(IEventAggregator eventAggregator)
@@ -34,7 +45,36 @@ namespace IVM.Studio.Services
         /// <returns>이미 슬라이드쇼가 진행중이 아닌 경우 실행되지 않으며 이 경우 false가 반환됩니다. 실행에 성공하면 true를 반환합니다.</returns>
         public bool ContinueSlideshow()
         {
-            return false;
+            if (NowPlaying)
+            {
+                Task.Run(() => {
+                    Thread.Sleep(sleep);
+                    if (currentCount == 1)
+                    {
+                        repeat--;
+                        if (repeat > 0)
+                        {
+                            // 첫 루프에서는 슬라이드를 1로 이동하는 걸 호출자 쪽에서 해주지만, 두번째 이후의 루프에서는 직접 해야 함
+                            currentCount = initialCount + 1;
+                        }
+                        else
+                        {
+                            currentCount = 0;
+                        }
+                    }
+                    else
+                    {
+                        currentCount--;
+                    }
+                    EventAggregator.GetEvent<PlaySlideshowEvent>().Publish();
+                });
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

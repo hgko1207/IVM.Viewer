@@ -106,7 +106,7 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
             EventAggregator.GetEvent<ImageViewerCloseEvent>().Subscribe(() => view.Close());
 
-            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
+            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap.Values.Where(c => c.ChannelType != ChannelType.ALL).ToDictionary(data => data.ChannelType);
         }
 
         public void OnLoaded(ImageViewerWindow view)
@@ -150,7 +150,7 @@ namespace IVM.Studio.ViewModels
             {
                 fOVSizeX = param.Metadata.FovX;
                 fOVSizeY = param.Metadata.FovY;
-               
+
                 // 메타데이터의 채널 정보 반영
                 ChannelNameConverter converter = Container.Resolve<FileService>().GenerateChannelNameConverter(param.Metadata);
                 foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
@@ -194,7 +194,11 @@ namespace IVM.Studio.ViewModels
             // 로테이션 초기화
             currentRotate = 0;
 
-            InternalDisplayImage();
+            // 디스플레이
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+
+            // 슬라이드쇼
+            Container.Resolve<SlideShowService>().ContinueSlideshow();
         }
 
         /// <summary>
@@ -206,11 +210,12 @@ namespace IVM.Studio.ViewModels
                 return;
 
             // 이미지 표시는 히스토그램 생성 등으로 인해 오래 걸리므로 백그라운드에서 처리
-            Task.Run(() =>
+            Task.Run(() => 
             {
                 // 주 이미지 변경
                 {
-                    List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c => {
+                    List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
+                    {
                         if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
                         else return null;
                     }).ToList();
@@ -227,7 +232,7 @@ namespace IVM.Studio.ViewModels
                 {
                     for (int i = 0; i < 4; i++)
                     {
-                        
+
                     }
                 }
             });
@@ -305,7 +310,7 @@ namespace IVM.Studio.ViewModels
                     break;
             }
 
-            InternalDisplayImage();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
         }
 
         /// <summary>
@@ -330,7 +335,7 @@ namespace IVM.Studio.ViewModels
                     break;
             }
 
-            InternalDisplayImage();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
         }
 
         /// <summary>
@@ -342,7 +347,7 @@ namespace IVM.Studio.ViewModels
             horizontalReflect = false;
             verticalReflect = false;
 
-            InternalDisplayImage();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
         }
 
         /// <summary>

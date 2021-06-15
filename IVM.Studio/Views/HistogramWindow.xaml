@@ -8,7 +8,8 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         mc:Ignorable="d"
-        Title="Histogram" Height="160" Width="300" Background="White">
+        Title="Histogram" Height="160" Width="300" Left="1400" Top="70" Background="White">
+    
     <Grid Margin="10">
         <Border BorderThickness="1" Height="100" Width="257">
             <Border.BorderBrush>
