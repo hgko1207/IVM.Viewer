@@ -42,11 +42,19 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(Close);
         }
 
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnLoaded(ChannelViewerWindow view)
         {
             this.view = view;
         }
 
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnUnloaded(ChannelViewerWindow view)
         {
             EventAggregator.GetEvent<ChWindowClosedEvent>().Unsubscribe(Close);

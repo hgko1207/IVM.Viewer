@@ -20,6 +20,7 @@
 
     <Window.Resources>
         <util:IndexFromOneConverter x:Key="IndexFromOneConverter"/>
+        <dx:Format x:Key="valueFormat" Foreground="Gray" />
     </Window.Resources>
 
     <Grid>
@@ -42,10 +43,6 @@
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Image Data">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="127*"/>
-                                    <ColumnDefinition Width="451*"/>
-                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition Height="auto"/>
@@ -80,29 +77,50 @@
                         <dxdo:DocumentPanel Caption="Imaging Parameter">
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
                                     <RowDefinition/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
 
-                                <dxg:GridControl ItemsSource="{Binding MetadataCollection}" SelectionMode="Row" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10">
+                                <StackPanel Margin="10 0">
+                                    <StackPanel Margin="0 10 0 10" Orientation="Horizontal">
+                                        <TextBlock Text="Filename : " FontWeight="Bold" FontSize="13"/>
+                                        <TextBlock Text="{Binding SelectedFilename}" Margin="5 0" FontSize="13" Foreground="Gray"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <dxg:GridControl Grid.Row="1" ItemsSource="{Binding MetadataCollection}" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 0 10 10">
                                     <dxg:GridControl.View>
-                                        <dxg:TableView AutoWidth="True" ShowColumnHeaders="False" AllowCellMerge="True"/>
+                                        <dxg:TableView NavigationStyle="None" AutoWidth="True" ShowColumnHeaders="False" UseLegacyFilterPanel="False">
+                                            <dxg:TableView.FormatConditions>
+                                                <dxg:FormatCondition FieldName="Value1" Expression="true" Format="{StaticResource valueFormat}" />
+                                                <dxg:FormatCondition FieldName="Value2" Expression="true" Format="{StaticResource valueFormat}" />
+                                                <dxg:FormatCondition FieldName="Value3" Expression="true" Format="{StaticResource valueFormat}" />
+                                                <dxg:FormatCondition FieldName="Value4" Expression="true" Format="{StaticResource valueFormat}" />
+                                            </dxg:TableView.FormatConditions>
+                                        </dxg:TableView>
                                     </dxg:GridControl.View>
 
                                     <dxg:GridControl.Bands>
                                         <dxg:GridControlBand Header="Name" HorizontalHeaderContentAlignment="Center">
-                                            <dxg:GridColumn FieldName="Group"/>
+                                            <dxg:GridColumn FieldName="Group" Width="90"/>
                                         </dxg:GridControlBand>
-                                        <dxg:GridControlBand Header="Filename" HorizontalHeaderContentAlignment="Center">
+                                        <dxg:GridControlBand Header="Values" HorizontalHeaderContentAlignment="Center">
                                             <dxg:GridColumn FieldName="Name1"/>
                                             <dxg:GridColumn FieldName="Value1"/>
+                                            <dxg:GridColumn FieldName="Name2"/>
+                                            <dxg:GridColumn FieldName="Value2"/>
+                                            <dxg:GridColumn FieldName="Name3"/>
+                                            <dxg:GridColumn FieldName="Value3"/>
+                                            <dxg:GridColumn FieldName="Name4"/>
+                                            <dxg:GridColumn FieldName="Value4"/>
                                         </dxg:GridControlBand>
                                     </dxg:GridControl.Bands>
                                 </dxg:GridControl>
 
-                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 10">
-                                    <Button Content="Previous" Width="80"/>
-                                    <Button Content="Next" Width="80" Margin="8 0 0 0"/>
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 10">
+                                    <Button Content="Previous" Width="80" Command="{Binding PreviousSlideCommand}"/>
+                                    <Button Content="Next" Width="80" Margin="8 0 0 0" Command="{Binding NextSlideCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </dxdo:DocumentPanel>

@@ -30,11 +30,19 @@ namespace IVM.Studio.ViewModels
             Title = "Video Viewer";
         }
 
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnLoaded(VideoViewerWindow view)
         {
             this.view = view;
         }
 
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnUnloaded(VideoViewerWindow view)
         {
         }

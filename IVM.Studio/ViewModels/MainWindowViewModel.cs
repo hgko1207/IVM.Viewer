@@ -50,7 +50,19 @@ namespace IVM.Studio.ViewModels
             }
         }
 
-        public ObservableCollection<MetadataModel> MetadataCollection = new ObservableCollection<MetadataModel>();
+        private ObservableCollection<MetadataModel> metadataCollection = new ObservableCollection<MetadataModel>();
+        public ObservableCollection<MetadataModel> MetadataCollection
+        {
+            get => metadataCollection;
+            set => SetProperty(ref metadataCollection, value);
+        }
+
+        private string selectedFilename;
+        public string SelectedFilename
+        {
+            get => selectedFilename;
+            set => SetProperty(ref selectedFilename, value);
+        }
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
@@ -61,11 +73,13 @@ namespace IVM.Studio.ViewModels
         public ICommand ReflectCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
 
+        private MainWindow view;
+
         private string currentSlidesPath;
 
         private readonly IEnumerable<string> imageFileExtensions;
         private readonly IEnumerable<string> videoFileExtensions;
-        private IEnumerable<string> extensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
+        private IEnumerable<string> approvedExtensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
 
         private FileInfo currentFile;
 
@@ -95,10 +109,19 @@ namespace IVM.Studio.ViewModels
             videoFileExtensions = new[] { ".avi" };
         }
 
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnLoaded(MainWindow view)
         {
+            this.view = view;
         }
 
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnUnloaded(MainWindow view)
         {
         }
@@ -134,7 +157,7 @@ namespace IVM.Studio.ViewModels
                 bool first = true;
                 foreach (DirectoryInfo imageFolder in directory.EnumerateDirectories())
                 {
-                    if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, extensions, true).Any())
+                    if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, approvedExtensions, true).Any())
                         continue;
 
                     SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name };
@@ -147,7 +170,7 @@ namespace IVM.Studio.ViewModels
                     }
                 }
 
-                foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, extensions, false))
+                foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, approvedExtensions, false))
                 {
                     SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name };
                     SlideInfoCollection.Add(slideInfo);
@@ -193,12 +216,12 @@ namespace IVM.Studio.ViewModels
         {
             string slidePath = Path.Combine(currentSlidesPath, SelectedSlideInfo.Name);
 
-            FileInfo file = null;
-            if (SelectedSlideInfo.Category == "File")
-                file = new FileInfo(slidePath);
+            FileInfo file;
+            if (SelectedSlideInfo.Category == "Folder")
+                file = Container.Resolve<FileService>().FindImageInSlide(new DirectoryInfo(slidePath), approvedExtensions, 0, 0, 0, 1);
             else
-                file = Container.Resolve<FileService>().FindImageInSlide(new DirectoryInfo(slidePath), extensions, 0, 0, 0, 0);
-
+                file = new FileInfo(slidePath);
+               
             // 파일 실존하는지 확인
             if (file == null || !file.Exists)
             {
@@ -217,25 +240,35 @@ namespace IVM.Studio.ViewModels
             Metadata metadata = Container.Resolve<FileService>().ReadMetadataOfImage(currentSlidesPath, currentFile);
 
             // 디스플레이
-            if (extensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            if (imageFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
-                DisplayImageWithMetadata(metadata);
                 EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
-            else if (extensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            else if (videoFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
+
+            DisplayImageWithMetadata(metadata);
 
             Container.Resolve<DataManager>().CurrentFile = currentFile;
             Container.Resolve<DataManager>().Metadata = metadata;
             Container.Resolve<DataManager>().SelectedSlideInfo = SelectedSlideInfo;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void StopSlideshow()
         {
+            Container.Resolve<SlideShowService>().StopSlideshow();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentSlidesPath"></param>
+        /// <param name="name"></param>
         private void EnableImageSliders(string currentSlidesPath, string name)
         {
         }
@@ -250,7 +283,8 @@ namespace IVM.Studio.ViewModels
 
             if (metadata != null)
             {
-                MetadataCollection.Add(new MetadataModel() { Group = "Filename", Name1 = metadata.FileName, Value1 = metadata.FileName });
+                SelectedFilename = metadata.FileName;
+                MetadataCollection = Container.Resolve<FileService>().ToModel(metadata);
             }
         }
 
@@ -264,7 +298,7 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 좌우 또는 상하 이벤트
+        /// 좌우 또는 상하 반전 이벤트
         /// </summary>
         /// <param name="type"></param>
         private void Reflect(string type)
@@ -272,6 +306,9 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<ReflectEvent>().Publish(type);
         }
 
+        /// <summary>
+        /// 회전, 반전 초기화
+        /// </summary>
         private void RotationReset()
         {
             EventAggregator.GetEvent<RotationResetEvent>().Publish();

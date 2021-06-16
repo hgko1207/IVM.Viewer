@@ -155,7 +155,10 @@ namespace IVM.Studio.ViewModels
                 ChannelNameConverter converter = Container.Resolve<FileService>().GenerateChannelNameConverter(param.Metadata);
                 foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
                 {
-                    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
+                    if (type == ChannelType.ALL)
+                        continue;
+
+                    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type - 1);
                 }
             }
             else

@@ -37,20 +37,36 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public HistogramWindowViewModel(IContainerExtension container) : base(container)
         {
-            HistogramImage = Container.Resolve<DataManager>().HistogramImage;
-
             EventAggregator.GetEvent<HistogramCloseEvent>().Subscribe(() => view.Close());
+
+            Refresh();
         }
 
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnLoaded(HistogramWindow view)
         {
             this.view = view;
             view.Closed += WindowClosed;
         }
 
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
         public void OnUnloaded(HistogramWindow view)
         {
             EventAggregator.GetEvent<HistogramCloseEvent>().Unsubscribe(() => view.Close());
+        }
+
+        /// <summary>
+        /// 새로고침
+        /// </summary>
+        private void Refresh()
+        {
+            HistogramImage = Container.Resolve<DataManager>().HistogramImage;
         }
 
         /// <summary>

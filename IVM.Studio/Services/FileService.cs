@@ -2,6 +2,7 @@
 using IVM.Studio.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -299,6 +300,108 @@ namespace IVM.Studio.Services
 
             result.Freeze();
             return result;
+        }
+
+        /// <summary>
+        /// 주어진 객체에 포함된 CSV 직렬화 가능 프로퍼티를 이용해 바인딩용 메타데이터 모델 컬렉션을 만듭니다.
+        /// </summary>
+        /// <param name="metadata"></param>
+        /// <returns></returns>
+        public ObservableCollection<MetadataModel> ToModel(Metadata metadata)
+        {
+            ObservableCollection<MetadataModel> metadataCollection = new ObservableCollection<MetadataModel>();
+
+            ImageSequence sequence = metadata.Sequence;
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Sequence",
+                Name1 = "TL",
+                Value1 = sequence.TimeLapseNumbering.ToString(),
+                Name2 = "MP",
+                Value2 = sequence.MultiPositionNumbering.ToString(),
+                Name3 = "MS",
+                Value3 = sequence.MosaicNumbering.ToString(),
+                Name4 = "ZS",
+                Value4 = sequence.ZStackNumbering.ToString()
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Pseudocolor",
+                Name1 = "DAPI",
+                Value1 = metadata.ChA,
+                Name2 = "GFP",
+                Value2 = metadata.ChB,
+                Name3 = "RFP",
+                Value3 = metadata.ChC,
+                Name4 = "NIR",
+                Value4 = metadata.ChD,
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Laser (%)",
+                Name1 = "DAPI",
+                Value1 = metadata.LaserA.ToString(),
+                Name2 = "GFP",
+                Value2 = metadata.LaserB.ToString(),
+                Name3 = "RFP",
+                Value3 = metadata.LaserC.ToString(),
+                Name4 = "NIR",
+                Value4 = metadata.LaserD.ToString(),
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Detector",
+                Name1 = "DAPI",
+                Value1 = metadata.GainA.ToString(),
+                Name2 = "GFP",
+                Value2 = metadata.GainB.ToString(),
+                Name3 = "RFP",
+                Value3 = metadata.GainC.ToString(),
+                Name4 = "NIR",
+                Value4 = metadata.GainD.ToString(),
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Pinhole (μm)",
+                Name1 = "DAPI",
+                Value1 = metadata.PhA.ToString(),
+                Name2 = "GFP",
+                Value2 = metadata.PhB.ToString(),
+                Name3 = "RFP",
+                Value3 = metadata.PhC.ToString(),
+                Name4 = "NIR",
+                Value4 = metadata.PhD.ToString(),
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Stage",
+                Name1 = "X-axis",
+                Value1 = metadata.StageX.ToString(),
+                Name2 = "Y-axis",
+                Value2 = metadata.StageY.ToString(),
+                Name3 = "Z-axis",
+                Value3 = metadata.StageZ.ToString(),
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "FOV (μm)",
+                Name1 = "X-axis",
+                Value1 = metadata.FovX.ToString(),
+                Name2 = "Y-axis",
+                Value2 = metadata.FovY.ToString(),
+            });
+            metadataCollection.Add(new MetadataModel()
+            {
+                Group = "Format",
+                Name1 = "Format",
+                Value1 = metadata.FileName.Contains("png") ? "PNG" : "AVI",
+                Name2 = "FPS",
+                Value2 = metadata.FPS.ToString(),
+                Name3 = "AVG",
+                Value3 = metadata.Averaging.ToString(),
+            });
+
+            return metadataCollection;
         }
     }
 }
