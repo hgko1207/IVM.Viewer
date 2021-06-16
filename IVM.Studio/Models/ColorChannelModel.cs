@@ -23,7 +23,7 @@ namespace IVM.Studio.Models
 {
     public enum ChannelType 
     {
-        ALL, DAPI, GFP, RFP, NIR
+        DAPI, GFP, RFP, NIR, ALL
     }
 
     public class ColorChannelModel : BindableBase, IEquatable<ColorChannelModel>
@@ -186,7 +186,13 @@ namespace IVM.Studio.Models
             this._ColorLevelUpperValue = upperLevel;
             this.alwaysTopEnabled = true;
 
-            eventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(ClosedDisplay);
+            eventAggregator.GetEvent<ChWindowCloseEvent>().Subscribe(ClosedDisplay);
+        }
+
+        public ColorChannelModel(ChannelType type, string channelName)
+        {
+            this.ChannelType = type;
+            this.channelName = channelName;
         }
 
         public override bool Equals(object obj) => Equals(obj as ColorChannelModel);

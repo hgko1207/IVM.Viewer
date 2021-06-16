@@ -185,6 +185,22 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 주어진 컬러맵에 따라 이미지의 특정 채널의 색상을 투영합니다.
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="channel"></param>
+        /// <param name="colorMap"></param>
+        /// <returns></returns>
+        public Bitmap ApplyColorMapGDI(Bitmap image, int channel, ColorMap colorMap)
+        {
+            using (OpenCvDrawing.Mat src = image.ToMat())
+            using (OpenCvDrawing.Mat dst = ApplyColorMapMat(src, channel, colorMap))
+            {
+                return dst.ToBitmap();
+            }
+        }
+
+        /// <summary>
         /// 주어진 인수에 따라 이미지를 회전 또는 반전합니다.
         /// </summary>
         /// <param name="image"></param>

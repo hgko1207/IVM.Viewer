@@ -1,7 +1,10 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using IVM.Studio.Views;
+using Prism.Commands;
 using Prism.Ioc;
+using System.Windows.Input;
 using System.Windows.Media;
 
 /**
@@ -27,9 +30,11 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref displayImage, value);
         }
 
+        public ICommand ClosedCommand { get; private set; }
+
         private ChannelViewerWindow view;
 
-        public int Channel;
+        public int Channel { get; set; }
 
         /// <summary>
         /// 생성자
@@ -37,9 +42,9 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public ChannelViewerWindowViewModel(IContainerExtension container) : base(container)
         {
-            Title = "Display";
+            ClosedCommand = new DelegateCommand(WindowClosed);
 
-            EventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(Close);
+            EventAggregator.GetEvent<ChWindowCloseEvent>().Subscribe(Close);
         }
 
         /// <summary>
@@ -57,7 +62,15 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(ChannelViewerWindow view)
         {
-            EventAggregator.GetEvent<ChWindowClosedEvent>().Unsubscribe(Close);
+            EventAggregator.GetEvent<ChWindowCloseEvent>().Unsubscribe(Close);
+        }
+
+        /// <summary>
+        /// Window 종료 이벤트
+        /// </summary>
+        private void WindowClosed()
+        {
+            EventAggregator.GetEvent<ChWindowClosedEvent>().Publish(Channel);
         }
 
         /// <summary>

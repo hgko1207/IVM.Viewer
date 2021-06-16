@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 /**
@@ -75,6 +76,10 @@ namespace IVM.Studio.ViewModels
 
         private MainWindow view;
 
+        private readonly UserControl imagePage;
+        private readonly UserControl videoPage;
+        private UserControl viewerPage;
+
         private string currentSlidesPath;
 
         private readonly IEnumerable<string> imageFileExtensions;
@@ -107,6 +112,10 @@ namespace IVM.Studio.ViewModels
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
+
+            imagePage = new ImageViewer();
+            videoPage = new VideoViewer();
+            viewerPage = imagePage;
         }
 
         /// <summary>
@@ -242,10 +251,12 @@ namespace IVM.Studio.ViewModels
             // 디스플레이
             if (imageFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
+                viewerPage = imagePage;
                 EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
             else if (videoFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
+                viewerPage = videoPage;
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
 
@@ -254,10 +265,13 @@ namespace IVM.Studio.ViewModels
             Container.Resolve<DataManager>().CurrentFile = currentFile;
             Container.Resolve<DataManager>().Metadata = metadata;
             Container.Resolve<DataManager>().SelectedSlideInfo = SelectedSlideInfo;
+            Container.Resolve<DataManager>().ViewerPage = viewerPage;
+
+            EventAggregator.GetEvent<ViewerPageChangedEvent>().Publish();
         }
 
         /// <summary>
-        /// 
+        /// StopSlideshow
         /// </summary>
         private void StopSlideshow()
         {
@@ -265,7 +279,7 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// EnableImageSliders
         /// </summary>
         /// <param name="currentSlidesPath"></param>
         /// <param name="name"></param>

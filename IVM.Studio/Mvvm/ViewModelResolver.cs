@@ -87,9 +87,7 @@ namespace IVM.Studio.Mvvm
             {
                 var viewType = view.GetType();
                 if (interfaceInstance.GenericArguments.Single() != viewType)
-                {
                     throw new InvalidOperationException();
-                }
 
                 var onLoadedMethod = interfaceInstance.GetMethod<Action<object>>("OnLoaded", viewType);
                 var onUnloadedMethod = interfaceInstance.GetMethod<Action<object>>("OnUnloaded", viewType);

@@ -49,11 +49,7 @@
 
             <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
 
-            <dxe:TrackBarEdit Grid.Row="0" Grid.Column="2" Margin="15 0" Minimum="1" Maximum="300" SelectionStart="35" SelectionEnd="285" TickPlacement="None">
-                <dxe:TrackBarEdit.StyleSettings>
-                    <dxe:TrackBarRangeStyleSettings/>
-                </dxe:TrackBarEdit.StyleSettings>
-            </dxe:TrackBarEdit>
+            <Slider Grid.Row="0" Grid.Column="2" Minimum="1" Maximum="255" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
 
             <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock Style="{StaticResource GeneralTextBlock}">35/285</TextBlock>
@@ -75,6 +71,8 @@
 
             <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
 
+            <Slider Grid.Row="4" Grid.Column="2" Minimum="1" Maximum="255" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+
             <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock Style="{StaticResource GeneralTextBlock}">5/36</TextBlock>
             </Border>
@@ -83,6 +81,12 @@
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Time-lapse" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
+
+            <dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Margin="15 0" Minimum="1" Maximum="300" SelectionStart="35" SelectionEnd="285" TickPlacement="None">
+                <dxe:TrackBarEdit.StyleSettings>
+                    <dxe:TrackBarRangeStyleSettings/>
+                </dxe:TrackBarEdit.StyleSettings>
+            </dxe:TrackBarEdit>
 
             <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock Style="{StaticResource GeneralTextBlock}">81/121</TextBlock>

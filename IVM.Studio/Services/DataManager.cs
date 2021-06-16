@@ -3,6 +3,7 @@ using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Controls;
 using WPFDrawing = System.Windows.Media;
 
 /**
@@ -22,10 +23,14 @@ namespace IVM.Studio.Services
         /// <summary>메타데이터 정보</summary>
         public Metadata Metadata { get; set; }
 
+        public UserControl ViewerPage { get; set; }
+
         /// <summary>선택된 파일 정보</summary>
         public SlideInfo SelectedSlideInfo { get; set; }
 
         public Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; set; }
+
+        public List<ColorChannelModel> ColorChannelModels { get; set; }
 
         /// <summary>선택된 패널 정보</summary>
         public ColorChannelModel SelectedChannel { get; set; }
@@ -34,13 +39,20 @@ namespace IVM.Studio.Services
 
         public void Init(IContainerExtension container, IEventAggregator eventAggregator)
         {
-            
             ColorChannelInfoMap = new Dictionary<ChannelType, ColorChannelModel>();
             ColorChannelInfoMap.Add(ChannelType.ALL, new ColorChannelModel(ChannelType.ALL, "ALL", true, Colors.Red, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.DAPI, new ColorChannelModel(ChannelType.DAPI, "DAPI (425-465)", true, Colors.Red, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.GFP, new ColorChannelModel(ChannelType.GFP, "GFP (500-550)", true, Colors.Green, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.RFP, new ColorChannelModel(ChannelType.RFP, "RFP (582-618)", true, Colors.Blue, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.NIR, new ColorChannelModel(ChannelType.NIR, "NIR (663-733)", false, Colors.None, false, 0, 1, 0, 255, container, eventAggregator));
+
+            ColorChannelModels = new List<ColorChannelModel>() {
+                new ColorChannelModel(ChannelType.ALL, "ALL"),
+                new ColorChannelModel(ChannelType.DAPI, "DAPI"),
+                new ColorChannelModel(ChannelType.GFP, "GFP"),
+                new ColorChannelModel(ChannelType.RFP, "RFP"),
+                new ColorChannelModel(ChannelType.NIR, "NIR")
+            };
 
             SelectedChannel = ColorChannelInfoMap[ChannelType.DAPI];
         }

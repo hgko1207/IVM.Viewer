@@ -79,12 +79,13 @@
     <Compile Include="Services\SlideShowService.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
     <Compile Include="ViewModels\HistogramWindowViewModel.cs" />
-    <Compile Include="ViewModels\VideoViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
     <Compile Include="Views\HistogramWindow.xaml.cs">
       <DependentUpon>HistogramWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\VideoViewerWindow.xaml.cs">
-      <DependentUpon>VideoViewerWindow.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\VideoViewer.xaml.cs">
+      <DependentUpon>VideoViewer.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\ButtonResource.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -99,6 +100,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HistogramWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -122,7 +127,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ImageViewerWindow.xaml">
+    <Page Include="Views\UserControls\ImageViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,11 +166,14 @@
     <Compile Include="ViewModels\UserControls\DisplayControlViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
-    <Compile Include="ViewModels\ImageViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ImageViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Views\ChannelViewerWindow.xaml.cs">
       <DependentUpon>ChannelViewerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainViewerWindow.xaml.cs">
+      <DependentUpon>MainViewerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\Annotation.xaml.cs">
       <DependentUpon>Annotation.xaml</DependentUpon>
@@ -182,14 +190,14 @@
     <Compile Include="Views\UserControls\ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ImageViewerWindow.xaml.cs">
-      <DependentUpon>ImageViewerWindow.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\ImageViewer.xaml.cs">
+      <DependentUpon>ImageViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\VideoViewerWindow.xaml">
+    <Page Include="Views\UserControls\VideoViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,6 +274,9 @@
     </PackageReference>
     <PackageReference Include="Prism.Wpf">
       <Version>8.1.97</Version>
+    </PackageReference>
+    <PackageReference Include="Vlc.DotNet.Wpf">
+      <Version>3.1.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

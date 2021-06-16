@@ -15,6 +15,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Drawing = System.Windows.Media;
 
 /**
@@ -31,7 +33,7 @@ using Drawing = System.Windows.Media;
  */
 namespace IVM.Studio.ViewModels
 {
-    public class ImageViewerWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ImageViewerWindow>
+    public class ImageViewerViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ImageViewer>
     {
         private Drawing.ImageSource displayingImage;
         public Drawing.ImageSource DisplayingImage
@@ -50,8 +52,6 @@ namespace IVM.Studio.ViewModels
 
         public ICommand MouseWheelCommand { get; set; }
         public ICommand SizeChangedCommand { get; set; }
-
-        private ImageViewerWindow view;
 
         private Bitmap originalImage;
         private Bitmap flippedOriginalImage;
@@ -88,40 +88,42 @@ namespace IVM.Studio.ViewModels
         private bool scaleBarEnabled;
         private int scaleBarSize;
 
-        public ImageViewerWindowViewModel(IContainerExtension container) : base(container)
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="container"></param>
+        public ImageViewerViewModel(IContainerExtension container) : base(container)
         {
-            Title = "Image Viewer";
-
             MouseWheelCommand = new DelegateCommand<MouseWheelEventArgs>(MouseWheel);
             SizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(SizeChanged);
-
-            currentZoomRatio = 100;
-            DisplayingImageWidth = double.NaN;
-            currentRotate = 0;
 
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread);
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect);
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
-            EventAggregator.GetEvent<ImageViewerCloseEvent>().Subscribe(() => view.Close());
+
+            currentZoomRatio = 100;
+            DisplayingImageWidth = double.NaN;
+            currentRotate = 0;
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap.Values.Where(c => c.ChannelType != ChannelType.ALL).ToDictionary(data => data.ChannelType);
         }
 
-        public void OnLoaded(ImageViewerWindow view)
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnLoaded(ImageViewer view)
         {
-            this.view = view;
-            view.Closed += WindowClosed;
         }
 
-        public void OnUnloaded(ImageViewerWindow view)
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnUnloaded(ImageViewer view)
         {
-            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImage);
-            EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
-            EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
-            EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
-            EventAggregator.GetEvent<ImageViewerCloseEvent>().Unsubscribe(() => view.Close());
         }
 
         /// <summary>
@@ -158,7 +160,7 @@ namespace IVM.Studio.ViewModels
                     if (type == ChannelType.ALL)
                         continue;
 
-                    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type - 1);
+                    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
                 }
             }
             else
@@ -173,7 +175,7 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 
+        /// DisplayImageWithoutMetadata
         /// </summary>
         /// <param name="file"></param>
         private void DisplayImageWithoutMetadata(FileInfo file)
@@ -198,7 +200,7 @@ namespace IVM.Studio.ViewModels
             currentRotate = 0;
 
             // 디스플레이
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            InternalDisplayImage();
 
             // 슬라이드쇼
             Container.Resolve<SlideShowService>().ContinueSlideshow();
@@ -213,7 +215,7 @@ namespace IVM.Studio.ViewModels
                 return;
 
             // 이미지 표시는 히스토그램 생성 등으로 인해 오래 걸리므로 백그라운드에서 처리
-            Task.Run(() => 
+            Task.Run(() =>
             {
                 // 주 이미지 변경
                 {
@@ -233,9 +235,53 @@ namespace IVM.Studio.ViewModels
 
                 // 채널별 이미지 변경
                 {
-                    for (int i = 0; i < 4; i++)
+                    foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
                     {
+                        if (type == ChannelType.ALL)
+                            continue;
 
+                        ColorChannelModel colorChannelModel = colorChannelInfoMap[type];
+
+                        if (colorChannelModel.Display)
+                        {
+                            bool[] visibilityByChannel = new bool[4] { false, false, false, false };
+                            visibilityByChannel[(int)type] = true;
+
+                            float[][] colorMatrix = Container.Resolve<ImageService>().GenerateColorMatrix(
+                                startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
+                                endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
+                                brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
+                                contrastByChannel: colorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
+                                translationByChannel: currentTranslationByChannel,
+                                visibilityByChannel: visibilityByChannel
+                            );
+
+                            if (colorChannelModel.ColorMapEnabled)
+                            {
+                                using (Bitmap img1 = Container.Resolve<ImageService>().TranslateColor(originalImage, colorMatrix))
+                                using (Bitmap img2 = Container.Resolve<ImageService>().ApplyColorMapGDI(img1, currentTranslationByChannel[(int)type], colorChannelModel.ColorMap))
+                                {
+                                    BitmapSource img = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(img2);
+                                    Container.Resolve<WindowByChannelService>().DisplayImage((int)type, img);
+                                    using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img2, currentTranslationByChannel, new bool[4] { true, true, true, false }))
+                                    {
+                                        colorChannelModel.HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                using (Bitmap img = Container.Resolve<ImageService>().TranslateColor(originalImage, colorMatrix))
+                                {
+                                    BitmapSource imgwpf = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(img);
+                                    Container.Resolve<WindowByChannelService>().DisplayImage((int)type, imgwpf);
+                                    using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img, currentTranslationByChannel, visibilityByChannel))
+                                    {
+                                        colorChannelModel.HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -407,16 +453,6 @@ namespace IVM.Studio.ViewModels
                     DisplayingImageWidth = originalImage.Width * (newScale / 100d);
                 }
             }
-        }
-
-        /// <summary>
-        /// Window 종료 시킬 때
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void WindowClosed(object sender, EventArgs e)
-        {
-            EventAggregator.GetEvent<ImageViewerClosedEvent>().Publish();
         }
     }
 }

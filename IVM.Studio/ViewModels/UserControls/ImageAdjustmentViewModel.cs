@@ -1,4 +1,5 @@
-﻿using DevExpress.Xpf.Editors;
+﻿using DevExpress.Mvvm.Native;
+using DevExpress.Xpf.Editors;
 using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
@@ -9,6 +10,7 @@ using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 
 /**
@@ -125,17 +127,65 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     if (value)
                     {
-                        new ImageViewerWindow() { Topmost = true }.Show();
+                        new MainViewerWindow() { Topmost = true }.Show();
+
                         FileInfo currentFile = Container.Resolve<DataManager>().CurrentFile;
                         if (currentFile != null)
                         {
                             Metadata metadata = Container.Resolve<DataManager>().Metadata;
-                            EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                            if (Container.Resolve<DataManager>().ViewerPage == new ImageViewer())
+                                EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                            else
+                                EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
                         }
                     }
                     else
-                        EventAggregator.GetEvent<ImageViewerCloseEvent>().Publish();
+                        EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
                 }
+            }
+        }
+
+        private bool _DAPIWindowOpend;
+        public bool DAPIWindowOpend
+        {
+            get => _DAPIWindowOpend;
+            set
+            {
+                if (SetProperty(ref _DAPIWindowOpend, value))
+                    colorChannelInfoMap[ChannelType.DAPI].Display = value;
+            }
+        }
+
+        private bool _GFPWindowOpend;
+        public bool GFPWindowOpend
+        {
+            get => _GFPWindowOpend;
+            set
+            {
+                if (SetProperty(ref _GFPWindowOpend, value))
+                    colorChannelInfoMap[ChannelType.GFP].Display = value;
+            }
+        }
+
+        private bool _RFPWindowOpend;
+        public bool RFPWindowOpend
+        {
+            get => _RFPWindowOpend;
+            set
+            {
+                if (SetProperty(ref _RFPWindowOpend, value))
+                    colorChannelInfoMap[ChannelType.RFP].Display = value;
+            }
+        }
+
+        private bool _NIRWindowOpend;
+        public bool NIRWindowOpend
+        {
+            get => _NIRWindowOpend;
+            set
+            {
+                if (SetProperty(ref _NIRWindowOpend, value))
+                    colorChannelInfoMap[ChannelType.NIR].Display = value;
             }
         }
 
@@ -180,12 +230,13 @@ namespace IVM.Studio.ViewModels.UserControls
             LevelResetCommand = new DelegateCommand(LevelReset);
 
             EventAggregator.GetEvent<SlideChangedEvent>().Subscribe(InitVisible);
-            EventAggregator.GetEvent<ImageViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
+            EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
+            EventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(ChWindowClosed);
 
             colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
-            ChannelNames = colorChannelInfoMap.Values.ToList();
+            ChannelNames = container.Resolve<DataManager>().ColorChannelModels;
             SelectedChannel = ChannelNames[0];
 
             InitVisible();
@@ -198,19 +249,23 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void BrightnessChanged(EditValueChangedEventArgs e)
         {
-            decimal v = (decimal)e.NewValue;
-            float value = (float)(v - 50) * 0.05f;
+            Thread.Sleep(500);
 
-            if (SelectedChannel.ChannelType == ChannelType.ALL)
+            if (e.NewValue is decimal value)
             {
-                bool refresh = false;
-                foreach (ColorChannelModel i in colorChannelInfoMap.Values)
-                    refresh |= i.UpdateBrightnessWithoutRefresh((float)value);
-                if (refresh)
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                if (SelectedChannel.ChannelType == ChannelType.ALL)
+                {
+                    bool refresh = false;
+                    colorChannelInfoMap.Values.Where(item => item.ChannelType != ChannelType.ALL).ForEach(date =>
+                    {
+                        refresh |= date.UpdateBrightnessWithoutRefresh((float)value);
+                    });
+                    if (refresh)
+                        EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                }
+                else
+                    colorChannelInfoMap[SelectedChannel.ChannelType].Brightness = (float)value;
             }
-            else
-                colorChannelInfoMap[SelectedChannel.ChannelType].Brightness = (float)value;
         }
 
         /// <summary>
@@ -219,8 +274,23 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ContrastChanged(EditValueChangedEventArgs e)
         {
+            Thread.Sleep(500);
+             
             if (e.NewValue is decimal value)
-                colorChannelInfoMap[SelectedChannel.ChannelType].Contrast = (float)value;
+            {
+                if (SelectedChannel.ChannelType == ChannelType.ALL)
+                {
+                    bool refresh = false;
+                    colorChannelInfoMap.Values.Where(item => item.ChannelType != ChannelType.ALL).ForEach(date =>
+                    {
+                        refresh |= date.UpdateContrastWithoutRefresh((float)value);
+                    });
+                    if (refresh)
+                        EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                }
+                else
+                    colorChannelInfoMap[SelectedChannel.ChannelType].Contrast = (float)value;
+            }
         }
 
         /// <summary>
@@ -266,6 +336,29 @@ namespace IVM.Studio.ViewModels.UserControls
             GFPVisible = colorChannelInfoMap[ChannelType.GFP].Visible;
             RFPVisible = colorChannelInfoMap[ChannelType.RFP].Visible;
             NIRVisible = colorChannelInfoMap[ChannelType.NIR].Visible;
+        }
+
+        /// <summary>
+        /// 채널 윈도우 종료될 때
+        /// </summary>
+        /// <param name="channel"></param>
+        private void ChWindowClosed(int channel)
+        {
+            switch (channel)
+            {
+                case (int)ChannelType.DAPI:
+                    DAPIWindowOpend = false;
+                    break;
+                case (int)ChannelType.GFP:
+                    GFPWindowOpend = false;
+                    break;
+                case (int)ChannelType.RFP:
+                    RFPWindowOpend = false;
+                    break;
+                case (int)ChannelType.NIR:
+                    NIRWindowOpend = false;
+                    break;
+            }
         }
     }
 }
