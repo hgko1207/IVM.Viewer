@@ -1,5 +1,4 @@
-﻿using DevExpress.Xpf.Editors;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace IVM.Studio.Views.UserControls
 {
@@ -11,11 +10,6 @@ namespace IVM.Studio.Views.UserControls
         public ImageAdjustment()
         {
             InitializeComponent();
-        }
-
-        private void EditValueChanged(object sender, EditValueChangedEventArgs e)
-        {
-
         }
     }
 }

@@ -37,6 +37,8 @@ namespace IVM.Studio.Services
 
         public WPFDrawing.ImageSource HistogramImage { get; set; }
 
+        public bool MainViewerOpend { get; set; }
+
         public void Init(IContainerExtension container, IEventAggregator eventAggregator)
         {
             ColorChannelInfoMap = new Dictionary<ChannelType, ColorChannelModel>();

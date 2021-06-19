@@ -60,6 +60,9 @@ namespace IVM.Studio.ViewModels
         {
             this.view = view;
             view.Closed += WindowClosed;
+
+            Container.Resolve<DataManager>().MainViewerOpend = true;
+            EventAggregator.GetEvent<MainViewerOpendEvent>().Publish();
         }
 
         /// <summary>
@@ -68,6 +71,7 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(MainViewerWindow view)
         {
+            EventAggregator.GetEvent<ViewerPageChangedEvent>().Unsubscribe(ViewerChanged);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(() => view.Close());
         }
 
@@ -87,6 +91,7 @@ namespace IVM.Studio.ViewModels
         /// <param name="e"></param>
         private void WindowClosed(object sender, EventArgs e)
         {
+            Container.Resolve<DataManager>().MainViewerOpend = false;
             EventAggregator.GetEvent<MainViewerClosedEvent>().Publish();
         }
     }

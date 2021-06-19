@@ -1,8 +1,10 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Views.UserControls;
+using Prism.Events;
 using Prism.Ioc;
 using System;
+using Vlc.DotNet.Core.Interops.Signatures;
 
 /**
  * @Class Name : VideoViewerViewModel.cs
@@ -38,7 +40,9 @@ namespace IVM.Studio.ViewModels.UserControls
         public void OnLoaded(VideoViewer view)
         {
             this.view = view;
+
             EventAggregator.GetEvent<DisplayVideoEvent>().Subscribe(InitialPlayVideo);
+            EventAggregator.GetEvent<PlayVideoEvent>().Subscribe(PlayVideo, ThreadOption.BackgroundThread);
         }
 
         /// <summary>
@@ -57,6 +61,17 @@ namespace IVM.Studio.ViewModels.UserControls
         private void InitialPlayVideo(DisplayParam param)
         {
             view.MediaPlayer.SourceProvider.MediaPlayer.Play(param.FileInfo);
+        }
+
+        /// <summary>
+        /// Play Video
+        /// </summary>
+        private void PlayVideo()
+        {
+            if (view.MediaPlayer.SourceProvider.MediaPlayer.State == MediaStates.Ended)
+                view.MediaPlayer.SourceProvider.MediaPlayer.Stop();
+
+            view.MediaPlayer.SourceProvider.MediaPlayer.Play();
         }
     }
 }

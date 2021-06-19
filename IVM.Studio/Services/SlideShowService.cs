@@ -40,19 +40,43 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 새로운 슬라이드쇼 태스크를 초기화합니다.
+        /// </summary>
+        /// <param name="fps"></param>
+        /// <param name="count"></param>
+        /// <param name="repeat"></param>
+        /// <returns>이미 슬라이드쇼가 진행중인 경우 기존 태스크를 변경하지 않으며 false를 반환합니다. 실행에 성공하면 true를 반환합니다.</returns>
+        public bool StartSlideShow(double fps, int count, int repeat)
+        {
+            if (NowPlaying)
+            {
+                return false;
+            }
+            else
+            {
+                initialCount = count;
+                currentCount = count;
+                sleep = TimeSpan.FromSeconds(1 / fps);
+                this.repeat = repeat;
+
+                return true;
+            }
+        }
+
+        /// <summary>
         /// 슬라이드 종료
         /// </summary>
-        public void StopSlideshow()
+        public void StopSlideShow()
         {
             repeat = 0;
             currentCount = 0;
         }
 
         /// <summary>
-        /// 기존 슬라이드쇼 태스크의 카운트를 1 진행합니다. 카운트가 진행될 때마다 지정한 시간만큼 대기한 후 <seealso cref="PlaySlideshowEvent"/> 이벤트를 발생시킵니다.
+        /// 기존 슬라이드쇼 태스크의 카운트를 1 진행합니다. 카운트가 진행될 때마다 지정한 시간만큼 대기한 후 <seealso cref="PlaySlideShowEvent"/> 이벤트를 발생시킵니다.
         /// </summary>
         /// <returns>이미 슬라이드쇼가 진행중이 아닌 경우 실행되지 않으며 이 경우 false가 반환됩니다. 실행에 성공하면 true를 반환합니다.</returns>
-        public bool ContinueSlideshow()
+        public bool ContinueSlideShow()
         {
             if (NowPlaying)
             {
@@ -62,28 +86,21 @@ namespace IVM.Studio.Services
                     {
                         repeat--;
                         if (repeat > 0)
-                        {
                             // 첫 루프에서는 슬라이드를 1로 이동하는 걸 호출자 쪽에서 해주지만, 두번째 이후의 루프에서는 직접 해야 함
                             currentCount = initialCount + 1;
-                        }
                         else
-                        {
                             currentCount = 0;
-                        }
                     }
                     else
-                    {
                         currentCount--;
-                    }
-                    EventAggregator.GetEvent<PlaySlideshowEvent>().Publish();
+
+                    EventAggregator.GetEvent<PlaySlideShowEvent>().Publish();
                 });
 
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
     }
 }

@@ -15,6 +15,7 @@ using System.IO;
  */
 namespace IVM.Studio.Models.Events
 {
+    public class MainViewerOpendEvent : PubSubEvent { }
     /// <summary> 메인 뷰어 윈도우를 종료 할때 </summary>
     public class MainViewerCloseEvent : PubSubEvent { }
     /// <summary> 메인 뷰어 윈도우가 종료 될때 </summary>
@@ -59,5 +60,9 @@ namespace IVM.Studio.Models.Events
 
     public class SlideChangedEvent : PubSubEvent { }
 
-    public class PlaySlideshowEvent : PubSubEvent { }
+    public class PlaySlideShowEvent : PubSubEvent { }
+
+    public class PlayVideoEvent : PubSubEvent { }
+    public class PauseVideoEvent : PubSubEvent { }
+    public class StopVideoEvent : PubSubEvent { }
 }

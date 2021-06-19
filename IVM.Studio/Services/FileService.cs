@@ -303,6 +303,48 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 주어진 슬라이드 폴더 안의 이미지 모드 갯수를 계산하여 반환합니다. 각 모드의 첫번째 폴더만을 검사합니다.
+        /// </summary>
+        /// <param name="slideRootDir"></param>
+        /// <param name="approvedExtensions"></param>
+        /// <returns>각 모드별 슬라이드 폴더 갯수를 반환합니다. 0이면 해당 계층이 존재하지 않음을 뜻합니다.</returns>
+        public (int TimeLapse, int MultiPosition, int Mosaic, int ZStack) GetImagesModeStatus(DirectoryInfo slideRootDir, IEnumerable<string> approvedExtensions)
+        {
+            if (!slideRootDir.Exists) 
+                return (0, 0, 0, 0);
+
+            string[] imageModes = Regex.Replace(slideRootDir.Name, @"([A-Za-z\-]+)([0-9]+)(_.*)?", "$1").Split('-');
+            int[] counts = new int[imageModes.Length];
+
+            DirectoryInfo cursor = slideRootDir;
+            for (int i = 0; i < imageModes.Length; i++)
+            {
+                if (i == imageModes.Length - 1)
+                {
+                    // 마지막 모드는 파일 갯수를 세야함
+                    int count = GetImagesInFolder(cursor, approvedExtensions, false).Count();
+                    counts[i] = Math.Max(counts[i], count);
+                }
+                else
+                {
+                    List<DirectoryInfo> subdirs = cursor.EnumerateDirectories($"{imageModes[i]}*").ToList();
+                    if (subdirs.Count == 0)
+                        break;
+
+                    counts[i] = Math.Max(counts[i], subdirs.Count);
+                    cursor = subdirs[0];
+                }
+            }
+
+            int zsIndex = Array.FindIndex(imageModes, s => s == "ZS");
+            int mpIndex = Array.FindIndex(imageModes, s => s == "MP");
+            int msIndex = Array.FindIndex(imageModes, s => s == "MS");
+            int tlIndex = Array.FindIndex(imageModes, s => s == "TL");
+
+            return (tlIndex == -1 ? 0 : counts[tlIndex], mpIndex == -1 ? 0 : counts[mpIndex], msIndex == -1 ? 0 : counts[msIndex], zsIndex == -1 ? 0 : counts[zsIndex]);
+        }
+
+        /// <summary>
         /// 주어진 객체에 포함된 CSV 직렬화 가능 프로퍼티를 이용해 바인딩용 메타데이터 모델 컬렉션을 만듭니다.
         /// </summary>
         /// <param name="metadata"></param>

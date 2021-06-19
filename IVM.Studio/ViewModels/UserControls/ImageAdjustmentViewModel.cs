@@ -140,7 +140,10 @@ namespace IVM.Studio.ViewModels.UserControls
                         }
                     }
                     else
+                    {
+                        Container.Resolve<DataManager>().MainViewerOpend = false;
                         EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
+                    }
                 }
             }
         }

@@ -142,7 +142,127 @@
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Display Control">
-                            <ContentControl prism:RegionManager.RegionName="DisplayControlPanel"/>
+                            <Grid Margin="15 10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Z-Stack -->
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Z-Stack" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                                    <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="ZStack"
+                                                     IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding ZSSliderEnabled}"/>
+
+                                    <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" IsEnabled="{Binding ZSSliderEnabled}"
+                                            Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}"/>
+
+                                    <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                                        <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding ZSSliderText}"/>
+                                    </Border>
+
+                                    <!-- Mosaic -->
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                                    <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
+
+                                    <Slider Grid.Row="2" Grid.Column="2" Minimum="1" Maximum="255" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+
+                                    <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                                        <TextBlock Style="{StaticResource GeneralTextBlock}">81/144</TextBlock>
+                                    </Border>
+
+                                    <!-- Multi-Spot -->
+                                    <TextBlock Grid.Row="4" Grid.Column="0" Text="Multi-Spot" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                                    <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
+
+                                    <Slider Grid.Row="4" Grid.Column="2" Minimum="1" Maximum="255" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+
+                                    <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                                        <TextBlock Style="{StaticResource GeneralTextBlock}">5/36</TextBlock>
+                                    </Border>
+
+                                    <!-- Time-lapse -->
+                                    <TextBlock Grid.Row="6" Grid.Column="0" Text="Time-lapse" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                                    <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}"/>
+
+                                    <dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Margin="15 0" Minimum="1" Maximum="300" SelectionStart="35" SelectionEnd="285" TickPlacement="None">
+                                        <dxe:TrackBarEdit.StyleSettings>
+                                            <dxe:TrackBarRangeStyleSettings/>
+                                        </dxe:TrackBarEdit.StyleSettings>
+                                    </dxe:TrackBarEdit>
+
+                                    <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                                        <TextBlock Style="{StaticResource GeneralTextBlock}">81/121</TextBlock>
+                                    </Border>
+                                </Grid>
+
+                                <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 12" />
+
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentControl Grid.Column="0" prism:RegionManager.RegionName="DisplayControlPanel"/>
+
+                                    <StackPanel Grid.Column="2">
+                                        <DockPanel>
+                                            <TextBlock Text="Slideshow" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                                            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Record" HorizontalAlignment="Right"/>
+                                        </DockPanel>
+
+                                        <DockPanel Margin="0 8 0 0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                                    <TextBlock TextAlignment="Center" Text="Speed"/>
+                                                    <TextBlock TextAlignment="Center" Text="(FPS)" Margin="0 -4 0 0"/>
+                                                </StackPanel>
+
+                                                <dxe:SpinEdit Value="{Binding SlideShowFps}" Width="60" Margin="10 0 0 0"/>
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                <TextBlock Text="Repeat" VerticalAlignment="Center"/>
+                                                <dxe:SpinEdit Value="{Binding SlideShowRepeat}" Width="60" Margin="10 0 0 0"/>
+                                            </StackPanel>
+                                        </DockPanel>
+
+                                        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 12" />
+
+                                        <DockPanel>
+                                            <TextBlock Text="Window Arrange" VerticalAlignment="Center"/>
+
+                                            <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right">
+                                                <dxe:ComboBoxEditItem Content="Horizontal"/>
+                                                <dxe:ComboBoxEditItem Content="Vertical"/>
+                                            </dxe:ComboBoxEdit>
+                                        </DockPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>

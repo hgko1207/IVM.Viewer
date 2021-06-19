@@ -222,12 +222,12 @@
         <Setter Property="Height" Value="25"/>
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Glyph" Value="/Resources/Images/Pause_16x16.png"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="False">
                 <Setter Property="Background" Value="{StaticResource GradientActiveButtonBackground}"/>
                 <!--<Setter Property="Glyph" Value="{dx:DXImage Images/Arrows/Next_32x32.png}"/>-->
                 <Setter Property="Glyph" Value="/Resources/Images/Play_16x16.png"/>
-            </Trigger>
-            <Trigger Property="IsChecked" Value="False">
-                <Setter Property="Glyph" Value="/Resources/Images/Pause_16x16.png"/>
             </Trigger>
         </Style.Triggers>
     </Style>
