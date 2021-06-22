@@ -5,11 +5,35 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             dx:ThemeManager.ThemeName="Office2019Black">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
         <vlc:VlcControl x:Name="MediaPlayer" Margin="5" />
+
+        <StackPanel Grid.Row="1" Margin="10 5">
+            <DockPanel>
+                <TextBlock VerticalAlignment="Center" Text="{Binding FileInfoText}" />
+                <dx:SimpleButton Width="80" HorizontalAlignment="Right" Content="Trim" Command="{Binding TrimCommand}" Cursor="Hand"/>
+            </DockPanel>
+
+            <DockPanel Margin="0 5 0 0">
+                <dx:SimpleButton DockPanel.Dock="Left" Style="{StaticResource PlayAndPauseButton}" Width="32" Height="32" 
+                                 Command="{Binding PlayPauseCommand}" IsChecked="{Binding IsPlaying, Mode=OneWay}"/>
+                <dx:SimpleButton DockPanel.Dock="Left" Margin="5 0 0 0" Style="{StaticResource ButtonBase}" Command="{Binding StopCommand}" Width="36" Height="32" Padding="0" Cursor="Hand">
+                    <material:PackIcon Kind="Stop" Height="24" Width="24"/>
+                </dx:SimpleButton>
+                <Slider Margin="15 0 0 0" Minimum="0" Maximum="{Binding VideoLength}" Value="{Binding VideoCurrentTime, Delay=500}" />
+            </DockPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

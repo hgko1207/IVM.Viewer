@@ -4,6 +4,7 @@ using IVM.Studio.Views.UserControls;
 using Prism.Events;
 using Prism.Ioc;
 using System;
+using System.IO;
 using Vlc.DotNet.Core.Interops.Signatures;
 
 /**
@@ -24,13 +25,15 @@ namespace IVM.Studio.ViewModels.UserControls
     {
         private VideoViewer view;
 
+        private DisplayParam displayParam;
+
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
         public VideoViewerViewModel(IContainerExtension container) : base(container)
         {
-            
+            EventAggregator.GetEvent<DisplayVideoEvent>().Subscribe(InitialPlayVideo);
         }
 
         /// <summary>
@@ -41,7 +44,11 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
-            EventAggregator.GetEvent<DisplayVideoEvent>().Subscribe(InitialPlayVideo);
+            view.MediaPlayer.SourceProvider.CreatePlayer(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "libvlc")));
+
+            if (displayParam != null)
+                view.MediaPlayer.SourceProvider.MediaPlayer.Play(displayParam.FileInfo);
+
             EventAggregator.GetEvent<PlayVideoEvent>().Subscribe(PlayVideo, ThreadOption.BackgroundThread);
         }
 
@@ -51,7 +58,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(VideoViewer view)
         {
-            EventAggregator.GetEvent<DisplayVideoEvent>().Unsubscribe(InitialPlayVideo);
+            EventAggregator.GetEvent<PlayVideoEvent>().Unsubscribe(PlayVideo);
         }
 
         /// <summary>
@@ -60,7 +67,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="param"></param>
         private void InitialPlayVideo(DisplayParam param)
         {
-            view.MediaPlayer.SourceProvider.MediaPlayer.Play(param.FileInfo);
+            this.displayParam = param;
         }
 
         /// <summary>
