@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using System;
 using System.IO;
 
 /**
@@ -65,4 +66,19 @@ namespace IVM.Studio.Models.Events
     public class PlayVideoEvent : PubSubEvent { }
     public class PauseVideoEvent : PubSubEvent { }
     public class StopVideoEvent : PubSubEvent { }
+    public class SeekVideoEvent : PubSubEvent<TimeSpan> { }
+
+    public class PlayingVideoEvent : PubSubEvent<PlayingVideoParam> { }
+    public class PlayingVideoParam
+    {
+        public readonly TimeSpan VideoLength;
+        public readonly TimeSpan VideoCurrentTime;
+
+        public PlayingVideoParam(TimeSpan VideoCurrentTime, TimeSpan VideoLength)
+        {
+            this.VideoLength = VideoLength;
+            this.VideoCurrentTime = VideoCurrentTime;
+        }
+    }
+    public class TrimWindowClosedEvent : PubSubEvent { }
 }

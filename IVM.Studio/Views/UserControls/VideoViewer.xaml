@@ -22,14 +22,14 @@
 
         <StackPanel Grid.Row="1" Margin="10 5">
             <DockPanel>
-                <TextBlock VerticalAlignment="Center" Text="{Binding FileInfoText}" />
+                <TextBlock Foreground="White" VerticalAlignment="Center" Text="{Binding FileInfoText}" />
                 <dx:SimpleButton Width="80" HorizontalAlignment="Right" Content="Trim" Command="{Binding TrimCommand}" Cursor="Hand"/>
             </DockPanel>
 
             <DockPanel Margin="0 5 0 0">
-                <dx:SimpleButton DockPanel.Dock="Left" Style="{StaticResource PlayAndPauseButton}" Width="32" Height="32" 
+                <dx:SimpleButton DockPanel.Dock="Left" Style="{StaticResource PlayAndPauseButton}" Width="28" Height="28" 
                                  Command="{Binding PlayPauseCommand}" IsChecked="{Binding IsPlaying, Mode=OneWay}"/>
-                <dx:SimpleButton DockPanel.Dock="Left" Margin="5 0 0 0" Style="{StaticResource ButtonBase}" Command="{Binding StopCommand}" Width="36" Height="32" Padding="0" Cursor="Hand">
+                <dx:SimpleButton DockPanel.Dock="Left" Margin="5 0 0 0" Style="{StaticResource ButtonBase}" Command="{Binding StopCommand}" Width="32" Height="32" Padding="0" Cursor="Hand">
                     <material:PackIcon Kind="Stop" Height="24" Width="24"/>
                 </dx:SimpleButton>
                 <Slider Margin="15 0 0 0" Minimum="0" Maximum="{Binding VideoLength}" Value="{Binding VideoCurrentTime, Delay=500}" />
