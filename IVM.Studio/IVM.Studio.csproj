@@ -114,11 +114,15 @@
     <Compile Include="ViewModels\HistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
+    <Compile Include="ViewModels\VideoTrimWindowViewModel.cs" />
     <Compile Include="Views\HistogramWindow.xaml.cs">
       <DependentUpon>HistogramWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\VideoViewer.xaml.cs">
       <DependentUpon>VideoViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VideoTrimWindow.xaml.cs">
+      <DependentUpon>VideoTrimWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\ButtonResource.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +237,10 @@
     <Page Include="Views\UserControls\VideoViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VideoTrimWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

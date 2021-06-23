@@ -232,7 +232,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="AutoToolTipPlacement" Value="None" />
         <Setter Property="IsMoveToPointEnabled" Value="True" />
-        <Setter Property="Minimum" Value="0" />
         <Setter Property="SelectionStart" Value="0" />
         <Setter Property="SelectionEnd" Value="{Binding Path=Value, RelativeSource={RelativeSource Self}}" />
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />

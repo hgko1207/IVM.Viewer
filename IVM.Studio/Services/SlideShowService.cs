@@ -36,7 +36,7 @@ namespace IVM.Studio.Services
 
         public SlideShowService(IEventAggregator eventAggregator)
         {
-            EventAggregator = eventAggregator;
+            this.EventAggregator = eventAggregator;
         }
 
         /// <summary>

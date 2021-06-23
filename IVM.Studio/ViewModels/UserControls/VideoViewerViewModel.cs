@@ -155,6 +155,7 @@ namespace IVM.Studio.ViewModels.UserControls
             (TimeSpan Current, TimeSpan Total) time;
             time.Current = TimeSpan.FromMilliseconds(e.NewTime);
             time.Total = TimeSpan.FromMilliseconds(view.MediaPlayer.SourceProvider.MediaPlayer.Length);
+
             // 딜레이 0.5초
             if ((cachedPreviousTime.Current - time.Current).Duration() > TimeSpan.FromMilliseconds(500) || cachedPreviousTime.Total != time.Total)
             {
@@ -180,6 +181,9 @@ namespace IVM.Studio.ViewModels.UserControls
         private void InitialPlayVideo(DisplayParam param)
         {
             this.displayParam = param;
+
+            if (view != null)
+                view.MediaPlayer.SourceProvider.MediaPlayer.Play(param.FileInfo);
 
             IsPlaying = true;
             CurrentFile = param.FileInfo;
@@ -251,7 +255,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Trim()
         {
-
+            Container.Resolve<VideoTrimService>().ShowTrimWindow(CurrentFile, TimeSpan.FromSeconds(VideoLength));
         }
 
         /// <summary>

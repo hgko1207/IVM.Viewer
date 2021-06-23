@@ -172,7 +172,7 @@
                                     <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="ZStack"
                                                      IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding ZSSliderEnabled}"/>
 
-                                    <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" IsEnabled="{Binding ZSSliderEnabled}"
+                                    <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" IsEnabled="{Binding ZSSliderEnabled}"
                                             Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}"/>
 
                                     <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">

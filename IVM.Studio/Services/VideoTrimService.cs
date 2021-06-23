@@ -24,7 +24,7 @@ namespace IVM.Studio.Services
         {
             if (videoTrimWindow == null)
             {
-                videoTrimWindow = new VideoTrimWindow();
+                videoTrimWindow = new VideoTrimWindow() { Topmost = true };
                 if (videoTrimWindow.DataContext is VideoTrimWindowViewModel vm)
                 {
                     vm.File = file;

@@ -1,4 +1,5 @@
 ﻿using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using IVM.Studio.Views;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
@@ -66,6 +67,8 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public VideoTrimWindowViewModel(IContainerExtension container) : base(container)
         {
+            Title = "IVM Viewer Video Trim";
+
             TrimCommand = new DelegateCommand(Trim);
             ClosedCommand = new DelegateCommand(Closed);
         }
@@ -87,16 +90,15 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// Trim
+        /// 비디오 저장
         /// </summary>
         private void Trim()
         {
             TimeSpan from = new TimeSpan(0, FromMin, FromSec);
             TimeSpan to = new TimeSpan(0, ToMin, ToSec);
+
             if (to > Length || from >= Length || from >= to || from < TimeSpan.Zero || to <= TimeSpan.Zero)
-            {
                 return;
-            }
 
             VistaSaveFileDialog dialog = new VistaSaveFileDialog
             {
@@ -120,7 +122,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void Closed()
         {
-
+            Container.Resolve<VideoTrimService>().ClosedWindow();
         }
     }
 }

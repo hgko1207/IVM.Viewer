@@ -7,15 +7,18 @@ using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 /**
  * @Class Name : MainWindowViewModel.cs
@@ -191,6 +194,7 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<PlaySlideShowEvent>().Subscribe(InternalPlaySlideshow);
             EventAggregator.GetEvent<MainViewerOpendEvent>().Subscribe(SliderStateChanged);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(SliderStateChanged);
+            EventAggregator.GetEvent<RefresgMetadata>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -349,7 +353,7 @@ namespace IVM.Studio.ViewModels
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
 
-            //DisplayImageWithMetadata(metadata);
+            EventAggregator.GetEvent<RefresgMetadata>().Publish(metadata);
 
             Container.Resolve<DataManager>().CurrentFile = currentFile;
             Container.Resolve<DataManager>().Metadata = metadata;

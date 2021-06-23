@@ -203,7 +203,7 @@ namespace IVM.Studio.ViewModels
             InternalDisplayImage();
 
             // 슬라이드쇼
-            Container.Resolve<SlideShowService>().ContinueSlideShow();
+            //Container.Resolve<SlideShowService>().ContinueSlideShow();
         }
 
         /// <summary>
