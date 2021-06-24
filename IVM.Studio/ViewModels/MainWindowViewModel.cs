@@ -14,11 +14,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 /**
  * @Class Name : MainWindowViewModel.cs
@@ -69,12 +67,33 @@ namespace IVM.Studio.ViewModels
         }
 
         public bool ZSSliderEnabled => ZSSliderMaximum > 1 && Container.Resolve<DataManager>().MainViewerOpend;
+        public bool MSSliderEnabled => MSSliderMaximum > 1 && Container.Resolve<DataManager>().MainViewerOpend;
+        public bool MPSliderEnabled => MPSliderMaximum > 1 && Container.Resolve<DataManager>().MainViewerOpend;
+        public bool TLSliderEnabled => TLSliderMaximum > 1 && Container.Resolve<DataManager>().MainViewerOpend;
 
         private int _ZSSliderMinimum;
         public int ZSSliderMinimum
         {
             get => _ZSSliderMinimum;
             set => SetProperty(ref _ZSSliderMinimum, value);
+        }
+        private int _MSSliderMinimum;
+        public int MSSliderMinimum
+        {
+            get => _MSSliderMinimum;
+            set => SetProperty(ref _MSSliderMinimum, value);
+        }
+        private int _MPSliderMinimum;
+        public int MPSliderMinimum
+        {
+            get => _MPSliderMinimum;
+            set => SetProperty(ref _MPSliderMinimum, value);
+        }
+        private int _TLSliderMinimum;
+        public int TLSliderMinimum
+        {
+            get => _TLSliderMinimum;
+            set => SetProperty(ref _TLSliderMinimum, value);
         }
 
         private int _ZSSliderMaximum;
@@ -87,6 +106,45 @@ namespace IVM.Studio.ViewModels
                 {
                     RaisePropertyChanged(nameof(ZSSliderText));
                     RaisePropertyChanged(nameof(ZSSliderEnabled));
+                }
+            }
+        }
+        private int _MSSliderMaximum;
+        public int MSSliderMaximum
+        {
+            get => _MSSliderMaximum;
+            set
+            {
+                if (SetProperty(ref _MSSliderMaximum, value))
+                {
+                    RaisePropertyChanged(nameof(MSSliderText));
+                    RaisePropertyChanged(nameof(MSSliderEnabled));
+                }
+            }
+        }
+        private int _MPSliderMaximum;
+        public int MPSliderMaximum
+        {
+            get => _MPSliderMaximum;
+            set
+            {
+                if (SetProperty(ref _MPSliderMaximum, value))
+                {
+                    RaisePropertyChanged(nameof(MPSliderText));
+                    RaisePropertyChanged(nameof(MPSliderEnabled));
+                }
+            }
+        }
+        private int _TLSliderMaximum;
+        public int TLSliderMaximum
+        {
+            get => _TLSliderMaximum;
+            set
+            {
+                if (SetProperty(ref _TLSliderMaximum, value))
+                {
+                    RaisePropertyChanged(nameof(TLSliderText));
+                    RaisePropertyChanged(nameof(TLSliderEnabled));
                 }
             }
         }
@@ -105,8 +163,53 @@ namespace IVM.Studio.ViewModels
                 }
             }
         }
+        private int _MSSliderValue;
+        public int MSSliderValue
+        {
+            get => _MSSliderValue;
+            set
+            {
+                if (SetProperty(ref _MSSliderValue, value))
+                {
+                    RaisePropertyChanged(nameof(MSSliderText));
+                    if (!disableSlidersEvent)
+                        DisplaySlide(false);
+                }
+            }
+        }
+        private int _MPSliderValue;
+        public int MPSliderValue
+        {
+            get => _MPSliderValue;
+            set
+            {
+                if (SetProperty(ref _MPSliderValue, value))
+                {
+                    RaisePropertyChanged(nameof(MPSliderText));
+                    if (!disableSlidersEvent)
+                        DisplaySlide(false);
+                }
+            }
+        }
+        private int _TLSliderValue;
+        public int TLSliderValue
+        {
+            get => _TLSliderValue;
+            set
+            {
+                if (SetProperty(ref _TLSliderValue, value))
+                {
+                    RaisePropertyChanged(nameof(TLSliderText));
+                    if (!disableSlidersEvent)
+                        DisplaySlide(false);
+                }
+            }
+        }
 
         public string ZSSliderText => $"{ZSSliderValue}/{ZSSliderMaximum}";
+        public string MSSliderText => $"{MSSliderValue}/{MSSliderMaximum}";
+        public string MPSliderText => $"{MPSliderValue}/{MPSliderMaximum}";
+        public string TLSliderText => $"{TLSliderValue}/{TLSliderMaximum}";
 
         private int currentPlayingSlider;
         public int CurrentPlayingSlider
@@ -191,10 +294,10 @@ namespace IVM.Studio.ViewModels
 
             PlaySlideShowCommand = new DelegateCommand<string>(PlaySlideShow);
 
-            EventAggregator.GetEvent<PlaySlideShowEvent>().Subscribe(InternalPlaySlideshow);
+            EventAggregator.GetEvent<PlaySlideShowEvent>().Subscribe(InternalPlaySlideShow);
             EventAggregator.GetEvent<MainViewerOpendEvent>().Subscribe(SliderStateChanged);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(SliderStateChanged);
-            EventAggregator.GetEvent<RefresgMetadata>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -223,9 +326,10 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(MainWindow view)
         {
-            EventAggregator.GetEvent<PlaySlideShowEvent>().Unsubscribe(InternalPlaySlideshow);
+            EventAggregator.GetEvent<PlaySlideShowEvent>().Unsubscribe(InternalPlaySlideShow);
             EventAggregator.GetEvent<MainViewerOpendEvent>().Unsubscribe(SliderStateChanged);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Unsubscribe(SliderStateChanged);
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(DisplayImageWithMetadata);
         }
 
         /// <summary>
@@ -320,7 +424,7 @@ namespace IVM.Studio.ViewModels
 
             FileInfo file;
             if (SelectedSlideInfo.Category == "Folder")
-                file = Container.Resolve<FileService>().FindImageInSlide(new DirectoryInfo(slidePath), approvedExtensions, 0, 0, 0, ZSSliderValue);
+                file = Container.Resolve<FileService>().FindImageInSlide(new DirectoryInfo(slidePath), approvedExtensions, TLSliderValue, MPSliderValue, MSSliderValue, ZSSliderValue);
             else
                 file = new FileInfo(slidePath);
                
@@ -353,7 +457,7 @@ namespace IVM.Studio.ViewModels
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
 
-            EventAggregator.GetEvent<RefresgMetadata>().Publish(metadata);
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Publish(metadata);
 
             Container.Resolve<DataManager>().CurrentFile = currentFile;
             Container.Resolve<DataManager>().Metadata = metadata;
@@ -385,6 +489,15 @@ namespace IVM.Studio.ViewModels
             {
                 ZSSliderValue = 0;
                 ZSSliderMaximum = 0;
+
+                MSSliderValue = 0;
+                MSSliderMaximum = 0;
+
+                MPSliderValue = 0;
+                MPSliderMaximum = 0;
+
+                TLSliderValue = 0;
+                TLSliderMaximum = 0;
             }
             else
             {
@@ -394,6 +507,18 @@ namespace IVM.Studio.ViewModels
                 ZSSliderMinimum = 1;
                 ZSSliderMaximum = zsCount;
                 ZSSliderValue = zsCount == 0 ? 0 : 1;
+
+                MSSliderMinimum = 1;
+                MSSliderMaximum = msCount;
+                MSSliderValue = msCount == 0 ? 0 : 1;
+
+                MPSliderMinimum = 1;
+                MPSliderMaximum = mpCount;
+                MPSliderValue = mpCount == 0 ? 0 : 1;
+
+                TLSliderMinimum = 1;
+                TLSliderMaximum = tlCount;
+                TLSliderValue = tlCount == 0 ? 0 : 1;
             }
 
             disableSlidersEvent = false;
@@ -420,11 +545,11 @@ namespace IVM.Studio.ViewModels
         /// <param name="type"></param>
         private void PlaySlideShow(string type)
         {
+            Container.Resolve<SlideShowService>().StopSlideShow();
+
             switch (type)
             {
                 case "ZStack":
-                    Container.Resolve<SlideShowService>().StopSlideShow();
-
                     if (CurrentPlayingSlider != 0 && ZSSliderEnabled && ZSSliderMaximum >= 2)
                     {
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, ZSSliderMaximum - 1, SlideShowRepeat);
@@ -446,17 +571,73 @@ namespace IVM.Studio.ViewModels
                     else
                         CurrentPlayingSlider = -1;
                     break;
+                case "Mosaic":
+                    if (CurrentPlayingSlider != 1 && MSSliderEnabled && MSSliderMaximum >= 2)
+                    {
+                        Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, MSSliderMaximum - 1, SlideShowRepeat);
+                        if (MSSliderValue == 1)
+                        {
+                            if (viewerPage == imagePage)
+                                Container.Resolve<SlideShowService>().ContinueSlideShow();
+                            else
+                                EventAggregator.GetEvent<PlayVideoEvent>().Publish();
+                        }
+                        else
+                            MSSliderValue = 1;
+
+                        CurrentPlayingSlider = 1;
+                    }
+                    else
+                        CurrentPlayingSlider = -1;
+                    break;
+                case "MultiPosition":
+                    if (CurrentPlayingSlider != 2 && MPSliderEnabled && MPSliderMaximum >= 2)
+                    {
+                        Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, MPSliderMaximum - 1, SlideShowRepeat);
+                        if (MPSliderValue == 1)
+                        {
+                            if (viewerPage == imagePage)
+                                Container.Resolve<SlideShowService>().ContinueSlideShow();
+                            else
+                                EventAggregator.GetEvent<PlayVideoEvent>().Publish();
+                        }
+                        else
+                            MPSliderValue = 1;
+
+                        CurrentPlayingSlider = 2;
+                    }
+                    else
+                        CurrentPlayingSlider = -1;
+                    break;
+                case "TimeLapse":
+                    if (CurrentPlayingSlider != 3 && TLSliderEnabled && TLSliderMaximum >= 2)
+                    {
+                        Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, TLSliderMaximum - 1, SlideShowRepeat);
+                        if (TLSliderValue == 1)
+                        {
+                            if (viewerPage == imagePage)
+                                Container.Resolve<SlideShowService>().ContinueSlideShow();
+                            else
+                                EventAggregator.GetEvent<PlayVideoEvent>().Publish();
+                        }
+                        else
+                            TLSliderValue = 1;
+                        CurrentPlayingSlider = 3;
+                    }
+                    else
+                        CurrentPlayingSlider = -1;
+                    break;
             }
         }
 
         /// <summary>
-        /// 
+        /// InternalPlaySlideShow
         /// </summary>
-        private void InternalPlaySlideshow()
+        private void InternalPlaySlideShow()
         {
             switch (CurrentPlayingSlider)
             {
-                case 0:
+                case 0: // ZStack
                     if (ZSSliderValue == ZSSliderMaximum)
                     {
                         ZSSliderValue = ZSSliderMinimum;
@@ -465,6 +646,42 @@ namespace IVM.Studio.ViewModels
                     {
                         ZSSliderValue++;
                         if (!Container.Resolve<SlideShowService>().NowPlaying && ZSSliderValue == ZSSliderMaximum)
+                            CurrentPlayingSlider = -1;
+                    }
+                    break;
+                case 1: // Mosaic
+                    if (MSSliderValue == MSSliderMaximum)
+                    {
+                        MSSliderValue = MSSliderMinimum;
+                    }
+                    else
+                    {
+                        MSSliderValue++;
+                        if (!Container.Resolve<SlideShowService>().NowPlaying && MSSliderValue == MSSliderMaximum)
+                            CurrentPlayingSlider = -1;
+                    }
+                    break;
+                case 2: // MultiPosition
+                    if (MPSliderValue == MPSliderMaximum)
+                    {
+                        MPSliderValue = MPSliderMinimum;
+                    }
+                    else
+                    {
+                        MPSliderValue++;
+                        if (!Container.Resolve<SlideShowService>().NowPlaying && MPSliderValue == MPSliderMaximum)
+                            CurrentPlayingSlider = -1;
+                    }
+                    break;
+                case 3: // TimeLapse
+                    if (TLSliderValue == TLSliderMaximum)
+                    {
+                        TLSliderValue = TLSliderMinimum;
+                    }
+                    else
+                    {
+                        TLSliderValue++;
+                        if (!Container.Resolve<SlideShowService>().NowPlaying && TLSliderValue == TLSliderMaximum)
                             CurrentPlayingSlider = -1;
                     }
                     break;

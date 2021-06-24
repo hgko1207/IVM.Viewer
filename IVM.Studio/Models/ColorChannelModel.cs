@@ -230,5 +230,31 @@ namespace IVM.Studio.Models
         {
             return SetProperty(ref _ColorLevelLowerValue, colorLevelLowerValue, nameof(colorLevelLowerValue));
         }
+
+        /// <summary>
+        /// string to color
+        /// </summary>
+        /// <param name="color"></param>
+        public void SetColor(string color)
+        {
+            switch (color)
+            {
+                case "Red":
+                    Color = Colors.Red;
+                    break;
+                case "Green":
+                    Color = Colors.Green;
+                    break;
+                case "Blue":
+                    Color = Colors.Blue;
+                    break;
+                case "Alpha":
+                    Color = Colors.Alpha;
+                    break;
+                case "None":
+                    Color = Colors.None;
+                    break;
+            }
+        }
     }
 }

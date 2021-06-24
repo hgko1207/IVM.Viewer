@@ -11,5 +11,10 @@ namespace IVM.Studio.Views.UserControls
         {
             InitializeComponent();
         }
+
+        private void itemCopy_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
+        {
+
+        }
     }
 }

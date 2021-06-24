@@ -1,4 +1,7 @@
-﻿using IVM.Studio.Mvvm;
+﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
+using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using Prism.Ioc;
 
 /**
@@ -17,12 +20,20 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class AnnotationViewModel : ViewModelBase
     {
+        private AnnotationInfo annotationInfo;
+        public AnnotationInfo AnnotationInfo
+        {
+            get => annotationInfo;
+            set => SetProperty(ref annotationInfo, value);
+        }
+
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
         public AnnotationViewModel(IContainerExtension container) : base(container)
         {
+            AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
         }
     }
 }

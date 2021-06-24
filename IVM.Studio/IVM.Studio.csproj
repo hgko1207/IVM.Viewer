@@ -106,10 +106,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AnnotationInfo.cs" />
     <Compile Include="Services\DataManager.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\SlideShowService.cs" />
     <Compile Include="Services\VideoTrimService.cs" />
+    <Compile Include="Utils\ButtonStyleConverter.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
     <Compile Include="ViewModels\HistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />

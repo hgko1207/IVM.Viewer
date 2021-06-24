@@ -3,6 +3,7 @@ using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.Linq;
 
 /**
  * @Class Name : ColormapViewModel.cs
@@ -20,6 +21,13 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class ColormapViewModel : ViewModelBase
     {
+        private List<ColorChannelModel> colorChannelModels;
+        public List<ColorChannelModel> ColorChannelModels
+        {
+            get => colorChannelModels;
+            set => SetProperty(ref colorChannelModels, value);
+        }
+
         private ColorChannelModel selectedChannel;
         public ColorChannelModel SelectedChannel
         {
@@ -45,6 +53,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public ColormapViewModel(IContainerExtension container) : base(container)
         {
+            ColorChannelModels = Container.Resolve<DataManager>().ColorChannelModels.Where(item => item.ChannelType != ChannelType.ALL).ToList();
             SelectedChannel = Container.Resolve<DataManager>().SelectedChannel;
         }
     }

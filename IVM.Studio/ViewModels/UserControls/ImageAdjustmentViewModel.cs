@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Input;
 
 /**
@@ -208,11 +209,44 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        public ICommand BrightnessChangedCommand { get; set; }
-        public ICommand ContrastChangedCommand { get; set; }
+        private string _DAPIColor;
+        public string DAPIColor
+        {
+            get => _DAPIColor;
+            set => SetProperty(ref _DAPIColor, value);
+        }
 
-        public ICommand ColorResetCommand { get; set; }
-        public ICommand AllVisibleCommand { get; set; }
+        private string _GFPColor;
+        public string GFPColor
+        {
+            get => _GFPColor;
+            set => SetProperty(ref _GFPColor, value);
+        }
+
+        private string _RFPColor;
+        public string RFPColor
+        {
+            get => _RFPColor;
+            set => SetProperty(ref _RFPColor, value);
+        }
+
+        private string _NIRColor;
+        public string NIRColor
+        {
+            get => _NIRColor;
+            set => SetProperty(ref _NIRColor, value);
+        }
+
+        public ICommand BrightnessChangedCommand { get; private set; }
+        public ICommand ContrastChangedCommand { get; private set; }
+
+        public ICommand DAPIColorChangedCommand { get; private set; }
+        public ICommand GFPColorChangedCommand { get; private set; }
+        public ICommand RFPColorChangedCommand { get; private set; }
+        public ICommand NIRColorChangedCommand { get; private set; }
+
+        public ICommand ColorResetCommand { get; private set; }
+        public ICommand AllVisibleCommand { get; private set; }
 
         public ICommand LevelLockCommand { get; private set; }
         public ICommand LevelResetCommand { get; private set; }
@@ -227,6 +261,10 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             BrightnessChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(BrightnessChanged);
             ContrastChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(ContrastChanged);
+            DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
+            GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
+            RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
+            NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
             ColorResetCommand = new DelegateCommand(ColorReset);
             AllVisibleCommand = new DelegateCommand(AllVisible);
             LevelLockCommand = new DelegateCommand(LevelLock);
@@ -242,8 +280,20 @@ namespace IVM.Studio.ViewModels.UserControls
             ChannelNames = container.Resolve<DataManager>().ColorChannelModels;
             SelectedChannel = ChannelNames[0];
 
+            InitColorStyle();
             InitVisible();
             LevelReset();
+        }
+
+        /// <summary>
+        /// Color 초기화
+        /// </summary>
+        private void InitColorStyle()
+        {
+            DAPIColor = "Red";
+            GFPColor = "Green";
+            RFPColor = "Blue";
+            NIRColor = "Alpha";
         }
 
         /// <summary>
@@ -297,10 +347,56 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
+        /// DAPI Color 변경 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void DAPIColorChanged(string type)
+        {
+            DAPIColor = type;
+            colorChannelInfoMap[ChannelType.DAPI].SetColor(type);
+        }
+
+        /// <summary>
+        /// GFP Color 변경 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void GFPColorChanged(string type)
+        {
+            GFPColor = type;
+            colorChannelInfoMap[ChannelType.GFP].SetColor(type);
+        }
+
+        /// <summary>
+        /// RFP Color 변경 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void RFPColorChanged(string type)
+        {
+            RFPColor = type;
+            colorChannelInfoMap[ChannelType.RFP].SetColor(type);
+        }
+
+        /// <summary>
+        /// RFP Color 변경 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void NIRColorChanged(string type)
+        {
+            NIRColor = type;
+            colorChannelInfoMap[ChannelType.NIR].SetColor(type);
+        }
+
+        /// <summary>
         /// metadata에 저장된 pseudocolor값 그대로 읽어옴
         /// </summary>
         private void ColorReset()
         {
+            InitColorStyle();
+
+            colorChannelInfoMap[ChannelType.DAPI].SetColor("Red");
+            colorChannelInfoMap[ChannelType.GFP].SetColor("Green");
+            colorChannelInfoMap[ChannelType.RFP].SetColor("Blue");
+            colorChannelInfoMap[ChannelType.NIR].SetColor("Alpha");
         }
 
         /// <summary>

@@ -7,13 +7,19 @@
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
              xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:util="clr-namespace:IVM.Studio.Utils"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
+    <UserControl.Resources>
+        <util:ButtonStyleConverter x:Key="ButtonStyleConverter"/>
+    </UserControl.Resources>
+
     <Grid Margin="10 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -63,23 +69,24 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="70"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="27*"/>
                     <ColumnDefinition Width="2"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="18*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Channel" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                <TextBlock Text="Channel" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="61,9,9,8"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="Color" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="3" Text="Visible" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Color" HorizontalAlignment="Center" Margin="12,0"/>
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="Visible" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="7,0"/>
 
                 <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                     <TextBlock TextAlignment="Center" Text="Master" FontSize="14" FontWeight="Bold"/>
                     <TextBlock TextAlignment="Center" Text="(4 channels)" Margin="0 -3 0 0" FontSize="11"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset" Command="{Binding ColorResetCommand}"/>
-                <dx:SimpleButton Grid.Row="3" Grid.Column="3" Style="{StaticResource GrayGradientButton}" Content="ALL" Width="50" Command="{Binding AllVisibleCommand}"/>
+                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset" Command="{Binding ColorResetCommand}" Margin="0,0,0,1"/>
+                <dx:SimpleButton Grid.Row="3" Grid.Column="3" Style="{StaticResource GrayGradientButton}" Content="ALL" Width="50" Command="{Binding AllVisibleCommand, Delay=500}" Grid.ColumnSpan="2" Margin="0,0,0,1"/>
             </Grid>
 
             <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
@@ -116,7 +123,7 @@
 
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" EditValueType="{x:Type sys:Int32}"/>
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" EditValueType="{x:Type sys:Int32}"/>
-                
+
                 <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Minimum="1" Maximum="255" TickPlacement="None" Margin="5 0"
                                   SelectionStart="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
                                   SelectionEnd="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
@@ -184,7 +191,19 @@
                     <TextBlock TextAlignment="Center" Text="(425-465)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="B&amp;W"/>
+                <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{Binding DAPIColor, Converter={StaticResource ButtonStyleConverter}}" Width="50" Height="30" Content="{Binding DAPIColor}">
+                    <dxb:BarManager.DXContextMenu>
+                        <dxb:PopupMenu>
+                            <dxb:PopupMenu.Items>
+                                <dxb:BarButtonItem Content="Red" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Red"/>
+                                <dxb:BarButtonItem Content="Green" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Green"/>
+                                <dxb:BarButtonItem Content="Blue" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Blue"/>
+                                <dxb:BarButtonItem Content="Alpha" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Alpha"/>
+                                <dxb:BarButtonItem Content="None" Command="{Binding DAPIColorChangedCommand}" CommandParameter="None"/>
+                            </dxb:PopupMenu.Items>
+                        </dxb:PopupMenu>
+                    </dxb:BarManager.DXContextMenu>
+                </dx:SimpleButton>
                 <dx:SimpleButton Grid.Row="0" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" IsChecked="{Binding DAPIVisible}"/>
 
                 <!-- GFP -->
@@ -193,7 +212,19 @@
                     <TextBlock TextAlignment="Center" Text="(500-550)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Content="Green" Style="{StaticResource GreenGradientButton}" Height="30" Margin="2 0 0 0"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{Binding GFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding GFPColor}" Width="50" Height="30">
+                    <dxb:BarManager.DXContextMenu>
+                        <dxb:PopupMenu>
+                            <dxb:PopupMenu.Items>
+                                <dxb:BarButtonItem Content="Red" Command="{Binding GFPColorChangedCommand}" CommandParameter="Red"/>
+                                <dxb:BarButtonItem Content="Green" Command="{Binding GFPColorChangedCommand}" CommandParameter="Green"/>
+                                <dxb:BarButtonItem Content="Blue" Command="{Binding GFPColorChangedCommand}" CommandParameter="Blue"/>
+                                <dxb:BarButtonItem Content="Alpha" Command="{Binding GFPColorChangedCommand}" CommandParameter="Alpha"/>
+                                <dxb:BarButtonItem Content="None" Command="{Binding GFPColorChangedCommand}" CommandParameter="None"/>
+                            </dxb:PopupMenu.Items>
+                        </dxb:PopupMenu>
+                    </dxb:BarManager.DXContextMenu>
+                </dx:SimpleButton>
                 <dx:SimpleButton Grid.Row="2" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" IsChecked="{Binding GFPVisible}"/>
 
                 <!-- RFP -->
@@ -202,7 +233,19 @@
                     <TextBlock TextAlignment="Center" Text="(582-618)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="4" Grid.Column="1" Content="Red" Style="{StaticResource RedGradientButton}" Height="30" Margin="2 0 0 0"/>
+                <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{Binding RFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding RFPColor}" Width="50" Height="30">
+                    <dxb:BarManager.DXContextMenu>
+                        <dxb:PopupMenu>
+                            <dxb:PopupMenu.Items>
+                                <dxb:BarButtonItem Content="Red" Command="{Binding RFPColorChangedCommand}" CommandParameter="Red"/>
+                                <dxb:BarButtonItem Content="Green" Command="{Binding RFPColorChangedCommand}" CommandParameter="Green"/>
+                                <dxb:BarButtonItem Content="Blue" Command="{Binding RFPColorChangedCommand}" CommandParameter="Blue"/>
+                                <dxb:BarButtonItem Content="Alpha" Command="{Binding RFPColorChangedCommand}" CommandParameter="Alpha"/>
+                                <dxb:BarButtonItem Content="None" Command="{Binding RFPColorChangedCommand}" CommandParameter="None"/>
+                            </dxb:PopupMenu.Items>
+                        </dxb:PopupMenu>
+                    </dxb:BarManager.DXContextMenu>
+                </dx:SimpleButton>
                 <dx:SimpleButton Grid.Row="4" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" IsChecked="{Binding RFPVisible}"/>
 
                 <!-- NIR -->
@@ -211,7 +254,19 @@
                     <TextBlock TextAlignment="Center" Text="(663-733)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="6" Grid.Column="1" Content="Blue" Style="{StaticResource BlueGradientButton}" Height="30" Margin="2 0 0 0"/>
+                <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{Binding NIRColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding NIRColor}" Width="50" Height="30">
+                    <dxb:BarManager.DXContextMenu>
+                        <dxb:PopupMenu>
+                            <dxb:PopupMenu.Items>
+                                <dxb:BarButtonItem Content="Red" Command="{Binding NIRColorChangedCommand}" CommandParameter="Red"/>
+                                <dxb:BarButtonItem Content="Green" Command="{Binding NIRColorChangedCommand}" CommandParameter="Green"/>
+                                <dxb:BarButtonItem Content="Blue" Command="{Binding NIRColorChangedCommand}" CommandParameter="Blue"/>
+                                <dxb:BarButtonItem Content="Alpha" Command="{Binding NIRColorChangedCommand}" CommandParameter="Alpha"/>
+                                <dxb:BarButtonItem Content="None" Command="{Binding NIRColorChangedCommand}" CommandParameter="None"/>
+                            </dxb:PopupMenu.Items>
+                        </dxb:PopupMenu>
+                    </dxb:BarManager.DXContextMenu>
+                </dx:SimpleButton>
                 <dx:SimpleButton Grid.Row="6" Grid.Column="3" Style="{StaticResource ToggleButton}" ButtonKind="Toggle" IsChecked="{Binding NIRVisible}"/>
             </Grid>
 

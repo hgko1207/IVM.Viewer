@@ -42,9 +42,7 @@
 
             <TextBlock Text="Channel" VerticalAlignment="Center" FontSize="13" Margin="30 0 0 0"/>
 
-            <dxe:ComboBoxEdit SelectedIndex="0" Margin="10 0 0 0" Width="130">
-                <dxe:ComboBoxEditItem Content="DAPI (425-465)"/>
-            </dxe:ComboBoxEdit>
+            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="130" ItemsSource="{Binding ColorChannelModels}" ValueMember="ChannelType" DisplayMember="ChannelName" SelectedItem="{Binding SelectedChannel}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">
