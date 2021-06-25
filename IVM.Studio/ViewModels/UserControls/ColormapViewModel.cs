@@ -1,9 +1,11 @@
 ﻿using IVM.Studio.Models;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 /**
  * @Class Name : ColormapViewModel.cs
@@ -47,6 +49,8 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        public ICommand ExportLabelCommand { get; private set; }
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -55,6 +59,16 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             ColorChannelModels = Container.Resolve<DataManager>().ColorChannelModels.Where(item => item.ChannelType != ChannelType.ALL).ToList();
             SelectedChannel = Container.Resolve<DataManager>().SelectedChannel;
+
+            ExportLabelCommand = new DelegateCommand(ExportLabel);
+        }
+
+        /// <summary>
+        /// ExportLabel
+        /// </summary>
+        private void ExportLabel()
+        {
+
         }
     }
 }

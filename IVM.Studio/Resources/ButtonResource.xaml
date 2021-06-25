@@ -176,7 +176,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="AplhaGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
+    <Style x:Key="AlphaGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="Background" Value="{StaticResource GrayGradientButtonBackground}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
