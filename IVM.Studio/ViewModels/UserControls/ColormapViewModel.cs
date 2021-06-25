@@ -4,8 +4,10 @@ using IVM.Studio.Services;
 using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using static IVM.Studio.Models.Common;
 
 /**
  * @Class Name : ColormapViewModel.cs
@@ -23,18 +25,25 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class ColormapViewModel : ViewModelBase
     {
-        private List<ColorChannelModel> colorChannelModels;
-        public List<ColorChannelModel> ColorChannelModels
+        private List<ColorChannelItem> colorChannelItems;
+        public List<ColorChannelItem> ColorChannelItems
         {
-            get => colorChannelModels;
-            set => SetProperty(ref colorChannelModels, value);
+            get => colorChannelItems;
+            set => SetProperty(ref colorChannelItems, value);
         }
 
-        private ColorChannelModel selectedChannel;
-        public ColorChannelModel SelectedChannel
+        private ColorChannelItem selectedChannel;
+        public ColorChannelItem SelectedChannel
         {
             get => selectedChannel;
             set => SetProperty(ref selectedChannel, value);
+        }
+
+        private ColorMap selectedColorMap;
+        public ColorMap SelectedColorMap
+        {
+            get => selectedColorMap;
+            set => SetProperty(ref selectedColorMap, value);
         }
 
         public IEnumerable<ColorMap> ColorMaps
@@ -49,7 +58,10 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        public ICommand ApplyCommand { get; private set; }
         public ICommand ExportLabelCommand { get; private set; }
+
+        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
         /// <summary>
         /// 생성자
@@ -57,10 +69,24 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public ColormapViewModel(IContainerExtension container) : base(container)
         {
-            ColorChannelModels = Container.Resolve<DataManager>().ColorChannelModels.Where(item => item.ChannelType != ChannelType.ALL).ToList();
-            SelectedChannel = Container.Resolve<DataManager>().SelectedChannel;
-
+            ApplyCommand = new DelegateCommand(Apply);
             ExportLabelCommand = new DelegateCommand(ExportLabel);
+
+            SelectedColorMap = ColorMaps.SingleOrDefault(color => color == ColorMap.Hot);
+
+            ColorChannelItems = Container.Resolve<DataManager>().ColorChannelItems.Where(item => item.Type != ChannelType.ALL).ToList();
+            SelectedChannel = ColorChannelItems[0];
+
+            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
+        }
+
+        /// <summary>
+        /// 적용 이벤트
+        /// </summary>
+        private void Apply()
+        {
+            colorChannelInfoMap[SelectedChannel.Type].ColorMap = SelectedColorMap;
+            colorChannelInfoMap[SelectedChannel.Type].ColorMapEnabled = true;
         }
 
         /// <summary>

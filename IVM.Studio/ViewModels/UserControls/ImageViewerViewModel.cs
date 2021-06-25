@@ -89,6 +89,8 @@ namespace IVM.Studio.ViewModels
         private bool scaleBarEnabled;
         private int scaleBarSize;
 
+        FileInfo fileToDisplay;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -99,10 +101,6 @@ namespace IVM.Studio.ViewModels
             SizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(SizeChanged);
 
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread);
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
-            EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation);
-            EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect);
-            EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
 
             currentZoomRatio = 100;
             DisplayingImageWidth = double.NaN;
@@ -117,6 +115,11 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnLoaded(ImageViewer view)
         {
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread);
+
+            EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
+            EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
+            EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset, ThreadOption.UIThread);
         }
 
         /// <summary>
@@ -125,6 +128,10 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(ImageViewer view)
         {
+            EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
+            EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
+            EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
+            EventAggregator.GetEvent<RotationResetEvent>().Unsubscribe(RotationReset);
         }
 
         /// <summary>
@@ -183,15 +190,11 @@ namespace IVM.Studio.ViewModels
         {
             // 레지스트레이션 체크
             FileInfo registrationFile = new FileInfo(Path.Combine(file.DirectoryName, Path.GetFileNameWithoutExtension(file.Name) + "_Reg" + file.Extension));
-
-            FileInfo fileToDisplay;
+           
             if (registrationFile.Exists)
                 fileToDisplay = registrationFile;
             else
                 fileToDisplay = file;
-
-            originalImage?.Dispose();
-            originalImage = Container.Resolve<ImageService>().LoadImage(fileToDisplay.FullName);
 
             // 어노테이션 초기화
             annotationImage?.Dispose();
@@ -210,15 +213,16 @@ namespace IVM.Studio.ViewModels
         /// <summary>
         /// 지정한 색상값에 따라 이미지의 색상을 투영한 후, 어노테이션 이미지를 붙여 화면에 표시하고, 히스토그램을 생성하는 내부 메서드
         /// </summary>
-        private void InternalDisplayImage()
+        private async void InternalDisplayImage()
         {
-            if (originalImage == null || disableRefreshImageEvent)
+            if (fileToDisplay == null && disableRefreshImageEvent)
                 return;
 
             // 이미지 표시는 히스토그램 생성 등으로 인해 오래 걸리므로 백그라운드에서 처리
-            Task.Run(() =>
+            await Task.Run(() =>
             {
-                Thread.Sleep(500);
+                originalImage?.Dispose();
+                originalImage = Container.Resolve<ImageService>().LoadImage(fileToDisplay.FullName);
 
                 // 주 이미지 변경
                 {
@@ -303,29 +307,29 @@ namespace IVM.Studio.ViewModels
 
                 flippedOriginalImage?.Dispose();
                 flippedOriginalImage = new Bitmap(workingImage);
-            }
 
-            // 한번 뒤집기 후에는 반드시 비트맵을 다시 생성해줘야 함.
-            // 90도, 270도 플립시 이미지의 가로 길이보다 Y좌표가 큰 영역에 쓰지 못하는 문제가 있음. (원인불명)
-            using (Bitmap workingImage = new Bitmap(flippedOriginalImage))
-            {
-                // 어노테이션
-                if (annotationImage != null)
+                // 한번 뒤집기 후에는 반드시 비트맵을 다시 생성해줘야 함.
+                // 90도, 270도 플립시 이미지의 가로 길이보다 Y좌표가 큰 영역에 쓰지 못하는 문제가 있음. (원인불명)
+                using (Bitmap bitmap = new Bitmap(flippedOriginalImage))
                 {
-                    using (Bitmap annotationImg = new Bitmap(annotationImage))
+                    // 어노테이션
+                    if (annotationImage != null)
                     {
-                        Container.Resolve<ImageService>().ReflectAndRotate(annotationImg, horizontalReflect, verticalReflect, currentRotate);
-                        Container.Resolve<ImageService>().DrawImageOnImage(workingImage, annotationImg);
+                        using (Bitmap annotationImg = new Bitmap(annotationImage))
+                        {
+                            Container.Resolve<ImageService>().ReflectAndRotate(annotationImg, horizontalReflect, verticalReflect, currentRotate);
+                            Container.Resolve<ImageService>().DrawImageOnImage(bitmap, annotationImg);
+                        }
                     }
+
+                    // 스케일 바
+                    if (scaleBarEnabled && fOVSizeX > 0 && fOVSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fOVSizeX && scaleBarSize < fOVSizeY)
+                        Container.Resolve<ImageService>().DrawScaleBar(bitmap, fOVSizeX, fOVSizeY, scaleBarSize, 2, 3, 9);
+
+                    displayingImageGDI?.Dispose();
+                    displayingImageGDI = new Bitmap(bitmap);
+                    DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(bitmap);
                 }
-
-                // 스케일 바
-                if (scaleBarEnabled && fOVSizeX > 0 && fOVSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fOVSizeX && scaleBarSize < fOVSizeY)
-                    Container.Resolve<ImageService>().DrawScaleBar(workingImage, fOVSizeX, fOVSizeY, scaleBarSize, 2, 3, 9);
-
-                displayingImageGDI?.Dispose();
-                displayingImageGDI = new Bitmap(workingImage);
-                DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(workingImage);
             }
         }
 

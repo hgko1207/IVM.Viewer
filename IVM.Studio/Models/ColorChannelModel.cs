@@ -175,7 +175,7 @@ namespace IVM.Studio.Models
 
             this.Index = (int) type;
             this.ChannelType = type;
-            this.channelName = channelName;
+            this.ChannelName = channelName;
             this.visible = visible;
             this.color = color;
             this.display = display;
@@ -192,7 +192,7 @@ namespace IVM.Studio.Models
         public ColorChannelModel(ChannelType type, string channelName)
         {
             this.ChannelType = type;
-            this.channelName = channelName;
+            this.ChannelName = channelName;
         }
 
         public override bool Equals(object obj) => Equals(obj as ColorChannelModel);

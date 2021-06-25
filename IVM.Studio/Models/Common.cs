@@ -8,5 +8,12 @@
 
             public string Name { get; set; }
         }
+
+        public class ColorChannelItem
+        {
+            public string Name { get; set; }
+
+            public ChannelType Type { get; set; }
+        }
     }
 }

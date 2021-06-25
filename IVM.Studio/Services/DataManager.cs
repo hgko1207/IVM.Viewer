@@ -4,6 +4,7 @@ using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Controls;
+using static IVM.Studio.Models.Common;
 using WPFDrawing = System.Windows.Media;
 
 /**
@@ -30,10 +31,7 @@ namespace IVM.Studio.Services
 
         public Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; set; }
 
-        public List<ColorChannelModel> ColorChannelModels { get; set; }
-
-        /// <summary>선택된 패널 정보</summary>
-        public ColorChannelModel SelectedChannel { get; set; }
+        public List<ColorChannelItem> ColorChannelItems { get; set; }
 
         public WPFDrawing.ImageSource HistogramImage { get; set; }
 
@@ -50,15 +48,13 @@ namespace IVM.Studio.Services
             ColorChannelInfoMap.Add(ChannelType.RFP, new ColorChannelModel(ChannelType.RFP, "RFP (582-618)", true, Colors.Blue, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.NIR, new ColorChannelModel(ChannelType.NIR, "NIR (663-733)", false, Colors.None, false, 0, 1, 0, 255, container, eventAggregator));
 
-            ColorChannelModels = new List<ColorChannelModel>() {
-                new ColorChannelModel(ChannelType.ALL, "ALL"),
-                new ColorChannelModel(ChannelType.DAPI, "DAPI"),
-                new ColorChannelModel(ChannelType.GFP, "GFP"),
-                new ColorChannelModel(ChannelType.RFP, "RFP"),
-                new ColorChannelModel(ChannelType.NIR, "NIR")
+            ColorChannelItems = new List<ColorChannelItem>() {
+                new ColorChannelItem() { Name = "ALL", Type = ChannelType.ALL },
+                new ColorChannelItem() { Name = "DAPI", Type = ChannelType.DAPI },
+                new ColorChannelItem() { Name = "GFP", Type = ChannelType.GFP },
+                new ColorChannelItem() { Name = "RFP", Type = ChannelType.RFP },
+                new ColorChannelItem() { Name = "NIR", Type = ChannelType.NIR }
             };
-
-            SelectedChannel = ColorChannelInfoMap[ChannelType.DAPI];
 
             AnnotationInfo = new AnnotationInfo(eventAggregator);
             AnnotationInfo.ScaleBarSize = 100;

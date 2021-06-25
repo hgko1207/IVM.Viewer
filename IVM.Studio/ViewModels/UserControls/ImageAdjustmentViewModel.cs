@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using static IVM.Studio.Models.Common;
 
 /**
  * @Class Name : ImageAdjustmentViewModel.cs
@@ -30,15 +31,15 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class ImageAdjustmentViewModel : ViewModelBase
     {
-        private List<ColorChannelModel> channelNames;
-        public List<ColorChannelModel> ChannelNames
+        private List<ColorChannelItem> colorChannelItems;
+        public List<ColorChannelItem> ColorChannelItems
         {
-            get => channelNames;
-            set => SetProperty(ref channelNames, value);
+            get => colorChannelItems;
+            set => SetProperty(ref colorChannelItems, value);
         }
 
-        private ColorChannelModel selectedChannel;
-        public ColorChannelModel SelectedChannel
+        private ColorChannelItem selectedChannel;
+        public ColorChannelItem SelectedChannel
         {
             get => selectedChannel;
             set => SetProperty(ref selectedChannel, value);
@@ -277,8 +278,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
             colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
-            ChannelNames = container.Resolve<DataManager>().ColorChannelModels;
-            SelectedChannel = ChannelNames[0];
+            ColorChannelItems = Container.Resolve<DataManager>().ColorChannelItems;
+            SelectedChannel = ColorChannelItems[0];
 
             InitColorStyle();
             InitVisible();
@@ -306,7 +307,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
             if (e.NewValue is decimal value)
             {
-                if (SelectedChannel.ChannelType == ChannelType.ALL)
+                if (SelectedChannel.Type == ChannelType.ALL)
                 {
                     bool refresh = false;
                     colorChannelInfoMap.Values.Where(item => item.ChannelType != ChannelType.ALL).ForEach(date =>
@@ -317,7 +318,7 @@ namespace IVM.Studio.ViewModels.UserControls
                         EventAggregator.GetEvent<RefreshImageEvent>().Publish();
                 }
                 else
-                    colorChannelInfoMap[SelectedChannel.ChannelType].Brightness = (float)value;
+                    colorChannelInfoMap[SelectedChannel.Type].Brightness = (float)value;
             }
         }
 
@@ -331,7 +332,7 @@ namespace IVM.Studio.ViewModels.UserControls
              
             if (e.NewValue is decimal value)
             {
-                if (SelectedChannel.ChannelType == ChannelType.ALL)
+                if (SelectedChannel.Type == ChannelType.ALL)
                 {
                     bool refresh = false;
                     colorChannelInfoMap.Values.Where(item => item.ChannelType != ChannelType.ALL).ForEach(date =>
@@ -342,7 +343,7 @@ namespace IVM.Studio.ViewModels.UserControls
                         EventAggregator.GetEvent<RefreshImageEvent>().Publish();
                 }
                 else
-                    colorChannelInfoMap[SelectedChannel.ChannelType].Contrast = (float)value;
+                    colorChannelInfoMap[SelectedChannel.Type].Contrast = (float)value;
             }
         }
 

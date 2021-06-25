@@ -27,9 +27,9 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5 10" Height="30">
             <TextBlock Text="Type" VerticalAlignment="Center" FontSize="13"/>
 
-            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="250" ApplyItemTemplateToSelectedItem="True" DataContext="{Binding SelectedChannel}" 
-                              SelectedItem="{Binding ColorMap, Converter={StaticResource ColorMapConverter}}"
-                              ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=StackPanel}, Path=DataContext.ColorMaps, Converter={StaticResource ColorMapCollectionConverter}}">
+            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="250" ApplyItemTemplateToSelectedItem="True"
+                              SelectedItem="{Binding SelectedColorMap, Converter={StaticResource ColorMapConverter}}"
+                              ItemsSource="{Binding ColorMaps, Converter={StaticResource ColorMapCollectionConverter}}">
                 <dxe:ComboBoxEdit.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5 0">
@@ -42,11 +42,13 @@
 
             <TextBlock Text="Channel" VerticalAlignment="Center" FontSize="13" Margin="30 0 0 0"/>
 
-            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="130" ItemsSource="{Binding ColorChannelModels}" ValueMember="ChannelType" DisplayMember="ChannelName" SelectedItem="{Binding SelectedChannel}"/>
+            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="130" ItemsSource="{Binding ColorChannelModels}" SelectedItem="{Binding SelectedChannel}" DisplayMember="Name" ValueMember="Type">
+
+            </dxe:ComboBoxEdit>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">
-            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Apply" />
+            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Apply" Command="{Binding ApplyCommand}"/>
             <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0" Command="{Binding ExportLabelCommand}"/>
         </StackPanel>
     </Grid>

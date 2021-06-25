@@ -33,54 +33,6 @@ namespace IVM.Studio.Utils
         }
     }
 
-    //[ValueConversion(typeof(ColorMap), typeof(Image))]
-    //public class ColorMapConverter : IValueConverter
-    //{
-    //    private static readonly Dictionary<ColorMap, Image> colorTable = new Dictionary<ColorMap, Image> {
-    //        { ColorMap.Autumn, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Autumn.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Bone, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Bone.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Jet, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Jet.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Winter, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Winter.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Rainbow, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Rainbow.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Ocean, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Ocean.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Summer, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Summer.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Spring, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Spring.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Cool, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Cool.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Hsv, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Hsv.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Pink, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Pink.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Hot, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Hot.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Parula, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Parula.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Magma, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Magma.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Inferno, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Inferno.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Plasma, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Plasma.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Viridis, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Viridis.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Cividis, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Cividis.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.Twilight, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_Twilight.jpg", UriKind.RelativeOrAbsolute)) } },
-    //         { ColorMap.TwilightShifted, new Image { Source = new BitmapImage(new Uri("/Resources/Images/ColorMap_TwilightShifted.jpg", UriKind.RelativeOrAbsolute)) } },
-    //    };
-
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        if (colorTable.TryGetValue((ColorMap)value, out Image ret))
-    //            return ret;
-    //        else
-    //            return null;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        Image image = (Image) value;
-    //        if (image == null)
-    //            return ColorMap.Autumn;
-
-    //        foreach (KeyValuePair<ColorMap, Image> i in colorTable)
-    //            if (image == i.Value)
-    //                return i.Key;
-
-    //        return ColorMap.Autumn;
-    //    }
-    //}
-
     [ValueConversion(typeof(ColorMap), typeof(ColorMapModel))]
     public class ColorMapConverter : IValueConverter
     {
