@@ -2,7 +2,9 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using Prism.Commands;
 using Prism.Ioc;
+using System.Windows.Input;
 
 /**
  * @Class Name : AnnotationViewModel.cs
@@ -27,13 +29,25 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref annotationInfo, value);
         }
 
+        public ICommand DisplayScaleBarCommand { get; private set; }
+
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
         public AnnotationViewModel(IContainerExtension container) : base(container)
         {
+            DisplayScaleBarCommand = new DelegateCommand(DisplayScaleBar);
+
             AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
+        }
+
+        /// <summary>
+        /// Display
+        /// </summary>
+        private void DisplayScaleBar()
+        {
+
         }
     }
 }

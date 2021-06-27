@@ -62,7 +62,7 @@
                     <dxe:ComboBoxEditItem Content="Below"/>
                 </dxe:ComboBoxEdit>
 
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Display" Margin="15 0 0 0"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Display" Margin="15 0 0 0" Command="{Binding DisplayScaleBarCommand}"/>
             </StackPanel>
         </StackPanel>
 

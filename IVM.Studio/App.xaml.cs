@@ -34,6 +34,7 @@ namespace IVM.Studio
             containerRegistry.RegisterSingleton<FileService>();
             containerRegistry.RegisterSingleton<ImageService>();
             containerRegistry.RegisterSingleton<WindowByChannelService>();
+            containerRegistry.RegisterSingleton<WindowByHistogramService>();
             containerRegistry.RegisterSingleton<SlideShowService>();
             containerRegistry.RegisterSingleton<DataManager>();
             containerRegistry.RegisterSingleton<VideoTrimService>();

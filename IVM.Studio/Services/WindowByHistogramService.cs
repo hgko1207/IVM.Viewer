@@ -1,4 +1,5 @@
-﻿using IVM.Studio.ViewModels;
+﻿using IVM.Studio.Models;
+using IVM.Studio.ViewModels;
 using IVM.Studio.Views;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,12 @@ namespace IVM.Studio.Services
         /// <summary>
         /// Histogram 창 열기
         /// </summary>
-        /// <param name="channel"></param>
+        /// <param name="channelType"></param>
         /// <param name="alwaysTop"></param>
-        public void ShowDisplay(int channel, bool alwaysTop)
+        public void ShowDisplay(ChannelType channelType, bool alwaysTop)
         {
+            int channel = (int)channelType;
+
             if (channel < 0 || channel >= 4)
                 return;
 
@@ -55,7 +58,7 @@ namespace IVM.Studio.Services
             if (channelHistogramWindows[channel].DataContext is ChannelHistogramWindowViewModel vm)
             {
                 vm.Title = $"Histogram #{channel + 1}";
-                vm.Channel = channel;
+                vm.ChannelType = channelType;
             }
         }
 
@@ -103,7 +106,7 @@ namespace IVM.Studio.Services
             channelHistogramWindows[channel].Dispatcher.Invoke(() => {
                 if (channelHistogramWindows[channel].DataContext is ChannelHistogramWindowViewModel vm)
                 {
-                    vm.DisplayHistogram = histogram;
+                    vm.HistogramImage = histogram;
                 }
             });
         }

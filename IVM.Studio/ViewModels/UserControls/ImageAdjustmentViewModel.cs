@@ -45,6 +45,34 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref selectedChannel, value);
         }
 
+        private string _DAPIColor;
+        public string DAPIColor
+        {
+            get => _DAPIColor;
+            set => SetProperty(ref _DAPIColor, value);
+        }
+
+        private string _GFPColor;
+        public string GFPColor
+        {
+            get => _GFPColor;
+            set => SetProperty(ref _GFPColor, value);
+        }
+
+        private string _RFPColor;
+        public string RFPColor
+        {
+            get => _RFPColor;
+            set => SetProperty(ref _RFPColor, value);
+        }
+
+        private string _NIRColor;
+        public string NIRColor
+        {
+            get => _NIRColor;
+            set => SetProperty(ref _NIRColor, value);
+        }
+
         private bool _DAPIVisible;
         public bool DAPIVisible
         {
@@ -210,32 +238,48 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        private string _DAPIColor;
-        public string DAPIColor
+        private bool _DAPIHistogramOpend;
+        public bool DAPIHistogramOpend
         {
-            get => _DAPIColor;
-            set => SetProperty(ref _DAPIColor, value);
+            get => _DAPIHistogramOpend;
+            set
+            {
+                if (SetProperty(ref _DAPIHistogramOpend, value))
+                    colorChannelInfoMap[ChannelType.DAPI].Histogram = value;
+            }
         }
 
-        private string _GFPColor;
-        public string GFPColor
+        private bool _GFPHistogramOpend;
+        public bool GFPHistogramOpend
         {
-            get => _GFPColor;
-            set => SetProperty(ref _GFPColor, value);
+            get => _GFPHistogramOpend;
+            set
+            {
+                if (SetProperty(ref _GFPHistogramOpend, value))
+                    colorChannelInfoMap[ChannelType.GFP].Histogram = value;
+            }
         }
 
-        private string _RFPColor;
-        public string RFPColor
+        private bool _RFPHistogramOpend;
+        public bool RFPHistogramOpend
         {
-            get => _RFPColor;
-            set => SetProperty(ref _RFPColor, value);
+            get => _RFPHistogramOpend;
+            set
+            {
+                if (SetProperty(ref _RFPHistogramOpend, value))
+                    colorChannelInfoMap[ChannelType.RFP].Histogram = value;
+            }
         }
 
-        private string _NIRColor;
-        public string NIRColor
+        private bool _NIRHistogramOpend;
+        public bool NIRHistogramOpend
         {
-            get => _NIRColor;
-            set => SetProperty(ref _NIRColor, value);
+            get => _NIRHistogramOpend;
+            set
+            {
+                if (SetProperty(ref _NIRHistogramOpend, value))
+                    colorChannelInfoMap[ChannelType.NIR].Histogram = value;
+            }
         }
 
         public ICommand BrightnessChangedCommand { get; private set; }
@@ -275,6 +319,7 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
             EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Subscribe(ChWindowClosed);
+            EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Subscribe(ChHistogramClosed);
 
             colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
@@ -439,7 +484,7 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// 채널 윈도우 종료될 때
+        /// 채널 뷰어 윈도우 종료될 때
         /// </summary>
         /// <param name="channel"></param>
         private void ChWindowClosed(int channel)
@@ -457,6 +502,29 @@ namespace IVM.Studio.ViewModels.UserControls
                     break;
                 case (int)ChannelType.NIR:
                     NIRWindowOpend = false;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 채널 히스토그램 윈도우 종료될 때
+        /// </summary>
+        /// <param name="channelType"></param>
+        private void ChHistogramClosed(ChannelType channelType)
+        {
+            switch (channelType)
+            {
+                case ChannelType.DAPI:
+                    DAPIHistogramOpend = false;
+                    break;
+                case ChannelType.GFP:
+                    GFPHistogramOpend = false;
+                    break;
+                case ChannelType.RFP:
+                    RFPHistogramOpend = false;
+                    break;
+                case ChannelType.NIR:
+                    NIRHistogramOpend = false;
                     break;
             }
         }

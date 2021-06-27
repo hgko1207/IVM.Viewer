@@ -1,6 +1,11 @@
-﻿using IVM.Studio.Mvvm;
+﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
+using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using IVM.Studio.Views;
+using Prism.Commands;
 using Prism.Ioc;
+using System.Windows.Input;
 using System.Windows.Media;
 
 /**
@@ -19,14 +24,18 @@ namespace IVM.Studio.ViewModels
 {
     public class ChannelHistogramWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ChannelHistogramWindow>
     {
-        private ImageSource displayHistogram;
-        public ImageSource DisplayHistogram
+        private ImageSource histogramImage;
+        public ImageSource HistogramImage
         {
-            get => displayHistogram;
-            set => SetProperty(ref displayHistogram, value);
+            get => histogramImage;
+            set => SetProperty(ref histogramImage, value);
         }
 
-        public int Channel { get; set; }
+        public ICommand ClosedCommand { get; private set; }
+
+        public ChannelType ChannelType { get; set; }
+
+        private ChannelHistogramWindow view;
 
         /// <summary>
         /// 생성자
@@ -34,6 +43,11 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public ChannelHistogramWindowViewModel(IContainerExtension container) : base(container)
         {
+            ClosedCommand = new DelegateCommand(WindowClosed);
+
+            EventAggregator.GetEvent<ChHistogramWindowCloseEvent>().Subscribe(Close);
+
+            Refresh();
         }
 
         /// <summary>
@@ -42,6 +56,7 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnLoaded(ChannelHistogramWindow view)
         {
+            this.view = view;
         }
 
         /// <summary>
@@ -50,6 +65,31 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(ChannelHistogramWindow view)
         {
+            EventAggregator.GetEvent<ChHistogramWindowCloseEvent>().Unsubscribe(Close);
+        }
+
+        /// <summary>
+        /// 새로고침 이벤트
+        /// </summary>
+        private void Refresh()
+        {
+            HistogramImage = Container.Resolve<DataManager>().ColorChannelInfoMap[ChannelType].HistogramImage;
+        }
+
+        /// <summary>
+        /// Window 종료 이벤트
+        /// </summary>
+        private void WindowClosed()
+        {
+            EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Publish(ChannelType);
+        }
+
+        /// <summary>
+        /// Window 종료 이벤트
+        /// </summary>
+        private void Close(int type)
+        {
+            view.Close();
         }
     }
 }

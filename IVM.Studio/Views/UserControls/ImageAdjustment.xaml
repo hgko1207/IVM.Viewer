@@ -346,16 +346,16 @@
                 </Grid.ColumnDefinitions>
 
                 <dx:SimpleButton Grid.Row="0" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding DAPIWindowOpend, Delay=200}"/>
-                <dx:SimpleButton Grid.Row="0" Grid.Column="2" Style="{StaticResource ToggleButton}"/>
+                <dx:SimpleButton Grid.Row="0" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding DAPIHistogramOpend}"/>
 
                 <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding GFPWindowOpend, Delay=200}"/>
-                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding GFPHistogramOpend}"/>
 
                 <dx:SimpleButton Grid.Row="4" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding RFPWindowOpend, Delay=200}"/>
-                <dx:SimpleButton Grid.Row="4" Grid.Column="2" Style="{StaticResource ToggleButton}"/>
+                <dx:SimpleButton Grid.Row="4" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding RFPHistogramOpend}"/>
 
                 <dx:SimpleButton Grid.Row="6" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding NIRWindowOpend, Delay=200}"/>
-                <dx:SimpleButton Grid.Row="6" Grid.Column="2" Style="{StaticResource ToggleButton}"/>
+                <dx:SimpleButton Grid.Row="6" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding NIRHistogramOpend}"/>
             </Grid>
         </Grid>
     </Grid>

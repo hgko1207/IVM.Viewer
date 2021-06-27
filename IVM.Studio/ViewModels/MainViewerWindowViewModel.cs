@@ -27,13 +27,7 @@ namespace IVM.Studio.ViewModels
         public UserControl ViewerPage
         {
             get => viewerPage;
-            set
-            {
-                if (SetProperty(ref viewerPage, value))
-                {
-
-                }
-            }
+            set => SetProperty(ref viewerPage, value);
         }
 
         private MainViewerWindow view;

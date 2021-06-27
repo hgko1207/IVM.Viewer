@@ -42,9 +42,7 @@
 
             <TextBlock Text="Channel" VerticalAlignment="Center" FontSize="13" Margin="30 0 0 0"/>
 
-            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="130" ItemsSource="{Binding ColorChannelModels}" SelectedItem="{Binding SelectedChannel}" DisplayMember="Name" ValueMember="Type">
-
-            </dxe:ComboBoxEdit>
+            <dxe:ComboBoxEdit Margin="10 0 0 0" Width="130" ItemsSource="{Binding ColorChannelItems}" SelectedItem="{Binding SelectedChannel}" DisplayMember="Name" ValueMember="Type"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">

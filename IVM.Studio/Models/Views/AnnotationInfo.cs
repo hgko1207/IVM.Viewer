@@ -29,11 +29,7 @@ namespace IVM.Studio.Models
         public int ScaleBarSize
         {
             get => scaleBarSize;
-            set
-            {
-                if (SetProperty(ref scaleBarSize, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
-            }
+            set => SetProperty(ref scaleBarSize, value);
         }
 
         public IEventAggregator EventAggregator;

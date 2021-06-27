@@ -142,7 +142,7 @@ namespace IVM.Studio.Models
                 if (SetProperty(ref histogram, value))
                 {
                     if (value)
-                        ContainerExtension.Resolve<WindowByHistogramService>().ShowDisplay(Index, AlwaysTopEnabled);
+                        ContainerExtension.Resolve<WindowByHistogramService>().ShowDisplay(ChannelType, AlwaysTopEnabled);
                     else
                         ContainerExtension.Resolve<WindowByHistogramService>().CloseDisplay(Index);
                 }

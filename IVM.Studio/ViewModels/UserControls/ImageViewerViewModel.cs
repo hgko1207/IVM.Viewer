@@ -30,7 +30,7 @@ using Drawing = System.Windows.Media;
  * @since 2021.06.05
  * @version 1.0
  */
-namespace IVM.Studio.ViewModels
+namespace IVM.Studio.ViewModels.UserControls
 {
     public class ImageViewerViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ImageViewer>
     {
@@ -271,7 +271,8 @@ namespace IVM.Studio.ViewModels
                                     using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img2, currentTranslationByChannel, new bool[4] { true, true, true, false }))
                                     {
                                         Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
-                                        Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
+                                        colorChannelModel.HistogramImage = histogramImage;
+                                        //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                     }
                                 }
                             }
@@ -284,7 +285,8 @@ namespace IVM.Studio.ViewModels
                                     using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img, currentTranslationByChannel, visibilityByChannel))
                                     {
                                         Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
-                                        Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
+                                        colorChannelModel.HistogramImage = histogramImage;
+                                        //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                     }
                                 }
                             }
