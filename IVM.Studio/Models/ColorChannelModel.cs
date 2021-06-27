@@ -133,6 +133,22 @@ namespace IVM.Studio.Models
             }
         }
 
+        private bool histogram;
+        public bool Histogram
+        {
+            get => histogram;
+            set
+            {
+                if (SetProperty(ref histogram, value))
+                {
+                    if (value)
+                        ContainerExtension.Resolve<WindowByHistogramService>().ShowDisplay(Index, AlwaysTopEnabled);
+                    else
+                        ContainerExtension.Resolve<WindowByHistogramService>().CloseDisplay(Index);
+                }
+            }
+        }
+
         private ImageSource histogramImage;
         public ImageSource HistogramImage
         {
@@ -186,7 +202,7 @@ namespace IVM.Studio.Models
             this._ColorLevelUpperValue = upperLevel;
             this.alwaysTopEnabled = true;
 
-            eventAggregator.GetEvent<ChWindowCloseEvent>().Subscribe(ClosedDisplay);
+            eventAggregator.GetEvent<ChViewerWindowCloseEvent>().Subscribe(ClosedDisplay);
         }
 
         public ColorChannelModel(ChannelType type, string channelName)

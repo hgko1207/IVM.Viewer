@@ -3,7 +3,7 @@ using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Utils;
-using IVM.Studio.Views;
+using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -12,12 +12,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using Drawing = System.Windows.Media;
 
 /**
@@ -272,7 +270,8 @@ namespace IVM.Studio.ViewModels
                                     Container.Resolve<WindowByChannelService>().DisplayImage((int)type, img);
                                     using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img2, currentTranslationByChannel, new bool[4] { true, true, true, false }))
                                     {
-                                        colorChannelModel.HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                        Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                        Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                     }
                                 }
                             }
@@ -284,7 +283,8 @@ namespace IVM.Studio.ViewModels
                                     Container.Resolve<WindowByChannelService>().DisplayImage((int)type, imgwpf);
                                     using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img, currentTranslationByChannel, visibilityByChannel))
                                     {
-                                        colorChannelModel.HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                        Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                        Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                     }
                                 }
                             }

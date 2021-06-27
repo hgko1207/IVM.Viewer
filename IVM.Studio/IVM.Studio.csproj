@@ -111,14 +111,19 @@
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\SlideShowService.cs" />
     <Compile Include="Services\VideoTrimService.cs" />
+    <Compile Include="Services\WindowByHistogramService.cs" />
     <Compile Include="Utils\ButtonStyleConverter.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
-    <Compile Include="ViewModels\HistogramWindowViewModel.cs" />
+    <Compile Include="ViewModels\ChannelHistogramWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
     <Compile Include="ViewModels\VideoTrimWindowViewModel.cs" />
-    <Compile Include="Views\HistogramWindow.xaml.cs">
-      <DependentUpon>HistogramWindow.xaml</DependentUpon>
+    <Compile Include="Views\MainHistogramWindow.xaml.cs">
+      <DependentUpon>MainHistogramWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChannelHistogramWindow.xaml.cs">
+      <DependentUpon>ChannelHistogramWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\VideoViewer.xaml.cs">
       <DependentUpon>VideoViewer.xaml</DependentUpon>
@@ -138,7 +143,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HistogramWindow.xaml">
+    <Page Include="Views\MainHistogramWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -147,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\Annotation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChannelHistogramWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

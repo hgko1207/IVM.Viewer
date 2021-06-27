@@ -1,6 +1,5 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
-using IVM.Studio.Services;
 using IVM.Studio.Views;
 using Prism.Commands;
 using Prism.Ioc;
@@ -44,7 +43,7 @@ namespace IVM.Studio.ViewModels
         {
             ClosedCommand = new DelegateCommand(WindowClosed);
 
-            EventAggregator.GetEvent<ChWindowCloseEvent>().Subscribe(Close);
+            EventAggregator.GetEvent<ChViewerWindowCloseEvent>().Subscribe(Close);
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(ChannelViewerWindow view)
         {
-            EventAggregator.GetEvent<ChWindowCloseEvent>().Unsubscribe(Close);
+            EventAggregator.GetEvent<ChViewerWindowCloseEvent>().Unsubscribe(Close);
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void WindowClosed()
         {
-            EventAggregator.GetEvent<ChWindowClosedEvent>().Publish(Channel);
+            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Publish(Channel);
         }
 
         /// <summary>

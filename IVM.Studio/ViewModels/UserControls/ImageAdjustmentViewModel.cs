@@ -5,13 +5,13 @@ using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
+using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows;
 using System.Windows.Input;
 using static IVM.Studio.Models.Common;
 
@@ -203,7 +203,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (SetProperty(ref allHistogramOpend, value))
                 {
                     if (value)
-                        new HistogramWindow() { Topmost = true }.Show();
+                        new MainHistogramWindow() { Topmost = true }.Show();
                     else
                         EventAggregator.GetEvent<HistogramCloseEvent>().Publish();
                 }
@@ -274,7 +274,7 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<SlideChangedEvent>().Subscribe(InitVisible);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
-            EventAggregator.GetEvent<ChWindowClosedEvent>().Subscribe(ChWindowClosed);
+            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Subscribe(ChWindowClosed);
 
             colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 

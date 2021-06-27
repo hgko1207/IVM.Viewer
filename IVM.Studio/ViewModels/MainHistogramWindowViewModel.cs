@@ -7,8 +7,8 @@ using System;
 using Drawing = System.Windows.Media;
 
 /**
-* @Class Name : HistogramWindowViewModel.cs
-* @Description : 히스토그램 뷰어 뷰 모델
+* @Class Name : MainHistogramWindowViewModel.cs
+* @Description : 메인 히스토그램 뷰어 뷰 모델
 * @
 * @ 수정일         수정자              수정내용
 * @ ----------   ---------   -------------------------------
@@ -20,7 +20,7 @@ using Drawing = System.Windows.Media;
 */
 namespace IVM.Studio.ViewModels
 {
-    public class HistogramWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<HistogramWindow>
+    public class MainHistogramWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<MainHistogramWindow>
     {
         private Drawing.ImageSource histogramImage;
         public Drawing.ImageSource HistogramImage
@@ -29,13 +29,13 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref histogramImage, value);
         }
 
-        private HistogramWindow view;
+        private MainHistogramWindow view;
 
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public HistogramWindowViewModel(IContainerExtension container) : base(container)
+        public MainHistogramWindowViewModel(IContainerExtension container) : base(container)
         {
             EventAggregator.GetEvent<HistogramCloseEvent>().Subscribe(() => view.Close());
 
@@ -46,7 +46,7 @@ namespace IVM.Studio.ViewModels
         /// OnLoaded
         /// </summary>
         /// <param name="view"></param>
-        public void OnLoaded(HistogramWindow view)
+        public void OnLoaded(MainHistogramWindow view)
         {
             this.view = view;
             view.Closed += WindowClosed;
@@ -56,7 +56,7 @@ namespace IVM.Studio.ViewModels
         /// OnUnloaded
         /// </summary>
         /// <param name="view"></param>
-        public void OnUnloaded(HistogramWindow view)
+        public void OnUnloaded(MainHistogramWindow view)
         {
             EventAggregator.GetEvent<HistogramCloseEvent>().Unsubscribe(() => view.Close());
         }

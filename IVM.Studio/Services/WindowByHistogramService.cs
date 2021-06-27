@@ -7,31 +7,24 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
-/**
- * @Class Name : WindowByChannelService.cs
- * @Description : 채널별 윈도우 관리 서비스
- * @author 고형균
- * @since 2021.04.04
- * @version 1.0
- */
 namespace IVM.Studio.Services
 {
-    public class WindowByChannelService
+    public class WindowByHistogramService
     {
-        private ChannelViewerWindow[] channelViewerWindows;
+        private ChannelHistogramWindow[] channelHistogramWindows;
 
         /// <summary>
         /// 생성자
         /// </summary>
-        public WindowByChannelService()
+        public WindowByHistogramService()
         {
-            channelViewerWindows = new ChannelViewerWindow[4] {
+            channelHistogramWindows = new ChannelHistogramWindow[4] {
                 null, null, null, null
             };
         }
 
         /// <summary>
-        /// Display 창 열기
+        /// Histogram 창 열기
         /// </summary>
         /// <param name="channel"></param>
         /// <param name="alwaysTop"></param>
@@ -40,28 +33,28 @@ namespace IVM.Studio.Services
             if (channel < 0 || channel >= 4)
                 return;
 
-            if (channelViewerWindows[channel] == null)
+            if (channelHistogramWindows[channel] == null)
             {
-                channelViewerWindows[channel] = new ChannelViewerWindow();
+                channelHistogramWindows[channel] = new ChannelHistogramWindow();
                 ChangeOwner(channel, alwaysTop);
             }
 
             // 저장된 위치 불러오기
-            string pos = ConfigurationManager.AppSettings.Get($"Channel{channel}Position");
+            string pos = ConfigurationManager.AppSettings.Get($"Histogram{channel}Position");
             if (pos != null)
             {
                 List<double> parsedPosition = pos.Split(';').Select(s => Convert.ToDouble(s)).ToList();
-                channelViewerWindows[channel].Top = parsedPosition[0];
-                channelViewerWindows[channel].Left = parsedPosition[1];
-                channelViewerWindows[channel].Width = parsedPosition[2];
-                channelViewerWindows[channel].Height = parsedPosition[3];
+                channelHistogramWindows[channel].Top = parsedPosition[0];
+                channelHistogramWindows[channel].Left = parsedPosition[1];
+                channelHistogramWindows[channel].Width = parsedPosition[2];
+                channelHistogramWindows[channel].Height = parsedPosition[3];
             }
 
             // 띄우기
-            channelViewerWindows[channel].Show();
-            if (channelViewerWindows[channel].DataContext is ChannelViewerWindowViewModel vm)
+            channelHistogramWindows[channel].Show();
+            if (channelHistogramWindows[channel].DataContext is ChannelHistogramWindowViewModel vm)
             {
-                vm.Title = $"Display #{channel + 1}";
+                vm.Title = $"Histogram #{channel + 1}";
                 vm.Channel = channel;
             }
         }
@@ -72,45 +65,45 @@ namespace IVM.Studio.Services
         /// <param name="channel"></param>
         public void CloseDisplay(int channel)
         {
-            if (channel < 0 || channel >= 4) 
+            if (channel < 0 || channel >= 4)
                 return;
 
-            if (channelViewerWindows[channel] != null)
+            if (channelHistogramWindows[channel] != null)
             {
                 // 위치 저장
-                string key = $"Channel{channel}Position";
-                string value = $"{channelViewerWindows[channel].Top};{channelViewerWindows[channel].Left};{channelViewerWindows[channel].Width};{channelViewerWindows[channel].Height}";
+                string key = $"Histogram{channel}Position";
+                string value = $"{channelHistogramWindows[channel].Top};{channelHistogramWindows[channel].Left};{channelHistogramWindows[channel].Width};{channelHistogramWindows[channel].Height}";
 
                 Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 KeyValueConfigurationElement element = config.AppSettings.Settings[key];
                 if (element != null)
                     element.Value = value;
-                else 
+                else
                     config.AppSettings.Settings.Add(key, value);
 
                 config.Save(ConfigurationSaveMode.Modified);
                 ConfigurationManager.RefreshSection("appSettings");
 
                 // 닫기
-                channelViewerWindows[channel].Close();
-                channelViewerWindows[channel] = null;
+                channelHistogramWindows[channel].Close();
+                channelHistogramWindows[channel] = null;
             }
         }
 
         /// <summary>
-        /// DisplayImage
+        /// DisplayHistogram
         /// </summary>
         /// <param name="channel"></param>
         /// <param name="image"></param>
-        public void DisplayImage(int channel, ImageSource image)
+        public void DisplayHistogram(int channel, ImageSource histogram)
         {
-            if (channel < 0 || channel >= 4 || channelViewerWindows[channel] == null)
+            if (channel < 0 || channel >= 4 || channelHistogramWindows[channel] == null)
                 return;
 
-            channelViewerWindows[channel].Dispatcher.Invoke(() => {
-                if (channelViewerWindows[channel].DataContext is ChannelViewerWindowViewModel vm)
+            channelHistogramWindows[channel].Dispatcher.Invoke(() => {
+                if (channelHistogramWindows[channel].DataContext is ChannelHistogramWindowViewModel vm)
                 {
-                    vm.DisplayImage = image;
+                    vm.DisplayHistogram = histogram;
                 }
             });
         }
@@ -122,17 +115,17 @@ namespace IVM.Studio.Services
         /// <param name="enableAlwaysTop"></param>
         public void ChangeOwner(int channel, bool enableAlwaysTop)
         {
-            if (channel < 0 || channel >= 4 || channelViewerWindows[channel] == null)
+            if (channel < 0 || channel >= 4 || channelHistogramWindows[channel] == null)
                 return;
 
             if (enableAlwaysTop)
             {
-                channelViewerWindows[channel].Owner = Application.Current.MainWindow;
-                channelViewerWindows[channel].Activate();
+                channelHistogramWindows[channel].Owner = Application.Current.MainWindow;
+                channelHistogramWindows[channel].Activate();
             }
             else
             {
-                channelViewerWindows[channel].Owner = null;
+                channelHistogramWindows[channel].Owner = null;
                 Application.Current.MainWindow.Activate();
             }
         }
