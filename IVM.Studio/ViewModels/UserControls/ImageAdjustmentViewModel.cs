@@ -282,6 +282,11 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        public ColorChannelModel DAPIChannel { get; set; }
+        public ColorChannelModel GFPChannel { get; set; }
+        public ColorChannelModel RFPChannel { get; set; }
+        public ColorChannelModel NIRChannel { get; set; }
+
         public ICommand BrightnessChangedCommand { get; private set; }
         public ICommand ContrastChangedCommand { get; private set; }
 
@@ -325,6 +330,11 @@ namespace IVM.Studio.ViewModels.UserControls
 
             ColorChannelItems = Container.Resolve<DataManager>().ColorChannelItems;
             SelectedChannel = ColorChannelItems[0];
+
+            DAPIChannel = colorChannelInfoMap[ChannelType.DAPI];
+            GFPChannel = colorChannelInfoMap[ChannelType.GFP];
+            RFPChannel = colorChannelInfoMap[ChannelType.RFP];
+            NIRChannel = colorChannelInfoMap[ChannelType.NIR];
 
             InitColorStyle();
             InitVisible();

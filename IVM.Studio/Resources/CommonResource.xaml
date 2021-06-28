@@ -237,4 +237,11 @@
         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
     </Style>
 
+    <Style x:Key="HistogramSliderStyle" TargetType="{x:Type dxe:TrackBarEdit}">
+        <Setter Property="Minimum" Value="0" />
+        <Setter Property="Maximum" Value="255" />
+        <Setter Property="TickFrequency" Value="1" />
+        <Setter Property="TickPlacement" Value="None" />
+    </Style>
+
 </ResourceDictionary>

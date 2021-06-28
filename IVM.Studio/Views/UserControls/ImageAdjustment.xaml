@@ -124,7 +124,7 @@
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" EditValueType="{x:Type sys:Int32}"/>
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" EditValueType="{x:Type sys:Int32}"/>
 
-                <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Minimum="1" Maximum="255" TickPlacement="None" Margin="5 0"
+                <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
                                   SelectionEnd="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
@@ -293,16 +293,20 @@
                 <dxe:SpinEdit Grid.Row="0" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
                 <dxe:SpinEdit Grid.Row="0" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
 
-                <dxe:TrackBarEdit Grid.Row="0" Grid.Column="2" Minimum="1" Maximum="255" SelectionStart="0" SelectionEnd="255" TickPlacement="None" Margin="5 0">
+                <dxe:TrackBarEdit DataContext="{Binding DAPIChannel}" Grid.Row="0" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                                  SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
+                                  SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
                         <dxe:TrackBarRangeStyleSettings/>
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Value="0" Style="{StaticResource HistogramEdit}"/>
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
 
-                <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Minimum="1" Maximum="255" SelectionStart="0" SelectionEnd="255" TickPlacement="None" Margin="5 0">
+                <dxe:TrackBarEdit DataContext="{Binding GFPChannel}" Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                                  SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
+                                  SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
                         <dxe:TrackBarRangeStyleSettings/>
                     </dxe:TrackBarEdit.StyleSettings>
@@ -311,7 +315,9 @@
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
 
-                <dxe:TrackBarEdit Grid.Row="4" Grid.Column="2" Minimum="1" Maximum="255" SelectionStart="0" SelectionEnd="255" TickPlacement="None" Margin="5 0">
+                <dxe:TrackBarEdit DataContext="{Binding RFPChannel}" Grid.Row="4" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                                  SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
+                                  SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
                         <dxe:TrackBarRangeStyleSettings/>
                     </dxe:TrackBarEdit.StyleSettings>
@@ -320,7 +326,9 @@
                 <dxe:SpinEdit Grid.Row="6" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
                 <dxe:SpinEdit Grid.Row="6" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
 
-                <dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Minimum="1" Maximum="255" SelectionStart="0" SelectionEnd="255" TickPlacement="None" Margin="5 0">
+                <dxe:TrackBarEdit DataContext="{Binding NIRChannel}" Grid.Row="6" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                                  SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
+                                  SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
                         <dxe:TrackBarRangeStyleSettings/>
                     </dxe:TrackBarEdit.StyleSettings>
@@ -345,16 +353,16 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <dx:SimpleButton Grid.Row="0" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding DAPIWindowOpend, Delay=200}"/>
+                <dx:SimpleButton Grid.Row="0" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding DAPIWindowOpend}"/>
                 <dx:SimpleButton Grid.Row="0" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding DAPIHistogramOpend}"/>
 
-                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding GFPWindowOpend, Delay=200}"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding GFPWindowOpend}"/>
                 <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding GFPHistogramOpend}"/>
 
-                <dx:SimpleButton Grid.Row="4" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding RFPWindowOpend, Delay=200}"/>
+                <dx:SimpleButton Grid.Row="4" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding RFPWindowOpend}"/>
                 <dx:SimpleButton Grid.Row="4" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding RFPHistogramOpend}"/>
 
-                <dx:SimpleButton Grid.Row="6" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding NIRWindowOpend, Delay=200}"/>
+                <dx:SimpleButton Grid.Row="6" Grid.Column="0" Style="{StaticResource ToggleButton}" IsChecked="{Binding NIRWindowOpend}"/>
                 <dx:SimpleButton Grid.Row="6" Grid.Column="2" Style="{StaticResource ToggleButton}" IsChecked="{Binding NIRHistogramOpend}"/>
             </Grid>
         </Grid>
