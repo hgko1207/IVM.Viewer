@@ -58,9 +58,6 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        public ICommand ApplyCommand { get; private set; }
-        public ICommand ExportLabelCommand { get; private set; }
-
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
         /// <summary>
@@ -69,32 +66,12 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public ColormapViewModel(IContainerExtension container) : base(container)
         {
-            ApplyCommand = new DelegateCommand(Apply);
-            ExportLabelCommand = new DelegateCommand(ExportLabel);
-
             SelectedColorMap = ColorMaps.SingleOrDefault(color => color == ColorMap.Hot);
 
             ColorChannelItems = Container.Resolve<DataManager>().ColorChannelItems.Where(item => item.Type != ChannelType.ALL).ToList();
             SelectedChannel = ColorChannelItems[0];
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
-        }
-
-        /// <summary>
-        /// 적용 이벤트
-        /// </summary>
-        private void Apply()
-        {
-            colorChannelInfoMap[SelectedChannel.Type].ColorMap = SelectedColorMap;
-            colorChannelInfoMap[SelectedChannel.Type].ColorMapEnabled = true;
-        }
-
-        /// <summary>
-        /// ExportLabel
-        /// </summary>
-        private void ExportLabel()
-        {
-
         }
     }
 }

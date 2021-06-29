@@ -62,7 +62,7 @@
                     <dxe:ComboBoxEditItem Content="Below"/>
                 </dxe:ComboBoxEdit>
 
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Display" Margin="15 0 0 0" Command="{Binding DisplayScaleBarCommand}"/>
+                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="90" Content="Display" Margin="15 0 0 0"/>
             </StackPanel>
         </StackPanel>
 
@@ -87,8 +87,8 @@
 
                 <TextBlock Text="Suffix" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
                 <dxe:TextEdit Margin="10 0 0 0" EditValue="μm" Width="45" HorizontalContentAlignment="Right"/>
-                
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Display" Margin="15 0 0 0"/>
+
+                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width='90' Content="Display" Margin="15 0 0 0"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>

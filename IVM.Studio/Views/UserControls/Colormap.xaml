@@ -46,8 +46,8 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">
-            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Apply" Command="{Binding ApplyCommand}"/>
-            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0" Command="{Binding ExportLabelCommand}"/>
+            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Apply"/>
+            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0"/>
         </StackPanel>
     </Grid>
 </UserControl>
