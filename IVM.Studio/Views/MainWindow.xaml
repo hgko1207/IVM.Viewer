@@ -15,7 +15,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="1040" Width="1680" Top="0"
+        Title="IVM Studio" Height="1040" Width="1680" Top="0" MinWidth="1600"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
 
     <Window.Resources>
@@ -49,7 +49,7 @@
                                 </Grid.RowDefinitions>
 
                                 <dxg:GridControl ItemsSource="{Binding SlideInfoCollection}" CurrentItem="{Binding SelectedSlideInfo}" SelectedItem="{Binding SelectedSlideInfo}" SelectionMode="Row" 
-                                                 ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10" Grid.ColumnSpan="2">
+                                                 ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 10 10 0" Grid.ColumnSpan="2">
                                     <dxg:GridControl.View>
                                         <dxg:TableView AllowScrollToFocusedRow="True" AllowSorting="False" AllowPerPixelScrolling="True" AllowScrollAnimation="True" PreviewKeyDown="OnTableViewPreviewKeyDown"/>
                                     </dxg:GridControl.View>
@@ -67,9 +67,9 @@
                                     </dxg:GridControl.Columns>
                                 </dxg:GridControl>
 
-                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,10" Grid.Column="1">
-                                    <Button Content="Previous" Width="80" Command="{Binding PreviousSlideCommand}"/>
-                                    <Button Content="Next" Width="80" Margin="8 0 0 0" Command="{Binding NextSlideCommand}"/>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 8 10 8" Grid.Column="1">
+                                    <dx:SimpleButton Content="Previous" Width="80" Style="{StaticResource GrayGradientButton}" Command="{Binding PreviousSlideCommand}"/>
+                                    <dx:SimpleButton Content="Next" Width="80" Margin="5 0 0 0" Style="{StaticResource GrayGradientButton}" Command="{Binding NextSlideCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </dxdo:DocumentPanel>
@@ -89,7 +89,7 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <dxg:GridControl Grid.Row="1" ItemsSource="{Binding MetadataCollection}" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 0 10 10">
+                                <dxg:GridControl Grid.Row="1" ItemsSource="{Binding MetadataCollection}" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 0 10 0">
                                     <dxg:GridControl.View>
                                         <dxg:TableView NavigationStyle="None" AutoWidth="True" ShowColumnHeaders="False" UseLegacyFilterPanel="False">
                                             <dxg:TableView.FormatConditions>
@@ -118,9 +118,9 @@
                                     </dxg:GridControl.Bands>
                                 </dxg:GridControl>
 
-                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 10">
-                                    <Button Content="Previous" Width="80" Command="{Binding PreviousSlideCommand}"/>
-                                    <Button Content="Next" Width="80" Margin="8 0 0 0" Command="{Binding NextSlideCommand}"/>
+                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 8 10 8">
+                                    <dx:SimpleButton Content="Previous" Width="80" Style="{StaticResource GrayGradientButton}" Command="{Binding PreviousSlideCommand}"/>
+                                    <dx:SimpleButton Content="Next" Width="80" Margin="5 0 0 0" Style="{StaticResource GrayGradientButton}" Command="{Binding NextSlideCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </dxdo:DocumentPanel>
@@ -292,8 +292,8 @@
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
-                                <Button Content="Apply All" Margin="16 0 0 0"/>
-                                <Button Content="Reset" Margin="8 0 0 0" Command="{Binding RotationResetCommand}"/>
+                                <dx:SimpleButton Content="Lock" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0"/>
+                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding RotationResetCommand}"/>
                             </StackPanel>
 
                             <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />
@@ -306,11 +306,11 @@
                                 </dx:SimpleButton>
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/crop_circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
 
-                                <Button Content="Crop" Margin="16 0 0 0"/>
-                                <Button Content="Invert" Margin="8 0 0 0"/>
-                                <Button Content="Apply" Margin="8 0 0 0"/>
-                                <Button Content="Apply All" Margin="8 0 0 0"/>
-                                <Button Content="Reset" Margin="8 0 0 0"/>
+                                <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0"/>
+                                <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
+                                <dx:SimpleButton Content="Apply" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
+                                <dx:SimpleButton Content="Apply All" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
+                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
                             </StackPanel>
                         </StackPanel>
                     </dxdo:LayoutPanel>
