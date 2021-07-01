@@ -19,7 +19,27 @@
     </UserControl.Resources>
     
     <Grid Margin="10">
-        <Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+            </Grid>
+        </Grid>
+        
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
@@ -48,6 +68,6 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5 0">
             <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Apply"/>
             <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0"/>
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </UserControl>
