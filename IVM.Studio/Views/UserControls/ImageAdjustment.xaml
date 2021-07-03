@@ -74,7 +74,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Channel" Grid.ColumnSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                <TextBlock Text="Channel" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="Color" HorizontalAlignment="Center" Margin="12,0"/>
                 <TextBlock Grid.Row="1" Grid.Column="3" Text="Visible" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="7,0"/>
