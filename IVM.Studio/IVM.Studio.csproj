@@ -117,6 +117,7 @@
     <Compile Include="ViewModels\ChannelHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
     <Compile Include="ViewModels\VideoTrimWindowViewModel.cs" />
     <Compile Include="Views\MainHistogramWindow.xaml.cs">
@@ -124,6 +125,9 @@
     </Compile>
     <Compile Include="Views\ChannelHistogramWindow.xaml.cs">
       <DependentUpon>ChannelHistogramWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\BrightnessPanel.xaml.cs">
+      <DependentUpon>BrightnessPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\VideoViewer.xaml.cs">
       <DependentUpon>VideoViewer.xaml</DependentUpon>
@@ -151,7 +155,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\Annotation.xaml">
+    <Page Include="Views\UserControls\AnnotationPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,15 +163,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\Colormap.xaml">
+    <Page Include="Views\UserControls\BrightnessPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\DisplayControl.xaml">
+    <Page Include="Views\UserControls\ColormapPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\ImageAdjustment.xaml">
+    <Page Include="Views\UserControls\DisplayControlPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\ImageAdjustmentPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -207,10 +215,10 @@
     <Compile Include="Utils\IndexFromOneConverter.cs" />
     <Compile Include="Utils\ValueConverters.cs" />
     <Compile Include="ViewModels\ChannelViewerWindowViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\AnnotationViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\ColormapViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\DisplayControlViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\ImageAdjustmentViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\AnnotationPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ColormapPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\DisplayControlPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ImageAdjustmentPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageViewerViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -221,17 +229,17 @@
     <Compile Include="Views\MainViewerWindow.xaml.cs">
       <DependentUpon>MainViewerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\Annotation.xaml.cs">
-      <DependentUpon>Annotation.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\AnnotationPanel.xaml.cs">
+      <DependentUpon>AnnotationPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\Colormap.xaml.cs">
-      <DependentUpon>Colormap.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\ColormapPanel.xaml.cs">
+      <DependentUpon>ColormapPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\DisplayControl.xaml.cs">
-      <DependentUpon>DisplayControl.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\DisplayControlPanel.xaml.cs">
+      <DependentUpon>DisplayControlPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UserControls\ImageAdjustment.xaml.cs">
-      <DependentUpon>ImageAdjustment.xaml</DependentUpon>
+    <Compile Include="Views\UserControls\ImageAdjustmentPanel.xaml.cs">
+      <DependentUpon>ImageAdjustmentPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ImageControl.xaml.cs">
       <DependentUpon>ImageControl.xaml</DependentUpon>

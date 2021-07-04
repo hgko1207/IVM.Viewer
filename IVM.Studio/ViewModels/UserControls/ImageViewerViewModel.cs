@@ -104,7 +104,7 @@ namespace IVM.Studio.ViewModels.UserControls
             DisplayingImageWidth = double.NaN;
             currentRotate = 0;
 
-            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap.Values.Where(c => c.ChannelType != ChannelType.ALL).ToDictionary(data => data.ChannelType);
+            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
         }
 
         /// <summary>

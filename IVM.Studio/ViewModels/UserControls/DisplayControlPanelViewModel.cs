@@ -2,7 +2,7 @@
 using Prism.Ioc;
 
 /**
- * @Class Name : DisplayControlViewModel.cs
+ * @Class Name : DisplayControlPanelViewModel.cs
  * @Description : 이미지 컨트롤 화면 뷰 모델
  * @
  * @ 수정일         수정자              수정내용
@@ -15,13 +15,13 @@ using Prism.Ioc;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class DisplayControlViewModel : ViewModelBase
+    public class DisplayControlPanelViewModel : ViewModelBase
     {
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public DisplayControlViewModel(IContainerExtension container) : base(container)
+        public DisplayControlPanelViewModel(IContainerExtension container) : base(container)
         {
         }
     }

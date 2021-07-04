@@ -42,7 +42,7 @@ namespace IVM.Studio.Services
         public void Init(IContainerExtension container, IEventAggregator eventAggregator)
         {
             ColorChannelInfoMap = new Dictionary<ChannelType, ColorChannelModel>();
-            ColorChannelInfoMap.Add(ChannelType.ALL, new ColorChannelModel(ChannelType.ALL, "ALL", true, Colors.None, false, 0, 1, 0, 255, container, eventAggregator));
+            //ColorChannelInfoMap.Add(ChannelType.ALL, new ColorChannelModel(ChannelType.ALL, "ALL", true, Colors.None, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.DAPI, new ColorChannelModel(ChannelType.DAPI, "DAPI (425-465)", true, Colors.Red, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.GFP, new ColorChannelModel(ChannelType.GFP, "GFP (500-550)", true, Colors.Green, false, 0, 1, 0, 255, container, eventAggregator));
             ColorChannelInfoMap.Add(ChannelType.RFP, new ColorChannelModel(ChannelType.RFP, "RFP (582-618)", true, Colors.Blue, false, 0, 1, 0, 255, container, eventAggregator));

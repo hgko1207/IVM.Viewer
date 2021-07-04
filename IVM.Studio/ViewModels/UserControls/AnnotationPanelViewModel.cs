@@ -7,7 +7,7 @@ using Prism.Ioc;
 using System.Windows.Input;
 
 /**
- * @Class Name : AnnotationViewModel.cs
+ * @Class Name : AnnotationPanelViewModel.cs
  * @Description : Annotation 화면 뷰 모델
  * @
  * @ 수정일         수정자              수정내용
@@ -20,7 +20,7 @@ using System.Windows.Input;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class AnnotationViewModel : ViewModelBase
+    public class AnnotationPanelViewModel : ViewModelBase
     {
         private AnnotationInfo annotationInfo;
         public AnnotationInfo AnnotationInfo
@@ -33,7 +33,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public AnnotationViewModel(IContainerExtension container) : base(container)
+        public AnnotationPanelViewModel(IContainerExtension container) : base(container)
         {
             AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
         }

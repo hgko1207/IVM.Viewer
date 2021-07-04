@@ -276,10 +276,11 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public MainWindowViewModel(IContainerExtension container) : base(container)
         {
-            RegionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustment));
-            RegionManager.RegisterViewWithRegion("AnnotationPanel", typeof(Annotation));
-            RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(Colormap));
-            RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControl));
+            RegionManager.RegisterViewWithRegion("ImageAdjustmentPanel", typeof(ImageAdjustmentPanel));
+            RegionManager.RegisterViewWithRegion("BrightnessPanel", typeof(BrightnessPanel));
+            RegionManager.RegisterViewWithRegion("AnnotationPanel", typeof(AnnotationPanel));
+            RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(ColormapPanel));
+            RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControlPanel));
 
             container.Resolve<DataManager>().Init(container, EventAggregator);
 

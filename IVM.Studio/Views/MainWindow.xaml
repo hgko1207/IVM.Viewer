@@ -131,6 +131,10 @@
                             <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel"/>
                         </dxdo:DocumentPanel>
 
+                        <dxdo:DocumentPanel Caption="Brightness/Contrast">
+                            <ContentControl prism:RegionManager.RegionName="BrightnessPanel"/>
+                        </dxdo:DocumentPanel>
+
                         <dxdo:DocumentPanel Caption="Annotation">
                             <ContentControl prism:RegionManager.RegionName="AnnotationPanel"/>
                         </dxdo:DocumentPanel>

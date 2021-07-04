@@ -16,7 +16,7 @@ using System.Windows.Input;
 using static IVM.Studio.Models.Common;
 
 /**
- * @Class Name : ImageAdjustmentViewModel.cs
+ * @Class Name : ImageAdjustmentPanelViewModel.cs
  * @Description : 이미지 조정 뷰 모델
  * @
  * @ 수정일         수정자              수정내용
@@ -29,7 +29,7 @@ using static IVM.Studio.Models.Common;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class ImageAdjustmentViewModel : ViewModelBase
+    public class ImageAdjustmentPanelViewModel : ViewModelBase
     {
         private List<ColorChannelItem> colorChannelItems;
         public List<ColorChannelItem> ColorChannelItems
@@ -307,7 +307,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public ImageAdjustmentViewModel(IContainerExtension container) : base(container)
+        public ImageAdjustmentPanelViewModel(IContainerExtension container) : base(container)
         {
             BrightnessChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(BrightnessChanged);
             ContrastChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(ContrastChanged);

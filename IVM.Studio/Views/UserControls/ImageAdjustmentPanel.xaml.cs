@@ -5,16 +5,11 @@ namespace IVM.Studio.Views.UserControls
     /// <summary>
     /// ImageAdjustment.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class ImageAdjustment : UserControl
+    public partial class ImageAdjustmentPanel : UserControl
     {
-        public ImageAdjustment()
+        public ImageAdjustmentPanel()
         {
             InitializeComponent();
-        }
-
-        private void itemCopy_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
-        {
-
         }
     }
 }

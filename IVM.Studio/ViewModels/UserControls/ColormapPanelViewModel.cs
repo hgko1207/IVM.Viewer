@@ -8,14 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using GDIDrawing = System.Drawing;
 
 /**
- * @Class Name : ColormapViewModel.cs
+ * @Class Name : ColormapPanelViewModel.cs
  * @Description : 컬러 맵 화면 뷰 모델
  * @
  * @ 수정일         수정자              수정내용
@@ -28,7 +26,7 @@ using GDIDrawing = System.Drawing;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class ColormapViewModel : ViewModelBase
+    public class ColormapPanelViewModel : ViewModelBase
     {
         public IEnumerable<ColorMap> ColorMaps
         {
@@ -138,7 +136,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// 생성자
         /// </summary>
         /// <param name="container"></param>
-        public ColormapViewModel(IContainerExtension container) : base(container)
+        public ColormapPanelViewModel(IContainerExtension container) : base(container)
         {
             ExportLabelCommand = new DelegateCommand<string>(ExportLabel);
 
