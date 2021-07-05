@@ -14,10 +14,13 @@
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
         <Grid>
-            <Image Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
+            <Image x:Name="ImageView" Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
                 <dxmvvm:Interaction.Behaviors>
                     <dxmvvm:EventToCommand EventName="MouseWheel" Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True"/>
                     <dxmvvm:EventToCommand EventName="SizeChanged" Command="{Binding SizeChangedCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="MouseDown" Command="{Binding ImageMouseDownCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="MouseMove" Command="{Binding ImageMouseMoveCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="MouseUp" Command="{Binding ImageMouseUpCommand}" PassEventArgsToCommand="True"/>
                 </dxmvvm:Interaction.Behaviors>
             </Image>
 
@@ -26,3 +29,5 @@
         </Grid>
     </ScrollViewer>
 </UserControl>
+
+    

@@ -1,4 +1,6 @@
 ﻿using DevExpress.Xpf.Core;
+using IVM.Studio.Models.Events;
+using Prism.Events;
 using System;
 using System.Windows;
 using System.Windows.Controls;

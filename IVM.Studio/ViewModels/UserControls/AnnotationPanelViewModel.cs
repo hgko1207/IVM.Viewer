@@ -22,12 +22,11 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class AnnotationPanelViewModel : ViewModelBase
     {
-        private AnnotationInfo annotationInfo;
-        public AnnotationInfo AnnotationInfo
-        {
-            get => annotationInfo;
-            set => SetProperty(ref annotationInfo, value);
-        }
+        public ICommand AddDrawCommand { get; private set; }
+        public ICommand ClearCommand { get; private set; }
+        public ICommand ExportCommand { get; private set; }
+
+        public AnnotationInfo AnnotationInfo { get; set; }
 
         /// <summary>
         /// 생성자
@@ -35,7 +34,35 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public AnnotationPanelViewModel(IContainerExtension container) : base(container)
         {
+            AddDrawCommand = new DelegateCommand(AddDraw);
+            ClearCommand = new DelegateCommand(Clear);
+            ExportCommand = new DelegateCommand(Export);
+
             AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
+        }
+
+        /// <summary>
+        /// Add Draw 이벤트
+        /// </summary>
+        private void AddDraw()
+        {
+
+        }
+
+        /// <summary>
+        /// Clear 이벤트
+        /// </summary>
+        private void Clear()
+        {
+
+        }
+
+        /// <summary>
+        /// Export 이벤트
+        /// </summary>
+        private void Export()
+        {
+
         }
     }
 }

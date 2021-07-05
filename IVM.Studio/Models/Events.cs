@@ -87,4 +87,20 @@ namespace IVM.Studio.Models.Events
         }
     }
     public class TrimWindowClosedEvent : PubSubEvent { }
+
+    public class TextAnnotationDialogEvent : PubSubEvent<TextAnnotationDialogParam> { }
+    public class TextAnnotationDialogParam
+    {
+        public readonly string Title;
+        public readonly string Content;
+        public readonly int X;
+        public readonly int Y;
+        public TextAnnotationDialogParam(string Title, string Content, int X, int Y)
+        {
+            this.Title = Title;
+            this.Content = Content;
+            this.X = X;
+            this.Y = Y;
+        }
+    }
 }

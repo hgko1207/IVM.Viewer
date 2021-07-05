@@ -362,6 +362,9 @@
     <Content Include="ffmpeg\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\triangle.png" />
+    <Resource Include="Resources\Images\rectangle.png" />
+    <Resource Include="Resources\Images\circle.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

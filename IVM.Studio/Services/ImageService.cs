@@ -33,6 +33,17 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 주어진 크기를 갖는 빈 GDI+ 비트맵을 생성합니다.
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        public Bitmap MakeEmptyImage(int width, int height)
+        {
+            return new Bitmap(width, height, GDIDrawing.Imaging.PixelFormat.Format32bppArgb);
+        }
+
+        /// <summary>
         /// 각 채널별 색 투영 정보를 사용하여 <seealso cref="TranslateColor(Bitmap, float[][])"/> 함수에서 사용할 컬러 매트릭스를 생성합니다.
         /// </summary>
         /// <param name="startLevelByChannel">각 채널의 이미지 레벨 조정시 사용할 시작 레벨입니다. 픽셀의 컬러 레벨이 해당 값 이하인 경우 최소값으로 투영됩니다.</param>
@@ -233,6 +244,94 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 주어진 두 이미지 상에 주어진 두 점을 잇는 선을 그립니다.
+        /// </summary>
+        /// <param name="annotationImage">어노테이션 이미지입니다. 이 이미지에 선을 그릴 때는 주어진 변환에 따라 좌표계를 변환합니다.</param>
+        /// <param name="displayImage"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="color"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawPen(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+                            bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
+                Point from = new Point(x1, y1);
+                Point to = new Point(x2, y2);
+                int fromEllipse_left = (int)(x1 - thickness / 2d);
+                int fromEllipse_top = (int)(y1 - thickness / 2d);
+                int toEllipse_left = (int)(x2 - thickness / 2d);
+                int toEllipse_top = (int)(y2 - thickness / 2d);
+
+                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
+                {
+                    g1.DrawLine(pen, from, to);
+                    g1.FillEllipse(brush, fromEllipse_left, fromEllipse_top, thickness, thickness);
+                    g1.FillEllipse(brush, toEllipse_left, toEllipse_top, thickness, thickness);
+                    g2.DrawLine(pen, from, to);
+                    g2.FillEllipse(brush, fromEllipse_left, fromEllipse_top, thickness, thickness);
+                    g2.FillEllipse(brush, toEllipse_left, toEllipse_top, thickness, thickness);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 주어진 두 이미지에서 지우개 작업을 합니다.
+        /// </summary>
+        /// <param name="annotationImage">어노테이션 이미지입니다. 지우개 작업시 이 이미지의 지울 범위는 투명색으로 칠하며, 주어진 변환에 따라 좌표계를 변환합니다.</param>
+        /// <param name="displayImage">디스플레이 이미지입니다. 지우개 작업시 이 이미지의 지울 범위는 컬러 매트릭스를 적용한 원본 이미지로 칠합니다.</param>
+        /// <param name="originalImage">원본 이미지입니다. 지우개 작업 전후 이 이미지는 변화하지 않습니다. 좌표계 변환은 미리 적용되어 있어야 합니다.</param>
+        /// <param name="colorMatrix"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="thickness"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawEraser(Bitmap annotationImage, Bitmap displayImage, Bitmap originalImage, float[][] colorMatrix, int x, int y, int thickness,
+                               bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+
+            int left = (int)(x - thickness / 2d);
+            int right = (int)(x + thickness / 2d);
+            int top = (int)(y - thickness / 2d);
+            int bottom = (int)(y + thickness / 2d);
+
+            using (GDIDrawing.Drawing2D.Matrix matrix = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate))
+            {
+                for (int i_x = left; i_x <= right; i_x++)
+                {
+                    for (int i_y = top; i_y <= bottom; i_y++)
+                    {
+                        Point[] point = new Point[] { new Point(i_x, i_y) };
+                        matrix.TransformPoints(point);
+                        annotationImage.SetPixel(i_x, i_y, Color.Transparent);
+                    }
+                }
+            }
+
+            using (Graphics g = Graphics.FromImage(displayImage))
+            {
+                GDIDrawing.Imaging.ImageAttributes attr = new GDIDrawing.Imaging.ImageAttributes();
+                GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
+                Point[] DestPoints = new Point[] { new Point(left, top), new Point(right, top), new Point(left, bottom) };
+                Rectangle SrcRect = new Rectangle(left, top, right - left, bottom - top);
+                attr.SetColorMatrix(cm);
+                g.DrawImage(originalImage, DestPoints, SrcRect, GDIDrawing.GraphicsUnit.Pixel, attr);
+            }
+        }
+
+        /// <summary>
         /// 주어진 비트맵 이미지에 스케일 바를 그립니다.
         /// </summary>
         /// <param name="image"></param>
@@ -262,6 +361,44 @@ namespace IVM.Studio.Services
                 gr.FillRectangle(Brushes.White, new Rectangle(StartPoint - new Size(thicknessOfScaleBar / 2, thicknessOfScaleBar / 2),
                     new Size(thicknessOfScaleBar, thicknessOfScaleBar)));
             }
+        }
+
+        public Color ConvertWPFColorToGDI(WPFDrawing.Color color)
+        {
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
+        /// 주어진 회전 및 반전 정보에 따라, 회전된 이미지에서 원본 이미지로 가는 변환 행렬을 생성합니다.
+        /// </summary>
+        /// <param name="imageWidth"></param>
+        /// <param name="imageHeight"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
+        private GDIDrawing.Drawing2D.Matrix GetTransformToOriginal(int imageWidth, int imageHeight, bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            GDIDrawing.Drawing2D.Matrix matrix = new GDIDrawing.Drawing2D.Matrix();
+            // 원점을 이미지의 중앙으로 이동하고 회전
+            if (rotate != 0)
+            {
+                matrix.Translate(imageWidth / 2f, imageHeight / 2f);
+                matrix.Rotate(360f - rotate * 90f);
+                if (rotate == 2)
+                {
+                    // 원점 원상복귀
+                    matrix.Translate(-imageWidth / 2f, -imageHeight / 2f);
+                }
+                else
+                {
+                    // 90도, 270도 회전의 경우 회전 전후 가로/세로가 바뀌므로 반대로 해야함
+                    matrix.Translate(-imageHeight / 2f, -imageWidth / 2f);
+                }
+            }
+            // 뒤집기
+            matrix.Scale(horizontalReflect ? -1.0f : +1.0f, verticalReflect ? -1.0f : +1.0f);
+            return matrix;
         }
 
         /// <summary>

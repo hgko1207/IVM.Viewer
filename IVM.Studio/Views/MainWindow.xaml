@@ -305,10 +305,8 @@
                             <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
                                 <TextBlock Text="Crop" FontWeight="Bold" VerticalAlignment="Center"/>
 
-                                <dx:SimpleButton Style="{StaticResource IconButton}" ToolTip="Crop Rectangle" Padding="0" Margin="20 0 0 0">
-                                    <material:PackIcon Kind="CropFree" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                </dx:SimpleButton>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/crop_circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
+                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
 
                                 <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0"/>
                                 <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
