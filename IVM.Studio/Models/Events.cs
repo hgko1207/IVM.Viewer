@@ -29,7 +29,8 @@ namespace IVM.Studio.Models.Events
     public class HistogramCloseEvent : PubSubEvent { }
     /// <summary>히스토그램 윈도우가 종료 될때</summary>
     public class HistogramClosedEvent : PubSubEvent { }
-    public class RefreshHistogramEvent : PubSubEvent { }
+    public class RefreshMainHistogramEvent : PubSubEvent { }
+    public class RefreshChHistogramEvent : PubSubEvent<ChannelType> { }
 
     /// <summary> 메타데이터 새로고침 </summary>
     public class RefreshMetadataEvent : PubSubEvent<Metadata> { }
@@ -65,9 +66,6 @@ namespace IVM.Studio.Models.Events
     public class RotationEvent : PubSubEvent<string> { }
     public class ReflectEvent : PubSubEvent<string> { }
     public class RotationResetEvent : PubSubEvent { }
-
-    public class InitSlideEvent : PubSubEvent { }
-    public class SlideChangedEvent : PubSubEvent { }
 
     public class PlaySlideShowEvent : PubSubEvent { }
 

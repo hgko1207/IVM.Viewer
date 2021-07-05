@@ -297,7 +297,6 @@ namespace IVM.Studio.ViewModels.UserControls
             LevelLockCommand = new DelegateCommand(LevelLock);
             LevelResetCommand = new DelegateCommand(LevelReset);
 
-            EventAggregator.GetEvent<InitSlideEvent>().Subscribe(InitSlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
@@ -312,7 +311,7 @@ namespace IVM.Studio.ViewModels.UserControls
             NIRColorChannel = colorChannelInfoMap[ChannelType.NIR];
 
             RefreshColorStyle();
-            InitVisible();
+            RefreshVisible();
             LevelReset();
         }
 
@@ -375,12 +374,6 @@ namespace IVM.Studio.ViewModels.UserControls
             RefreshMetadata(Container.Resolve<DataManager>().Metadata);
         }
 
-        private void InitSlide()
-        {
-            InitVisible();
-            RefreshColorStyle();
-        }
-
         /// <summary>
         /// 메타데이터 변경 시
         /// </summary>
@@ -389,13 +382,14 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (metadata != null)
             {
-                DAPIColorChannel.Color = ConvertMetadataToColor(metadata.ChA);
-                GFPColorChannel.Color = ConvertMetadataToColor(metadata.ChB);
-                RFPColorChannel.Color = ConvertMetadataToColor(metadata.ChC);
-                NIRColorChannel.Color = ConvertMetadataToColor(metadata.ChD);
-
-                RefreshColorStyle();
+                DAPIColorChannel.Color = metadata.ChA == "0" ? Colors.Red : ConvertMetadataToColor(metadata.ChA);
+                GFPColorChannel.Color = metadata.ChB == "0" ? Colors.Green : ConvertMetadataToColor(metadata.ChB);
+                RFPColorChannel.Color = metadata.ChC == "0" ? Colors.Blue : ConvertMetadataToColor(metadata.ChC);
+                NIRColorChannel.Color = metadata.ChD == "0" ? Colors.Alpha : ConvertMetadataToColor(metadata.ChD);
             }
+
+            RefreshColorStyle();
+            RefreshVisible();
         }
 
         /// <summary>
@@ -426,11 +420,24 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
+        /// VisibleFromColor
+        /// </summary>
+        private void VisibleFromColor()
+        {
+            DAPIColorChannel.Visible = DAPIColor == "Alpha" ? false : true;
+            GFPColorChannel.Visible = GFPColor == "Alpha" ? false : true;
+            RFPColorChannel.Visible = RFPColor == "Alpha" ? false : true;
+            NIRColorChannel.Visible = NIRColor == "Alpha" ? false : true;
+        }
+
+        /// <summary>
         /// 채널 Visible 초기화
         /// </summary>
-        private void InitVisible()
+        private void RefreshVisible()
         {
-            DAPIVisible = NIRColorChannel.Visible;
+            VisibleFromColor();
+
+            DAPIVisible = DAPIColorChannel.Visible;
             GFPVisible = GFPColorChannel.Visible;
             RFPVisible = RFPColorChannel.Visible;
             NIRVisible = NIRColorChannel.Visible;

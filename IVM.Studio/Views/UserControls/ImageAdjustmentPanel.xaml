@@ -263,12 +263,12 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <dxe:SpinEdit Grid.Row="0" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding DAPIChannel}" 
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding DAPIColorChannel}" 
                               Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <dxe:SpinEdit Grid.Row="0" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding DAPIChannel}" 
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding DAPIColorChannel}" 
                               Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                <dxe:TrackBarEdit DataContext="{Binding DAPIChannel}" Grid.Row="0" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                <dxe:TrackBarEdit DataContext="{Binding DAPIColorChannel}" Grid.Row="0" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
@@ -276,12 +276,12 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding GFPChannel}" 
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding GFPColorChannel}" 
                               Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding GFPChannel}" 
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding GFPColorChannel}" 
                               Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                <dxe:TrackBarEdit DataContext="{Binding GFPChannel}" Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                <dxe:TrackBarEdit DataContext="{Binding GFPColorChannel}" Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
@@ -289,12 +289,12 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="4" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding RFPChannel}" 
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding RFPColorChannel}" 
                               Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <dxe:SpinEdit Grid.Row="4" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding RFPChannel}" 
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding RFPColorChannel}" 
                               Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                <dxe:TrackBarEdit DataContext="{Binding RFPChannel}" Grid.Row="4" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                <dxe:TrackBarEdit DataContext="{Binding RFPColorChannel}" Grid.Row="4" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
@@ -302,12 +302,12 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="6" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding NIRChannel}" 
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding NIRColorChannel}" 
                               Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <dxe:SpinEdit Grid.Row="6" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding NIRChannel}" 
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding NIRColorChannel}" 
                               Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                <dxe:TrackBarEdit DataContext="{Binding NIRChannel}" Grid.Row="6" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                <dxe:TrackBarEdit DataContext="{Binding NIRColorChannel}" Grid.Row="6" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>

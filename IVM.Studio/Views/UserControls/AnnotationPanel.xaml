@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"

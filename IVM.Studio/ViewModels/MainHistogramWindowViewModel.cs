@@ -2,6 +2,7 @@
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
+using Prism.Events;
 using Prism.Ioc;
 using System;
 using Drawing = System.Windows.Media;
@@ -37,9 +38,10 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public MainHistogramWindowViewModel(IContainerExtension container) : base(container)
         {
+            EventAggregator.GetEvent<RefreshMainHistogramEvent>().Subscribe(RefreshHistogram, ThreadOption.UIThread);
             EventAggregator.GetEvent<HistogramCloseEvent>().Subscribe(() => view.Close());
 
-            Refresh();
+            RefreshHistogram();
         }
 
         /// <summary>
@@ -58,13 +60,14 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(MainHistogramWindow view)
         {
+            EventAggregator.GetEvent<RefreshMainHistogramEvent>().Unsubscribe(RefreshHistogram);
             EventAggregator.GetEvent<HistogramCloseEvent>().Unsubscribe(() => view.Close());
         }
 
         /// <summary>
         /// 새로고침
         /// </summary>
-        private void Refresh()
+        private void RefreshHistogram()
         {
             HistogramImage = Container.Resolve<DataManager>().HistogramImage;
         }

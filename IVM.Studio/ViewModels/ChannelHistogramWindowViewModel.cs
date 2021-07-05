@@ -4,6 +4,7 @@ using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -45,9 +46,10 @@ namespace IVM.Studio.ViewModels
         {
             ClosedCommand = new DelegateCommand(WindowClosed);
 
+            EventAggregator.GetEvent<RefreshChHistogramEvent>().Subscribe(RefreshHistogram, ThreadOption.UIThread, false, type => type == ChannelType);
             EventAggregator.GetEvent<ChHistogramWindowCloseEvent>().Subscribe(Close);
 
-            Refresh();
+            RefreshHistogram(ChannelType);
         }
 
         /// <summary>
@@ -65,15 +67,16 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(ChannelHistogramWindow view)
         {
+            EventAggregator.GetEvent<RefreshChHistogramEvent>().Unsubscribe(RefreshHistogram);
             EventAggregator.GetEvent<ChHistogramWindowCloseEvent>().Unsubscribe(Close);
         }
 
         /// <summary>
         /// 새로고침 이벤트
         /// </summary>
-        private void Refresh()
+        private void RefreshHistogram(ChannelType type)
         {
-            HistogramImage = Container.Resolve<DataManager>().ColorChannelInfoMap[ChannelType].HistogramImage;
+            HistogramImage = Container.Resolve<DataManager>().ColorChannelInfoMap[type].HistogramImage;
         }
 
         /// <summary>

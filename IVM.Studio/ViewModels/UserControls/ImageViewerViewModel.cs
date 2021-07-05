@@ -98,7 +98,7 @@ namespace IVM.Studio.ViewModels.UserControls
             MouseWheelCommand = new DelegateCommand<MouseWheelEventArgs>(MouseWheel);
             SizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(SizeChanged);
 
-            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread);
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.BackgroundThread);
 
             currentZoomRatio = 100;
             DisplayingImageWidth = double.NaN;
@@ -113,7 +113,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnLoaded(ImageViewer view)
         {
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread);
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.BackgroundThread);
 
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
@@ -136,23 +136,9 @@ namespace IVM.Studio.ViewModels.UserControls
         /// DisplayImage
         /// </summary>
         /// <param name="param"></param>
-        private void DisplayImage(DisplayParam param)
+        private void DisplayImageWithMetadata(DisplayParam param)
         {
             disableRefreshImageEvent = true;
-
-            if (param.SlideChanged)
-            {
-                colorChannelInfoMap[ChannelType.DAPI].Color = Colors.Red;
-                colorChannelInfoMap[ChannelType.DAPI].Visible = true;
-                colorChannelInfoMap[ChannelType.GFP].Color = Colors.Green;
-                colorChannelInfoMap[ChannelType.GFP].Visible = true;
-                colorChannelInfoMap[ChannelType.RFP].Color = Colors.Blue;
-                colorChannelInfoMap[ChannelType.RFP].Visible = true;
-                colorChannelInfoMap[ChannelType.NIR].Color = Colors.Alpha;
-                colorChannelInfoMap[ChannelType.NIR].Visible = false;
-
-                EventAggregator.GetEvent<InitSlideEvent>().Publish();
-            }
 
             if (param.Metadata != null)
             {
@@ -179,8 +165,6 @@ namespace IVM.Studio.ViewModels.UserControls
 
             DisplayImageWithoutMetadata(param.FileInfo);
         }
-
-
 
         /// <summary>
         /// DisplayImageWithoutMetadata
@@ -275,6 +259,7 @@ namespace IVM.Studio.ViewModels.UserControls
                                         Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
                                         colorChannelModel.HistogramImage = histogramImage;
                                         //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
+                                        EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
                             }
@@ -289,6 +274,7 @@ namespace IVM.Studio.ViewModels.UserControls
                                         Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
                                         colorChannelModel.HistogramImage = histogramImage;
                                         //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
+                                        EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
                             }
@@ -346,6 +332,7 @@ namespace IVM.Studio.ViewModels.UserControls
             using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(imgage, currentTranslationByChannel, currentVisibilityByChannel))
             {
                 Container.Resolve<DataManager>().HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                EventAggregator.GetEvent<RefreshMainHistogramEvent>().Publish();
             }
         }
 
