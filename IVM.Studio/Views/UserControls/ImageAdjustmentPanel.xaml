@@ -1,14 +1,12 @@
 ﻿<UserControl x:Class="IVM.Studio.Views.UserControls.ImageAdjustmentPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"  
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
-             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:util="clr-namespace:IVM.Studio.Utils"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
@@ -20,38 +18,14 @@
         <util:ButtonStyleConverter x:Key="ButtonStyleConverter"/>
     </UserControl.Resources>
 
-    <Grid Margin="10 0">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 10 0 4">
-            <TextBlock Text="Channel" FontWeight="Bold" VerticalAlignment="Center" Margin="6 0 0 0"/>
-
-            <dxe:ComboBoxEdit ItemsSource="{Binding ColorChannelItems}" ValueMember="Type" DisplayMember="Name" SelectedItem="{Binding SelectedChannel}" Margin="10 0" Width="120"/>
-
-            <TextBlock Text="Brightness" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
-            <dxe:SpinEdit Width="55" Value="0" Margin="10 0 0 0" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True">
-                <dxmvvm:Interaction.Behaviors>
-                    <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding BrightnessChangedCommand}" PassEventArgsToCommand="True"/>
-                </dxmvvm:Interaction.Behaviors>
-            </dxe:SpinEdit>
-
-            <TextBlock Text="Contrast" FontWeight="Bold" VerticalAlignment="Center" Margin="20 0 0 0"/>
-            <dxe:SpinEdit Width="55" Value="1" Margin="10 0 0 0" Increment="0.05" MinValue="0.6" MaxValue="1.4" IsFloatValue="True">
-                <dxmvvm:Interaction.Behaviors>
-                    <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding ContrastChangedCommand}" PassEventArgsToCommand="True"/>
-                </dxmvvm:Interaction.Behaviors>
-            </dxe:SpinEdit>
-        </StackPanel>
-
-        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="5 5" />
-
-        <Grid Grid.Row="2" Margin="0 0 0 2">
+        <Grid Margin="0 0 0 4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -120,8 +94,8 @@
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Black" HorizontalAlignment="Center"/>
                 <TextBlock Grid.Row="1" Grid.Column="4" Text="White" HorizontalAlignment="Center"/>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" EditValueType="{x:Type sys:Int32}"/>
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" EditValueType="{x:Type sys:Int32}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
@@ -156,9 +130,9 @@
             </Grid>
         </Grid>
 
-        <ContentControl Grid.Row="3" Template="{StaticResource HorizontalLine}" Margin="0 5" />
+        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 5" />
 
-        <Grid Grid.Row="4" Margin="0 5" MinHeight="160">
+        <Grid Grid.Row="2" Margin="0 5" MinHeight="160">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -289,8 +263,10 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <dxe:SpinEdit Grid.Row="0" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
-                <dxe:SpinEdit Grid.Row="0" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding DAPIChannel}" 
+                              Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding DAPIChannel}" 
+                              Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <dxe:TrackBarEdit DataContext="{Binding DAPIChannel}" Grid.Row="0" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
@@ -300,8 +276,10 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Value="0" Style="{StaticResource HistogramEdit}"/>
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding GFPChannel}" 
+                              Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding GFPChannel}" 
+                              Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <dxe:TrackBarEdit DataContext="{Binding GFPChannel}" Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
@@ -311,8 +289,10 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="4" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
-                <dxe:SpinEdit Grid.Row="4" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding RFPChannel}" 
+                              Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding RFPChannel}" 
+                              Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <dxe:TrackBarEdit DataContext="{Binding RFPChannel}" Grid.Row="4" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
@@ -322,11 +302,14 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
-                <dxe:SpinEdit Grid.Row="6" Grid.Column="0" Value="1" Style="{StaticResource HistogramEdit}"/>
-                <dxe:SpinEdit Grid.Row="6" Grid.Column="4" Value="255" Style="{StaticResource HistogramEdit}"/>
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="0" Style="{StaticResource HistogramEdit}" DataContext="{Binding NIRChannel}" 
+                              Value="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="4" Style="{StaticResource HistogramEdit}" DataContext="{Binding NIRChannel}" 
+                              Value="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <dxe:TrackBarEdit DataContext="{Binding NIRChannel}" Grid.Row="6" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
-                                  >
+                                  SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
+                                  SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
                         <dxe:TrackBarRangeStyleSettings/>
                     </dxe:TrackBarEdit.StyleSettings>

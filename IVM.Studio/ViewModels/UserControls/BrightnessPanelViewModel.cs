@@ -2,8 +2,10 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 /**
  * @Class Name : BrightnessPanelViewModel.cs
@@ -62,6 +64,9 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        public ICommand LockCommand { get; private set; }
+        public ICommand ResetCommand { get; private set; }
+
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
         public ColorChannelModel DAPIChannel { get; set; }
@@ -75,6 +80,9 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public BrightnessPanelViewModel(IContainerExtension container) : base(container)
         {
+            LockCommand = new DelegateCommand(Lock);
+            ResetCommand = new DelegateCommand(Reset);
+
             colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
             AllBrightness = 0;
@@ -86,6 +94,22 @@ namespace IVM.Studio.ViewModels.UserControls
             GFPChannel = colorChannelInfoMap[ChannelType.GFP];
             RFPChannel = colorChannelInfoMap[ChannelType.RFP];
             NIRChannel = colorChannelInfoMap[ChannelType.NIR];
+        }
+
+        /// <summary>
+        /// Lock 이벤트
+        /// </summary>
+        private void Lock()
+        {
+
+        }
+
+        /// <summary>
+        /// Reset 이벤트
+        /// </summary>
+        private void Reset()
+        {
+
         }
     }
 }

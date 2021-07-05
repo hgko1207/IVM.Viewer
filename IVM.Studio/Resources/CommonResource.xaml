@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
                     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
                     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
@@ -94,6 +95,7 @@
         <Setter Property="MinValue" Value="0"/>
         <Setter Property="MaxValue" Value="255"/>
         <Setter Property="IsFloatValue" Value="False"/>
+        <Setter Property="EditValueType" Value="{x:Type sys:Int32}"/>
     </Style>
 
     <Style TargetType="{x:Type dxe:SpinEdit}">

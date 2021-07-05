@@ -91,8 +91,8 @@
 
                     <TextBlock Text="Contrast" Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Lock" Height="28" Command="{Binding LevelLockCommand}"/>
-                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding LevelResetCommand}"/>
+                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Lock" Height="28" Command="{Binding LockCommand}"/>
+                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetCommand}"/>
                 </Grid>
 
                 <Slider Grid.Row="2" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
@@ -219,31 +219,25 @@
                               Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- GFP -->
-                <Slider Grid.Row="2" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+                <Slider Grid.Row="2" DataContext="{Binding GFPChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+                        SelectionStart="0.6" Minimum="0.6" Maximum="1.4" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="2" Width="50" Height="30" Value="0" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True">
-                    <dxmvvm:Interaction.Behaviors>
-                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding BrightnessChangedCommand}" PassEventArgsToCommand="True"/>
-                    </dxmvvm:Interaction.Behaviors>
-                </dxe:SpinEdit>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="2" DataContext="{Binding GFPChannel}" Width="50" Height="30" Increment="0.05" MinValue="0.6" MaxValue="1.4" IsFloatValue="True"
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- RFP -->
-                <Slider Grid.Row="4" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+                <Slider Grid.Row="4" DataContext="{Binding RFPChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+                        SelectionStart="0.6" Minimum="0.6" Maximum="1.4" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="4" Grid.Column="2" Width="50" Height="30" Value="0" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True">
-                    <dxmvvm:Interaction.Behaviors>
-                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding BrightnessChangedCommand}" PassEventArgsToCommand="True"/>
-                    </dxmvvm:Interaction.Behaviors>
-                </dxe:SpinEdit>
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="2" DataContext="{Binding RFPChannel}" Width="50" Height="30" Increment="0.05" MinValue="0.6" MaxValue="1.4" IsFloatValue="True"
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- NIR -->
-                <Slider Grid.Row="6" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+                <Slider Grid.Row="6" DataContext="{Binding NIRChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+                        SelectionStart="0.6" Minimum="0.6" Maximum="1.4" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="6" Grid.Column="2" Width="50" Height="30" Value="0" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True">
-                    <dxmvvm:Interaction.Behaviors>
-                        <dxmvvm:EventToCommand EventName="EditValueChanged" Command="{Binding BrightnessChangedCommand}" PassEventArgsToCommand="True"/>
-                    </dxmvvm:Interaction.Behaviors>
-                </dxe:SpinEdit>
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="2" DataContext="{Binding NIRChannel}" Width="50" Height="30" Increment="0.05" MinValue="0.6" MaxValue="1.4" IsFloatValue="True"
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
         </Grid>
     </Grid>

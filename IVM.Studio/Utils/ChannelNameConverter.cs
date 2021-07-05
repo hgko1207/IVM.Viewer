@@ -19,18 +19,18 @@ namespace IVM.Studio.Utils
             IsFrozen = false;
         }
 
-        public void AddMatch(int ChannelNumber, string ChannelName)
+        public void AddMatch(int channelNumber, string channelName)
         {
             if (IsFrozen) 
                 throw new InvalidOperationException("This converter is frozen.");
 
             try
             {
-                if (convertTable.ContainsKey(ChannelNumber) || convertBackTable.ContainsKey(ChannelName)) 
+                if (convertTable.ContainsKey(channelNumber) || convertBackTable.ContainsKey(channelName)) 
                     throw new ArgumentException("Some of specified match already exists.");
 
-                convertTable.Add(ChannelNumber, ChannelName);
-                convertBackTable.Add(ChannelName, ChannelNumber);
+                convertTable.Add(channelNumber, channelName);
+                convertBackTable.Add(channelName, channelNumber);
             }
             catch {}
         }
@@ -57,22 +57,20 @@ namespace IVM.Studio.Utils
             IsFrozen = true;
         }
 
-        public string ConvertNumberToName(int ChannelNumber)
+        public string ConvertNumberToName(int channelNumber)
         {
             if (!IsFrozen) 
                 throw new InvalidOperationException("This converter needs to be frozen.");
 
-            return 
-                convertTable[ChannelNumber];
+            return convertTable[channelNumber];
         }
 
-        public int ConvertNameToNumber(string ChannelName)
+        public int ConvertNameToNumber(string channelName)
         {
             if (!IsFrozen) 
                 throw new InvalidOperationException("This converter needs to be frozen.");
 
-            return 
-                convertBackTable[ChannelName];
+            return convertBackTable[channelName];
         }
     }
 }

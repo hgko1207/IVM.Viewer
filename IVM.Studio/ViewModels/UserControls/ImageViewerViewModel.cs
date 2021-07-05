@@ -151,7 +151,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 colorChannelInfoMap[ChannelType.NIR].Color = Colors.Alpha;
                 colorChannelInfoMap[ChannelType.NIR].Visible = false;
 
-                EventAggregator.GetEvent<SlideChangedEvent>().Publish();
+                EventAggregator.GetEvent<InitSlideEvent>().Publish();
             }
 
             if (param.Metadata != null)
@@ -160,14 +160,14 @@ namespace IVM.Studio.ViewModels.UserControls
                 fOVSizeY = param.Metadata.FovY;
 
                 // 메타데이터의 채널 정보 반영
-                ChannelNameConverter converter = Container.Resolve<FileService>().GenerateChannelNameConverter(param.Metadata);
-                foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
-                {
-                    if (type == ChannelType.ALL)
-                        continue;
+                //ChannelNameConverter converter = Container.Resolve<FileService>().GenerateChannelNameConverter(param.Metadata);
+                //foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
+                //{
+                //    if (type == ChannelType.ALL)
+                //        continue;
 
-                    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
-                }
+                //    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
+                //}
             }
             else
             {
@@ -179,6 +179,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
             DisplayImageWithoutMetadata(param.FileInfo);
         }
+
+
 
         /// <summary>
         /// DisplayImageWithoutMetadata

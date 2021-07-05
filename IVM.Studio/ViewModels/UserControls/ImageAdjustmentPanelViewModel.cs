@@ -1,19 +1,15 @@
-﻿using DevExpress.Mvvm.Native;
-using DevExpress.Xpf.Editors;
-using IVM.Studio.Models;
+﻿using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Windows.Input;
-using static IVM.Studio.Models.Common;
 
 /**
  * @Class Name : ImageAdjustmentPanelViewModel.cs
@@ -31,20 +27,6 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class ImageAdjustmentPanelViewModel : ViewModelBase
     {
-        private List<ColorChannelItem> colorChannelItems;
-        public List<ColorChannelItem> ColorChannelItems
-        {
-            get => colorChannelItems;
-            set => SetProperty(ref colorChannelItems, value);
-        }
-
-        private ColorChannelItem selectedChannel;
-        public ColorChannelItem SelectedChannel
-        {
-            get => selectedChannel;
-            set => SetProperty(ref selectedChannel, value);
-        }
-
         private string _DAPIColor;
         public string DAPIColor
         {
@@ -282,13 +264,10 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        public ColorChannelModel DAPIChannel { get; set; }
-        public ColorChannelModel GFPChannel { get; set; }
-        public ColorChannelModel RFPChannel { get; set; }
-        public ColorChannelModel NIRChannel { get; set; }
-
-        public ICommand BrightnessChangedCommand { get; private set; }
-        public ICommand ContrastChangedCommand { get; private set; }
+        public ColorChannelModel DAPIColorChannel { get; set; }
+        public ColorChannelModel GFPColorChannel { get; set; }
+        public ColorChannelModel RFPColorChannel { get; set; }
+        public ColorChannelModel NIRColorChannel { get; set; }
 
         public ICommand DAPIColorChangedCommand { get; private set; }
         public ICommand GFPColorChangedCommand { get; private set; }
@@ -309,8 +288,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public ImageAdjustmentPanelViewModel(IContainerExtension container) : base(container)
         {
-            BrightnessChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(BrightnessChanged);
-            ContrastChangedCommand = new DelegateCommand<EditValueChangedEventArgs>(ContrastChanged);
             DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
             GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
             RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
@@ -320,7 +297,8 @@ namespace IVM.Studio.ViewModels.UserControls
             LevelLockCommand = new DelegateCommand(LevelLock);
             LevelResetCommand = new DelegateCommand(LevelReset);
 
-            EventAggregator.GetEvent<SlideChangedEvent>().Subscribe(InitVisible);
+            EventAggregator.GetEvent<InitSlideEvent>().Subscribe(InitSlide);
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
             EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Subscribe(ChWindowClosed);
@@ -328,15 +306,12 @@ namespace IVM.Studio.ViewModels.UserControls
 
             colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
 
-            ColorChannelItems = Container.Resolve<DataManager>().ColorChannelItems;
-            SelectedChannel = ColorChannelItems[0];
+            DAPIColorChannel = colorChannelInfoMap[ChannelType.DAPI];
+            GFPColorChannel = colorChannelInfoMap[ChannelType.GFP];
+            RFPColorChannel = colorChannelInfoMap[ChannelType.RFP];
+            NIRColorChannel = colorChannelInfoMap[ChannelType.NIR];
 
-            DAPIChannel = colorChannelInfoMap[ChannelType.DAPI];
-            GFPChannel = colorChannelInfoMap[ChannelType.GFP];
-            RFPChannel = colorChannelInfoMap[ChannelType.RFP];
-            NIRChannel = colorChannelInfoMap[ChannelType.NIR];
-
-            InitColorStyle();
+            RefreshColorStyle();
             InitVisible();
             LevelReset();
         }
@@ -344,62 +319,12 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <summary>
         /// Color 초기화
         /// </summary>
-        private void InitColorStyle()
+        private void RefreshColorStyle()
         {
-            DAPIColor = "Red";
-            GFPColor = "Green";
-            RFPColor = "Blue";
-            NIRColor = "Alpha";
-        }
-
-        /// <summary>
-        /// 밝기 변경
-        /// </summary>
-        /// <param name="e"></param>
-        private void BrightnessChanged(EditValueChangedEventArgs e)
-        {
-            Thread.Sleep(500);
-
-            if (e.NewValue is decimal value)
-            {
-                if (SelectedChannel.Type == ChannelType.ALL)
-                {
-                    bool refresh = false;
-                    colorChannelInfoMap.Values.Where(item => item.ChannelType != ChannelType.ALL).ForEach(date =>
-                    {
-                        refresh |= date.UpdateBrightnessWithoutRefresh((float)value);
-                    });
-                    if (refresh)
-                        EventAggregator.GetEvent<RefreshImageEvent>().Publish();
-                }
-                else
-                    colorChannelInfoMap[SelectedChannel.Type].Brightness = (float)value;
-            }
-        }
-
-        /// <summary>
-        /// 대비 변경
-        /// </summary>
-        /// <param name="e"></param>
-        private void ContrastChanged(EditValueChangedEventArgs e)
-        {
-            Thread.Sleep(500);
-             
-            if (e.NewValue is decimal value)
-            {
-                if (SelectedChannel.Type == ChannelType.ALL)
-                {
-                    bool refresh = false;
-                    colorChannelInfoMap.Values.Where(item => item.ChannelType != ChannelType.ALL).ForEach(date =>
-                    {
-                        refresh |= date.UpdateContrastWithoutRefresh((float)value);
-                    });
-                    if (refresh)
-                        EventAggregator.GetEvent<RefreshImageEvent>().Publish();
-                }
-                else
-                    colorChannelInfoMap[SelectedChannel.Type].Contrast = (float)value;
-            }
+            DAPIColor = ConvertColorToString(DAPIColorChannel.Color);
+            GFPColor = ConvertColorToString(GFPColorChannel.Color);
+            RFPColor = ConvertColorToString(RFPColorChannel.Color);
+            NIRColor = ConvertColorToString(NIRColorChannel.Color);
         }
 
         /// <summary>
@@ -409,7 +334,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void DAPIColorChanged(string type)
         {
             DAPIColor = type;
-            colorChannelInfoMap[ChannelType.DAPI].SetColor(type);
+            DAPIColorChannel.SetColor(type);
         }
 
         /// <summary>
@@ -419,7 +344,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void GFPColorChanged(string type)
         {
             GFPColor = type;
-            colorChannelInfoMap[ChannelType.GFP].SetColor(type);
+            GFPColorChannel.SetColor(type);
         }
 
         /// <summary>
@@ -429,7 +354,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void RFPColorChanged(string type)
         {
             RFPColor = type;
-            colorChannelInfoMap[ChannelType.RFP].SetColor(type);
+            RFPColorChannel.SetColor(type);
         }
 
         /// <summary>
@@ -439,7 +364,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void NIRColorChanged(string type)
         {
             NIRColor = type;
-            colorChannelInfoMap[ChannelType.NIR].SetColor(type);
+            NIRColorChannel.SetColor(type);
         }
 
         /// <summary>
@@ -447,12 +372,30 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void ColorReset()
         {
-            InitColorStyle();
+            RefreshMetadata(Container.Resolve<DataManager>().Metadata);
+        }
 
-            colorChannelInfoMap[ChannelType.DAPI].SetColor("Red");
-            colorChannelInfoMap[ChannelType.GFP].SetColor("Green");
-            colorChannelInfoMap[ChannelType.RFP].SetColor("Blue");
-            colorChannelInfoMap[ChannelType.NIR].SetColor("Alpha");
+        private void InitSlide()
+        {
+            InitVisible();
+            RefreshColorStyle();
+        }
+
+        /// <summary>
+        /// 메타데이터 변경 시
+        /// </summary>
+        /// <param name="metadata"></param>
+        private void RefreshMetadata(Metadata metadata)
+        {
+            if (metadata != null)
+            {
+                DAPIColorChannel.Color = ConvertMetadataToColor(metadata.ChA);
+                GFPColorChannel.Color = ConvertMetadataToColor(metadata.ChB);
+                RFPColorChannel.Color = ConvertMetadataToColor(metadata.ChC);
+                NIRColorChannel.Color = ConvertMetadataToColor(metadata.ChD);
+
+                RefreshColorStyle();
+            }
         }
 
         /// <summary>
@@ -487,10 +430,10 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void InitVisible()
         {
-            DAPIVisible = colorChannelInfoMap[ChannelType.DAPI].Visible;
-            GFPVisible = colorChannelInfoMap[ChannelType.GFP].Visible;
-            RFPVisible = colorChannelInfoMap[ChannelType.RFP].Visible;
-            NIRVisible = colorChannelInfoMap[ChannelType.NIR].Visible;
+            DAPIVisible = NIRColorChannel.Visible;
+            GFPVisible = GFPColorChannel.Visible;
+            RFPVisible = RFPColorChannel.Visible;
+            NIRVisible = NIRColorChannel.Visible;
         }
 
         /// <summary>
@@ -536,6 +479,50 @@ namespace IVM.Studio.ViewModels.UserControls
                 case ChannelType.NIR:
                     NIRHistogramOpend = false;
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Metadata Color를 색상으로 변환
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        private Colors ConvertMetadataToColor(string color)
+        {
+            switch (color)
+            {
+                case "R":
+                    return Colors.Red;
+                case "G":
+                    return Colors.Green;
+                case "B":
+                    return Colors.Blue;
+                case "A":
+                    return Colors.Alpha;
+                default:
+                    return Colors.None;
+            }
+        }
+
+        /// <summary>
+        /// Color를 string으로 변환
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        private string ConvertColorToString(Colors color)
+        {
+            switch (color)
+            {
+                case Colors.Red:
+                    return "Red";
+                case Colors.Green:
+                    return "Green";
+                case Colors.Blue:
+                    return "Blue";
+                case Colors.Alpha:
+                    return "Alpha";
+                default:
+                    return "None";
             }
         }
     }
