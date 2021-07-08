@@ -119,8 +119,12 @@
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ThumbnailPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
     <Compile Include="ViewModels\VideoTrimWindowViewModel.cs" />
+    <Compile Include="Views\InputBoxWindow.xaml.cs">
+      <DependentUpon>InputBoxWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainHistogramWindow.xaml.cs">
       <DependentUpon>MainHistogramWindow.xaml</DependentUpon>
     </Compile>
@@ -129,6 +133,9 @@
     </Compile>
     <Compile Include="Views\UserControls\BrightnessPanel.xaml.cs">
       <DependentUpon>BrightnessPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\ThumbnailPanel.xaml.cs">
+      <DependentUpon>ThumbnailPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\VideoViewer.xaml.cs">
       <DependentUpon>VideoViewer.xaml</DependentUpon>
@@ -145,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ChannelViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InputBoxWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,6 +263,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\UserControls\ThumbnailPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\VideoViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

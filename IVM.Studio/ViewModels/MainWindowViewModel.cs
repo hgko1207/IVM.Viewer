@@ -285,6 +285,7 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("AnnotationPanel", typeof(AnnotationPanel));
             RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(ColormapPanel));
             RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControlPanel));
+            RegionManager.RegisterViewWithRegion("ThumbnailPanel", typeof(ThumbnailPanel));
 
             container.Resolve<DataManager>().Init(container, EventAggregator);
 

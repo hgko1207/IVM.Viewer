@@ -318,12 +318,7 @@
                     </dxdo:LayoutPanel>
 
                     <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="150">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10 0">
-                            <Grid x:Name="ImageSequenceGroup">
-                                <Grid.RowDefinitions/>
-                                <Grid.ColumnDefinitions/>
-                            </Grid>
-                        </ScrollViewer>
+                        <ContentControl prism:RegionManager.RegionName="ThumbnailPanel"/>
                     </dxdo:LayoutPanel>
                 </dxdo:LayoutGroup>
             </dxdo:LayoutGroup>
