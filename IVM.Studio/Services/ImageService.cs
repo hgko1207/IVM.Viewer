@@ -323,11 +323,45 @@ namespace IVM.Studio.Services
             using (Graphics g = Graphics.FromImage(displayImage))
             {
                 GDIDrawing.Imaging.ImageAttributes attr = new GDIDrawing.Imaging.ImageAttributes();
-                GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
+                //GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
                 Point[] DestPoints = new Point[] { new Point(left, top), new Point(right, top), new Point(left, bottom) };
                 Rectangle SrcRect = new Rectangle(left, top, right - left, bottom - top);
-                attr.SetColorMatrix(cm);
-                g.DrawImage(originalImage, DestPoints, SrcRect, GDIDrawing.GraphicsUnit.Pixel, attr);
+                //attr.SetColorMatrix(cm);
+                g.DrawImage(originalImage, DestPoints, SrcRect, GraphicsUnit.Pixel, attr);
+            }
+        }
+
+        /// <summary>
+        /// 주어진 두 이미지 상에 텍스트를 그립니다.
+        /// </summary>
+        /// <param name="annotationImage">어노테이션 이미지입니다. 이 이미지에 텍스트를 그릴 때는 주어진 변환에 따라 좌표계를 변환합니다.</param>
+        /// <param name="displayImage"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="fontSize"></param>
+        /// <param name="color"></param>
+        /// <param name="text"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawText(Bitmap annotationImage, Bitmap displayImage, int x, int y, int fontSize, WPFDrawing.Color color, string text,
+                             bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+                using (Font font = new Font("돋움", fontSize))
+                {
+                    SizeF size = g1.MeasureString(text, font);
+                    float left_converted = x - size.Width / 2f;
+                    float top_converted = y - size.Height / 2f;
+                    using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
+                    {
+                        g1.DrawString(text, font, brush, new PointF(left_converted, top_converted));
+                        g2.DrawString(text, font, brush, new PointF(left_converted, top_converted));
+                    }
+                }
             }
         }
 
@@ -379,6 +413,27 @@ namespace IVM.Studio.Services
         /// <returns></returns>
         private GDIDrawing.Drawing2D.Matrix GetTransformToOriginal(int imageWidth, int imageHeight, bool horizontalReflect, bool verticalReflect, int rotate)
         {
+            //GDIDrawing.Drawing2D.Matrix matrix = new GDIDrawing.Drawing2D.Matrix();
+            //// 원점을 이미지의 중앙으로 이동하고 회전
+            //if (rotate != 0)
+            //{
+            //    matrix.Translate(imageWidth / 2f, imageHeight / 2f);
+            //    matrix.Rotate(360f - rotate * 90f);
+            //    if (rotate == 2)
+            //    {
+            //        // 원점 원상복귀
+            //        matrix.Translate(-imageWidth / 2f, -imageHeight / 2f);
+            //    }
+            //    else
+            //    {
+            //        // 90도, 270도 회전의 경우 회전 전후 가로/세로가 바뀌므로 반대로 해야함
+            //        matrix.Translate(-imageHeight / 2f, -imageWidth / 2f);
+            //    }
+            //}
+            //// 뒤집기
+            //matrix.Scale(horizontalReflect ? -1.0f : +1.0f, verticalReflect ? -1.0f : +1.0f);
+            //return matrix;
+
             GDIDrawing.Drawing2D.Matrix matrix = new GDIDrawing.Drawing2D.Matrix();
             // 원점을 이미지의 중앙으로 이동하고 회전
             if (rotate != 0)

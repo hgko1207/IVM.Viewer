@@ -4,6 +4,7 @@ using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using Prism.Commands;
 using Prism.Ioc;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 /**
@@ -22,6 +23,20 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class AnnotationPanelViewModel : ViewModelBase
     {
+        private List<string> fontItemList;
+        public List<string> FontItemList
+        {
+            get => fontItemList;
+            set => SetProperty(ref fontItemList, value);
+        }
+
+        private string selectedFontItem;
+        public string SelectedFontItem
+        {
+            get => selectedFontItem;
+            set => SetProperty(ref selectedFontItem, value);
+        }
+
         public ICommand AddDrawCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
         public ICommand ExportCommand { get; private set; }
@@ -39,6 +54,11 @@ namespace IVM.Studio.ViewModels.UserControls
             ExportCommand = new DelegateCommand(Export);
 
             AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
+
+            FontItemList = new List<string>();
+            FontItemList.Add("돋음");
+
+            SelectedFontItem = FontItemList[0];
         }
 
         /// <summary>
@@ -54,7 +74,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Clear()
         {
-
+            EventAggregator.GetEvent<DrawClearEvent>().Publish();
         }
 
         /// <summary>
@@ -62,7 +82,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Export()
         {
-
+            EventAggregator.GetEvent<DrawExportEvent>().Publish();
         }
     }
 }

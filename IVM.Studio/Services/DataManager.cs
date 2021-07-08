@@ -60,7 +60,6 @@ namespace IVM.Studio.Services
             };
 
             AnnotationInfo = new AnnotationInfo(eventAggregator);
-            AnnotationInfo.ScaleBarSize = 100;
         }
     }
 }

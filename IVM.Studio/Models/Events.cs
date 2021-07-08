@@ -63,6 +63,9 @@ namespace IVM.Studio.Models.Events
         }
     }
 
+    public class DrawClearEvent : PubSubEvent { }
+    public class DrawExportEvent : PubSubEvent { }
+
     public class RotationEvent : PubSubEvent<string> { }
     public class ReflectEvent : PubSubEvent<string> { }
     public class RotationResetEvent : PubSubEvent { }
@@ -95,12 +98,28 @@ namespace IVM.Studio.Models.Events
         public readonly string Content;
         public readonly int X;
         public readonly int Y;
+
         public TextAnnotationDialogParam(string Title, string Content, int X, int Y)
         {
             this.Title = Title;
             this.Content = Content;
             this.X = X;
             this.Y = Y;
+        }
+    }
+
+    public class TextAnnotationEvent : PubSubEvent<TextAnnotationParam> { }
+    public class TextAnnotationParam
+    {
+        public readonly int X;
+        public readonly int Y;
+        public readonly string Text;
+
+        public TextAnnotationParam(int X, int Y, string Text)
+        {
+            this.X = X;
+            this.Y = Y;
+            this.Text = Text;
         }
     }
 }

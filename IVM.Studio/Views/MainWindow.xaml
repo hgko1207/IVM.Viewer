@@ -276,6 +276,18 @@
                                 </Grid>
                             </Grid>
                         </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Channel Processing">
+
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Post Processing">
+
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Image Export">
+
+                        </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>
 

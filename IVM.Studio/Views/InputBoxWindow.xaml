@@ -6,21 +6,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IVM.Studio.Views"
         mc:Ignorable="d"
-        Title="Please enter text" Height="180" Width="300">
+        Title="Input Dialog" Height="160" Width="320">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="Text :" VerticalAlignment="Center"/>
-            <TextBox Width="150" Margin="10 0"/>
-        </StackPanel>
+            <TextBox Name="InputText" Margin="10 0" Width="220"/>
+        </DockPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="OK" Width="75" Click="OkClick"/>
-            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Cancel" Width="75" Margin="5 0 0 0" Command="{Binding LevelResetCommand}"/>
+            <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Cancel" Width="75" Margin="5 0 0 0" Click="CloseClick"/>
         </StackPanel>
     </Grid>
 </dx:ThemedWindow>

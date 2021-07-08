@@ -3,7 +3,9 @@ using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
+using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -126,10 +128,14 @@ namespace IVM.Studio.ViewModels.UserControls
             this.view = view;
 
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.BackgroundThread);
+            EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText);
+            EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear);
+            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
 
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset, ThreadOption.UIThread);
+
         }
 
         /// <summary>
@@ -139,6 +145,10 @@ namespace IVM.Studio.ViewModels.UserControls
         public void OnUnloaded(ImageViewer view)
         {
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
+            EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
+            EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
+            EventAggregator.GetEvent<DrawExportEvent>().Unsubscribe(DrawExport);
+
             EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
             EventAggregator.GetEvent<RotationResetEvent>().Unsubscribe(RotationReset);
@@ -351,6 +361,49 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
+        /// Text 그리기
+        /// </summary>
+        /// <param name="param"></param>
+        private void DrawAnnotationText(TextAnnotationParam param)
+        {
+            if (param.Text != null)
+            {
+                Container.Resolve<ImageService>().DrawText(annotationImage, displayingImageGDI,
+                    param.X, param.Y, annotationInfo.TextFontSize, annotationInfo.TextColor, param.Text,
+                    horizontalReflect, verticalReflect, currentRotate
+                );
+                DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(displayingImageGDI);
+            }
+        }
+
+        /// <summary>
+        /// Draw Clear
+        /// </summary>
+        private void DrawClear()
+        {
+            annotationImage = null;
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+        }
+
+        /// <summary>
+        /// Draw Export
+        /// </summary>
+        private void DrawExport()
+        {
+            if (displayingImageGDI == null)
+                return;
+
+            VistaSaveFileDialog dlg = new VistaSaveFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
+            };
+
+            if (dlg.ShowDialog().GetValueOrDefault())
+                displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+        }
+
+        /// <summary>
         /// 회전 이벤트
         /// </summary>
         /// <param name="type"></param>
@@ -523,10 +576,13 @@ namespace IVM.Studio.ViewModels.UserControls
                 }
                 else if (annotationInfo.TextEnabled)
                 {
+                    InputBoxWindow inputBoxWindow = new InputBoxWindow(EventAggregator) { Topmost = true };
+                    inputBoxWindow.Show();
+
                     TextAnnotationDialogParam param = new TextAnnotationDialogParam(
-                        Title: "", 
+                        Title: "",
                         Content: "Please enter text.",
-                        X: (int)Math.Round(position.X / currentZoomRatio * 100), 
+                        X: (int)Math.Round(position.X / currentZoomRatio * 100),
                         Y: (int)Math.Round(position.Y / currentZoomRatio * 100)
                     );
                     EventAggregator.GetEvent<TextAnnotationDialogEvent>().Publish(param);
