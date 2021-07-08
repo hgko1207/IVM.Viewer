@@ -278,11 +278,11 @@
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Channel Processing">
-
+                            <ContentControl prism:RegionManager.RegionName="ChannelProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Post Processing">
-
+                            <ContentControl prism:RegionManager.RegionName="PostProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Image Export">

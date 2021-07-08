@@ -106,7 +106,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Views\AnnotationInfo.cs" />
+    <Compile Include="Models\Views\PostProcessingInfo.cs" />
     <Compile Include="Models\Views\SliderControlInfo.cs" />
     <Compile Include="Services\DataManager.cs" />
     <Compile Include="Services\ImageService.cs" />
@@ -115,10 +117,13 @@
     <Compile Include="Services\WindowByHistogramService.cs" />
     <Compile Include="Utils\ButtonStyleConverter.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
+    <Compile Include="Utils\EnumDescriptionConverter.cs" />
+    <Compile Include="Utils\EnumToCollectionExtension.cs" />
     <Compile Include="ViewModels\ChannelHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\ChannelProcessingPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PostProcessingPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ThumbnailPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
@@ -134,6 +139,9 @@
     </Compile>
     <Compile Include="Views\UserControls\BrightnessPanel.xaml.cs">
       <DependentUpon>BrightnessPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\ChannelProcessingPanel.xaml.cs">
+      <DependentUpon>ChannelProcessingPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\PostProcessingPanel.xaml.cs">
       <DependentUpon>PostProcessingPanel.xaml</DependentUpon>
@@ -180,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\BrightnessPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\ChannelProcessingPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

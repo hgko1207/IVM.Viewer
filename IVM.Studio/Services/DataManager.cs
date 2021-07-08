@@ -52,7 +52,7 @@ namespace IVM.Studio.Services
             ColorChannelInfoMap.Add(ChannelType.NIR, new ColorChannelModel(ChannelType.NIR, "NIR (663-733)", false, Colors.Alpha, false, 0, 1, 0, 255, container, eventAggregator));
 
             ColorChannelItems = new List<ColorChannelItem>() {
-                new ColorChannelItem() { Name = "ALL", Type = ChannelType.ALL },
+                //new ColorChannelItem() { Name = "ALL", Type = ChannelType.ALL },
                 new ColorChannelItem() { Name = "DAPI", Type = ChannelType.DAPI },
                 new ColorChannelItem() { Name = "GFP", Type = ChannelType.GFP },
                 new ColorChannelItem() { Name = "RFP", Type = ChannelType.RFP },

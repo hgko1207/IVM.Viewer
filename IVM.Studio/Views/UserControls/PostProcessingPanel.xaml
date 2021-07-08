@@ -3,13 +3,115 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
+             xmlns:utils="clr-namespace:IVM.Studio.Utils"
+             xmlns:models="clr-namespace:IVM.Studio.Models"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <UserControl.Resources>
+        <utils:EnumDescriptionConverter x:Key="enumConverter" />
+    </UserControl.Resources>
+    
+    <StackPanel Margin="10">
+        <StackPanel>
+            <TextBlock Text="Video Processing" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <DockPanel Margin="5 4 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Average frames" VerticalAlignment="Center"/>
+
+                    <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="40 0 0 0"/>
+                    <TextBlock Text="Frames" VerticalAlignment="Center" Margin="8 0 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
+            </DockPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 6" />
+
+        <StackPanel>
+            <TextBlock Text="Motion Compensation" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <DockPanel Margin="5 4 0 0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="1" Text="Time-lapse" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" Text="Z-stack" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="5" Text="Rotation" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Reference Ch." VerticalAlignment="Center"/>
+
+                    <dxe:ComboBoxEdit Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ColorChannelItems}" EditValue="{Binding SelectedTimeLapseItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
+                    <dxe:ComboBoxEdit Grid.Row="2" Grid.Column="3" ItemsSource="{Binding ColorChannelItems}" EditValue="{Binding SelectedZStackItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
+                    <dxe:ComboBoxEdit Grid.Row="2" Grid.Column="5" ItemsSource="{Binding ColorChannelItems}" EditValue="{Binding SelectedRotationItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
+                </Grid>
+
+                <dx:SimpleButton HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
+            </DockPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 6" />
+
+        <StackPanel>
+            <TextBlock Text="Z-stack Processing" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <DockPanel Margin="5 4 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Z-stack Projection" VerticalAlignment="Center"/>
+
+                    <dxe:ComboBoxEdit EditValue="{Binding SelectedProjection}" 
+                                      ShowSizeGrip="True" IsTextEditable="False" Width="160" Height="28" Margin="30 0 0 0">
+                        <dxe:ComboBoxEdit>
+                            <dxmvvm:Interaction.Behaviors>
+                                <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type models:ZStackProjectionType}"/>
+                            </dxmvvm:Interaction.Behaviors>
+                        </dxe:ComboBoxEdit>
+                    </dxe:ComboBoxEdit>
+                </StackPanel>
+
+                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
+            </DockPanel>
+        </StackPanel>
+
+        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 6" />
+
+        <StackPanel>
+            <TextBlock Text="Mosaic Processing" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <DockPanel Margin="5 4 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Mosaic" VerticalAlignment="Center"/>
+                    
+                    <TextBlock Text="Edge Crop" VerticalAlignment="Center" Margin="30 0 0 0"/>
+                    <dxe:ComboBoxEdit ItemsSource="{utils:EnumToCollectionExtension EnumType={x:Type models:EdgeCropType}}" EditValue="{Binding SelectedEdgeCrop}" 
+                                      ShowSizeGrip="True" IsTextEditable="False" Width="120" Height="28" Margin="10 0 0 0"/>
+
+                    <TextBlock Text="Overlap (%)" VerticalAlignment="Center" Margin="25 0 0 0"/>
+                    <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="10 0 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
+            </DockPanel>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

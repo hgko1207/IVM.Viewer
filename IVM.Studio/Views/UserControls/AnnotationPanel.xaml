@@ -88,27 +88,30 @@
         <StackPanel Grid.Row="2" Margin="5 0">
             <TextBlock Text="Scale Bar" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <StackPanel Orientation="Horizontal" Margin="5 5 0 0">
-                <TextBlock Text="Size" VerticalAlignment="Center" FontSize="13"/>
-                <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarSize}" IsFloatValue="False" Width="60" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
-                <TextBlock Text="μm" VerticalAlignment="Center" Margin="4 0 0 0"/>
+            <DockPanel Margin="5 5 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Size" VerticalAlignment="Center" FontSize="13"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarSize}" IsFloatValue="False" Width="60" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
+                    <TextBlock Text="μm" VerticalAlignment="Center" Margin="4 0 0 0"/>
 
-                <TextBlock Text="Height" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
-                <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarThickness}" IsFloatValue="False" Width="50" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
+                    <TextBlock Text="Height" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarThickness}" IsFloatValue="False" Width="50" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
 
-                <TextBlock Text="Text" VerticalAlignment="Center" FontSize="13" Margin="35 0 0 0"/>
-                <dxe:ComboBoxEdit SelectedIndex="0" Width="50" Margin="10 0 5 0">
-                    <dxe:ComboBoxEditItem Content="μm"/>
-                    <dxe:ComboBoxEditItem Content="mm"/>
-                </dxe:ComboBoxEdit>
+                    <TextBlock Text="Text" VerticalAlignment="Center" FontSize="13" Margin="35 0 0 0"/>
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="50" Margin="10 0 5 0">
+                        <dxe:ComboBoxEditItem Content="μm"/>
+                        <dxe:ComboBoxEditItem Content="mm"/>
+                    </dxe:ComboBoxEdit>
 
-                <dxe:ComboBoxEdit SelectedIndex="0" Width="70">
-                    <dxe:ComboBoxEditItem Content="Above"/>
-                    <dxe:ComboBoxEditItem Content="Below"/>
-                </dxe:ComboBoxEdit>
-
-                <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding ScaleBarEnabled}" Style="{StaticResource ToggleButton}" Width="90" Content="Display" Margin="15 0 0 0" />
-            </StackPanel>
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="70">
+                        <dxe:ComboBoxEditItem Content="Above"/>
+                        <dxe:ComboBoxEditItem Content="Below"/>
+                    </dxe:ComboBoxEdit>
+                </StackPanel>
+                
+                <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding ScaleBarEnabled}" HorizontalAlignment="Right"
+                                 Style="{StaticResource ToggleButton}" Width="90" Content="Display" Margin="15 0 0 0" />
+            </DockPanel>
         </StackPanel>
 
         <ContentControl Grid.Row="3" Template="{StaticResource HorizontalLine}" Margin="0 5" />
@@ -116,25 +119,28 @@
         <StackPanel Grid.Row="4" Margin="5 0">
             <TextBlock Text="Label" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <StackPanel Orientation="Horizontal" Margin="5 5 0 0">
-                <TextBlock Text="Type" VerticalAlignment="Center"/>
-                <dxe:ComboBoxEdit SelectedIndex="0" Width="80" Margin="10 0 0 0">
-                    <dxe:ComboBoxEditItem Content="00:00:00"/>
-                    <dxe:ComboBoxEditItem Content="00:00"/>
-                    <dxe:ComboBoxEditItem Content="Text"/>
-                </dxe:ComboBoxEdit>
+            <DockPanel Margin="5 5 0 0">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Type" VerticalAlignment="Center"/>
 
-                <TextBlock Text="Start" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
-                <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="80" Margin="10 0 0 0">
+                        <dxe:ComboBoxEditItem Content="00:00:00"/>
+                        <dxe:ComboBoxEditItem Content="00:00"/>
+                        <dxe:ComboBoxEditItem Content="Text"/>
+                    </dxe:ComboBoxEdit>
 
-                <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
-                <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
+                    <TextBlock Text="Start" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                    <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
 
-                <TextBlock Text="Suffix" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
-                <dxe:TextEdit Margin="10 0 0 0" EditValue="μm" Width="45" HorizontalContentAlignment="Right"/>
+                    <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                    <dxe:SpinEdit Value="1" IsFloatValue="False" Width="40" Margin="10 0 0 0" HorizontalContentAlignment="Left"/>
 
-                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width='90' Content="Display" Margin="15 0 0 0"/>
-            </StackPanel>
+                    <TextBlock Text="Suffix" VerticalAlignment="Center" FontSize="13" Margin="20 0 0 0"/>
+                    <dxe:TextEdit Margin="10 0 0 0" EditValue="μm" Width="45" HorizontalContentAlignment="Right"/>
+                </StackPanel>
+
+                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width='90' Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
+            </DockPanel>
         </StackPanel>
 
         <ContentControl Grid.Row="5" Template="{StaticResource HorizontalLine}" Margin="0 5" />
