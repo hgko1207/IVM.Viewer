@@ -264,6 +264,19 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        private bool isLockHistogram;
+        public bool IsLockHistogram
+        {
+            get => isLockHistogram;
+            set
+            {
+                if (SetProperty(ref isLockHistogram, value))
+                {
+
+                }
+            }
+        }
+
         public ColorChannelModel DAPIColorChannel { get; set; }
         public ColorChannelModel GFPColorChannel { get; set; }
         public ColorChannelModel RFPColorChannel { get; set; }
@@ -277,8 +290,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand ColorResetCommand { get; private set; }
         public ICommand AllVisibleCommand { get; private set; }
 
-        public ICommand LevelLockCommand { get; private set; }
-        public ICommand LevelResetCommand { get; private set; }
+        public ICommand ResetHistogramCommand { get; private set; }
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
@@ -294,8 +306,7 @@ namespace IVM.Studio.ViewModels.UserControls
             NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
             ColorResetCommand = new DelegateCommand(ColorReset);
             AllVisibleCommand = new DelegateCommand(AllVisible);
-            LevelLockCommand = new DelegateCommand(LevelLock);
-            LevelResetCommand = new DelegateCommand(LevelReset);
+            ResetHistogramCommand = new DelegateCommand(ResetHistogram);
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
             EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
@@ -312,7 +323,9 @@ namespace IVM.Studio.ViewModels.UserControls
 
             RefreshColorStyle();
             RefreshVisible();
-            LevelReset();
+            ResetHistogram();
+
+            IsLockHistogram = true;
         }
 
         /// <summary>
@@ -404,16 +417,9 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Histgram Level 잠금
-        /// </summary>
-        private void LevelLock()
-        {
-        }
-
-        /// <summary>
         /// Histgram Level 초기화
         /// </summary>
-        private void LevelReset()
+        private void ResetHistogram()
         {
             AllLevelLower = 0;
             AllLevelUpper = 255;

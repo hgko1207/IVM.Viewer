@@ -87,8 +87,8 @@
 
                     <TextBlock Text="Level" Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Lock" Height="28" Command="{Binding LevelLockCommand}"/>
-                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding LevelResetCommand}"/>
+                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource ToggleButton}" Content="Lock" Height="28" IsChecked="{Binding IsLockHistogram}"/>
+                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetHistogramCommand}"/>
                 </Grid>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Black" HorizontalAlignment="Center"/>

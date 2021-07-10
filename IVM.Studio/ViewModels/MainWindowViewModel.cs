@@ -248,6 +248,18 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref slideShowRepeat, value);
         }
 
+        private bool isLockRotate;
+        public bool IsLockRotate
+        {
+            get => isLockRotate;
+            set
+            {
+                if (SetProperty(ref isLockRotate, value))
+                {
+                }
+            }
+        }
+
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
         public ICommand PreviousSlideCommand { get; private set; }
@@ -317,6 +329,8 @@ namespace IVM.Studio.ViewModels
             CurrentPlayingSlider = -1;
             SlideShowFps = 5;
             SlideShowRepeat = 2;
+
+            IsLockRotate = true;
         }
 
         /// <summary>

@@ -74,6 +74,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.Mvvm.v20.1, Version=20.1.10.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Mvvm.v21.1, Version=21.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Controls.v20.1, Version=20.1.10.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Core.v20.1, Version=20.1.10.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Xpf.Docking.v20.1, Version=20.1.10.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -117,7 +120,6 @@
     <Compile Include="Services\WindowByHistogramService.cs" />
     <Compile Include="Utils\ButtonStyleConverter.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
-    <Compile Include="Utils\EnumDescriptionConverter.cs" />
     <Compile Include="Utils\EnumToCollectionExtension.cs" />
     <Compile Include="ViewModels\ChannelHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />

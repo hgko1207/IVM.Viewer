@@ -308,8 +308,8 @@
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
-                                <dx:SimpleButton Content="Lock" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0"/>
-                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding RotationResetCommand}"/>
+                                <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
+                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetRotationCommand}"/>
                             </StackPanel>
 
                             <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />
@@ -320,11 +320,11 @@
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
 
-                                <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0"/>
-                                <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
-                                <dx:SimpleButton Content="Apply" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
-                                <dx:SimpleButton Content="Apply All" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
-                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0"/>
+                                <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0" Command="{Binding CropCommand}"/>
+                                <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding InvertCropCommand}"/>
+                                <dx:SimpleButton Content="Apply" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyCropCommand}"/>
+                                <dx:SimpleButton Content="Apply All" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyAllCropCommand}"/>
+                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetCropCommand}"/>
                             </StackPanel>
                         </StackPanel>
                     </dxdo:LayoutPanel>
