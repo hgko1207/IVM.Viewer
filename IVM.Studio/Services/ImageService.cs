@@ -105,19 +105,20 @@ namespace IVM.Studio.Services
 
             Bitmap bitmap = new Bitmap(image.Width, image.Height);
 
-            using (Graphics graphics = Graphics.FromImage(bitmap))
-            {
-                Point[] destPoints = new Point[] {
+            Point[] destPoints = new Point[] {
                     new Point(0, 0),
-                    new Point(image.Width, 0),
-                    new Point(0, image.Height)
+                    new Point(bitmap.Width, 0),
+                    new Point(0, bitmap.Height)
                 };
 
-                Rectangle srcRect = new Rectangle(0, 0, image.Width, image.Height);
+            Rectangle srcRect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
                 graphics.DrawImage(image, destPoints, srcRect, GraphicsUnit.Pixel, attr);
-                return bitmap;
             }
+
+            return bitmap;
         }
 
         /// <summary>

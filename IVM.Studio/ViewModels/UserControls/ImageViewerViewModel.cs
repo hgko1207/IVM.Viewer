@@ -1,5 +1,4 @@
-﻿using DevExpress.Mvvm.POCO;
-using IVM.Studio.Models;
+﻿using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -62,6 +62,8 @@ namespace IVM.Studio.ViewModels.UserControls
         private Bitmap annotationImage;
         private Bitmap displayingImageGDI;
 
+        private int displayWidth;
+
         /// <summary>뷰에서 표시 될 현재 이미지의 줌 배율입니다. 단위는 퍼센트입니다.</summary>
         /// <remarks>이미지의 표시 배율을 뷰모델에서 조정할 경우 <see cref="DisplayingImageWidth"/>를 사용합니다.</remarks>
         private int currentZoomRatio;
@@ -73,7 +75,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private int[] currentTranslationByChannel => colorChannelInfoMap.Values.Select(s => (int)s.Color).ToArray();
         private bool[] currentVisibilityByChannel => colorChannelInfoMap.Values.Select(s => s.Visible).ToArray();
-        private float[][] currentColorMatrix => Container.Resolve<ImageService>().GenerateColorMatrix(
+        private float[][] currentColorMatrix => imageService.GenerateColorMatrix(
                     startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
                     endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
                     brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
@@ -97,6 +99,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private System.Windows.Point? imagePreviousPoint;
 
+        private ImageService imageService { get; set; }
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -109,7 +113,7 @@ namespace IVM.Studio.ViewModels.UserControls
             ImageMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ImageMouseMove);
             ImageMouseUpCommand = new DelegateCommand<MouseButtonEventArgs>(ImageMouseUp);
 
-            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.BackgroundThread);
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
             currentZoomRatio = 100;
             DisplayingImageWidth = double.NaN;
@@ -117,6 +121,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
             annotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
+
+            imageService = Container.Resolve<ImageService>();
         }
 
         /// <summary>
@@ -127,7 +133,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.BackgroundThread);
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear);
             EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
@@ -135,7 +141,6 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset, ThreadOption.UIThread);
-
         }
 
         /// <summary>
@@ -228,7 +233,7 @@ namespace IVM.Studio.ViewModels.UserControls
             await Task.Run(() =>
             {
                 originalImage?.Dispose();
-                originalImage = Container.Resolve<ImageService>().LoadImage(fileToDisplay.FullName);
+                originalImage = imageService.LoadImage(fileToDisplay.FullName);
 
                 // 주 이미지 변경
                 {
@@ -238,8 +243,8 @@ namespace IVM.Studio.ViewModels.UserControls
                         else return null;
                     }).ToList();
 
-                    using (Bitmap img1 = Container.Resolve<ImageService>().TranslateColor(originalImage, currentColorMatrix))
-                    using (Bitmap img2 = Container.Resolve<ImageService>().ApplyColorMaps(img1, colormaps))
+                    using (Bitmap img1 = imageService.TranslateColor(originalImage, currentColorMatrix))
+                    using (Bitmap img2 = imageService.ApplyColorMaps(img1, colormaps))
                     {
                         InternalDisplayAnnotatedImage(img2);
                         InternalDisplayHistogram(img2);
@@ -260,7 +265,7 @@ namespace IVM.Studio.ViewModels.UserControls
                             bool[] visibilityByChannel = new bool[4] { false, false, false, false };
                             visibilityByChannel[(int)type] = true;
 
-                            float[][] colorMatrix = Container.Resolve<ImageService>().GenerateColorMatrix(
+                            float[][] colorMatrix = imageService.GenerateColorMatrix(
                                 startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
                                 endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
                                 brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
@@ -271,14 +276,14 @@ namespace IVM.Studio.ViewModels.UserControls
 
                             if (colorChannelModel.ColorMapEnabled)
                             {
-                                using (Bitmap img1 = Container.Resolve<ImageService>().TranslateColor(originalImage, colorMatrix))
-                                using (Bitmap img2 = Container.Resolve<ImageService>().ApplyColorMapGDI(img1, currentTranslationByChannel[(int)type], colorChannelModel.ColorMap))
+                                using (Bitmap img1 = imageService.TranslateColor(originalImage, colorMatrix))
+                                using (Bitmap img2 = imageService.ApplyColorMapGDI(img1, currentTranslationByChannel[(int)type], colorChannelModel.ColorMap))
                                 {
-                                    BitmapSource img = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(img2);
+                                    BitmapSource img = imageService.ConvertGDIBitmapToWPF(img2);
                                     Container.Resolve<WindowByChannelService>().DisplayImage((int)type, img);
-                                    using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img2, currentTranslationByChannel, new bool[4] { true, true, true, false }))
+                                    using (Bitmap hist = imageService.CreateHistogram(img2, currentTranslationByChannel, new bool[4] { true, true, true, false }))
                                     {
-                                        Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                        Drawing.ImageSource histogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                                         colorChannelModel.HistogramImage = histogramImage;
                                         //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                         EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
@@ -287,13 +292,13 @@ namespace IVM.Studio.ViewModels.UserControls
                             }
                             else
                             {
-                                using (Bitmap img = Container.Resolve<ImageService>().TranslateColor(originalImage, colorMatrix))
+                                using (Bitmap img = imageService.TranslateColor(originalImage, colorMatrix))
                                 {
-                                    BitmapSource imgwpf = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(img);
+                                    BitmapSource imgwpf = imageService.ConvertGDIBitmapToWPF(img);
                                     Container.Resolve<WindowByChannelService>().DisplayImage((int)type, imgwpf);
-                                    using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(img, currentTranslationByChannel, visibilityByChannel))
+                                    using (Bitmap hist = imageService.CreateHistogram(img, currentTranslationByChannel, visibilityByChannel))
                                     {
-                                        Drawing.ImageSource histogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                                        Drawing.ImageSource histogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                                         colorChannelModel.HistogramImage = histogramImage;
                                         //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                         EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
@@ -315,22 +320,22 @@ namespace IVM.Studio.ViewModels.UserControls
             using (Bitmap workingImage = new Bitmap(image))
             {
                 // 반전 및 회전
-                Container.Resolve<ImageService>().ReflectAndRotate(workingImage, horizontalReflect, verticalReflect, currentRotate);
-
+                imageService.ReflectAndRotate(workingImage, horizontalReflect, verticalReflect, currentRotate);
+                
                 flippedOriginalImage?.Dispose();
                 flippedOriginalImage = new Bitmap(workingImage);
 
                 // 한번 뒤집기 후에는 반드시 비트맵을 다시 생성해줘야 함.
                 // 90도, 270도 플립시 이미지의 가로 길이보다 Y좌표가 큰 영역에 쓰지 못하는 문제가 있음. (원인불명)
-                using (Bitmap bitmap = new Bitmap(flippedOriginalImage))
+                using (Bitmap bitmap = new Bitmap(workingImage))
                 {
                     // 어노테이션
                     if (annotationImage != null)
                     {
                         using (Bitmap annotationImg = new Bitmap(annotationImage))
                         {
-                            Container.Resolve<ImageService>().ReflectAndRotate(annotationImg, horizontalReflect, verticalReflect, currentRotate);
-                            Container.Resolve<ImageService>().DrawImageOnImage(bitmap, annotationImg);
+                            imageService.ReflectAndRotate(annotationImg, horizontalReflect, verticalReflect, currentRotate);
+                            imageService.DrawImageOnImage(bitmap, annotationImg);
                         }
                     }
 
@@ -338,11 +343,14 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     // 스케일 바
                     if (annotationInfo.ScaleBarEnabled && fOVSizeX > 0 && fOVSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fOVSizeX && scaleBarSize < fOVSizeY)
-                        Container.Resolve<ImageService>().DrawScaleBar(bitmap, fOVSizeX, fOVSizeY, scaleBarSize, 2, 3, 9);
+                        imageService.DrawScaleBar(bitmap, fOVSizeX, fOVSizeY, scaleBarSize, 2, 3, 9);
 
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);
-                    DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(bitmap);
+
+                    displayWidth = bitmap.Width;
+
+                    DisplayingImage = imageService.ConvertGDIBitmapToWPF(bitmap);
                 }
             }
         }
@@ -353,9 +361,9 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="imgage"></param>
         private void InternalDisplayHistogram(Bitmap imgage)
         {
-            using (Bitmap hist = Container.Resolve<ImageService>().CreateHistogram(imgage, currentTranslationByChannel, currentVisibilityByChannel))
+            using (Bitmap hist = imageService.CreateHistogram(imgage, currentTranslationByChannel, currentVisibilityByChannel))
             {
-                Container.Resolve<DataManager>().HistogramImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(hist);
+                Container.Resolve<DataManager>().HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                 EventAggregator.GetEvent<RefreshMainHistogramEvent>().Publish();
             }
         }
@@ -368,11 +376,11 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (param.Text != null)
             {
-                Container.Resolve<ImageService>().DrawText(annotationImage, displayingImageGDI,
+                imageService.DrawText(annotationImage, displayingImageGDI,
                     param.X, param.Y, annotationInfo.TextFontSize, annotationInfo.TextColor, param.Text,
                     horizontalReflect, verticalReflect, currentRotate
                 );
-                DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(displayingImageGDI);
+                DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
             }
         }
 
@@ -484,8 +492,11 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void SizeChanged(SizeChangedEventArgs e)
         {
-            if (e.NewSize.Width is double value)
-                currentZoomRatio = (int)Math.Round(value / displayingImageGDI.Width * 100);
+            double? width = e.NewSize.Width;
+            if (!width.HasValue)
+                return;
+
+            currentZoomRatio = (int)Math.Round(width.Value / displayWidth * 100);
         }
 
         /// <summary>
@@ -509,13 +520,13 @@ namespace IVM.Studio.ViewModels.UserControls
                 System.Windows.Point position = e.GetPosition(view.ImageView);
 
                 if (annotationImage == null)
-                    annotationImage = Container.Resolve<ImageService>().MakeEmptyImage(originalImage.Width, originalImage.Height);
+                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
 
                 if (annotationInfo.PenEnabled)
                 {
                     if (imagePreviousPoint != null)
                     {
-                        Container.Resolve<ImageService>().DrawPen(
+                        imageService.DrawPen(
                             annotationImage: annotationImage, displayImage: displayingImageGDI,
                             x1: (int)Math.Round(imagePreviousPoint.Value.X / currentZoomRatio * 100), y1: (int)Math.Round(imagePreviousPoint.Value.Y / currentZoomRatio * 100),
                             x2: (int)Math.Round(position.X / currentZoomRatio * 100), y2: (int)Math.Round(position.Y / currentZoomRatio * 100),
@@ -527,7 +538,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 }
                 else if (annotationInfo.EraserEnabled)
                 {
-                    Container.Resolve<ImageService>().DrawEraser(
+                    imageService.DrawEraser(
                         annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
                         colorMatrix: currentColorMatrix,
                         x: (int)Math.Round(position.X / currentZoomRatio * 100), 
@@ -537,7 +548,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     );
                 }
 
-                DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(displayingImageGDI);
+                DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
             }
         }
 
@@ -552,11 +563,11 @@ namespace IVM.Studio.ViewModels.UserControls
             if (annotationInfo.PenEnabled || annotationInfo.EraserEnabled || annotationInfo.TextEnabled)
             {
                 if (annotationImage == null)
-                    annotationImage = Container.Resolve<ImageService>().MakeEmptyImage(originalImage.Width, originalImage.Height);
+                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
 
                 if (annotationInfo.PenEnabled && imagePreviousPoint != null)
                 {
-                    Container.Resolve<ImageService>().DrawPen(
+                    imageService.DrawPen(
                         annotationImage: annotationImage, displayImage: displayingImageGDI,
                         x1: (int)Math.Round(imagePreviousPoint.Value.X / currentZoomRatio * 100), y1: (int)Math.Round(imagePreviousPoint.Value.Y / currentZoomRatio * 100),
                         x2: (int)Math.Round(position.X / currentZoomRatio * 100), y2: (int)Math.Round(position.Y / currentZoomRatio * 100),
@@ -566,7 +577,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 }
                 else if (annotationInfo.EraserEnabled)
                 {
-                    Container.Resolve<ImageService>().DrawEraser(
+                    imageService.DrawEraser(
                         annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
                         colorMatrix: currentColorMatrix,
                         x: (int)Math.Round(position.X / currentZoomRatio * 100), y: (int)Math.Round(position.Y / currentZoomRatio * 100),
@@ -588,7 +599,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     EventAggregator.GetEvent<TextAnnotationDialogEvent>().Publish(param);
                 }
 
-                DisplayingImage = Container.Resolve<ImageService>().ConvertGDIBitmapToWPF(displayingImageGDI);
+                DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
             }
 
             imagePreviousPoint = null;

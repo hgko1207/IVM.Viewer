@@ -78,24 +78,24 @@ namespace IVM.Studio.Models
             }
         }
 
-        private float brightness;
+        private float _Brightness;
         public float Brightness
         {
-            get => brightness;
+            get => _Brightness;
             set
             {
-                if (SetProperty(ref brightness, value))
+                if (SetProperty(ref _Brightness, value))
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
 
-        private float contrast;
+        private float _Contrast;
         public float Contrast
         {
-            get => contrast;
+            get => _Contrast;
             set
             {
-                if (SetProperty(ref contrast, value))
+                if (SetProperty(ref _Contrast, value))
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
@@ -157,25 +157,25 @@ namespace IVM.Studio.Models
         }
 
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 낮은 쪽 값입니다.</summary>
-        private int colorLevelLowerValue;
+        private int _ColorLevelLowerValue;
         public int ColorLevelLowerValue
         {
-            get => colorLevelLowerValue;
+            get => _ColorLevelLowerValue;
             set
             {
-                if (SetProperty(ref colorLevelLowerValue, value))
+                if (SetProperty(ref _ColorLevelLowerValue, value))
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
 
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 높은 쪽 값입니다.</summary>
-        private int colorLevelUpperValue;
+        private int _ColorLevelUpperValue;
         public int ColorLevelUpperValue
         {
-            get => colorLevelUpperValue;
+            get => _ColorLevelUpperValue;
             set
             {
-                if (SetProperty(ref colorLevelUpperValue, value))
+                if (SetProperty(ref _ColorLevelUpperValue, value))
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish();
             }
         }
@@ -195,11 +195,11 @@ namespace IVM.Studio.Models
             this.visible = visible;
             this.color = color;
             this.display = display;
-            this.brightness = brightness;
-            this.contrast = contrast;
+            this._Brightness = brightness;
+            this._Contrast = contrast;
             this.colorMap = ColorMap.Hot;
-            this.colorLevelLowerValue = lowerLevel;
-            this.colorLevelUpperValue = upperLevel;
+            this._ColorLevelLowerValue = lowerLevel;
+            this._ColorLevelUpperValue = upperLevel;
             this.alwaysTopEnabled = true;
 
             eventAggregator.GetEvent<ChViewerWindowCloseEvent>().Subscribe(ClosedDisplay);
@@ -221,24 +221,30 @@ namespace IVM.Studio.Models
                 SetProperty(ref display, false, nameof(Display));
         }
 
-        public bool UpdateBrightnessWithoutRefresh(float Brightness)
+        public void ResetColorLevelValue()
         {
-            return SetProperty(ref brightness, Brightness, nameof(Brightness));
+            UpdateColorLevelUpperWithoutRefresh(255);
+            UpdateColorLevelLowerWithoutRefresh(0);
         }
 
-        public bool UpdateContrastWithoutRefresh(float Contrast)
+        public bool UpdateBrightnessWithoutRefresh(float brightness)
         {
-            return SetProperty(ref contrast, Contrast, nameof(Contrast));
+            return SetProperty(ref _Brightness, brightness, nameof(Brightness));
+        }
+
+        public bool UpdateContrastWithoutRefresh(float contrast)
+        {
+            return SetProperty(ref _Contrast, contrast, nameof(Contrast));
         }
 
         public bool UpdateColorLevelUpperWithoutRefresh(int colorLevelUpperValue)
         {
-            return SetProperty(ref colorLevelUpperValue, colorLevelUpperValue, nameof(colorLevelUpperValue));
+            return SetProperty(ref _ColorLevelUpperValue, colorLevelUpperValue, nameof(ColorLevelUpperValue));
         }
 
         public bool UpdateColorLevelLowerWithoutRefresh(int colorLevelLowerValue)
         {
-            return SetProperty(ref colorLevelLowerValue, colorLevelLowerValue, nameof(colorLevelLowerValue));
+            return SetProperty(ref _ColorLevelLowerValue, colorLevelLowerValue, nameof(ColorLevelLowerValue));
         }
 
         /// <summary>

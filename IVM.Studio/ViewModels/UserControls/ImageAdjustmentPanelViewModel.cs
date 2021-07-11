@@ -137,9 +137,11 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref allWindowOpend, value))
                 {
+                    
                     if (value)
                     {
-                        new MainViewerWindow() { Topmost = true }.Show();
+                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true };
+                        mainViewerWindow.Show();
 
                         FileInfo currentFile = Container.Resolve<DataManager>().CurrentFile;
                         if (currentFile != null)
@@ -423,6 +425,13 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             AllLevelLower = 0;
             AllLevelUpper = 255;
+
+            DAPIColorChannel.ResetColorLevelValue();
+            GFPColorChannel.ResetColorLevelValue();
+            RFPColorChannel.ResetColorLevelValue();
+            NIRColorChannel.ResetColorLevelValue();
+
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
         }
 
         /// <summary>

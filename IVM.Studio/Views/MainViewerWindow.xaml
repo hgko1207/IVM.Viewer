@@ -8,7 +8,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="650" Width="650" Left="720" Top="70">
+        Title="{Binding Title}" Height="735" Width="1000" Left="720" Top="70">
     <Grid>
         <Frame NavigationUIVisibility="Hidden" Content="{Binding ViewerPage}" />
     </Grid>

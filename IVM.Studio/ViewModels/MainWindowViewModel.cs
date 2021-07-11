@@ -3,7 +3,6 @@ using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
-using IVM.Studio.ViewModels.UserControls;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;

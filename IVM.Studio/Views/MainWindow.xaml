@@ -127,7 +127,7 @@
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="340">
-                        <dxdo:DocumentPanel Caption="Image Adjustment">
+                        <dxdo:DocumentPanel Caption="Image Adjustment" AllowMinimize="False" AllowMaximize="False" AllowSizing="False" FloatOnDoubleClick="False" AllowClose="False" AllowHide="False">
                             <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel"/>
                         </dxdo:DocumentPanel>
 
@@ -308,7 +308,7 @@
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
                                 <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
-                                <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
+                                <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Width="50" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
                                 <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetRotationCommand}"/>
                             </StackPanel>
 
