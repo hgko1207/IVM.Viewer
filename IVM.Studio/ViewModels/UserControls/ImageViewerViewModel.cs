@@ -133,7 +133,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage);
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear);
             EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
@@ -235,19 +235,22 @@ namespace IVM.Studio.ViewModels.UserControls
                 originalImage?.Dispose();
                 originalImage = imageService.LoadImage(fileToDisplay.FullName);
 
-                // 주 이미지 변경
+                using (Bitmap bitmap = new Bitmap(fileToDisplay.FullName))
                 {
-                    List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
+                    // 주 이미지 변경
                     {
-                        if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
-                        else return null;
-                    }).ToList();
+                        List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
+                        {
+                            if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
+                            else return null;
+                        }).ToList();
 
-                    using (Bitmap img1 = imageService.TranslateColor(originalImage, currentColorMatrix))
-                    using (Bitmap img2 = imageService.ApplyColorMaps(img1, colormaps))
-                    {
-                        InternalDisplayAnnotatedImage(img2);
-                        InternalDisplayHistogram(img2);
+                        using (Bitmap img1 = imageService.TranslateColor(bitmap, currentColorMatrix))
+                        using (Bitmap img2 = imageService.ApplyColorMaps(img1, colormaps))
+                        {
+                            InternalDisplayAnnotatedImage(img2);
+                            InternalDisplayHistogram(img2);
+                        }
                     }
                 }
 

@@ -405,6 +405,9 @@ namespace IVM.Studio.ViewModels.UserControls
 
             RefreshColorStyle();
             RefreshVisible();
+
+            if (!IsLockHistogram)
+                ResetHistogram();
         }
 
         /// <summary>
@@ -425,13 +428,6 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             AllLevelLower = 0;
             AllLevelUpper = 255;
-
-            DAPIColorChannel.ResetColorLevelValue();
-            GFPColorChannel.ResetColorLevelValue();
-            RFPColorChannel.ResetColorLevelValue();
-            NIRColorChannel.ResetColorLevelValue();
-
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
         }
 
         /// <summary>

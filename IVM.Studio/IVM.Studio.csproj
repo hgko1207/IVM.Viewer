@@ -124,6 +124,7 @@
     <Compile Include="ViewModels\ChannelHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ChannelProcessingPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PostProcessingPanelViewModel.cs" />
@@ -251,7 +252,6 @@
     <Compile Include="ViewModels\UserControls\ImageAdjustmentPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageViewerViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Views\ChannelViewerWindow.xaml.cs">
       <DependentUpon>ChannelViewerWindow.xaml</DependentUpon>

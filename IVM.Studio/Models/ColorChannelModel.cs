@@ -221,12 +221,6 @@ namespace IVM.Studio.Models
                 SetProperty(ref display, false, nameof(Display));
         }
 
-        public void ResetColorLevelValue()
-        {
-            UpdateColorLevelUpperWithoutRefresh(255);
-            UpdateColorLevelLowerWithoutRefresh(0);
-        }
-
         public bool UpdateBrightnessWithoutRefresh(float brightness)
         {
             return SetProperty(ref _Brightness, brightness, nameof(Brightness));

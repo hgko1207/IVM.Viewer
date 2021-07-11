@@ -37,11 +37,11 @@
             </dxb:MainMenuControl>
         </dxdo:LayoutPanel>
 
-        <dxdo:DockLayoutManager Grid.Row="1" ViewStyle="Default" Background="#1F201D">
+        <dxdo:DockLayoutManager Grid.Row="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
             <dxdo:LayoutGroup Caption="LayoutContent">
                 <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical" ItemWidth="580">
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
-                        <dxdo:DocumentPanel Caption="Image Data">
+                        <dxdo:DocumentPanel Caption="Image Data" AllowClose="False">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -74,7 +74,7 @@
                             </Grid>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Imaging Parameter">
+                        <dxdo:DocumentPanel Caption="Imaging Parameter" AllowClose="False">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -127,25 +127,25 @@
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="340">
-                        <dxdo:DocumentPanel Caption="Image Adjustment" AllowMinimize="False" AllowMaximize="False" AllowSizing="False" FloatOnDoubleClick="False" AllowClose="False" AllowHide="False">
+                        <dxdo:DocumentPanel Caption="Image Adjustment" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Brightness/Contrast">
+                        <dxdo:DocumentPanel Caption="Brightness/Contrast" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="BrightnessPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Annotation">
+                        <dxdo:DocumentPanel Caption="Annotation" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="AnnotationPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Colormap">
+                        <dxdo:DocumentPanel Caption="Colormap" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="ColormapPanel"/>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
-                        <dxdo:DocumentPanel Caption="Display Control">
+                        <dxdo:DocumentPanel Caption="Display Control" AllowClose="False">
                             <Grid Margin="15 10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -277,15 +277,15 @@
                             </Grid>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Channel Processing">
+                        <dxdo:DocumentPanel Caption="Channel Processing" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="ChannelProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Post Processing">
+                        <dxdo:DocumentPanel Caption="Post Processing" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="PostProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Image Export">
+                        <dxdo:DocumentPanel Caption="Image Export" AllowClose="False">
 
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
