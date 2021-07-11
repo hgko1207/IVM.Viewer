@@ -128,6 +128,17 @@ namespace IVM.Studio.Models
             }
         }
 
+        private bool labelEnabled;
+        public bool LabelEnabled
+        {
+            get => labelEnabled;
+            set
+            {
+                if (SetProperty(ref labelEnabled, value))
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            }
+        }
+
         private IEventAggregator eventAggregator;
 
         /// <summary>

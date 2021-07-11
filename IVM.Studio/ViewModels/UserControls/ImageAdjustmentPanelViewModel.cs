@@ -143,11 +143,11 @@ namespace IVM.Studio.ViewModels.UserControls
                         MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true };
                         mainViewerWindow.Show();
 
-                        FileInfo currentFile = Container.Resolve<DataManager>().CurrentFile;
+                        FileInfo currentFile = dataManager.CurrentFile;
                         if (currentFile != null)
                         {
-                            Metadata metadata = Container.Resolve<DataManager>().Metadata;
-                            if (Container.Resolve<DataManager>().ViewerPage == new ImageViewer())
+                            Metadata metadata = dataManager.Metadata;
+                            if (dataManager.ViewerPage == new ImageViewer())
                                 EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
                             else
                                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
@@ -155,7 +155,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     }
                     else
                     {
-                        Container.Resolve<DataManager>().MainViewerOpend = false;
+                        dataManager.MainViewerOpend = false;
                         EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
                     }
                 }
@@ -296,6 +296,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
+        private DataManager dataManager;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -316,7 +318,8 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Subscribe(ChWindowClosed);
             EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Subscribe(ChHistogramClosed);
 
-            colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
+            dataManager = container.Resolve<DataManager>();
+            colorChannelInfoMap = dataManager.ColorChannelInfoMap;
 
             DAPIColorChannel = colorChannelInfoMap[ChannelType.DAPI];
             GFPColorChannel = colorChannelInfoMap[ChannelType.GFP];
@@ -386,7 +389,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void ColorReset()
         {
-            RefreshMetadata(Container.Resolve<DataManager>().Metadata);
+            RefreshMetadata(dataManager.Metadata);
         }
 
         /// <summary>

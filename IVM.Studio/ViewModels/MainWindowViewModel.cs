@@ -285,6 +285,8 @@ namespace IVM.Studio.ViewModels
 
         private bool disableSlidersEvent;
 
+        private DataManager dataManager;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -300,7 +302,8 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("ChannelProcessingPanel", typeof(ChannelProcessingPanel));
             RegionManager.RegisterViewWithRegion("PostProcessingPanel", typeof(PostProcessingPanel));
 
-            container.Resolve<DataManager>().Init(container, EventAggregator);
+            dataManager = container.Resolve<DataManager>();
+            dataManager.Init(container, EventAggregator);
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
@@ -480,10 +483,10 @@ namespace IVM.Studio.ViewModels
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Publish(metadata);
 
-            Container.Resolve<DataManager>().CurrentFile = currentFile;
-            Container.Resolve<DataManager>().Metadata = metadata;
-            Container.Resolve<DataManager>().SelectedSlideInfo = SelectedSlideInfo;
-            Container.Resolve<DataManager>().ViewerPage = viewerPage;
+            dataManager.CurrentFile = currentFile;
+            dataManager.Metadata = metadata;
+            dataManager.SelectedSlideInfo = SelectedSlideInfo;
+            dataManager.ViewerPage = viewerPage;
 
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Publish();
         }
