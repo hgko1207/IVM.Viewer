@@ -140,6 +140,9 @@
     <Compile Include="Views\ChannelHistogramWindow.xaml.cs">
       <DependentUpon>ChannelHistogramWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SubViewerWindow.xaml.cs">
+      <DependentUpon>SubViewerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\BrightnessPanel.xaml.cs">
       <DependentUpon>BrightnessPanel.xaml</DependentUpon>
     </Compile>
@@ -177,6 +180,10 @@
     <Page Include="Views\MainHistogramWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubViewerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainViewerWindow.xaml">
       <SubType>Designer</SubType>

@@ -54,6 +54,8 @@ namespace IVM.Studio.ViewModels
         {
             this.view = view;
             view.Closed += WindowClosed;
+            view.Activated += WindowActivated;
+            view.Deactivated += WindowDeactivated;
 
             Container.Resolve<DataManager>().MainViewerOpend = true;
             EventAggregator.GetEvent<MainViewerOpendEvent>().Publish();
@@ -76,6 +78,24 @@ namespace IVM.Studio.ViewModels
         {
             if (ViewerPage != Container.Resolve<DataManager>().ViewerPage)
                 ViewerPage = Container.Resolve<DataManager>().ViewerPage;
+        }
+
+        /// <summary>
+        /// 창이 활성화 상태일 때
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowActivated(object sender, EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// 창이 비활성화 상태 일 때
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowDeactivated(object sender, EventArgs e)
+        {
         }
 
         /// <summary>

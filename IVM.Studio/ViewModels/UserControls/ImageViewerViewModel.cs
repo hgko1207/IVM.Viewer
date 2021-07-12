@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -171,16 +170,6 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 fOVSizeX = param.Metadata.FovX;
                 fOVSizeY = param.Metadata.FovY;
-
-                // 메타데이터의 채널 정보 반영
-                //ChannelNameConverter converter = Container.Resolve<FileService>().GenerateChannelNameConverter(param.Metadata);
-                //foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
-                //{
-                //    if (type == ChannelType.ALL)
-                //        continue;
-
-                //    colorChannelInfoMap[type].ChannelName = converter.ConvertNumberToName((int)type);
-                //}
             }
             else
             {
