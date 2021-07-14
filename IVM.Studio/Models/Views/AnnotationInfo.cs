@@ -1,5 +1,7 @@
 ﻿using IVM.Studio.Models.Events;
+using IVM.Studio.Services;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Mvvm;
 using WPFDrawing = System.Windows.Media;
 
@@ -124,7 +126,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref scaleBarEnabled, value))
-                    eventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -135,19 +137,22 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref labelEnabled, value))
-                    eventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
         private IEventAggregator eventAggregator;
 
+        private DataManager dataManager;
+
         /// <summary>
         /// 생성자
         /// </summary>
         /// <param name="eventAggregator"></param>
-        public AnnotationInfo(IEventAggregator eventAggregator)
+        public AnnotationInfo(IContainerExtension container, IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
+            dataManager = container.Resolve<DataManager>();
 
             PenThickness = 2;
             PenColor = WPFDrawing.Colors.Blue;

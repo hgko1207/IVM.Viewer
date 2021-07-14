@@ -7,6 +7,8 @@ namespace IVM.Studio.Views
     /// </summary>
     public partial class MainViewerWindow : ThemedWindow
     {
+        public int WindowId { get; set; }
+
         public MainViewerWindow()
         {
             InitializeComponent();

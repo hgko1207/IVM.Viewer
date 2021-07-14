@@ -34,7 +34,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 foreach (ColorChannelModel i in colorChannelInfoMap.Values)
                     refresh |= i.UpdateBrightnessWithoutRefresh(value);
                 if (refresh)
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -60,7 +60,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 foreach (ColorChannelModel i in colorChannelInfoMap.Values)
                     refresh |= i.UpdateContrastWithoutRefresh(value);
                 if (refresh)
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -74,6 +74,8 @@ namespace IVM.Studio.ViewModels.UserControls
         public ColorChannelModel RFPChannel { get; set; }
         public ColorChannelModel NIRChannel { get; set; }
 
+        private DataManager dataManager;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -83,7 +85,8 @@ namespace IVM.Studio.ViewModels.UserControls
             LockCommand = new DelegateCommand(Lock);
             ResetCommand = new DelegateCommand(Reset);
 
-            colorChannelInfoMap = container.Resolve<DataManager>().ColorChannelInfoMap;
+            dataManager = container.Resolve<DataManager>();
+            colorChannelInfoMap = dataManager.ColorChannelInfoMap;
 
             AllBrightness = 0;
             DAPIBrightness = 0;

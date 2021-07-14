@@ -110,7 +110,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 foreach (ColorChannelModel c in colorChannelInfoMap.Values)
                     refresh |= c.UpdateColorLevelLowerWithoutRefresh(value);
                 if (refresh)
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -125,7 +125,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 foreach (ColorChannelModel c in colorChannelInfoMap.Values)
                     refresh |= c.UpdateColorLevelUpperWithoutRefresh(value);
                 if (refresh)
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -137,17 +137,17 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref allWindowOpend, value))
                 {
-                    
+
                     if (value)
                     {
-                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true };
+                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true, WindowId = ++dataManager.MainWindowSeq };
                         mainViewerWindow.Show();
 
                         FileInfo currentFile = dataManager.CurrentFile;
                         if (currentFile != null)
                         {
                             Metadata metadata = dataManager.Metadata;
-                            if (dataManager.ViewerPage == new ImageViewer())
+                            if (dataManager.ViewerName == nameof(ImageViewer))
                                 EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
                             else
                                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
@@ -158,6 +158,19 @@ namespace IVM.Studio.ViewModels.UserControls
                         dataManager.MainViewerOpend = false;
                         EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
                     }
+
+                    //MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true, WindowId = ++dataManager.MainWindowSeq };
+                    //mainViewerWindow.Show();
+
+                    //FileInfo currentFile = dataManager.CurrentFile;
+                    //if (currentFile != null)
+                    //{
+                    //    Metadata metadata = dataManager.Metadata;
+                    //    if (dataManager.ViewerName == nameof(ImageViewer))
+                    //        EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                    //    else
+                    //        EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                    //}
                 }
             }
         }

@@ -27,6 +27,8 @@ namespace IVM.Studio.Services
 
         public UserControl ViewerPage { get; set; }
 
+        public string ViewerName { get; set; }
+
         /// <summary>선택된 파일 정보</summary>
         public SlideInfo SelectedSlideInfo { get; set; }
 
@@ -41,6 +43,10 @@ namespace IVM.Studio.Services
         public AnnotationInfo AnnotationInfo { get; set; }
 
         public SliderControlInfo SliderControlInfo { get; set; }
+
+        public int MainWindowSeq { get; set; }
+
+        public int MainWindowId { get; set; }
 
         public void Init(IContainerExtension container, IEventAggregator eventAggregator)
         {
@@ -59,7 +65,9 @@ namespace IVM.Studio.Services
                 new ColorChannelItem() { Name = "NIR", Type = ChannelType.NIR }
             };
 
-            AnnotationInfo = new AnnotationInfo(eventAggregator);
+            AnnotationInfo = new AnnotationInfo(container, eventAggregator);
+
+            MainWindowSeq = 0;
         }
     }
 }

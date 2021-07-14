@@ -244,6 +244,33 @@
         <Setter Property="Maximum" Value="255" />
         <Setter Property="TickFrequency" Value="1" />
         <Setter Property="TickPlacement" Value="None" />
+        <Setter Property="TrackHeight" Value="5" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="dxe:EditorAppearanceProperties.FocusedBorderBrush" Value="{StaticResource CustomSliderBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style x:Key="SelectedRangeStyle" TargetType="ContentControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Background="{StaticResource CustomSliderForegroundBrush}" Height="4" VerticalAlignment="Center" Margin="-10,0" CornerRadius="4" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TrackBarEditThumbStyle" TargetType="Thumb">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid Height="20" Width="10">
+                        <Rectangle Fill="{StaticResource CustomSelectSliderThumBrush}" Stroke="#1F201D" RadiusX="2" RadiusY="2"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>
+

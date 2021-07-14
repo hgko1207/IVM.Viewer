@@ -99,6 +99,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private System.Windows.Point? imagePreviousPoint;
 
         private ImageService imageService { get; set; }
+        private DataManager dataManager;
 
         /// <summary>
         /// 생성자
@@ -118,10 +119,11 @@ namespace IVM.Studio.ViewModels.UserControls
             DisplayingImageWidth = double.NaN;
             currentRotate = 0;
 
-            colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
-            annotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
-
             imageService = Container.Resolve<ImageService>();
+            dataManager = Container.Resolve<DataManager>();
+
+            colorChannelInfoMap = dataManager.ColorChannelInfoMap;
+            annotationInfo = dataManager.AnnotationInfo;
         }
 
         /// <summary>
@@ -132,10 +134,10 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread);
-            EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText);
-            EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear);
-            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
+            EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
+            EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
+            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport, ThreadOption.UIThread);
 
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
@@ -204,7 +206,7 @@ namespace IVM.Studio.ViewModels.UserControls
             currentRotate = 0;
 
             // 디스플레이
-            InternalDisplayImage();
+            InternalDisplayImage(dataManager.MainWindowId);
 
             // 슬라이드쇼
             //Container.Resolve<SlideShowService>().ContinueSlideShow();
@@ -213,9 +215,9 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <summary>
         /// 지정한 색상값에 따라 이미지의 색상을 투영한 후, 어노테이션 이미지를 붙여 화면에 표시하고, 히스토그램을 생성하는 내부 메서드
         /// </summary>
-        private async void InternalDisplayImage()
+        private async void InternalDisplayImage(int id)
         {
-            if (fileToDisplay == null && disableRefreshImageEvent)
+            if (id == 0 || fileToDisplay == null || disableRefreshImageEvent)
                 return;
 
             // 이미지 표시는 히스토그램 생성 등으로 인해 오래 걸리므로 백그라운드에서 처리
@@ -277,7 +279,6 @@ namespace IVM.Studio.ViewModels.UserControls
                                     {
                                         Drawing.ImageSource histogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                                         colorChannelModel.HistogramImage = histogramImage;
-                                        //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                         EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
@@ -292,7 +293,6 @@ namespace IVM.Studio.ViewModels.UserControls
                                     {
                                         Drawing.ImageSource histogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                                         colorChannelModel.HistogramImage = histogramImage;
-                                        //Container.Resolve<WindowByHistogramService>().DisplayHistogram((int)type, histogramImage);
                                         EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
@@ -355,7 +355,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             using (Bitmap hist = imageService.CreateHistogram(imgage, currentTranslationByChannel, currentVisibilityByChannel))
             {
-                Container.Resolve<DataManager>().HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
+                dataManager.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                 EventAggregator.GetEvent<RefreshMainHistogramEvent>().Publish();
             }
         }
@@ -382,7 +382,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void DrawClear()
         {
             annotationImage = null;
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -424,7 +424,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     break;
             }
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -449,7 +449,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     break;
             }
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ namespace IVM.Studio.ViewModels.UserControls
             horizontalReflect = false;
             verticalReflect = false;
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 
         /// <summary>

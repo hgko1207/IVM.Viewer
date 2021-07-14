@@ -292,9 +292,13 @@
                 </dxdo:LayoutGroup>
 
                 <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
-                    <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" Background="#1F201D" ShowBorder="False">
+                    <!--<dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
+                        <dxdo:DocumentPanel Caption="Viewer" AllowClose="False">
+                            <Frame NavigationUIVisibility="Hidden" Content="{Binding ViewerPanel}" />
+                        </dxdo:DocumentPanel>
+                    </dxdo:DocumentGroup>-->
 
-                    </dxdo:LayoutPanel>
+                    <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" Background="#1F201D" ShowBorder="False"/>
 
                     <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="50">
                         <StackPanel Orientation="Horizontal" Margin="15 0" VerticalAlignment="Center">

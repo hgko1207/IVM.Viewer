@@ -36,7 +36,7 @@ namespace IVM.Studio.Models.Events
     public class RefreshMetadataEvent : PubSubEvent<Metadata> { }
 
     /// <summary>표시중인 이미지를 갱신하는 이벤트. 밝기, 대비 등의 색상 정보가 변화하거나 반전, 회전 등으로 이미지 정보가 변화할 때마다 발생합니다.</summary>
-    public class RefreshImageEvent : PubSubEvent { }
+    public class RefreshImageEvent : PubSubEvent<int> { }
 
     /// <summary>채널별 윈도우를 종료 할때</summary>
     public class ChViewerWindowCloseEvent : PubSubEvent<int> { }

@@ -101,7 +101,8 @@
                                   SelectionStart="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
                                   SelectionEnd="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
-                        <dxe:TrackBarRangeStyleSettings/>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
             </Grid>
@@ -272,7 +273,8 @@
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
-                        <dxe:TrackBarRangeStyleSettings/>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
@@ -285,7 +287,8 @@
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
-                        <dxe:TrackBarRangeStyleSettings/>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
@@ -298,7 +301,8 @@
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
-                        <dxe:TrackBarRangeStyleSettings/>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
 
@@ -311,7 +315,8 @@
                                   SelectionStart="{Binding ColorLevelLowerValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"
                                   SelectionEnd="{Binding ColorLevelUpperValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
-                        <dxe:TrackBarRangeStyleSettings/>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
             </Grid>

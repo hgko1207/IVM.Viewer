@@ -7,6 +7,8 @@ namespace IVM.Studio.Views.UserControls
     /// </summary>
     public partial class ImageViewer : UserControl
     {
+        public int WindowId { get; set; }
+
         public ImageViewer()
         {
             InitializeComponent();

@@ -7,6 +7,8 @@ namespace IVM.Studio.Views.UserControls
     /// </summary>
     public partial class VideoViewer : UserControl
     {
+        public int WindowId { get; set; }
+
         public VideoViewer()
         {
             InitializeComponent();

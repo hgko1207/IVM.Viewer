@@ -1,11 +1,4 @@
 ﻿using DevExpress.Xpf.Core;
-using IVM.Studio.Models.Events;
-using Prism.Events;
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace IVM.Studio.Views
 {

@@ -251,12 +251,7 @@ namespace IVM.Studio.ViewModels
         public bool IsLockRotate
         {
             get => isLockRotate;
-            set
-            {
-                if (SetProperty(ref isLockRotate, value))
-                {
-                }
-            }
+            set => SetProperty(ref isLockRotate, value);
         }
 
         public ICommand OpenFolderCommand { get; private set; }
@@ -270,11 +265,15 @@ namespace IVM.Studio.ViewModels
 
         public ICommand PlaySlideShowCommand { get; private set; }
 
-        private MainWindow view;
-
         private readonly UserControl imagePage;
         private readonly UserControl videoPage;
-        private UserControl viewerPage;
+
+        private UserControl viewerPanel;
+        public UserControl ViewerPanel
+        {
+            get => viewerPanel;
+            set => SetProperty(ref viewerPanel, value);
+        }
 
         private readonly IEnumerable<string> imageFileExtensions;
         private readonly IEnumerable<string> videoFileExtensions;
@@ -326,7 +325,7 @@ namespace IVM.Studio.ViewModels
 
             imagePage = new ImageViewer();
             videoPage = new VideoViewer();
-            viewerPage = imagePage;
+            ViewerPanel = imagePage;
 
             CurrentPlayingSlider = -1;
             SlideShowFps = 5;
@@ -341,7 +340,6 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnLoaded(MainWindow view)
         {
-            this.view = view;
         }
 
         /// <summary>
@@ -472,12 +470,14 @@ namespace IVM.Studio.ViewModels
             // 디스플레이
             if (imageFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
-                viewerPage = imagePage;
+                ViewerPanel = imagePage;
+                dataManager.ViewerName = nameof(ImageViewer);
                 EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
             else if (videoFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
-                viewerPage = videoPage;
+                ViewerPanel = videoPage;
+                dataManager.ViewerName = nameof(VideoViewer);
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
             }
 
@@ -486,7 +486,6 @@ namespace IVM.Studio.ViewModels
             dataManager.CurrentFile = currentFile;
             dataManager.Metadata = metadata;
             dataManager.SelectedSlideInfo = SelectedSlideInfo;
-            dataManager.ViewerPage = viewerPage;
 
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Publish();
         }
@@ -582,7 +581,7 @@ namespace IVM.Studio.ViewModels
                         // 현재 슬라이드 값이 1인 경우: 이동시킬 필요 없으므로 바로 재생 시작
                         if (ZSSliderValue == 1)
                         {
-                            if (viewerPage == imagePage)
+                            if (ViewerPanel == imagePage)
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
@@ -601,7 +600,7 @@ namespace IVM.Studio.ViewModels
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, MSSliderMaximum - 1, SlideShowRepeat);
                         if (MSSliderValue == 1)
                         {
-                            if (viewerPage == imagePage)
+                            if (ViewerPanel == imagePage)
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
@@ -620,7 +619,7 @@ namespace IVM.Studio.ViewModels
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, MPSliderMaximum - 1, SlideShowRepeat);
                         if (MPSliderValue == 1)
                         {
-                            if (viewerPage == imagePage)
+                            if (ViewerPanel == imagePage)
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
@@ -639,7 +638,7 @@ namespace IVM.Studio.ViewModels
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, TLSliderMaximum - 1, SlideShowRepeat);
                         if (TLSliderValue == 1)
                         {
-                            if (viewerPage == imagePage)
+                            if (ViewerPanel == imagePage)
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();

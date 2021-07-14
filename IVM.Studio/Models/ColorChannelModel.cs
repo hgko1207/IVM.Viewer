@@ -39,7 +39,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref visible, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -57,7 +57,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref color, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -73,7 +73,7 @@ namespace IVM.Studio.Models
                         ContainerExtension.Resolve<WindowByChannelService>().ShowDisplay(Index, AlwaysTopEnabled);
                     else
                         ContainerExtension.Resolve<WindowByChannelService>().CloseDisplay(Index);
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
                 }
             }
         }
@@ -85,7 +85,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref _Brightness, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -96,7 +96,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref _Contrast, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -107,7 +107,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref colorMap, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -118,7 +118,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref colorMapEnabled, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -164,7 +164,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref _ColorLevelLowerValue, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -176,18 +176,21 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref _ColorLevelUpperValue, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish();
+                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
         public IContainerExtension ContainerExtension;
         public IEventAggregator EventAggregator;
 
+        private DataManager dataManager;
+
         public ColorChannelModel(ChannelType type, string channelName, bool visible, Colors color, bool display, float brightness, float contrast, 
                 int lowerLevel, int upperLevel, IContainerExtension containerExtension, IEventAggregator eventAggregator)
         {
             this.ContainerExtension = containerExtension;
             this.EventAggregator = eventAggregator;
+            dataManager = containerExtension.Resolve<DataManager>();
 
             this.Index = (int) type;
             this.ChannelType = type;
