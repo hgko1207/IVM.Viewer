@@ -59,7 +59,8 @@ namespace IVM.Studio.ViewModels
         public TimeSpan Length;
 
         public ICommand TrimCommand { get; private set; }
-        public ICommand ClosedCommand { get; private set; }
+
+        private VideoTrimWindow view;
 
         /// <summary>
         /// 생성자
@@ -70,7 +71,6 @@ namespace IVM.Studio.ViewModels
             Title = "IVM Viewer Video Trim";
 
             TrimCommand = new DelegateCommand(Trim);
-            ClosedCommand = new DelegateCommand(Closed);
         }
 
         /// <summary>
@@ -79,6 +79,8 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnLoaded(VideoTrimWindow view)
         {
+            this.view = view;
+            view.Closed += WindowClosed;
         }
 
         /// <summary>
@@ -118,9 +120,11 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// 닫기 이벤트
+        /// Window 종료 시킬 때
         /// </summary>
-        private void Closed()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowClosed(object sender, EventArgs e)
         {
             Container.Resolve<VideoTrimService>().ClosedWindow();
         }

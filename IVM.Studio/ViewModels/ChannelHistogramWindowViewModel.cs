@@ -3,10 +3,9 @@ using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
-using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
-using System.Windows.Input;
+using System;
 using System.Windows.Media;
 
 /**
@@ -32,8 +31,6 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref histogramImage, value);
         }
 
-        public ICommand ClosedCommand { get; private set; }
-
         public ChannelType ChannelType { get; set; }
 
         private ChannelHistogramWindow view;
@@ -44,8 +41,6 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public ChannelHistogramWindowViewModel(IContainerExtension container) : base(container)
         {
-            ClosedCommand = new DelegateCommand(WindowClosed);
-
             EventAggregator.GetEvent<RefreshChHistogramEvent>().Subscribe(RefreshHistogram, ThreadOption.UIThread, false, type => type == ChannelType);
             EventAggregator.GetEvent<ChHistogramWindowCloseEvent>().Subscribe(Close);
 
@@ -59,6 +54,7 @@ namespace IVM.Studio.ViewModels
         public void OnLoaded(ChannelHistogramWindow view)
         {
             this.view = view;
+            view.Closed += WindowClosed;
         }
 
         /// <summary>
@@ -82,17 +78,19 @@ namespace IVM.Studio.ViewModels
         /// <summary>
         /// Window 종료 이벤트
         /// </summary>
-        private void WindowClosed()
-        {
-            EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Publish(ChannelType);
-        }
-
-        /// <summary>
-        /// Window 종료 이벤트
-        /// </summary>
         private void Close(int type)
         {
             view.Close();
+        }
+
+        /// <summary>
+        /// Window 종료 시킬 때
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowClosed(object sender, EventArgs e)
+        {
+            EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Publish(ChannelType);
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Views;
-using Prism.Commands;
 using Prism.Ioc;
-using System.Windows.Input;
+using System;
 using System.Windows.Media;
 
 /**
@@ -29,8 +28,6 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref displayImage, value);
         }
 
-        public ICommand ClosedCommand { get; private set; }
-
         private ChannelViewerWindow view;
 
         public int Channel { get; set; }
@@ -41,8 +38,6 @@ namespace IVM.Studio.ViewModels
         /// <param name="container"></param>
         public ChannelViewerWindowViewModel(IContainerExtension container) : base(container)
         {
-            ClosedCommand = new DelegateCommand(WindowClosed);
-
             EventAggregator.GetEvent<ChViewerWindowCloseEvent>().Subscribe(Close);
         }
 
@@ -53,6 +48,7 @@ namespace IVM.Studio.ViewModels
         public void OnLoaded(ChannelViewerWindow view)
         {
             this.view = view;
+            view.Closed += WindowClosed;
         }
 
         /// <summary>
@@ -67,18 +63,20 @@ namespace IVM.Studio.ViewModels
         /// <summary>
         /// Window 종료 이벤트
         /// </summary>
-        private void WindowClosed()
-        {
-            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Publish(Channel);
-        }
-
-        /// <summary>
-        /// Window 종료 이벤트
-        /// </summary>
         /// <param name="type"></param>
         private void Close(int type)
         {
             view.Close();
+        }
+
+        /// <summary>
+        /// Window 종료 시킬 때
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowClosed(object sender, EventArgs e)
+        {
+            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Publish(Channel);
         }
     }
 }

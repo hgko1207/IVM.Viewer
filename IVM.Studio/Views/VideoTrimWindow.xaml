@@ -4,18 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-        xmlns:i ="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:IVM.Studio.Views"
         mc:Ignorable="d"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}" Height="150" Width="250" ResizeMode="NoResize">
-
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closed">
-            <i:InvokeCommandAction Command="{Binding ClosedCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
 
     <Grid Margin="5">
         <Grid.RowDefinitions>
