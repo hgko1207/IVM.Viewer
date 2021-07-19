@@ -5,6 +5,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Telerik.Windows.Themes.Fluent;component/Themes/Telerik.Windows.Controls.xaml" />
+
                 <ResourceDictionary Source="Resources/CommonResource.xaml" />
                 <ResourceDictionary Source="Resources/ButtonResource.xaml" />
             </ResourceDictionary.MergedDictionaries>

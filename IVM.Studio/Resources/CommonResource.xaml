@@ -5,7 +5,8 @@
                     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
                     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
                     xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
-                    xmlns:local="clr-namespace:IVM.Viewer.Resources">
+                    xmlns:local="clr-namespace:IVM.Viewer.Resources"
+                    xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation">
 
     <!-- Common Style -->
     
@@ -251,6 +252,7 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <!-- SingleSlider Style -->
     <Style x:Key="SelectedRangeStyle" TargetType="ContentControl">
         <Setter Property="Template">
             <Setter.Value>
@@ -272,5 +274,29 @@
         </Setter>
     </Style>
 
+    <ControlTemplate x:Key="CustomThumbTemplate" TargetType="{x:Type Thumb}">
+        <Border Background="{StaticResource CustomSliderBackgroundBrush}" SnapsToDevicePixels="True">
+            <DockPanel LastChildFill="True">
+                <Border ClipToBounds="True" Height="6" Visibility="Visible">
+                    <Rectangle Fill="{StaticResource CustomSliderForegroundBrush}" />
+                </Border>
+            </DockPanel>
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="SelectedMiddleThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Height" Value="6" />
+        <Setter Property="Background" Value="{StaticResource CustomSliderForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="IsTabStop" Value="true" />
+        <Setter Property="Focusable" Value="true" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template" Value="{StaticResource CustomThumbTemplate}"/>
+    </Style>
+
+    <Style x:Key="CustomTrackStyle" TargetType="ContentControl" BasedOn="{StaticResource TrackStyle}">
+        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
+    </Style>
 </ResourceDictionary>
 

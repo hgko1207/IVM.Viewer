@@ -66,6 +66,7 @@ namespace IVM.Studio.Services
             };
 
             AnnotationInfo = new AnnotationInfo(container, eventAggregator);
+            SliderControlInfo = new SliderControlInfo(container, eventAggregator);
 
             MainWindowSeq = 0;
         }

@@ -1,6 +1,7 @@
 ﻿using DevExpress.Xpf.WindowsUI;
 using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
+using IVM.Studio.Models.Views;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
@@ -286,6 +287,8 @@ namespace IVM.Studio.ViewModels
 
         private DataManager dataManager;
 
+        public SliderControlInfo SliderControlInfo { get; set; }
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -332,6 +335,8 @@ namespace IVM.Studio.ViewModels
             SlideShowRepeat = 2;
 
             IsLockRotate = true;
+
+            SliderControlInfo = dataManager.SliderControlInfo;
         }
 
         /// <summary>

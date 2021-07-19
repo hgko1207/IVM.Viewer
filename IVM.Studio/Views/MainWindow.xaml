@@ -10,7 +10,7 @@
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
-        xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:util="clr-namespace:IVM.Studio.Utils"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
@@ -178,6 +178,17 @@
 
                                     <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                                             Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
+
+                                    <!--<telerik:RadSlider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" 
+                                                       Minimum="1" Maximum="18" TrackStyle="{StaticResource CustomTrackStyle}">
+                                        <telerik:RadSlider.Thumbs>
+                                            <telerik:RangeSliderThumb RangeStart="{Binding ZSSliderMinimum, Mode=TwoWay}" RangeEnd="{Binding ZSSliderMaximum, Mode=TwoWay}" InteractionMode="Lock"
+                                                                      ThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
+                                                                      AlternateThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                                      MiddleThumbStyle="{StaticResource SelectedMiddleThumbStyle}"/>
+                                            <telerik:SliderThumb Value="{Binding ZSSliderValue, Delay=500, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>
+                                        </telerik:RadSlider.Thumbs>
+                                    </telerik:RadSlider>-->
 
                                     <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding ZSSliderText}"/>

@@ -70,6 +70,8 @@ namespace IVM.Studio.Models.Events
     public class ReflectEvent : PubSubEvent<string> { }
     public class RotationResetEvent : PubSubEvent { }
 
+    public class DisplaySlideEvent : PubSubEvent<bool> { }
+
     public class PlaySlideShowEvent : PubSubEvent { }
 
     public class PlayVideoEvent : PubSubEvent { }

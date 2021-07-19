@@ -48,11 +48,7 @@ namespace IVM.Studio.Services
         /// <returns>이미 슬라이드쇼가 진행중인 경우 기존 태스크를 변경하지 않으며 false를 반환합니다. 실행에 성공하면 true를 반환합니다.</returns>
         public bool StartSlideShow(double fps, int count, int repeat)
         {
-            if (NowPlaying)
-            {
-                return false;
-            }
-            else
+            if (!NowPlaying)
             {
                 initialCount = count;
                 currentCount = count;
@@ -61,6 +57,8 @@ namespace IVM.Studio.Services
 
                 return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -99,8 +97,8 @@ namespace IVM.Studio.Services
 
                 return true;
             }
-            else
-                return false;
+
+            return false;
         }
     }
 }
