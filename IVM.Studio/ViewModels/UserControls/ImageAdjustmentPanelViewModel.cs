@@ -9,6 +9,7 @@ using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 /**
@@ -140,7 +141,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     if (value)
                     {
-                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true, WindowId = ++dataManager.MainWindowSeq };
+                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
                         mainViewerWindow.Show();
 
                         FileInfo currentFile = dataManager.CurrentFile;

@@ -25,11 +25,16 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="24"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <dxdo:LayoutPanel Grid.Row="0" ShowCaption="False" ItemHeight="24" ShowBorder="False">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <dxdo:LayoutPanel Grid.Row="0" ShowCaption="False" ShowBorder="False">
             <dxb:MainMenuControl FontSize="14">
                 <dxb:BarSubItem Content=" File " Command="{Binding OpenFolderCommand}"/>
                 <dxb:BarSubItem Content=" Edit " Command="{Binding RefreshCommand}"/>
@@ -37,10 +42,10 @@
             </dxb:MainMenuControl>
         </dxdo:LayoutPanel>
 
-        <dxdo:DockLayoutManager Grid.Row="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
-            <dxdo:LayoutGroup Caption="LayoutContent">
-                <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical" ItemWidth="580">
-                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
+        <ScrollViewer Grid.Row="1" Grid.Column="0" dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+            <dxdo:DockLayoutManager ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
+                <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical">
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="300">
                         <dxdo:DocumentPanel Caption="Image Data" AllowClose="False">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -49,7 +54,7 @@
                                 </Grid.RowDefinitions>
 
                                 <dxg:GridControl ItemsSource="{Binding SlideInfoCollection}" CurrentItem="{Binding SelectedSlideInfo}" SelectedItem="{Binding SelectedSlideInfo}" SelectionMode="Row" 
-                                                 ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 10 10 0" Grid.ColumnSpan="2">
+                                                ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 10 10 0" Grid.ColumnSpan="2">
                                     <dxg:GridControl.View>
                                         <dxg:TableView AllowScrollToFocusedRow="True" AllowSorting="False" AllowPerPixelScrolling="True" AllowScrollAnimation="True" PreviewKeyDown="OnTableViewPreviewKeyDown"/>
                                     </dxg:GridControl.View>
@@ -144,7 +149,7 @@
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
-                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="325">
                         <dxdo:DocumentPanel Caption="Display Control" AllowClose="False">
                             <Grid Margin="15 10">
                                 <Grid.RowDefinitions>
@@ -174,21 +179,31 @@
                                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Z-Stack" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
                                     <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="ZStack"
-                                                     IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding ZSSliderEnabled}"/>
+                                                    IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding ZSSliderEnabled}"/>
 
                                     <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
-                                            Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
+                                        Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
 
-                                    <!--<telerik:RadSlider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" 
-                                                       Minimum="1" Maximum="18" TrackStyle="{StaticResource CustomTrackStyle}">
-                                        <telerik:RadSlider.Thumbs>
-                                            <telerik:RangeSliderThumb RangeStart="{Binding ZSSliderMinimum, Mode=TwoWay}" RangeEnd="{Binding ZSSliderMaximum, Mode=TwoWay}" InteractionMode="Lock"
-                                                                      ThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                                                      AlternateThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                                                      MiddleThumbStyle="{StaticResource SelectedMiddleThumbStyle}"/>
-                                            <telerik:SliderThumb Value="{Binding ZSSliderValue, Delay=500, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>
-                                        </telerik:RadSlider.Thumbs>
-                                    </telerik:RadSlider>-->
+                                    <!--<telerik:RadSlider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
+                                                    Minimum="1" Maximum="18" SelectionMiddleThumbStyle="{StaticResource SelectionMiddleThumbStyle}" IsSelectionRangeEnabled="True">
+                                    <telerik:RadSlider.Thumbs>
+                                        -->
+                                    <!--<telerik:RangeSliderThumb RangeStart="{Binding ZSSliderStart, Mode=TwoWay}" RangeEnd="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Lock"
+                                                                    ThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
+                                                                    AlternateThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                                    MiddleThumbStyle="{StaticResource SelectedMiddleThumbStyle}"/>-->
+                                    <!--
+                                        <telerik:RangeSliderThumb RangeStart="{Binding ZSSliderStart, Mode=TwoWay}" RangeEnd="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Lock"
+                                                                    MinimumRangeSpan="1" MaximumRangeSpan="20"/>
+                                        -->
+                                    <!--<telerik:SliderThumb Value="{Binding ZSSliderStart, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>-->
+                                    <!--
+                                        <telerik:SliderThumb Value="{Binding ZSSliderValue, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>
+                                        -->
+                                    <!--<telerik:SliderThumb Value="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>-->
+                                    <!--
+                                    </telerik:RadSlider.Thumbs>
+                                </telerik:RadSlider>-->
 
                                     <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding ZSSliderText}"/>
@@ -198,10 +213,10 @@
                                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
                                     <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="Mosaic"
-                                                     IsChecked="{Binding MSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding MSSliderEnabled}"/>
+                                                    IsChecked="{Binding MSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding MSSliderEnabled}"/>
 
                                     <Slider Grid.Row="2" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
-                                            Minimum="{Binding MSSliderMinimum}" Maximum="{Binding MSSliderMaximum}" Value="{Binding MSSliderValue, Delay=500}" IsEnabled="{Binding MSSliderEnabled}"/>
+                                        Minimum="{Binding MSSliderMinimum}" Maximum="{Binding MSSliderMaximum}" Value="{Binding MSSliderValue, Delay=500}" IsEnabled="{Binding MSSliderEnabled}"/>
 
                                     <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding MSSliderText}"/>
@@ -211,10 +226,10 @@
                                     <TextBlock Grid.Row="4" Grid.Column="0" Text="Multi-Spot" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
                                     <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="MultiPosition"
-                                                     IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" IsEnabled="{Binding MPSliderEnabled}"/>
+                                                    IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" IsEnabled="{Binding MPSliderEnabled}"/>
 
                                     <Slider Grid.Row="4" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
-                                            Minimum="{Binding MPSliderMinimum}" Maximum="{Binding MPSliderMaximum}" Value="{Binding MPSliderValue, Delay=500}" IsEnabled="{Binding MPSliderEnabled}"/>
+                                        Minimum="{Binding MPSliderMinimum}" Maximum="{Binding MPSliderMaximum}" Value="{Binding MPSliderValue, Delay=500}" IsEnabled="{Binding MPSliderEnabled}"/>
 
                                     <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding MPSliderText}"/>
@@ -224,16 +239,16 @@
                                     <TextBlock Grid.Row="6" Grid.Column="0" Text="Time-lapse" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
                                     <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="TimeLapse"
-                                                     IsChecked="{Binding TLSliderPlaying, Mode=OneWay}" IsEnabled="{Binding TLSliderEnabled}"/>
+                                                    IsChecked="{Binding TLSliderPlaying, Mode=OneWay}" IsEnabled="{Binding TLSliderEnabled}"/>
 
                                     <Slider Grid.Row="6" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
-                                            Minimum="{Binding TLSliderMinimum}" Maximum="{Binding TLSliderMaximum}" Value="{Binding TLSliderValue, Delay=500}" IsEnabled="{Binding TLSliderEnabled}"/>
-                                    
+                                        Minimum="{Binding TLSliderMinimum}" Maximum="{Binding TLSliderMaximum}" Value="{Binding TLSliderValue, Delay=500}" IsEnabled="{Binding TLSliderEnabled}"/>
+
                                     <!--<dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Margin="15 0" Minimum="1" Maximum="300" SelectionStart="35" SelectionEnd="285" TickPlacement="None">
-                                        <dxe:TrackBarEdit.StyleSettings>
-                                            <dxe:TrackBarRangeStyleSettings/>
-                                        </dxe:TrackBarEdit.StyleSettings>
-                                    </dxe:TrackBarEdit>-->
+                                    <dxe:TrackBarEdit.StyleSettings>
+                                        <dxe:TrackBarRangeStyleSettings/>
+                                    </dxe:TrackBarEdit.StyleSettings>
+                                </dxe:TrackBarEdit>-->
 
                                     <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding TLSliderText}"/>
@@ -301,53 +316,55 @@
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>
+            </dxdo:DockLayoutManager>
+        </ScrollViewer>
 
-                <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
-                    <!--<dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
+        <dxdo:DockLayoutManager Grid.Row="1" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
+            <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
+                <!--<dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Viewer" AllowClose="False">
                             <Frame NavigationUIVisibility="Hidden" Content="{Binding ViewerPanel}" />
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>-->
 
-                    <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" Background="#1F201D" ShowBorder="False"/>
+                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" Background="#1F201D" ShowBorder="False"/>
 
-                    <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="50">
-                        <StackPanel Orientation="Horizontal" Margin="15 0" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Rotate" VerticalAlignment="Center" FontWeight="Bold"/>
+                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="50">
+                    <StackPanel Orientation="Horizontal" Margin="15 0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Rotate" VerticalAlignment="Center" FontWeight="Bold"/>
 
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_right.png" ToolTip="Rotation Right" Margin="20 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Right"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_left.png" ToolTip="Rotation Left" Margin="8 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Left"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_left.png" ToolTip="Reflect Horizontal Left" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalLeft"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_right.png" ToolTip="Reflect Horizontal Right" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalRight"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_right.png" ToolTip="Rotation Right" Margin="20 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Right"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_left.png" ToolTip="Rotation Left" Margin="8 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Left"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_left.png" ToolTip="Reflect Horizontal Left" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalLeft"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_right.png" ToolTip="Reflect Horizontal Right" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalRight"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
-                                <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Width="50" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
-                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetRotationCommand}"/>
-                            </StackPanel>
-
-                            <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />
-
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
-                                <TextBlock Text="Crop" FontWeight="Bold" VerticalAlignment="Center"/>
-
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
-                                <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
-
-                                <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0" Command="{Binding CropCommand}"/>
-                                <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding InvertCropCommand}"/>
-                                <dx:SimpleButton Content="Apply" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyCropCommand}"/>
-                                <dx:SimpleButton Content="Apply All" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyAllCropCommand}"/>
-                                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetCropCommand}"/>
-                            </StackPanel>
+                            <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Width="50" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
+                            <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetRotationCommand}"/>
                         </StackPanel>
-                    </dxdo:LayoutPanel>
 
-                    <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="150">
-                        <ContentControl prism:RegionManager.RegionName="ThumbnailPanel"/>
-                    </dxdo:LayoutPanel>
-                </dxdo:LayoutGroup>
+                        <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+                            <TextBlock Text="Crop" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
+                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
+
+                            <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0" Command="{Binding CropCommand}"/>
+                            <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding InvertCropCommand}"/>
+                            <dx:SimpleButton Content="Apply" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyCropCommand}"/>
+                            <dx:SimpleButton Content="Apply All" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyAllCropCommand}"/>
+                            <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetCropCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </dxdo:LayoutPanel>
+
+                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="150">
+                    <ContentControl prism:RegionManager.RegionName="ThumbnailPanel"/>
+                </dxdo:LayoutPanel>
             </dxdo:LayoutGroup>
         </dxdo:DockLayoutManager>
     </Grid>

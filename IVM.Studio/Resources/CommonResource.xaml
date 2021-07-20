@@ -295,8 +295,8 @@
         <Setter Property="Template" Value="{StaticResource CustomThumbTemplate}"/>
     </Style>
 
-    <Style x:Key="CustomTrackStyle" TargetType="ContentControl" BasedOn="{StaticResource TrackStyle}">
-        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
+    <Style x:Key="SelectionMiddleThumbStyle" TargetType="Thumb" BasedOn="{StaticResource SelectionMiddleThumbStyle}">
+        <Setter Property="Height" Value="10" />
     </Style>
 </ResourceDictionary>
 

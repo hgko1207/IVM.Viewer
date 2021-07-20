@@ -75,6 +75,19 @@ namespace IVM.Studio.ViewModels
         public bool MPSliderEnabled => MPSliderMaximum > 1 && Container.Resolve<DataManager>().MainViewerOpend;
         public bool TLSliderEnabled => TLSliderMaximum > 1 && Container.Resolve<DataManager>().MainViewerOpend;
 
+        private int _ZSSliderStart;
+        public int ZSSliderStart
+        {
+            get => _ZSSliderStart;
+            set => SetProperty(ref _ZSSliderStart, value);
+        }
+        private int _ZSSliderEnd;
+        public int ZSSliderEnd
+        {
+            get => _ZSSliderEnd;
+            set => SetProperty(ref _ZSSliderEnd, value);
+        }
+
         private int _ZSSliderMinimum;
         public int ZSSliderMinimum
         {
@@ -162,8 +175,8 @@ namespace IVM.Studio.ViewModels
                 if (SetProperty(ref _ZSSliderValue, value))
                 {
                     RaisePropertyChanged(nameof(ZSSliderText));
-                    if (!disableSlidersEvent)
-                        DisplaySlide(false);
+                    //if (!disableSlidersEvent)
+                    //    DisplaySlide(false);
                 }
             }
         }
@@ -210,7 +223,7 @@ namespace IVM.Studio.ViewModels
             }
         }
 
-        public string ZSSliderText => $"{ZSSliderValue}/{ZSSliderMaximum}";
+        public string ZSSliderText => $"{ZSSliderValue}/{ZSSliderEnd}";
         public string MSSliderText => $"{MSSliderValue}/{MSSliderMaximum}";
         public string MPSliderText => $"{MPSliderValue}/{MPSliderMaximum}";
         public string TLSliderText => $"{TLSliderValue}/{TLSliderMaximum}";
@@ -516,6 +529,7 @@ namespace IVM.Studio.ViewModels
             if (approvedExtensions.Any(s => slideName.EndsWith(s)))
             {
                 ZSSliderValue = 0;
+                ZSSliderMinimum = 0;
                 ZSSliderMaximum = 0;
 
                 MSSliderValue = 0;
@@ -532,6 +546,8 @@ namespace IVM.Studio.ViewModels
                 DirectoryInfo di = new DirectoryInfo(Path.Combine(currentSlidesPath, slideName));
                 var (tlCount, mpCount, msCount, zsCount) = Container.Resolve<FileService>().GetImagesModeStatus(di, approvedExtensions);
 
+                ZSSliderStart = 1;
+                ZSSliderEnd = zsCount;
                 ZSSliderMinimum = 1;
                 ZSSliderMaximum = zsCount;
                 ZSSliderValue = zsCount == 0 ? 0 : 1;
@@ -578,9 +594,9 @@ namespace IVM.Studio.ViewModels
             switch (type)
             {
                 case "ZStack":
-                    if (CurrentPlayingSlider != 0 && ZSSliderEnabled && ZSSliderMaximum >= 2)
+                    if (CurrentPlayingSlider != 0 && ZSSliderEnabled && ZSSliderEnd >= 2)
                     {
-                        Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, ZSSliderMaximum - 1, SlideShowRepeat);
+                        Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, ZSSliderEnd - ZSSliderStart, SlideShowRepeat);
 
                         // 현재 슬라이드 값이 1이 아닌 경우: 1로 이동시키면 재생 시작
                         // 현재 슬라이드 값이 1인 경우: 이동시킬 필요 없으므로 바로 재생 시작
@@ -666,14 +682,14 @@ namespace IVM.Studio.ViewModels
             switch (CurrentPlayingSlider)
             {
                 case 0: // ZStack
-                    if (ZSSliderValue == ZSSliderMaximum)
+                    if (ZSSliderValue == ZSSliderEnd)
                     {
-                        ZSSliderValue = ZSSliderMinimum;
+                        ZSSliderValue = ZSSliderStart;
                     }
                     else
                     {
                         ZSSliderValue++;
-                        if (!Container.Resolve<SlideShowService>().NowPlaying && ZSSliderValue == ZSSliderMaximum)
+                        if (!Container.Resolve<SlideShowService>().NowPlaying && ZSSliderValue == ZSSliderEnd)
                             CurrentPlayingSlider = -1;
                     }
                     break;
