@@ -183,27 +183,19 @@
 
                                     <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                                         Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
-
                                     <!--<telerik:RadSlider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
-                                                    Minimum="1" Maximum="18" SelectionMiddleThumbStyle="{StaticResource SelectionMiddleThumbStyle}" IsSelectionRangeEnabled="True">
-                                    <telerik:RadSlider.Thumbs>
-                                        -->
-                                    <!--<telerik:RangeSliderThumb RangeStart="{Binding ZSSliderStart, Mode=TwoWay}" RangeEnd="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Lock"
+                                                    Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" IsEnabled="{Binding ZSSliderEnabled}">
+                                        <telerik:RadSlider.Thumbs>
+                                            --><!--<telerik:RangeSliderThumb RangeStart="{Binding ZSSliderStart, Mode=TwoWay}" RangeEnd="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Lock"
                                                                     ThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
                                                                     AlternateThumbStyle="{StaticResource TrackBarEditThumbStyle}"
                                                                     MiddleThumbStyle="{StaticResource SelectedMiddleThumbStyle}"/>-->
-                                    <!--
-                                        <telerik:RangeSliderThumb RangeStart="{Binding ZSSliderStart, Mode=TwoWay}" RangeEnd="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Lock"
-                                                                    MinimumRangeSpan="1" MaximumRangeSpan="20"/>
-                                        -->
-                                    <!--<telerik:SliderThumb Value="{Binding ZSSliderStart, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>-->
-                                    <!--
-                                        <telerik:SliderThumb Value="{Binding ZSSliderValue, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>
-                                        -->
-                                    <!--<telerik:SliderThumb Value="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>-->
-                                    <!--
-                                    </telerik:RadSlider.Thumbs>
-                                </telerik:RadSlider>-->
+                                    
+                                            <!--<telerik:SliderThumb Value="{Binding ZSSliderStart, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>--><!--
+                                            <telerik:SliderThumb Value="{Binding ZSSliderValue, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>
+                                            --><!--<telerik:SliderThumb Value="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>--><!--
+                                        </telerik:RadSlider.Thumbs>
+                                    </telerik:RadSlider>-->
 
                                     <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding ZSSliderText}"/>
