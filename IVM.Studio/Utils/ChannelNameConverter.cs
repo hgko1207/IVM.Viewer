@@ -21,12 +21,12 @@ namespace IVM.Studio.Utils
 
         public void AddMatch(int channelNumber, string channelName)
         {
-            if (IsFrozen) 
+            if (IsFrozen)
                 throw new InvalidOperationException("This converter is frozen.");
 
             try
             {
-                if (convertTable.ContainsKey(channelNumber) || convertBackTable.ContainsKey(channelName)) 
+                if (convertTable.ContainsKey(channelNumber) || convertBackTable.ContainsKey(channelName))
                     throw new ArgumentException("Some of specified match already exists.");
 
                 convertTable.Add(channelNumber, channelName);
@@ -37,7 +37,7 @@ namespace IVM.Studio.Utils
 
         public void Freeze()
         {
-            if (IsFrozen) 
+            if (IsFrozen)
                 return;
 
             SortedSet<int> channelNumbers = new SortedSet<int> { 0, 1, 2, 3 };
@@ -59,7 +59,7 @@ namespace IVM.Studio.Utils
 
         public string ConvertNumberToName(int channelNumber)
         {
-            if (!IsFrozen) 
+            if (!IsFrozen)
                 throw new InvalidOperationException("This converter needs to be frozen.");
 
             return convertTable[channelNumber];
@@ -67,7 +67,7 @@ namespace IVM.Studio.Utils
 
         public int ConvertNameToNumber(string channelName)
         {
-            if (!IsFrozen) 
+            if (!IsFrozen)
                 throw new InvalidOperationException("This converter needs to be frozen.");
 
             return convertBackTable[channelName];

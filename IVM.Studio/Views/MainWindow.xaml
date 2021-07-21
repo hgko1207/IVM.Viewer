@@ -181,8 +181,17 @@
                                     <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="ZStack"
                                                     IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding ZSSliderEnabled}"/>
 
-                                    <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+                                    <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" IsMoveToPointEnabled="True"
                                         Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
+
+                                    <!--<Slider Grid.Row="0" Grid.Column="2" Margin="10 0" Name="ZStackSlider" Value="{Binding ZSSliderValue, Delay=200}"
+                                                                    Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}"
+                                                                    SelectionStart="{Binding ZSSliderStart}" SelectionEnd="{Binding ZSSliderEnd}" 
+                                                                    TickFrequency="1"
+                                                                    IsMoveToPointEnabled="True"
+                                                                    IsSelectionRangeEnabled="True"
+                                                                    IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ValueChanged"/>-->
+                                    
                                     <!--<telerik:RadSlider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
                                                     Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" IsEnabled="{Binding ZSSliderEnabled}">
                                         <telerik:RadSlider.Thumbs>

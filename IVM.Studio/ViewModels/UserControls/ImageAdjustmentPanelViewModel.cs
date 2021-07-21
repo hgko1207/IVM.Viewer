@@ -403,15 +403,16 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void ColorReset()
         {
-            RefreshMetadata(dataManager.Metadata);
+            RefreshMetadata(new DisplayParam(null, dataManager.Metadata, true));
         }
 
         /// <summary>
         /// 메타데이터 변경 시
         /// </summary>
-        /// <param name="metadata"></param>
-        private void RefreshMetadata(Metadata metadata)
+        /// <param name="param"></param>
+        private void RefreshMetadata(DisplayParam param)
         {
+            Metadata metadata = param.Metadata;
             if (metadata != null)
             {
                 DAPIColorChannel.Color = metadata.ChA == "0" ? Colors.Red : ConvertMetadataToColor(metadata.ChA);
@@ -421,7 +422,9 @@ namespace IVM.Studio.ViewModels.UserControls
             }
 
             RefreshColorStyle();
-            RefreshVisible();
+
+            if (param.SlideChanged)
+                RefreshVisible();
 
             if (!IsLockHistogram)
                 ResetHistogram();

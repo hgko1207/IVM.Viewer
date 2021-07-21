@@ -72,13 +72,13 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
 
-        private int[] currentTranslationByChannel => colorChannelInfoMap.Values.Select(s => (int)s.Color).ToArray();
-        private bool[] currentVisibilityByChannel => colorChannelInfoMap.Values.Select(s => s.Visible).ToArray();
+        private int[] currentTranslationByChannel => OrderByColor().Select(s => (int)s.Color).ToArray();
+        private bool[] currentVisibilityByChannel => OrderByColor().Select(s => s.Visible).ToArray();
         private float[][] currentColorMatrix => imageService.GenerateColorMatrix(
-                    startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
-                    endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
-                    brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
-                    contrastByChannel: colorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
+                    startLevelByChannel: OrderByColor().Select(s => s.ColorLevelLowerValue).ToArray(),
+                    endLevelByChannel: OrderByColor().Select(s => s.ColorLevelUpperValue).ToArray(),
+                    brightnessByChannel: OrderByColor().Select(s => s.Brightness).ToArray(),
+                    contrastByChannel: OrderByColor().Select(s => s.Contrast).ToArray(),
                     translationByChannel: currentTranslationByChannel,
                     visibilityByChannel: currentVisibilityByChannel
                 );
@@ -158,6 +158,11 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
             EventAggregator.GetEvent<RotationResetEvent>().Unsubscribe(RotationReset);
+        }
+
+        private List<ColorChannelModel> OrderByColor()
+        {
+            return colorChannelInfoMap.Values.OrderBy(c => c.Color).ToList();
         }
 
         /// <summary>
@@ -260,10 +265,10 @@ namespace IVM.Studio.ViewModels.UserControls
                             visibilityByChannel[(int)type] = true;
 
                             float[][] colorMatrix = imageService.GenerateColorMatrix(
-                                startLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelLowerValue).ToArray(),
-                                endLevelByChannel: colorChannelInfoMap.Values.Select(s => s.ColorLevelUpperValue).ToArray(),
-                                brightnessByChannel: colorChannelInfoMap.Values.Select(s => s.Brightness).ToArray(),
-                                contrastByChannel: colorChannelInfoMap.Values.Select(s => s.Contrast).ToArray(),
+                                startLevelByChannel: OrderByColor().Select(s => s.ColorLevelLowerValue).ToArray(),
+                                endLevelByChannel: OrderByColor().Select(s => s.ColorLevelUpperValue).ToArray(),
+                                brightnessByChannel: OrderByColor().Select(s => s.Brightness).ToArray(),
+                                contrastByChannel: OrderByColor().Select(s => s.Contrast).ToArray(),
                                 translationByChannel: currentTranslationByChannel,
                                 visibilityByChannel: visibilityByChannel
                             );

@@ -58,7 +58,7 @@ namespace IVM.Studio.Services
         /// 이미지의 채널이 투영될지 아닐지를 정합니다. 크기가 4인 <seealso cref="bool[]"/>이여야 합니다.
         /// 값이 false일 경우 <paramref name="TranslationByChannel"/>의 값을 무시하고, 투영되지 않습니다.
         /// </param>
-        public float[][] GenerateColorMatrix(int[] startLevelByChannel, int[] endLevelByChannel, float[] brightnessByChannel, float[] contrastByChannel, 
+        public float[][] GenerateColorMatrix(int[] startLevelByChannel, int[] endLevelByChannel, float[] brightnessByChannel, float[] contrastByChannel,
             int[] translationByChannel, bool[] visibilityByChannel)
         {
             float[] contrastAdjust = contrastByChannel.Select(s => (1 - s) / 2).ToArray();

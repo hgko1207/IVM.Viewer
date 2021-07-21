@@ -222,20 +222,12 @@ namespace IVM.Studio.ViewModels
             set
             {
                 SetProperty(ref currentPlayingSlider, value);
-                //ZSSliderPlaying = CurrentPlayingSlider == 0 ? true : false;
                 RaisePropertyChanged(nameof(ZSSliderPlaying));
                 RaisePropertyChanged(nameof(MSSliderPlaying));
                 RaisePropertyChanged(nameof(MPSliderPlaying));
                 RaisePropertyChanged(nameof(TLSliderPlaying));
             }
         }
-
-        //private bool _ZSSliderPlaying;
-        //public bool ZSSliderPlaying
-        //{
-        //    get => _ZSSliderPlaying;
-        //    set => SetProperty(ref _ZSSliderPlaying, value);
-        //}
 
         public bool ZSSliderPlaying => CurrentPlayingSlider == 0;
         public bool MSSliderPlaying => CurrentPlayingSlider == 1;
@@ -480,21 +472,22 @@ namespace IVM.Studio.ViewModels
             // 메타 데이터 로드
             Metadata metadata = Container.Resolve<FileService>().ReadMetadataOfImage(currentSlidesPath, currentFile);
 
+            DisplayParam displayParam = new DisplayParam(currentFile, metadata, slideChanged);
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Publish(displayParam);
+
             // 디스플레이
             if (imageFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
                 ViewerPanel = imagePage;
                 dataManager.ViewerName = nameof(ImageViewer);
-                EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
+                EventAggregator.GetEvent<DisplayImageEvent>().Publish(displayParam);
             }
             else if (videoFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
                 ViewerPanel = videoPage;
                 dataManager.ViewerName = nameof(VideoViewer);
-                EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, slideChanged));
+                EventAggregator.GetEvent<DisplayVideoEvent>().Publish(displayParam);
             }
-
-            EventAggregator.GetEvent<RefreshMetadataEvent>().Publish(metadata);
 
             dataManager.CurrentFile = currentFile;
             dataManager.Metadata = metadata;
@@ -563,11 +556,12 @@ namespace IVM.Studio.ViewModels
         /// <summary>
         /// 메타데이터 표출
         /// </summary>
-        /// <param name="metadata"></param>
-        private void DisplayImageWithMetadata(Metadata metadata)
+        /// <param name="param"></param>
+        private void DisplayImageWithMetadata(DisplayParam param)
         {
             MetadataCollection.Clear();
 
+            Metadata metadata = param.Metadata;
             if (metadata != null)
             {
                 SelectedFilename = metadata.FileName;
@@ -594,7 +588,7 @@ namespace IVM.Studio.ViewModels
                         // 현재 슬라이드 값이 1인 경우: 이동시킬 필요 없으므로 바로 재생 시작
                         if (ZSSliderValue == 1)
                         {
-                            if (ViewerPanel == imagePage)
+                            if (dataManager.ViewerName == nameof(ImageViewer))
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
@@ -613,7 +607,7 @@ namespace IVM.Studio.ViewModels
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, MSSliderMaximum - 1, SlideShowRepeat);
                         if (MSSliderValue == 1)
                         {
-                            if (ViewerPanel == imagePage)
+                            if (dataManager.ViewerName == nameof(ImageViewer))
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
@@ -632,7 +626,7 @@ namespace IVM.Studio.ViewModels
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, MPSliderMaximum - 1, SlideShowRepeat);
                         if (MPSliderValue == 1)
                         {
-                            if (ViewerPanel == imagePage)
+                            if (dataManager.ViewerName == nameof(ImageViewer))
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
@@ -651,7 +645,7 @@ namespace IVM.Studio.ViewModels
                         Container.Resolve<SlideShowService>().StartSlideShow(SlideShowFps, TLSliderMaximum - 1, SlideShowRepeat);
                         if (TLSliderValue == 1)
                         {
-                            if (ViewerPanel == imagePage)
+                            if (dataManager.ViewerName == nameof(ImageViewer))
                                 Container.Resolve<SlideShowService>().ContinueSlideShow();
                             else
                                 EventAggregator.GetEvent<PlayVideoEvent>().Publish();
