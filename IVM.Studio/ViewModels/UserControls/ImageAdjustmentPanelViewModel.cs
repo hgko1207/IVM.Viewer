@@ -9,6 +9,7 @@ using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -364,6 +365,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="type"></param>
         private void DAPIColorChanged(string type)
         {
+            ChangedNoneColor(type);
+
             DAPIColor = type;
             DAPIColorChannel.SetColor(type);
         }
@@ -374,6 +377,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="type"></param>
         private void GFPColorChanged(string type)
         {
+            ChangedNoneColor(type);
+
             GFPColor = type;
             GFPColorChannel.SetColor(type);
         }
@@ -384,6 +389,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="type"></param>
         private void RFPColorChanged(string type)
         {
+            ChangedNoneColor(type);
+
             RFPColor = type;
             RFPColorChannel.SetColor(type);
         }
@@ -394,8 +401,24 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="type"></param>
         private void NIRColorChanged(string type)
         {
+            ChangedNoneColor(type);
+
             NIRColor = type;
             NIRColorChannel.SetColor(type);
+        }
+
+        /// <summary>
+        /// 컬러 선택 시 다른 채널에 컬러가 있을 시 다른 채널의 컬러를 None으로 변환
+        /// </summary>
+        /// <param name="color"></param>
+        private void ChangedNoneColor(string color)
+        {
+            ColorChannelModel channelModel = colorChannelInfoMap.Values.SingleOrDefault(item => item.Color == ConvertMetadataToColor(color));
+            if (channelModel != null)
+            {
+                channelModel.Color = Colors.None;
+                ConvertChannelColor(channelModel.ChannelType);
+            }
         }
 
         /// <summary>
@@ -529,12 +552,16 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             switch (color)
             {
+                case "Red":
                 case "R":
                     return Colors.Red;
+                case "Green":
                 case "G":
                     return Colors.Green;
+                case "Blue":
                 case "B":
                     return Colors.Blue;
+                case "Alpha":
                 case "A":
                     return Colors.Alpha;
                 default:
@@ -561,6 +588,30 @@ namespace IVM.Studio.ViewModels.UserControls
                     return "Alpha";
                 default:
                     return "None";
+            }
+        }
+
+        /// <summary>
+        /// 채널 컬러를 None으로 변환
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="color"></param>
+        private void ConvertChannelColor(ChannelType type)
+        {
+            switch (type)
+            {
+                case ChannelType.DAPI:
+                    DAPIColor = "None";
+                    break;
+                case ChannelType.GFP:
+                    GFPColor = "None";
+                    break;
+                case ChannelType.RFP:
+                    RFPColor = "None";
+                    break;
+                case ChannelType.NIR:
+                    NIRColor = "None";
+                    break;
             }
         }
     }
