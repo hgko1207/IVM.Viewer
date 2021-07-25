@@ -2,7 +2,9 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using IVM.Studio.Views.UserControls;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -21,7 +23,7 @@ using System.Windows.Input;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class BrightnessPanelViewModel : ViewModelBase
+    public class BrightnessPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<BrightnessPanel>
     {
         private float allBrightness;
         public float AllBrightness
@@ -35,17 +37,6 @@ namespace IVM.Studio.ViewModels.UserControls
                     refresh |= i.UpdateBrightnessWithoutRefresh(value);
                 if (refresh)
                     EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
-            }
-        }
-
-        private float _DAPIBrightness;
-        public float DAPIBrightness
-        {
-            get => _DAPIBrightness;
-            set
-            {
-                if (SetProperty(ref _DAPIBrightness, value))
-                    colorChannelInfoMap[ChannelType.DAPI].Brightness = value;
             }
         }
 
@@ -64,7 +55,13 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        public ICommand LockCommand { get; private set; }
+        private bool isLock;
+        public bool IsLock
+        {
+            get => isLock;
+            set => SetProperty(ref isLock, value);
+        }
+
         public ICommand ResetCommand { get; private set; }
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
@@ -82,29 +79,48 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public BrightnessPanelViewModel(IContainerExtension container) : base(container)
         {
-            LockCommand = new DelegateCommand(Lock);
             ResetCommand = new DelegateCommand(Reset);
 
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
+
             dataManager = container.Resolve<DataManager>();
+
             colorChannelInfoMap = dataManager.ColorChannelInfoMap;
-
-            AllBrightness = 0;
-            DAPIBrightness = 0;
-
-            AllContrast = 1;
-
             DAPIChannel = colorChannelInfoMap[ChannelType.DAPI];
             GFPChannel = colorChannelInfoMap[ChannelType.GFP];
             RFPChannel = colorChannelInfoMap[ChannelType.RFP];
             NIRChannel = colorChannelInfoMap[ChannelType.NIR];
+
+            Reset();
+
+            IsLock = true;
         }
 
         /// <summary>
-        /// Lock 이벤트
+        /// OnLoaded
         /// </summary>
-        private void Lock()
+        /// <param name="view"></param>
+        public void OnLoaded(BrightnessPanel view)
         {
+        }
 
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnUnloaded(BrightnessPanel view)
+        {
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(RefreshMetadata);
+        }
+
+        /// <summary>
+        /// 메타데이터 변경 시
+        /// </summary>
+        /// <param name="param"></param>
+        private void RefreshMetadata(DisplayParam param)
+        {
+            if (!IsLock)
+                Reset();
         }
 
         /// <summary>
@@ -112,7 +128,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Reset()
         {
-
+            AllBrightness = 0;
+            AllContrast = 1;
         }
     }
 }

@@ -140,26 +140,35 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Apply" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Apply" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                <dx:SimpleButton Grid.Column="1" Style="{StaticResource ToggleButton}" Content="Lock" Width="50" Height="28" IsChecked="{Binding IsLock}"/>
+            </Grid>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 0">
                 <dx:SimpleButton Style="{StaticResource ToggleButton}" IsChecked="{Binding DAPIColorMapEnabled}"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0" Command="{Binding ExportLabelCommand}" CommandParameter="DAPI"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0 0 0" Command="{Binding ExportLabelCommand}" CommandParameter="DAPI"/>
             </StackPanel>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 16 0 0">
                 <dx:SimpleButton Style="{StaticResource ToggleButton}" IsChecked="{Binding GFPColorMapEnabled}"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0" Command="{Binding ExportLabelCommand}" CommandParameter="GFP"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0 0 0" Command="{Binding ExportLabelCommand}" CommandParameter="GFP"/>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 16 0 0">
                 <dx:SimpleButton Style="{StaticResource ToggleButton}" IsChecked="{Binding RFPColorMapEnabled}"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0" Command="{Binding ExportLabelCommand}" CommandParameter="RFP"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0 0 0" Command="{Binding ExportLabelCommand}" CommandParameter="RFP"/>
             </StackPanel>
 
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 16 0 0">
                 <dx:SimpleButton Style="{StaticResource ToggleButton}" IsChecked="{Binding NIRColorMapEnabled}"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0" Command="{Binding ExportLabelCommand}" CommandParameter="NIR"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Export Label" Margin="5 0 0 0" Command="{Binding ExportLabelCommand}" CommandParameter="NIR"/>
             </StackPanel>
         </Grid>
     </Grid>

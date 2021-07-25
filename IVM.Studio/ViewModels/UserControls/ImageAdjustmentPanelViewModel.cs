@@ -27,8 +27,8 @@ using System.Windows.Input;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class ImageAdjustmentPanelViewModel : ViewModelBase
-    {
+    public class ImageAdjustmentPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ImageAdjustmentPanel>
+{
         private string _DAPIColor;
         public string DAPIColor
         {
@@ -285,13 +285,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public bool IsLockHistogram
         {
             get => isLockHistogram;
-            set
-            {
-                if (SetProperty(ref isLockHistogram, value))
-                {
-
-                }
-            }
+            set => SetProperty(ref isLockHistogram, value);
         }
 
         public ColorChannelModel DAPIColorChannel { get; set; }
@@ -346,6 +340,27 @@ namespace IVM.Studio.ViewModels.UserControls
             ResetHistogram();
 
             IsLockHistogram = true;
+        }
+
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnLoaded(ImageAdjustmentPanel view)
+        {
+        }
+
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnUnloaded(ImageAdjustmentPanel view)
+        {
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(RefreshMetadata);
+            EventAggregator.GetEvent<MainViewerClosedEvent>().Unsubscribe(() => AllWindowOpend = false);
+            EventAggregator.GetEvent<HistogramClosedEvent>().Unsubscribe(() => AllHistogramOpend = false);
+            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Unsubscribe(ChWindowClosed);
+            EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Unsubscribe(ChHistogramClosed);
         }
 
         /// <summary>

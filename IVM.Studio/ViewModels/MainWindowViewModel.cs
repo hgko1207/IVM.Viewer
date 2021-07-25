@@ -561,12 +561,11 @@ namespace IVM.Studio.ViewModels
         {
             MetadataCollection.Clear();
 
+            SelectedFilename = currentFile?.Name;
+
             Metadata metadata = param.Metadata;
             if (metadata != null)
-            {
-                SelectedFilename = metadata.FileName;
                 MetadataCollection = Container.Resolve<FileService>().ToModel(metadata);
-            }
         }
 
         /// <summary>

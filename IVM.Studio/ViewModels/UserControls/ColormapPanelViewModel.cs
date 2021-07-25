@@ -1,8 +1,11 @@
 ﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using System;
 using System.Collections.Generic;
@@ -26,7 +29,7 @@ using GDIDrawing = System.Drawing;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class ColormapPanelViewModel : ViewModelBase
+    public class ColormapPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<ColormapPanel>
     {
         public IEnumerable<ColorMap> ColorMaps
         {
@@ -128,6 +131,13 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        private bool isLock;
+        public bool IsLock
+        {
+            get => isLock;
+            set => SetProperty(ref isLock, value);
+        }
+
         public ICommand ExportLabelCommand { get; private set; }
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
@@ -140,14 +150,55 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             ExportLabelCommand = new DelegateCommand<string>(ExportLabel);
 
+            EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
+
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
 
             SelectedDAPIColorMap = colorChannelInfoMap[ChannelType.DAPI].ColorMap;
             SelectedGFPColorMap = colorChannelInfoMap[ChannelType.GFP].ColorMap;
             SelectedRFPColorMap = colorChannelInfoMap[ChannelType.RFP].ColorMap;
             SelectedNIRColorMap = colorChannelInfoMap[ChannelType.NIR].ColorMap;
+
+            IsLock = true;
         }
-        
+
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnLoaded(ColormapPanel view)
+        {
+        }
+
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnUnloaded(ColormapPanel view)
+        {
+        }
+
+        /// <summary>
+        /// 메타데이터 변경 시
+        /// </summary>
+        /// <param name="param"></param>
+        private void RefreshMetadata(DisplayParam param)
+        {
+            if (!IsLock)
+                Reset();
+        }
+
+        /// <summary>
+        /// Reset
+        /// </summary>
+        private void Reset()
+        {
+            DAPIColorMapEnabled = false;
+            GFPColorMapEnabled = false;
+            RFPColorMapEnabled = false;
+            NIRColorMapEnabled = false;
+        }
+
         /// <summary>
         /// 현재 선택된 범례 이미지 다운로드
         /// </summary>
