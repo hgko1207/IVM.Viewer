@@ -56,6 +56,10 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand ImageMouseMoveCommand { get; private set; }
         public ICommand ImageMouseUpCommand { get; private set; }
 
+        public ICommand ViewPortMouseDownCommand { get; private set; }
+        public ICommand ViewPortMouseMoveCommand { get; private set; }
+        public ICommand ViewPortMouseUpCommand { get; private set; }
+
         private Bitmap originalImage;
         private Bitmap flippedOriginalImage;
         private Bitmap annotationImage;
@@ -97,6 +101,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private ImageViewer view;
 
         private System.Windows.Point? imagePreviousPoint;
+        private System.Windows.Point? viewPortPreviousPoint;
 
         private ImageService imageService { get; set; }
         private DataManager dataManager;
@@ -112,6 +117,9 @@ namespace IVM.Studio.ViewModels.UserControls
             ImageMouseDownCommand = new DelegateCommand<MouseButtonEventArgs>(ImageMouseDown);
             ImageMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ImageMouseMove);
             ImageMouseUpCommand = new DelegateCommand<MouseButtonEventArgs>(ImageMouseUp);
+
+            ViewPortMouseDownCommand = new DelegateCommand<MouseButtonEventArgs>(ViewPortMouseDown);
+            ViewPortMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ViewPortMouseMove);
 
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
@@ -142,6 +150,8 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset, ThreadOption.UIThread);
+
+            EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl, ThreadOption.UIThread);
         }
 
         /// <summary>
@@ -158,6 +168,8 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
             EventAggregator.GetEvent<RotationResetEvent>().Unsubscribe(RotationReset);
+
+            EventAggregator.GetEvent<ZoomRatioControlEvent>().Unsubscribe(ZoomRatioControl);
         }
 
         private List<ColorChannelModel> OrderByColor()
@@ -470,11 +482,20 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
+        /// ZoomRatio 변경 시
+        /// </summary>
+        /// <param name="zoomRatio"></param>
+        private void ZoomRatioControl(int zoomRatio)
+        {
+            DisplayingImageWidth = originalImage.Width * (zoomRatio / 100d);
+        }
+
+        /// <summary>
         /// 마우스 휠 동작 이벤트
         /// </summary>
         private void MouseWheel(MouseWheelEventArgs e)
         {
-            if (e.Delta is int delta)
+            if (e.Delta is int delta && Keyboard.Modifiers == ModifierKeys.Control)
             {
                 if (delta > 0)
                     ZoomIn();
@@ -494,6 +515,8 @@ namespace IVM.Studio.ViewModels.UserControls
                 return;
 
             currentZoomRatio = (int)Math.Round(width.Value / displayWidth * 100);
+
+            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Publish(currentZoomRatio);
         }
 
         /// <summary>
@@ -502,8 +525,11 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ImageMouseDown(MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left || e.ChangedButton == MouseButton.Middle)
+            if (e.ChangedButton == MouseButton.Left)
                 imagePreviousPoint = e.GetPosition(view.ImageView);
+
+            if (e.ChangedButton == MouseButton.Middle)
+                DisplayingImageWidth = double.NaN;
         }
 
         /// <summary>
@@ -538,7 +564,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     imageService.DrawEraser(
                         annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
                         colorMatrix: currentColorMatrix,
-                        x: (int)Math.Round(position.X / currentZoomRatio * 100), 
+                        x: (int)Math.Round(position.X / currentZoomRatio * 100),
                         y: (int)Math.Round(position.Y / currentZoomRatio * 100),
                         thickness: annotationInfo.EraserThickness,
                         horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
@@ -584,22 +610,47 @@ namespace IVM.Studio.ViewModels.UserControls
                 }
                 else if (annotationInfo.TextEnabled)
                 {
-                    InputBoxWindow inputBoxWindow = new InputBoxWindow(EventAggregator) { Topmost = true };
-                    inputBoxWindow.Show();
+                    if (!InputBoxWindow.IsShow)
+                    {
+                        InputBoxWindow inputBoxWindow = new InputBoxWindow(EventAggregator) { Topmost = true };
+                        inputBoxWindow.Show();
 
-                    TextAnnotationDialogParam param = new TextAnnotationDialogParam(
-                        Title: "",
-                        Content: "Please enter text.",
-                        X: (int)Math.Round(position.X / currentZoomRatio * 100),
-                        Y: (int)Math.Round(position.Y / currentZoomRatio * 100)
-                    );
-                    EventAggregator.GetEvent<TextAnnotationDialogEvent>().Publish(param);
+                        TextAnnotationDialogParam param = new TextAnnotationDialogParam(
+                            Title: "",
+                            Content: "Please enter text.",
+                            X: (int)Math.Round(position.X / currentZoomRatio * 100),
+                            Y: (int)Math.Round(position.Y / currentZoomRatio * 100)
+                        );
+
+                        EventAggregator.GetEvent<TextAnnotationDialogEvent>().Publish(param);
+                    }
                 }
 
                 DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
             }
 
             imagePreviousPoint = null;
+        }
+
+        /// <summary>
+        /// ViewPort MouseDown
+        /// </summary>
+        /// <param name="e"></param>
+        private void ViewPortMouseDown(MouseButtonEventArgs e)
+        {
+            viewPortPreviousPoint = e.GetPosition(view.ImageView);
+        }
+
+        /// <summary>
+        /// ViewPort MouseMove
+        /// </summary>
+        /// <param name="e"></param>
+        private void ViewPortMouseMove(MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                System.Windows.Point position = e.GetPosition(view.ImageView);
+            }
         }
 
         /// <summary>
@@ -611,7 +662,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 int newScale = (int)Math.Floor(currentZoomRatio / 10d) * 10 + 10;
                 double newWidth = originalImage.Width * (newScale / 100d);
-                if (newScale <= 400 && newScale >= 10 && newWidth >= 20)
+                if (newScale <= 300 && newScale >= 10 && newWidth >= 20)
                 {
                     DisplayingImageWidth = originalImage.Width * (newScale / 100d);
                 }
@@ -627,7 +678,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 int newScale = (int)Math.Ceiling(currentZoomRatio / 10d) * 10 - 10;
                 double newWidth = originalImage.Width * (newScale / 100d);
-                if (newScale <= 400 && newScale >= 10 && newWidth >= 20)
+                if (newScale <= 300 && newScale >= 10 && newWidth >= 20)
                 {
                     DisplayingImageWidth = originalImage.Width * (newScale / 100d);
                 }

@@ -351,14 +351,13 @@
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
                             <TextBlock Text="Crop" FontWeight="Bold" VerticalAlignment="Center"/>
 
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="8 0 0 0"/>
+                            <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="28" Padding="4" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
+                            <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="28" Padding="3" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="5 0 0 0"/>
 
-                            <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="16 0 0 0" Command="{Binding CropCommand}"/>
-                            <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding InvertCropCommand}"/>
-                            <dx:SimpleButton Content="Apply" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyCropCommand}"/>
-                            <dx:SimpleButton Content="Apply All" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ApplyAllCropCommand}"/>
-                            <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetCropCommand}"/>
+                            <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="10 0 0 0" Command="{Binding InvertCropCommand}"/>
+                            <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding CropCommand}"/>
+                            <dx:SimpleButton Content="All Crop" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding AllCropCommand}"/>
+                            <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" Margin="20 0 0 0" Command="{Binding ExportCropCommand}"/>
                         </StackPanel>
                     </StackPanel>
                 </dxdo:LayoutPanel>

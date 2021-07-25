@@ -10,6 +10,8 @@ namespace IVM.Studio.Views
     /// </summary>
     public partial class InputBoxWindow : ThemedWindow
     {
+        public static bool IsShow { get; set; }
+
         private TextAnnotationDialogParam param;
 
         private IEventAggregator eventAggregator;
@@ -20,6 +22,8 @@ namespace IVM.Studio.Views
             this.eventAggregator = eventAggregator;
 
             eventAggregator.GetEvent<TextAnnotationDialogEvent>().Subscribe(InputDialog);
+
+            IsShow = true;
         }
 
         private void OkClick(object sender, RoutedEventArgs e)
@@ -35,6 +39,7 @@ namespace IVM.Studio.Views
         private void CloseClick(object sender, RoutedEventArgs e)
         {
             Close();
+            IsShow = false;
         }
 
         private void InputDialog(TextAnnotationDialogParam param)

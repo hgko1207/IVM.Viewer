@@ -266,6 +266,8 @@ namespace IVM.Studio.ViewModels
 
         public ICommand PlaySlideShowCommand { get; private set; }
 
+        public ICommand CropCommand { get; private set; }
+
         private readonly UserControl imagePage;
         private readonly UserControl videoPage;
 
@@ -566,6 +568,9 @@ namespace IVM.Studio.ViewModels
             Metadata metadata = param.Metadata;
             if (metadata != null)
                 MetadataCollection = Container.Resolve<FileService>().ToModel(metadata);
+
+            if (!IsLockRotate)
+                RotationReset();
         }
 
         /// <summary>

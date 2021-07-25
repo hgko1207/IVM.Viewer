@@ -124,4 +124,7 @@ namespace IVM.Studio.Models.Events
             this.Text = Text;
         }
     }
+
+    public class ZoomRatioChangedEvent : PubSubEvent<int> { }
+    public class ZoomRatioControlEvent : PubSubEvent<int> { }
 }

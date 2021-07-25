@@ -25,6 +25,11 @@
             </Image>
 
             <Canvas Panel.ZIndex="0" x:Name="ImageOverlayCanvas" Background="Transparent">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="MouseDown" Command="{Binding ViewPortMouseDownCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="MouseMove" Command="{Binding ViewPortMouseMoveCommand}" PassEventArgsToCommand="True"/>
+                    <dxmvvm:EventToCommand EventName="MouseUp" Command="{Binding ViewPortMouseUpCommand}" PassEventArgsToCommand="True"/>
+                </dxmvvm:Interaction.Behaviors>
             </Canvas>
         </Grid>
     </ScrollViewer>

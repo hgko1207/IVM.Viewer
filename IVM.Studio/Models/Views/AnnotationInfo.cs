@@ -31,6 +31,9 @@ namespace IVM.Studio.Models
                 {
                     EraserEnabled = false;
                     TextEnabled = false;
+                    DrawRectangleEnabled = false;
+                    DrawCircleEnabled = false;
+                    DrawTriangleEnabled = false;
                 }
             }
         }
@@ -73,6 +76,9 @@ namespace IVM.Studio.Models
                 {
                     PenEnabled = false;
                     EraserEnabled = false;
+                    DrawRectangleEnabled = false;
+                    DrawCircleEnabled = false;
+                    DrawTriangleEnabled = false;
                 }
             }
         }
@@ -94,6 +100,67 @@ namespace IVM.Studio.Models
                 {
                     PenEnabled = false;
                     TextEnabled = false;
+                    DrawRectangleEnabled = false;
+                    DrawCircleEnabled = false;
+                    DrawTriangleEnabled = false;
+                }
+            }
+        }
+
+        private WPFDrawing.Color drawColor;
+        public WPFDrawing.Color DrawColor
+        {
+            get => drawColor;
+            set => SetProperty(ref drawColor, value);
+        }
+
+        private bool drawRectangleEnabled;
+        public bool DrawRectangleEnabled
+        {
+            get => drawRectangleEnabled;
+            set 
+            {
+                if (SetProperty(ref drawRectangleEnabled, value) && value)
+                {
+                    PenEnabled = false;
+                    TextEnabled = false;
+                    EraserEnabled = false;
+                    DrawCircleEnabled = false;
+                    DrawTriangleEnabled = false;
+                }
+            }
+        }
+
+        private bool drawCircleEnabled;
+        public bool DrawCircleEnabled
+        {
+            get => drawCircleEnabled;
+            set
+            {
+                if (SetProperty(ref drawCircleEnabled, value) && value)
+                {
+                    PenEnabled = false;
+                    TextEnabled = false;
+                    EraserEnabled = false;
+                    DrawRectangleEnabled = false;
+                    DrawTriangleEnabled = false;
+                }
+            }
+        }
+
+        private bool drawTriangleEnabled;
+        public bool DrawTriangleEnabled
+        {
+            get => drawTriangleEnabled;
+            set
+            {
+                if (SetProperty(ref drawTriangleEnabled, value) && value)
+                {
+                    PenEnabled = false;
+                    TextEnabled = false;
+                    EraserEnabled = false;
+                    DrawRectangleEnabled = false;
+                    DrawCircleEnabled = false;
                 }
             }
         }
@@ -159,6 +226,8 @@ namespace IVM.Studio.Models
 
             TextFontSize = 12;
             TextColor = WPFDrawing.Colors.Blue;
+
+            DrawColor = WPFDrawing.Colors.Blue;
 
             DrawThickness = 2;
             EraserThickness = 20;

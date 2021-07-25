@@ -23,14 +23,15 @@
         <StackPanel>
             <DockPanel>
                 <TextBlock Text="Navigator" VerticalAlignment="Center" FontSize="13" FontWeight="Bold"/>
-                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="45" HorizontalAlignment="Right"/>
+                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="45" HorizontalAlignment="Right" IsChecked="{Binding IsNavigator}"/>
             </DockPanel>
 
-            <Slider Minimum="1" Maximum="255" Margin="0 10 0 10" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"/>
+            <Slider Minimum="10" Maximum="300" Margin="0 10 0 10" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" 
+                    Value="{Binding ZoomRatioValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
             <DockPanel>
-                <dxe:SpinEdit Value="2000" Width="60"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Default" HorizontalAlignment="Right"/>
+                <dxe:SpinEdit MinValue="10" MaxValue="300" Width="60" IsFloatValue="False" Value="{Binding ZoomRatioValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Default" HorizontalAlignment="Right" Command="{Binding ResetZoomRatioCommand}"/>
             </DockPanel>
         </StackPanel>
 
