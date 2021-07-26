@@ -15,7 +15,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="1040" Width="1680" Top="0" MinWidth="1600"
+        Title="IVM Studio" Height="1040" Width="1920" Top="0" MinWidth="1600"
         TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
 
     <Window.Resources>
@@ -131,7 +131,7 @@
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
-                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="340">
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">
                         <dxdo:DocumentPanel Caption="Image Adjustment" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel"/>
                         </dxdo:DocumentPanel>
@@ -351,13 +351,13 @@
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
                             <TextBlock Text="Crop" FontWeight="Bold" VerticalAlignment="Center"/>
 
-                            <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="28" Padding="4" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
-                            <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="28" Padding="3" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="5 0 0 0"/>
+                            <dx:SimpleButton Style="{StaticResource IconToggleButton}" IsChecked="{Binding CropRectangleEnabled}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
+                            <dx:SimpleButton Style="{StaticResource IconToggleButton}" IsChecked="{Binding CropCircleEnabled}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="5 0 0 0"/>
 
-                            <dx:SimpleButton Content="Invert" Style="{StaticResource GrayGradientButton}" Margin="10 0 0 0" Command="{Binding InvertCropCommand}"/>
-                            <dx:SimpleButton Content="Crop" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding CropCommand}"/>
+                            <dx:SimpleButton Content="Invert" Style="{StaticResource ToggleButton}" Width="60" Margin="10 0 0 0" IsChecked="{Binding InvertEnabled}"/>
+                            <dx:SimpleButton Content="Crop" Style="{StaticResource ToggleButton}" Width="60" Margin="5 0 0 0" IsChecked="{Binding CropEnabled}"/>
                             <dx:SimpleButton Content="All Crop" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding AllCropCommand}"/>
-                            <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" Margin="20 0 0 0" Command="{Binding ExportCropCommand}"/>
+                            <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" Width="60" Margin="20 0 0 0" Command="{Binding ExportCropCommand}"/>
                         </StackPanel>
                     </StackPanel>
                 </dxdo:LayoutPanel>

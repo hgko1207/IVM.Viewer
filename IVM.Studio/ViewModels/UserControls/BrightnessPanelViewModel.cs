@@ -55,14 +55,22 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        private bool isLock;
-        public bool IsLock
+        private bool isLockBrightness;
+        public bool IsLockBrightness
         {
-            get => isLock;
-            set => SetProperty(ref isLock, value);
+            get => isLockBrightness;
+            set => SetProperty(ref isLockBrightness, value);
         }
 
-        public ICommand ResetCommand { get; private set; }
+        private bool isLockContrast;
+        public bool IsLockContrast
+        {
+            get => isLockContrast;
+            set => SetProperty(ref isLockContrast, value);
+        }
+
+        public ICommand ResetBrightnessCommand { get; private set; }
+        public ICommand ResetContrastCommand { get; private set; }
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
@@ -79,7 +87,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public BrightnessPanelViewModel(IContainerExtension container) : base(container)
         {
-            ResetCommand = new DelegateCommand(Reset);
+            ResetBrightnessCommand = new DelegateCommand(ResetBrightness);
+            ResetContrastCommand = new DelegateCommand(ResetContrast);
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
 
@@ -91,9 +100,11 @@ namespace IVM.Studio.ViewModels.UserControls
             RFPChannel = colorChannelInfoMap[ChannelType.RFP];
             NIRChannel = colorChannelInfoMap[ChannelType.NIR];
 
-            Reset();
+            ResetBrightness();
+            ResetContrast();
 
-            IsLock = true;
+            IsLockBrightness = true;
+            IsLockContrast = true;
         }
 
         /// <summary>
@@ -119,16 +130,26 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="param"></param>
         private void RefreshMetadata(DisplayParam param)
         {
-            if (!IsLock)
-                Reset();
+            if (!IsLockBrightness)
+                AllBrightness = 0;
+
+            if (!IsLockContrast)
+                AllContrast = 1;
         }
 
         /// <summary>
-        /// Reset 이벤트
+        /// Reset Brightness 이벤트
         /// </summary>
-        private void Reset()
+        private void ResetBrightness()
         {
             AllBrightness = 0;
+        }
+
+        /// <summary>
+        /// Reset Contrast 이벤트
+        /// </summary>
+        private void ResetContrast()
+        {
             AllContrast = 1;
         }
     }

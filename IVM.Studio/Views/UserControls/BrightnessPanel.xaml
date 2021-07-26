@@ -57,7 +57,18 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Brightness" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                <Grid Grid.ColumnSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Brightness" Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource ToggleButton}" Content="Lock" Width="50" Height="28" IsChecked="{Binding IsLockBrightness}"/>
+                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetBrightnessCommand}"/>
+                </Grid>
 
                 <Slider Grid.Row="2" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" 
                         SelectionStart="-0.4" Minimum="-0.4" Maximum="0.4" Value="{Binding AllBrightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
@@ -89,8 +100,8 @@
 
                     <TextBlock Text="Contrast" Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource ToggleButton}" Content="Lock" Width="50" Height="28" IsChecked="{Binding IsLock}"/>
-                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetCommand}"/>
+                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource ToggleButton}" Content="Lock" Width="50" Height="28" IsChecked="{Binding IsLockContrast}"/>
+                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetContrastCommand}"/>
                 </Grid>
 
                 <Slider Grid.Row="2" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"

@@ -87,8 +87,8 @@ namespace IVM.Studio.ViewModels.UserControls
                     visibilityByChannel: currentVisibilityByChannel
                 );
 
-        private int fOVSizeX;
-        private int fOVSizeY;
+        private int fovSizeX;
+        private int fovSizeY;
 
         private bool horizontalReflect;
         private bool verticalReflect;
@@ -187,13 +187,13 @@ namespace IVM.Studio.ViewModels.UserControls
 
             if (param.Metadata != null)
             {
-                fOVSizeX = param.Metadata.FovX;
-                fOVSizeY = param.Metadata.FovY;
+                fovSizeX = param.Metadata.FovX;
+                fovSizeY = param.Metadata.FovY;
             }
             else
             {
-                fOVSizeX = 0;
-                fOVSizeY = 0;
+                fovSizeX = 0;
+                fovSizeY = 0;
             }
 
             disableRefreshImageEvent = false;
@@ -349,10 +349,11 @@ namespace IVM.Studio.ViewModels.UserControls
                     }
 
                     int scaleBarSize = annotationInfo.ScaleBarSize;
+                    int scaleBarThickness = annotationInfo.ScaleBarThickness;
 
                     // 스케일 바
-                    if (annotationInfo.ScaleBarEnabled && fOVSizeX > 0 && fOVSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fOVSizeX && scaleBarSize < fOVSizeY)
-                        imageService.DrawScaleBar(bitmap, fOVSizeX, fOVSizeY, scaleBarSize, 2, 3, 9);
+                    if (annotationInfo.ScaleBarEnabled && fovSizeX > 0 && fovSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fovSizeX && scaleBarSize < fovSizeY)
+                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, scaleBarThickness, 3, 9);
 
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);

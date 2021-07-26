@@ -36,7 +36,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Channel" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="Channel" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 5 0 0"/>
 
             <!-- DAPI -->
             <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" Margin="0 20 0 0">
@@ -74,7 +74,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Type" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <TextBlock Text="Type" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 5 0 0"/>
 
             <dxe:ComboBoxEdit Grid.Row="1" Margin="0 20 0 0" Width="250" Height="30" ApplyItemTemplateToSelectedItem="True"
                             SelectedItem="{Binding SelectedDAPIColorMap, Converter={StaticResource ColorMapConverter}}"

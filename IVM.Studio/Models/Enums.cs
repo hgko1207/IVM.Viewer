@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 /**
  * @Class Name : Enums.cs
@@ -16,6 +17,14 @@ namespace IVM.Studio.Models
 {
     public class Enums
     {
+    }
+
+    public enum PositionType
+    {
+        [Display(Name = "Left", Description = "Left", Order = 1)]
+        LEFT,
+        [Display(Name = "Right", Description = "Right", Order = 2)]
+        RIGHT
     }
 
     public enum ZStackProjectionType

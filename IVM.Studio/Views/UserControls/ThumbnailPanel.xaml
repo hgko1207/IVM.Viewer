@@ -10,8 +10,8 @@
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
     
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="10 0">
-        <Grid x:Name="ImageSequenceGroup">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid x:Name="ImageSequenceGroup" Margin="10 0">
             <Grid.RowDefinitions/>
             <Grid.ColumnDefinitions/>
         </Grid>

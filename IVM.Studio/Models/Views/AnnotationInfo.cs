@@ -197,13 +197,20 @@ namespace IVM.Studio.Models
             }
         }
 
-        private bool labelEnabled;
-        public bool LabelEnabled
+        private PositionType scaleBarPosition;
+        public PositionType ScaleBarPosition
         {
-            get => labelEnabled;
+            get => scaleBarPosition;
+            set => SetProperty(ref scaleBarPosition, value);
+        }
+
+        private bool timeStampEnabled;
+        public bool TimeStampEnabled
+        {
+            get => timeStampEnabled;
             set
             {
-                if (SetProperty(ref labelEnabled, value))
+                if (SetProperty(ref timeStampEnabled, value))
                     eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
@@ -234,6 +241,8 @@ namespace IVM.Studio.Models
 
             ScaleBarSize = 100;
             ScaleBarThickness = 2;
+
+            ScaleBarPosition = PositionType.RIGHT;
         }
     }
 }

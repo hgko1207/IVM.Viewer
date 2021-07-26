@@ -385,15 +385,15 @@ namespace IVM.Studio.Services
                 int canvasHeight = image.Height;
                 Size scaleBarX = new Size((int)((double)canvasWidth / fOVSizeX * lengthOfScaleBar), 0);
                 Size scaleBarY = new Size(0, (int)((double)canvasHeight / fOVSizeY * lengthOfScaleBar));
-                Point StartPoint = new Point(canvasWidth - marginOfScaleBar, canvasHeight - marginOfScaleBar);
+                Point startPoint = new Point(canvasWidth - marginOfScaleBar, canvasHeight - marginOfScaleBar);
                 Size clampX = new Size(clampSizeOfScaleBar, 0);
                 Size clampY = new Size(0, clampSizeOfScaleBar);
 
-                gr.DrawLine(pen, StartPoint, StartPoint - scaleBarX);
-                gr.DrawLine(pen, StartPoint, StartPoint - scaleBarY);
-                gr.DrawLine(pen, StartPoint - scaleBarX + clampY, StartPoint - scaleBarX - clampY);
-                gr.DrawLine(pen, StartPoint - scaleBarY + clampX, StartPoint - scaleBarY - clampX);
-                gr.FillRectangle(Brushes.White, new Rectangle(StartPoint - new Size(thicknessOfScaleBar / 2, thicknessOfScaleBar / 2),
+                gr.DrawLine(pen, startPoint, startPoint - scaleBarX);
+                gr.DrawLine(pen, startPoint, startPoint - scaleBarY);
+                gr.DrawLine(pen, startPoint - scaleBarX + clampY, startPoint - scaleBarX - clampY);
+                gr.DrawLine(pen, startPoint - scaleBarY + clampX, startPoint - scaleBarY - clampX);
+                gr.FillRectangle(Brushes.White, new Rectangle(startPoint - new Size(thicknessOfScaleBar / 2, thicknessOfScaleBar / 2),
                     new Size(thicknessOfScaleBar, thicknessOfScaleBar)));
             }
         }
