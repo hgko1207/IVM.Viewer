@@ -27,6 +27,16 @@ namespace IVM.Studio.Models
         RIGHT
     }
 
+    public enum ScaleBarLabelType
+    {
+        [Display(Name = "None", Order = 1)]
+        None,
+        [Display(Name = "μm", Order = 2)]
+        μm,
+        [Display(Name = "mm", Order = 3)]
+        mm
+    }
+
     public enum ZStackProjectionType
     {
         [Description("Maximum")]

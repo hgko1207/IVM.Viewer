@@ -99,8 +99,8 @@
                 <TextBlock Text="Scale Bar" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="X-axis" Width="60" Height="28" IsChecked="{Binding XAxisEnabled}"/>
-                    <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="Y-axis" Width="60" Height="28" IsChecked="{Binding YAxisEnabled}" Margin="5 0 0 0"/>
+                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding XAxisEnabled}" Style="{StaticResource ToggleButton}" Content="X-axis" Width="60" Height="28"/>
+                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding YAxisEnabled}" Style="{StaticResource ToggleButton}" Content="Y-axis" Width="60" Height="28" Margin="5 0 0 0"/>
                     <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding ScaleBarEnabled}" HorizontalAlignment="Right"
                                  Style="{StaticResource ToggleButton}" Width="80" Height="28" Content="Display" Margin="15 0 0 0" />
                 </StackPanel>
@@ -116,18 +116,17 @@
                 <TextBlock Text="Pixel" VerticalAlignment="Center" Margin="4 0 0 0"/>
 
                 <TextBlock Text="Position" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ScaleBarPosition, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                  Width="70" Margin="5 0 0 0" IsTextEditable="False">
+                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ScaleBarPosition, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="70" Margin="5 0 0 0">
                     <dxmvvm:Interaction.Behaviors>
                         <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:PositionType}" SortMode="DisplayName"/>
                     </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
 
                 <TextBlock Text="Label" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <dxe:ComboBoxEdit SelectedIndex="0" Width="60" Margin="5 0 0 0">
-                    <dxe:ComboBoxEditItem Content="None"/>
-                    <dxe:ComboBoxEditItem Content="μm"/>
-                    <dxe:ComboBoxEditItem Content="mm"/>
+                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ScaleBarLabel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="5 0 0 0">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ScaleBarLabelType}" SortMode="DisplayName"/>
+                    </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
             </StackPanel>
         </StackPanel>
@@ -138,7 +137,8 @@
             <DockPanel VerticalAlignment="Center">
                 <TextBlock Text="Time Stamp" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="80" Height="28" Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
+                <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding TimeStampEnabled}" Style="{StaticResource ToggleButton}" 
+                                 Width="80" Height="28" Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
             </DockPanel>
             
             <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
@@ -160,9 +160,10 @@
                 </Border>
 
                 <TextBlock Text="Position" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <dxe:ComboBoxEdit SelectedIndex="1" Width="70" Margin="5 0 0 0">
-                    <dxe:ComboBoxEditItem Content="Left"/>
-                    <dxe:ComboBoxEditItem Content="Right"/>
+                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding TimeStampPosition, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="70" Margin="5 0 0 0">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:PositionType}" SortMode="DisplayName"/>
+                    </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
             </StackPanel>
         </StackPanel>
@@ -173,7 +174,8 @@
             <DockPanel>
                 <TextBlock Text="Z-stack Label" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-                <dx:SimpleButton Style="{StaticResource ToggleButton}" Width="80" Height="28" Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
+                <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding ZStackLabelEnabled}" Style="{StaticResource ToggleButton}" 
+                                 Width="80" Height="28" Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
             </DockPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
@@ -193,9 +195,10 @@
                 </Border>
 
                 <TextBlock Text="Position" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <dxe:ComboBoxEdit SelectedIndex="1" Width="70" Margin="5 0 0 0">
-                    <dxe:ComboBoxEditItem Content="Left"/>
-                    <dxe:ComboBoxEditItem Content="Right"/>
+                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ZStackLabelPosition, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="70" Margin="5 0 0 0">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:PositionType}" SortMode="DisplayName"/>
+                    </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
             </StackPanel>
         </StackPanel>

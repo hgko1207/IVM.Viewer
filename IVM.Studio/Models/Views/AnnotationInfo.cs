@@ -186,6 +186,20 @@ namespace IVM.Studio.Models
             set => SetProperty(ref scaleBarThickness, value);
         }
 
+        private bool xAxisEnabled;
+        public bool XAxisEnabled
+        {
+            get => xAxisEnabled;
+            set => SetProperty(ref xAxisEnabled, value);
+        }
+
+        private bool yAxisEnabled;
+        public bool YAxisEnabled
+        {
+            get => yAxisEnabled;
+            set => SetProperty(ref yAxisEnabled, value);
+        }
+
         private bool scaleBarEnabled;
         public bool ScaleBarEnabled
         {
@@ -204,6 +218,20 @@ namespace IVM.Studio.Models
             set => SetProperty(ref scaleBarPosition, value);
         }
 
+        private ScaleBarLabelType scaleBarLabel;
+        public ScaleBarLabelType ScaleBarLabel
+        {
+            get => scaleBarLabel;
+            set => SetProperty(ref scaleBarLabel, value);
+        }
+
+        private PositionType timeStampPosition;
+        public PositionType TimeStampPosition
+        {
+            get => timeStampPosition;
+            set => SetProperty(ref timeStampPosition, value);
+        }
+
         private bool timeStampEnabled;
         public bool TimeStampEnabled
         {
@@ -211,6 +239,24 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref timeStampEnabled, value))
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+            }
+        }
+
+        private PositionType zStackLabelPosition;
+        public PositionType ZStackLabelPosition
+        {
+            get => zStackLabelPosition;
+            set => SetProperty(ref zStackLabelPosition, value);
+        }
+
+        private bool zStackLabelEnabled;
+        public bool ZStackLabelEnabled
+        {
+            get => zStackLabelEnabled;
+            set
+            {
+                if (SetProperty(ref zStackLabelEnabled, value))
                     eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
@@ -234,15 +280,21 @@ namespace IVM.Studio.Models
             TextFontSize = 12;
             TextColor = WPFDrawing.Colors.Blue;
 
-            DrawColor = WPFDrawing.Colors.Blue;
-
-            DrawThickness = 2;
             EraserThickness = 20;
+
+            DrawColor = WPFDrawing.Colors.Blue;
+            DrawThickness = 2;
 
             ScaleBarSize = 100;
             ScaleBarThickness = 2;
-
+            XAxisEnabled = true;
+            YAxisEnabled = true;
             ScaleBarPosition = PositionType.RIGHT;
+            ScaleBarLabel = ScaleBarLabelType.None;
+
+            TimeStampPosition = PositionType.RIGHT;
+
+            ZStackLabelPosition = PositionType.RIGHT;
         }
     }
 }
