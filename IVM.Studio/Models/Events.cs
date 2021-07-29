@@ -127,4 +127,7 @@ namespace IVM.Studio.Models.Events
 
     public class ZoomRatioChangedEvent : PubSubEvent<int> { }
     public class ZoomRatioControlEvent : PubSubEvent<int> { }
+
+    public class EnableCropEvent : PubSubEvent { }
+    public class DisableCropEvent : PubSubEvent { }
 }

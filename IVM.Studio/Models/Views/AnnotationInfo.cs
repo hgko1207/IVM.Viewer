@@ -21,6 +21,54 @@ namespace IVM.Studio.Models
 {
     public class AnnotationInfo : BindableBase
     {
+        private bool cropRectangleEnabled;
+        public bool CropRectangleEnabled
+        {
+            get => cropRectangleEnabled;
+            set
+            {
+                if (SetProperty(ref cropRectangleEnabled, value))
+                    CropCircleEnabled = value ? false : true;
+            }
+        }
+
+        private bool cropCircleEnabled;
+        public bool CropCircleEnabled
+        {
+            get => cropCircleEnabled;
+            set
+            {
+                if (SetProperty(ref cropCircleEnabled, value))
+                    CropRectangleEnabled = value ? false : true;
+            }
+        }
+
+        private bool cropEnabled;
+        public bool CropEnabled
+        {
+            get => cropEnabled;
+            set
+            {
+                if (SetProperty(ref cropEnabled, value))
+                {
+                    if (value)
+                    {
+                        PenEnabled = false;
+                        EraserEnabled = false;
+                        TextEnabled = false;
+                        DrawRectangleEnabled = false;
+                        DrawCircleEnabled = false;
+                        DrawTriangleEnabled = false;
+                        eventAggregator.GetEvent<EnableCropEvent>().Publish();
+                    }
+                    else
+                    {
+                        eventAggregator.GetEvent<DisableCropEvent>().Publish();
+                    }
+                }
+            }
+        }
+
         private bool penEnabled;
         public bool PenEnabled
         {
@@ -34,6 +82,7 @@ namespace IVM.Studio.Models
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    CropEnabled = false;
                 }
             }
         }
@@ -79,6 +128,7 @@ namespace IVM.Studio.Models
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    CropEnabled = false;
                 }
             }
         }
@@ -103,6 +153,7 @@ namespace IVM.Studio.Models
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    CropEnabled = false;
                 }
             }
         }
@@ -127,6 +178,7 @@ namespace IVM.Studio.Models
                     EraserEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    CropEnabled = false;
                 }
             }
         }
@@ -144,6 +196,7 @@ namespace IVM.Studio.Models
                     EraserEnabled = false;
                     DrawRectangleEnabled = false;
                     DrawTriangleEnabled = false;
+                    CropEnabled = false;
                 }
             }
         }
@@ -161,6 +214,7 @@ namespace IVM.Studio.Models
                     EraserEnabled = false;
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
+                    CropEnabled = false;
                 }
             }
         }
@@ -273,6 +327,8 @@ namespace IVM.Studio.Models
         {
             this.eventAggregator = eventAggregator;
             dataManager = container.Resolve<DataManager>();
+
+            CropRectangleEnabled = true;
 
             PenThickness = 2;
             PenColor = WPFDrawing.Colors.Blue;

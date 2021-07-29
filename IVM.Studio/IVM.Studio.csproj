@@ -167,6 +167,7 @@
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ChannelProcessingPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PostProcessingPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\RotateCropPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ThumbnailPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\VideoViewerViewModel.cs" />
     <Compile Include="ViewModels\VideoTrimWindowViewModel.cs" />
@@ -190,6 +191,9 @@
     </Compile>
     <Compile Include="Views\UserControls\PostProcessingPanel.xaml.cs">
       <DependentUpon>PostProcessingPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\RotateCropPanel.xaml.cs">
+      <DependentUpon>RotateCropPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ThumbnailPanel.xaml.cs">
       <DependentUpon>ThumbnailPanel.xaml</DependentUpon>
@@ -328,6 +332,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\UserControls\PostProcessingPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\RotateCropPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

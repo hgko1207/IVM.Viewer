@@ -248,25 +248,12 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref slideShowRepeat, value);
         }
 
-        private bool isLockRotate;
-        public bool IsLockRotate
-        {
-            get => isLockRotate;
-            set => SetProperty(ref isLockRotate, value);
-        }
-
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
         public ICommand PreviousSlideCommand { get; private set; }
         public ICommand NextSlideCommand { get; private set; }
 
-        public ICommand RotationCommand { get; private set; }
-        public ICommand ReflectCommand { get; private set; }
-        public ICommand RotationResetCommand { get; private set; }
-
         public ICommand PlaySlideShowCommand { get; private set; }
-
-        public ICommand CropCommand { get; private set; }
 
         private readonly UserControl imagePage;
         private readonly UserControl videoPage;
@@ -303,8 +290,9 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(ColormapPanel));
             RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControlPanel));
             RegionManager.RegisterViewWithRegion("ThumbnailPanel", typeof(ThumbnailPanel));
-            RegionManager.RegisterViewWithRegion("ChannelProcessingPanel", typeof(ChannelProcessingPanel));
+            RegionManager.RegisterViewWithRegion("ChannelProcessingPanel", typeof(ChannelProcessingPanel)); 
             RegionManager.RegisterViewWithRegion("PostProcessingPanel", typeof(PostProcessingPanel));
+            RegionManager.RegisterViewWithRegion("RotateCropPanel", typeof(RotateCropPanel));
 
             dataManager = container.Resolve<DataManager>();
             dataManager.Init(container, EventAggregator);
@@ -313,10 +301,6 @@ namespace IVM.Studio.ViewModels
             RefreshCommand = new DelegateCommand(Refresh);
             PreviousSlideCommand = new DelegateCommand(PreviousSlide);
             NextSlideCommand = new DelegateCommand(NextSlide);
-
-            RotationCommand = new DelegateCommand<string>(Rotation);
-            ReflectCommand = new DelegateCommand<string>(Reflect);
-            RotationResetCommand = new DelegateCommand(RotationReset);
 
             PlaySlideShowCommand = new DelegateCommand<string>(PlaySlideShow);
 
@@ -334,9 +318,7 @@ namespace IVM.Studio.ViewModels
 
             CurrentPlayingSlider = -1;
             SlideShowFps = 5;
-            SlideShowRepeat = 2;
-
-            IsLockRotate = true;
+            SlideShowRepeat = 2; 
 
             SliderControlInfo = dataManager.SliderControlInfo;
         }
@@ -568,9 +550,6 @@ namespace IVM.Studio.ViewModels
             Metadata metadata = param.Metadata;
             if (metadata != null)
                 MetadataCollection = Container.Resolve<FileService>().ToModel(metadata);
-
-            if (!IsLockRotate)
-                RotationReset();
         }
 
         /// <summary>
@@ -720,32 +699,6 @@ namespace IVM.Studio.ViewModels
                     }
                     break;
             }
-        }
-
-        /// <summary>
-        /// 회전 이벤트
-        /// </summary>
-        /// <param name="type"></param>
-        private void Rotation(string type)
-        {
-            EventAggregator.GetEvent<RotationEvent>().Publish(type);
-        }
-
-        /// <summary>
-        /// 좌우 또는 상하 반전 이벤트
-        /// </summary>
-        /// <param name="type"></param>
-        private void Reflect(string type)
-        {
-            EventAggregator.GetEvent<ReflectEvent>().Publish(type);
-        }
-
-        /// <summary>
-        /// 회전, 반전 초기화
-        /// </summary>
-        private void RotationReset()
-        {
-            EventAggregator.GetEvent<RotationResetEvent>().Publish();
         }
 
         /// <summary>

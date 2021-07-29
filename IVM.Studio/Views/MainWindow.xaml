@@ -331,35 +331,7 @@
                 <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" Background="#1F201D" ShowBorder="False"/>
 
                 <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="50">
-                    <StackPanel Orientation="Horizontal" Margin="15 0" VerticalAlignment="Center">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Rotate" VerticalAlignment="Center" FontWeight="Bold"/>
-
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_right.png" ToolTip="Rotation Right" Margin="20 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Right"/>
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/rotate_left.png" ToolTip="Rotation Left" Margin="8 0 0 0" Command="{Binding RotationCommand}" CommandParameter="Left"/>
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_left.png" ToolTip="Reflect Horizontal Left" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalLeft"/>
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_horizontal_right.png" ToolTip="Reflect Horizontal Right" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="HorizontalRight"/>
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_top.png" ToolTip="Reflect Vertical Top" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalTop"/>
-                            <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
-
-                            <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Width="50" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
-                            <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetRotationCommand}"/>
-                        </StackPanel>
-
-                        <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />
-
-                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
-                            <TextBlock Text="Crop" FontWeight="Bold" VerticalAlignment="Center"/>
-
-                            <dx:SimpleButton Style="{StaticResource IconToggleButton}" IsChecked="{Binding CropRectangleEnabled}" Glyph="../Resources/Images/rectangle.png" ToolTip="Crop Rectangle" Margin="20 0 0 0"/>
-                            <dx:SimpleButton Style="{StaticResource IconToggleButton}" IsChecked="{Binding CropCircleEnabled}" Glyph="../Resources/Images/circle.png" ToolTip="Crop Circle" Margin="5 0 0 0"/>
-
-                            <dx:SimpleButton Content="Invert" Style="{StaticResource ToggleButton}" Width="60" Margin="10 0 0 0" IsChecked="{Binding InvertEnabled}"/>
-                            <dx:SimpleButton Content="Crop" Style="{StaticResource ToggleButton}" Width="60" Margin="5 0 0 0" IsChecked="{Binding CropEnabled}"/>
-                            <dx:SimpleButton Content="All Crop" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding AllCropCommand}"/>
-                            <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" Width="60" Margin="20 0 0 0" Command="{Binding ExportCropCommand}"/>
-                        </StackPanel>
-                    </StackPanel>
+                    <ContentControl prism:RegionManager.RegionName="RotateCropPanel"/>
                 </dxdo:LayoutPanel>
 
                 <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="150">

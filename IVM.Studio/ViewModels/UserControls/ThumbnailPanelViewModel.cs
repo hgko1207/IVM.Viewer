@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IVM.Studio.Mvvm;
+using Prism.Ioc;
 
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class ThumbnailPanelViewModel
+    public class ThumbnailPanelViewModel : ViewModelBase
     {
+        /// <summary>
+        /// 생성자
+        /// </summary>
+        /// <param name="container"></param>
+        public ThumbnailPanelViewModel(IContainerExtension container) : base(container)
+        {
+        }
     }
 }
