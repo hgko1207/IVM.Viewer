@@ -312,7 +312,7 @@ namespace IVM.Studio.ViewModels
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
 
-            imagePage = new ImageViewer();
+            imagePage = new ImageViewer(EventAggregator);
             videoPage = new VideoViewer();
             ViewerPanel = imagePage;
 

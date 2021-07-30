@@ -30,9 +30,6 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand ReflectCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
 
-        public ICommand AllCropCommand { get; private set; }
-        public ICommand ExportCropCommand { get; private set; }
-
         public AnnotationInfo AnnotationInfo { get; set; }
 
         /// <summary>
@@ -44,8 +41,6 @@ namespace IVM.Studio.ViewModels.UserControls
             RotationCommand = new DelegateCommand<string>(Rotation);
             ReflectCommand = new DelegateCommand<string>(Reflect);
             RotationResetCommand = new DelegateCommand(RotationReset);
-            AllCropCommand = new DelegateCommand(AllCrop);
-            ExportCropCommand = new DelegateCommand(ExportCrop);
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
@@ -105,22 +100,6 @@ namespace IVM.Studio.ViewModels.UserControls
         private void RotationReset()
         {
             EventAggregator.GetEvent<RotationResetEvent>().Publish();
-        }
-
-        /// <summary>
-        /// All Crop
-        /// </summary>
-        private void AllCrop()
-        {
-
-        }
-
-        /// <summary>
-        /// Export Crop
-        /// </summary>
-        private void ExportCrop()
-        {
-
         }
     }
 }

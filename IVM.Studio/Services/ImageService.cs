@@ -3,6 +3,7 @@ using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using GDIDrawing = System.Drawing;
 using OpenCvDrawing = OpenCvSharp;
@@ -598,6 +599,47 @@ namespace IVM.Studio.Services
             }
 
             return hist;
+        }
+
+        /// <summary>
+        /// CreateCroppedImage
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="isBox"></param>
+        /// <returns></returns>
+        public Bitmap CreateCroppedImage(Bitmap image, double left, double top, double width, double height, bool isBox)
+        {
+            Bitmap result = MakeEmptyImage((int)width, (int)height);
+            if (isBox)
+            {
+                using (Graphics g = Graphics.FromImage(result))
+                {
+                    g.DrawImage(image, new Rectangle(0, 0, result.Width, result.Height), new Rectangle((int)left, (int)top, (int)width, (int)height), GraphicsUnit.Pixel);
+                }
+            }
+            else
+            {
+                int x = (int)width / 2;
+                int y = (int)height / 2;
+
+                using (Graphics g = Graphics.FromImage(result))
+                {
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    g.TranslateTransform(result.Width / 2, result.Height / 2);
+                    GraphicsPath gp = new GraphicsPath();
+                    gp.AddEllipse(0 - x, 0 - y, result.Width, result.Height);
+                    Region rg = new Region(gp);
+                    g.SetClip(rg, CombineMode.Replace);
+
+                    g.DrawImage(image, new Rectangle(-x, -y, result.Width, result.Height), new Rectangle((int)left, (int)top, (int)width, (int)height), GraphicsUnit.Pixel);
+                }
+            }
+
+            return result;
         }
     }
 }

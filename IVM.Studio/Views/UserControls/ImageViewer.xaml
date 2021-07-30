@@ -6,13 +6,42 @@
         xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:local="clr-namespace:IVM.Studio.Views"
+        xmlns:model="clr-namespace:IVM.Studio.Models"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
         d:DesignHeight="650" d:DesignWidth="650"
         dx:ThemeManager.ThemeName="Office2019Black">
 
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
+    <UserControl.Resources>
+        <!-- Resizable Rectangle -->
+        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="model:MoveThumb">
+            <Rectangle Fill="Transparent"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="Control">
+            <Grid>
+                <model:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 -4 0 0" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
+                <model:ResizeThumb Width="3" Cursor="SizeWE" Margin="-4 0 0 0" VerticalAlignment="Stretch" HorizontalAlignment="Left" />
+                <model:ResizeThumb Width="3" Cursor="SizeWE" Margin="0 0 -4 0" VerticalAlignment="Stretch" HorizontalAlignment="Right" />
+                <model:ResizeThumb Height="3" Cursor="SizeNS" Margin="0 0 0 -4" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+                <model:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="-6 -6 0 0" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                <model:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="0 -6 -6 0" VerticalAlignment="Top" HorizontalAlignment="Right" />
+                <model:ResizeThumb Width="7" Height="7" Cursor="SizeNESW" Margin="-6 0 0 -6" VerticalAlignment="Bottom" HorizontalAlignment="Left" />
+                <model:ResizeThumb Width="7" Height="7" Cursor="SizeNWSE" Margin="0 0 -6 -6" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="DesignerItemTemplate" TargetType="ContentControl">
+            <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                <model:MoveThumb Template="{StaticResource MoveThumbTemplate}" Cursor="SizeAll" />
+                <Control Template="{StaticResource ResizeDecoratorTemplate}" />
+                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Resources>
+
+    <ScrollViewer x:Name="DisplayingScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
         <Grid>
             <Image x:Name="ImageView" Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
                 <dxmvvm:Interaction.Behaviors>

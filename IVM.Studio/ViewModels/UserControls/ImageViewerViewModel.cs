@@ -74,8 +74,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <summary>이미지 새로고침 이벤트를 비활성화하는 플래그입니다.</summary>
         private bool disableRefreshImageEvent;
 
-        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
-
         private int[] currentTranslationByChannel => OrderByColor().Select(s => (int)s.Color).ToArray();
         private bool[] currentVisibilityByChannel => OrderByColor().Select(s => s.Visible).ToArray();
         private float[][] currentColorMatrix => imageService.GenerateColorMatrix(
@@ -87,6 +85,8 @@ namespace IVM.Studio.ViewModels.UserControls
                     visibilityByChannel: currentVisibilityByChannel
                 );
 
+        private ImageViewer view;
+
         private int fovSizeX;
         private int fovSizeY;
 
@@ -96,15 +96,14 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private FileInfo fileToDisplay;
 
-        public AnnotationInfo annotationInfo;
-
-        private ImageViewer view;
-
         private System.Windows.Point? imagePreviousPoint;
         private System.Windows.Point? viewPortPreviousPoint;
 
         private ImageService imageService { get; set; }
+
         private DataManager dataManager;
+        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
+        private AnnotationInfo annotationInfo;
 
         /// <summary>
         /// 생성자
@@ -120,6 +119,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
             ViewPortMouseDownCommand = new DelegateCommand<MouseButtonEventArgs>(ViewPortMouseDown);
             ViewPortMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ViewPortMouseMove);
+            ViewPortMouseUpCommand = new DelegateCommand<MouseButtonEventArgs>(ViewPortMouseUp);
 
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
@@ -152,6 +152,7 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset, ThreadOption.UIThread);
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl, ThreadOption.UIThread);
+            EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop, ThreadOption.UIThread);
         }
 
         /// <summary>
@@ -170,6 +171,7 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationResetEvent>().Unsubscribe(RotationReset);
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Unsubscribe(ZoomRatioControl);
+            EventAggregator.GetEvent<ExportCropEvent>().Unsubscribe(ExportCrop);
         }
 
         private List<ColorChannelModel> OrderByColor()
@@ -648,9 +650,81 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ViewPortMouseMove(MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (annotationInfo.CropCrosshairEnabled)
             {
-                System.Windows.Point position = e.GetPosition(view.ImageView);
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    System.Windows.Point position = e.GetPosition(view.ImageView);
+
+                    if (viewPortPreviousPoint == null)
+                    {
+                        viewPortPreviousPoint = new System.Windows.Point(position.X, position.Y);
+                        return;
+                    }
+
+                    double left = Math.Min(position.X, viewPortPreviousPoint.Value.X);
+                    double top = Math.Min(position.Y, viewPortPreviousPoint.Value.Y);
+                    double width = Math.Abs(position.X - viewPortPreviousPoint.Value.X);
+                    double height;
+
+                    if (Keyboard.Modifiers == ModifierKeys.Shift) 
+                        height = width;
+                    else
+                        height = Math.Abs(position.Y - viewPortPreviousPoint.Value.Y);
+
+                    if (annotationInfo.CropRectangleEnabled)
+                        EventAggregator.GetEvent<DrawCropBoxEvent>().Publish(new DrawCropParam(left, top, width, height));
+                    else if (annotationInfo.CropCircleEnabled)
+                        EventAggregator.GetEvent<DrawCropCircleEvent>().Publish(new DrawCropParam(left, top, width, height));
+                }
+            }
+        }
+
+        /// <summary>
+        /// ViewPort MouseUp
+        /// </summary>
+        /// <param name="e"></param>
+        private void ViewPortMouseUp(MouseButtonEventArgs e)
+        {
+            annotationInfo.CropCrosshairEnabled = false;
+        }
+
+        /// <summary>
+        /// ExportCrop
+        /// </summary>
+        private void ExportCrop()
+        {
+            if (displayingImageGDI == null)
+                return;
+
+            GetPositionToCropParam param = new GetPositionToCropParam();
+            EventAggregator.GetEvent<GetPositionToCropEvent>().Publish(param);
+
+            if (!param.Routed)
+                return;
+
+            param.Left = Math.Max(param.Left / currentZoomRatio * 100, 0);
+            param.Top = Math.Max(param.Top / currentZoomRatio * 100, 0);
+
+            param.Width = param.Width / currentZoomRatio * 100;
+            if (displayingImageGDI.Width < param.Width)
+                param.Width = displayingImageGDI.Width;
+
+            param.Height = param.Height / currentZoomRatio * 100;
+            if (displayingImageGDI.Height < param.Height)
+                param.Height = displayingImageGDI.Height;
+
+            VistaSaveFileDialog dlg = new VistaSaveFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
+            };
+            if (dlg.ShowDialog().GetValueOrDefault())
+            {
+                using (Bitmap bitmap = Container.Resolve<ImageService>().CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                {
+                    bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                }
             }
         }
 

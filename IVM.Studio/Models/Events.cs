@@ -130,4 +130,39 @@ namespace IVM.Studio.Models.Events
 
     public class EnableCropEvent : PubSubEvent { }
     public class DisableCropEvent : PubSubEvent { }
+
+    public class DrawCropBoxEvent : PubSubEvent<DrawCropParam> { }
+    public class DrawCropParam
+    {
+        public readonly double Left;
+        public readonly double Top;
+        public readonly double Width;
+        public readonly double Height;
+
+        public DrawCropParam(double left, double top, double width, double height)
+        {
+            Left = left;
+            Top = top;
+            Width = width;
+            Height = height;
+        }
+    }
+
+    public class DrawCropCircleEvent : PubSubEvent<DrawCropParam> { }
+
+    public class GetPositionToCropEvent : PubSubEvent<GetPositionToCropParam> { }
+    public class GetPositionToCropParam
+    {
+        public double HorizontalOffset;
+        public double VerticalOffset;
+        public double ViewportWidth;
+        public double ViewportHeight;
+        public double Left;
+        public double Top;
+        public double Width;
+        public double Height;
+        public bool Routed;
+    }
+
+    public class ExportCropEvent : PubSubEvent { }
 }

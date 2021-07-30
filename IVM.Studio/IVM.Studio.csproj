@@ -149,6 +149,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Enums.cs" />
+    <Compile Include="Models\Thumb.cs" />
     <Compile Include="Models\Views\AnnotationInfo.cs" />
     <Compile Include="Models\Views\PostProcessingInfo.cs" />
     <Compile Include="Models\Views\SliderControlInfo.cs" />

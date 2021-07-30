@@ -22,7 +22,7 @@
             <dx:SimpleButton Style="{StaticResource IconButton}" Glyph="../../Resources/Images/reflect_vertical_bottom.png" ToolTip="Reflect Vertical Bottom" Margin="8 0 0 0" Command="{Binding ReflectCommand}" CommandParameter="VerticalBottom"/>
 
             <dx:SimpleButton Content="Lock" Style="{StaticResource ToggleButton}" Width="50" Margin="16 0 0 0" IsChecked="{Binding IsLockRotate}"/>
-            <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding ResetRotationCommand}"/>
+            <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Margin="5 0 0 0" Command="{Binding RotationResetCommand}"/>
         </StackPanel>
 
         <ContentControl Template="{StaticResource VerticalLine}" Margin="24 0" />

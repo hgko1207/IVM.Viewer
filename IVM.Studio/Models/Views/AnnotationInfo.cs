@@ -1,8 +1,10 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Services;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+using System.Windows.Input;
 using WPFDrawing = System.Windows.Media;
 
 /**
@@ -21,6 +23,10 @@ namespace IVM.Studio.Models
 {
     public class AnnotationInfo : BindableBase
     {
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// Crop 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private bool cropRectangleEnabled;
         public bool CropRectangleEnabled
         {
@@ -28,7 +34,14 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref cropRectangleEnabled, value))
+                {
                     CropCircleEnabled = value ? false : true;
+                    if (CropEnabled)
+                    {
+                        CropEnabled = false;
+                        CropEnabled = true;
+                    }
+                }
             }
         }
 
@@ -39,7 +52,14 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref cropCircleEnabled, value))
+                {
                     CropRectangleEnabled = value ? false : true;
+                    if (CropEnabled)
+                    {
+                        CropEnabled = false;
+                        CropEnabled = true;
+                    }
+                }
             }
         }
 
@@ -59,16 +79,28 @@ namespace IVM.Studio.Models
                         DrawRectangleEnabled = false;
                         DrawCircleEnabled = false;
                         DrawTriangleEnabled = false;
+                        CropCrosshairEnabled = true;
                         eventAggregator.GetEvent<EnableCropEvent>().Publish();
                     }
                     else
                     {
+                        CropCrosshairEnabled = false;
                         eventAggregator.GetEvent<DisableCropEvent>().Publish();
                     }
                 }
             }
         }
 
+        private bool cropCrosshairEnabled;
+        public bool CropCrosshairEnabled
+        {
+            get => cropCrosshairEnabled;
+            set => SetProperty(ref cropCrosshairEnabled, value);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// Pen 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private bool penEnabled;
         public bool PenEnabled
         {
@@ -101,6 +133,9 @@ namespace IVM.Studio.Models
             set => SetProperty(ref penThickness, value);
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// Text 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private WPFDrawing.Color textColor;
         public WPFDrawing.Color TextColor
         {
@@ -133,6 +168,9 @@ namespace IVM.Studio.Models
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// Eraser 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private int eraserThickness;
         public int EraserThickness
         {
@@ -158,6 +196,9 @@ namespace IVM.Studio.Models
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// Draw 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private WPFDrawing.Color drawColor;
         public WPFDrawing.Color DrawColor
         {
@@ -226,6 +267,9 @@ namespace IVM.Studio.Models
             set => SetProperty(ref drawThickness, value);
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// ScaleBar 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private int scaleBarSize;
         public int ScaleBarSize
         {
@@ -279,6 +323,9 @@ namespace IVM.Studio.Models
             set => SetProperty(ref scaleBarLabel, value);
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// TimeStamp 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private PositionType timeStampPosition;
         public PositionType TimeStampPosition
         {
@@ -297,6 +344,9 @@ namespace IVM.Studio.Models
             }
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///// ZStackLabel 정보
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         private PositionType zStackLabelPosition;
         public PositionType ZStackLabelPosition
         {
@@ -315,6 +365,9 @@ namespace IVM.Studio.Models
             }
         }
 
+        public ICommand AllCropCommand { get; private set; }
+        public ICommand ExportCropCommand { get; private set; }
+
         private IEventAggregator eventAggregator;
 
         private DataManager dataManager;
@@ -327,6 +380,9 @@ namespace IVM.Studio.Models
         {
             this.eventAggregator = eventAggregator;
             dataManager = container.Resolve<DataManager>();
+
+            AllCropCommand = new DelegateCommand(AllCrop);
+            ExportCropCommand = new DelegateCommand(ExportCrop);
 
             CropRectangleEnabled = true;
 
@@ -351,6 +407,23 @@ namespace IVM.Studio.Models
             TimeStampPosition = PositionType.RIGHT;
 
             ZStackLabelPosition = PositionType.RIGHT;
+        }
+
+        /// <summary>
+        /// All Crop
+        /// </summary>
+        private void AllCrop()
+        {
+
+        }
+
+        /// <summary>
+        /// Export Crop
+        /// </summary>
+        private void ExportCrop()
+        {
+            if (CropEnabled)
+                eventAggregator.GetEvent<ExportCropEvent>().Publish();
         }
     }
 }

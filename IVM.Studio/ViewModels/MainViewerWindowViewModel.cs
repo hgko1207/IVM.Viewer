@@ -64,7 +64,7 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Subscribe(ViewerChanged);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(() => window.Close());
 
-            imagePage = new ImageViewer() { WindowId = view.WindowId };
+            imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId };
             videoPage = new VideoViewer() { WindowId = view.WindowId };
 
             ViewerChanged();
