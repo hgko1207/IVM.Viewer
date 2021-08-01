@@ -269,20 +269,20 @@ namespace IVM.Studio.Services
 
                 Point from = new Point(x1, y1);
                 Point to = new Point(x2, y2);
-                int fromEllipse_left = (int)(x1 - thickness / 2d);
-                int fromEllipse_top = (int)(y1 - thickness / 2d);
-                int toEllipse_left = (int)(x2 - thickness / 2d);
-                int toEllipse_top = (int)(y2 - thickness / 2d);
+                int fromEllipseLeft = (int)(x1 - thickness / 2d);
+                int fromEllipseTop = (int)(y1 - thickness / 2d);
+                int toEllipseLeft = (int)(x2 - thickness / 2d);
+                int toEllipseTop = (int)(y2 - thickness / 2d);
 
                 using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
                 using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
                 {
                     g1.DrawLine(pen, from, to);
-                    g1.FillEllipse(brush, fromEllipse_left, fromEllipse_top, thickness, thickness);
-                    g1.FillEllipse(brush, toEllipse_left, toEllipse_top, thickness, thickness);
+                    g1.FillEllipse(brush, fromEllipseLeft, fromEllipseTop, thickness, thickness);
+                    g1.FillEllipse(brush, toEllipseLeft, toEllipseTop, thickness, thickness);
                     g2.DrawLine(pen, from, to);
-                    g2.FillEllipse(brush, fromEllipse_left, fromEllipse_top, thickness, thickness);
-                    g2.FillEllipse(brush, toEllipse_left, toEllipse_top, thickness, thickness);
+                    g2.FillEllipse(brush, fromEllipseLeft, fromEllipseTop, thickness, thickness);
+                    g2.FillEllipse(brush, toEllipseLeft, toEllipseTop, thickness, thickness);
                 }
             }
         }
@@ -309,7 +309,7 @@ namespace IVM.Studio.Services
             int top = (int)(y - thickness / 2d);
             int bottom = (int)(y + thickness / 2d);
 
-            using (GDIDrawing.Drawing2D.Matrix matrix = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate))
+            using (Matrix matrix = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate))
             {
                 for (int i_x = left; i_x <= right; i_x++)
                 {
@@ -353,15 +353,17 @@ namespace IVM.Studio.Services
             using (Graphics g2 = Graphics.FromImage(displayImage))
             {
                 g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
                 using (Font font = new Font("돋움", fontSize))
                 {
                     SizeF size = g1.MeasureString(text, font);
-                    float left_converted = x - size.Width / 2f;
-                    float top_converted = y - size.Height / 2f;
+                    float leftConverted = x - size.Width / 2f;
+                    float topConverted = y - size.Height / 2f;
+
                     using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
                     {
-                        g1.DrawString(text, font, brush, new PointF(left_converted, top_converted));
-                        g2.DrawString(text, font, brush, new PointF(left_converted, top_converted));
+                        g1.DrawString(text, font, brush, new PointF(leftConverted, topConverted));
+                        g2.DrawString(text, font, brush, new PointF(leftConverted, topConverted));
                     }
                 }
             }
@@ -396,6 +398,52 @@ namespace IVM.Studio.Services
                 gr.DrawLine(pen, startPoint - scaleBarY + clampX, startPoint - scaleBarY - clampX);
                 gr.FillRectangle(Brushes.White, new Rectangle(startPoint - new Size(thicknessOfScaleBar / 2, thicknessOfScaleBar / 2),
                     new Size(thicknessOfScaleBar, thicknessOfScaleBar)));
+            }
+        }
+
+        /// <summary>
+        /// Draw Rectangle
+        /// </summary>
+        /// <param name="annotationImage"></param>
+        /// <param name="displayImage"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="color"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawRectangle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+                            bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
+                int width = Math.Abs(x1 - x2);
+                int height = Math.Abs(y1 - y2);
+
+                x1 = Math.Min(x1, x2);
+                y1 = Math.Min(y1, y2);
+
+                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                {
+                    g1.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
+                    g2.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
+                }
+            }
+        }
+
+        public void DrawCircle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+                            bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
             }
         }
 
@@ -463,7 +511,7 @@ namespace IVM.Studio.Services
         /// </summary>
         public WPFDrawing.Imaging.BitmapSource ConvertGDIBitmapToWPF(Bitmap image)
         {
-            if (image == null) 
+            if (image == null)
                 return null;
 
             Rectangle rect = new Rectangle(0, 0, image.Width, image.Height);

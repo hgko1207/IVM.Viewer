@@ -15,7 +15,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Drawing = System.Windows.Media;
 
@@ -105,6 +107,9 @@ namespace IVM.Studio.ViewModels.UserControls
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
         private AnnotationInfo annotationInfo;
 
+        private System.Windows.Shapes.Rectangle drawRectangle;
+        private System.Windows.Shapes.Ellipse drawEllipse;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -145,7 +150,6 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
-            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport, ThreadOption.UIThread);
 
             EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
             EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
@@ -164,7 +168,6 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
-            EventAggregator.GetEvent<DrawExportEvent>().Unsubscribe(DrawExport);
 
             EventAggregator.GetEvent<RotationEvent>().Unsubscribe(Rotation);
             EventAggregator.GetEvent<ReflectEvent>().Unsubscribe(Reflect);
@@ -406,24 +409,6 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Draw Export
-        /// </summary>
-        private void DrawExport()
-        {
-            if (displayingImageGDI == null)
-                return;
-
-            VistaSaveFileDialog dlg = new VistaSaveFileDialog
-            {
-                DefaultExt = ".png",
-                Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
-            };
-
-            if (dlg.ShowDialog().GetValueOrDefault())
-                displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
-        }
-
-        /// <summary>
         /// 회전 이벤트
         /// </summary>
         /// <param name="type"></param>
@@ -650,32 +635,70 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ViewPortMouseMove(MouseEventArgs e)
         {
-            if (annotationInfo.CropCrosshairEnabled)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    System.Windows.Point position = e.GetPosition(view.ImageView);
+                System.Windows.Point position = e.GetPosition(view.ImageView);
 
-                    if (viewPortPreviousPoint == null)
+                if (viewPortPreviousPoint == null)
+                {
+                    viewPortPreviousPoint = new System.Windows.Point(position.X, position.Y);
+                    return;
+                }
+
+                double left = Math.Min(position.X, viewPortPreviousPoint.Value.X);
+                double top = Math.Min(position.Y, viewPortPreviousPoint.Value.Y);
+                double width = Math.Abs(position.X - viewPortPreviousPoint.Value.X);
+                double height;
+
+                if (Keyboard.Modifiers == ModifierKeys.Shift)
+                    height = width;
+                else
+                    height = Math.Abs(position.Y - viewPortPreviousPoint.Value.Y);
+
+                if (annotationInfo.CropCrosshairEnabled)
+                {
+                    if (annotationInfo.CropRectangleEnabled)
+                        EventAggregator.GetEvent<DrawCropBoxEvent>().Publish(new DrawParam(left, top, width, height));
+                    else if (annotationInfo.CropCircleEnabled)
+                        EventAggregator.GetEvent<DrawCropCircleEvent>().Publish(new DrawParam(left, top, width, height));
+                }
+                else if (annotationInfo.DrawRectangleEnabled)
+                {
+                    if (drawRectangle == null)
                     {
-                        viewPortPreviousPoint = new System.Windows.Point(position.X, position.Y);
-                        return;
+                        drawRectangle = new System.Windows.Shapes.Rectangle()
+                        {
+                            Stroke = new SolidColorBrush(annotationInfo.DrawColor),
+                            StrokeThickness = annotationInfo.DrawThickness
+                        };
+
+                        Panel.SetZIndex(drawRectangle, 1);
+                        view.ImageOverlayCanvas.Children.Add(drawRectangle);
                     }
 
-                    double left = Math.Min(position.X, viewPortPreviousPoint.Value.X);
-                    double top = Math.Min(position.Y, viewPortPreviousPoint.Value.Y);
-                    double width = Math.Abs(position.X - viewPortPreviousPoint.Value.X);
-                    double height;
+                    drawRectangle.Width = width;
+                    drawRectangle.Height = height;
+                    Canvas.SetTop(drawRectangle, top);
+                    Canvas.SetLeft(drawRectangle, left);
+                }
+                else if (annotationInfo.DrawCircleEnabled)
+                {
+                    if (drawEllipse == null)
+                    {
+                        drawEllipse = new System.Windows.Shapes.Ellipse()
+                        {
+                            Stroke = new SolidColorBrush(annotationInfo.DrawColor),
+                            StrokeThickness = 2
+                        };
 
-                    if (Keyboard.Modifiers == ModifierKeys.Shift) 
-                        height = width;
-                    else
-                        height = Math.Abs(position.Y - viewPortPreviousPoint.Value.Y);
+                        Panel.SetZIndex(drawEllipse, 1);
+                        view.ImageOverlayCanvas.Children.Add(drawEllipse);
+                    }
 
-                    if (annotationInfo.CropRectangleEnabled)
-                        EventAggregator.GetEvent<DrawCropBoxEvent>().Publish(new DrawCropParam(left, top, width, height));
-                    else if (annotationInfo.CropCircleEnabled)
-                        EventAggregator.GetEvent<DrawCropCircleEvent>().Publish(new DrawCropParam(left, top, width, height));
+                    drawEllipse.Width = width;
+                    drawEllipse.Height = height;
+                    Canvas.SetTop(drawEllipse, top);
+                    Canvas.SetLeft(drawEllipse, left);
                 }
             }
         }
@@ -686,7 +709,37 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ViewPortMouseUp(MouseButtonEventArgs e)
         {
-            annotationInfo.CropCrosshairEnabled = false;
+            System.Windows.Point position = e.GetPosition(view.ImageView);
+
+            if (annotationInfo.CropCrosshairEnabled)
+            {
+                annotationInfo.CropCrosshairEnabled = false;
+            }
+            else if (annotationInfo.DrawRectangleEnabled)
+            {
+                if (annotationImage == null)
+                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
+
+                view.ImageOverlayCanvas.Children.Remove(drawRectangle);
+                drawRectangle = null;
+
+                imageService.DrawRectangle(
+                        annotationImage: annotationImage, displayImage: displayingImageGDI,
+                        x1: (int)Math.Round(viewPortPreviousPoint.Value.X / currentZoomRatio * 100), y1: (int)Math.Round(viewPortPreviousPoint.Value.Y / currentZoomRatio * 100),
+                        x2: (int)Math.Round(position.X / currentZoomRatio * 100), y2: (int)Math.Round(position.Y / currentZoomRatio * 100),
+                        thickness: annotationInfo.DrawThickness, color: annotationInfo.DrawColor,
+                        horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
+                    );
+
+                DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
+            }
+            else if (annotationInfo.DrawCircleEnabled)
+            {
+                if (annotationImage == null)
+                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
+            }
+
+            viewPortPreviousPoint = null;
         }
 
         /// <summary>

@@ -24,20 +24,31 @@ namespace IVM.Studio.Views.UserControls
         {
             InitializeComponent();
 
-            eventAggregator.GetEvent<EnableCropEvent>().Subscribe(EnableCrop);
+            eventAggregator.GetEvent<EnableCropEvent>().Subscribe(CanvasToTop);
             eventAggregator.GetEvent<DisableCropEvent>().Subscribe(DisableCrop);
+            eventAggregator.GetEvent<EnableDrawEvent>().Subscribe(CanvasToTop);
+            eventAggregator.GetEvent<DisableDrawEvent>().Subscribe(ImageToTop);
             eventAggregator.GetEvent<DrawCropBoxEvent>().Subscribe(DrawCropBox);
             eventAggregator.GetEvent<DrawCropCircleEvent>().Subscribe(DrawCropCircle);
             eventAggregator.GetEvent<GetPositionToCropEvent>().Subscribe(GetPosition);
         }
 
         /// <summary>
-        /// EnableCrop
+        /// CanvasToTop
         /// </summary>
-        private void EnableCrop()
+        private void CanvasToTop()
         {
             Panel.SetZIndex(ImageView, 0);
             Panel.SetZIndex(ImageOverlayCanvas, 1);
+        }
+
+        /// <summary>
+        /// ImageToTop
+        /// </summary>
+        private void ImageToTop()
+        {
+            Panel.SetZIndex(ImageView, 1);
+            Panel.SetZIndex(ImageOverlayCanvas, 0);
         }
 
         /// <summary>
@@ -45,8 +56,7 @@ namespace IVM.Studio.Views.UserControls
         /// </summary>
         private void DisableCrop()
         {
-            Panel.SetZIndex(ImageView, 1);
-            Panel.SetZIndex(ImageOverlayCanvas, 0);
+            ImageToTop();
 
             if (cropBox != null)
             {
@@ -65,7 +75,7 @@ namespace IVM.Studio.Views.UserControls
         /// DrawCropBox
         /// </summary>
         /// <param name="param"></param>
-        private void DrawCropBox(DrawCropParam param)
+        private void DrawCropBox(DrawParam param)
         {
             if (cropBox == null)
             {
@@ -84,7 +94,7 @@ namespace IVM.Studio.Views.UserControls
         /// <summary>
         /// DrawCropCircle
         /// </summary>
-        private void DrawCropCircle(DrawCropParam param)
+        private void DrawCropCircle(DrawParam param)
         {
             if (cropCircle == null)
             {

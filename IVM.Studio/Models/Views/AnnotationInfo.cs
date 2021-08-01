@@ -212,14 +212,22 @@ namespace IVM.Studio.Models
             get => drawRectangleEnabled;
             set 
             {
-                if (SetProperty(ref drawRectangleEnabled, value) && value)
+                if (SetProperty(ref drawRectangleEnabled, value))
                 {
-                    PenEnabled = false;
-                    TextEnabled = false;
-                    EraserEnabled = false;
-                    DrawCircleEnabled = false;
-                    DrawTriangleEnabled = false;
-                    CropEnabled = false;
+                    if (value)
+                    {
+                        PenEnabled = false;
+                        TextEnabled = false;
+                        EraserEnabled = false;
+                        DrawCircleEnabled = false;
+                        DrawTriangleEnabled = false;
+                        CropEnabled = false;
+                        eventAggregator.GetEvent<EnableDrawEvent>().Publish();
+                    }
+                    else
+                    {
+                        eventAggregator.GetEvent<DisableDrawEvent>().Publish();
+                    }
                 }
             }
         }
@@ -230,14 +238,22 @@ namespace IVM.Studio.Models
             get => drawCircleEnabled;
             set
             {
-                if (SetProperty(ref drawCircleEnabled, value) && value)
+                if (SetProperty(ref drawCircleEnabled, value))
                 {
-                    PenEnabled = false;
-                    TextEnabled = false;
-                    EraserEnabled = false;
-                    DrawRectangleEnabled = false;
-                    DrawTriangleEnabled = false;
-                    CropEnabled = false;
+                    if (value)
+                    {
+                        PenEnabled = false;
+                        TextEnabled = false;
+                        EraserEnabled = false;
+                        DrawRectangleEnabled = false;
+                        DrawTriangleEnabled = false;
+                        CropEnabled = false;
+                        eventAggregator.GetEvent<EnableDrawEvent>().Publish();
+                    }
+                    else
+                    {
+                        eventAggregator.GetEvent<DisableDrawEvent>().Publish();
+                    }
                 }
             }
         }

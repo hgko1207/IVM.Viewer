@@ -128,18 +128,22 @@ namespace IVM.Studio.Models.Events
     public class ZoomRatioChangedEvent : PubSubEvent<int> { }
     public class ZoomRatioControlEvent : PubSubEvent<int> { }
 
+    public class EnableDrawEvent : PubSubEvent { }
+    public class DisableDrawEvent : PubSubEvent { }
+
     public class EnableCropEvent : PubSubEvent { }
     public class DisableCropEvent : PubSubEvent { }
 
-    public class DrawCropBoxEvent : PubSubEvent<DrawCropParam> { }
-    public class DrawCropParam
+    public class DrawCropBoxEvent : PubSubEvent<DrawParam> { }
+    public class DrawCropCircleEvent : PubSubEvent<DrawParam> { }
+    public class DrawParam
     {
         public readonly double Left;
         public readonly double Top;
         public readonly double Width;
         public readonly double Height;
 
-        public DrawCropParam(double left, double top, double width, double height)
+        public DrawParam(double left, double top, double width, double height)
         {
             Left = left;
             Top = top;
@@ -147,8 +151,6 @@ namespace IVM.Studio.Models.Events
             Height = height;
         }
     }
-
-    public class DrawCropCircleEvent : PubSubEvent<DrawCropParam> { }
 
     public class GetPositionToCropEvent : PubSubEvent<GetPositionToCropParam> { }
     public class GetPositionToCropParam
