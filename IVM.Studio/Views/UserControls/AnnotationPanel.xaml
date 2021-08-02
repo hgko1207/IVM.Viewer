@@ -73,7 +73,7 @@
                     <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding DrawTriangleEnabled}" Style="{StaticResource IconToggleButton}" 
                                      Glyph="../../Resources/Images/triangle.png" ToolTip="Crop Triangle"/>
 
-                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding DrawThickness}" IsFloatValue="False" Width="50" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding DrawThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="50" Margin="12 0 0 0"/>
                     <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Add" Margin="12 0 0 0" Command="{Binding AddDrawCommand}"/>
                 </StackPanel>
 
@@ -108,11 +108,11 @@
 
             <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
                 <TextBlock Text="Size" VerticalAlignment="Center" FontSize="13"/>
-                <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarSize}" IsFloatValue="False" Width="60" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
+                <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="60" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
                 <TextBlock Text="μm" VerticalAlignment="Center" Margin="4 0 0 0"/>
 
                 <TextBlock Text="Thickness" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarThickness}" IsFloatValue="False" Width="45" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
+                <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="45" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
                 <TextBlock Text="Pixel" VerticalAlignment="Center" Margin="4 0 0 0"/>
 
                 <TextBlock Text="Position" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
@@ -142,19 +142,16 @@
             </DockPanel>
             
             <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
-                <dxe:ComboBoxEdit SelectedIndex="0" Width="90">
-                    <dxe:ComboBoxEditItem Content="hh:mm:ss"/>
-                    <dxe:ComboBoxEditItem Content="hh:mm"/>
-                    <dxe:ComboBoxEditItem Content="mm:ss"/>
-                    <dxe:ComboBoxEditItem Content="00 sec"/>
-                    <dxe:ComboBoxEditItem Content="00 min"/>
-                    <dxe:ComboBoxEditItem Content="00 h"/>
+                <dxe:ComboBoxEdit EditValue="{Binding SelectedDateTimeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="90">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:TimeSpanType}" SortMode="DisplayName"/>
+                    </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
                 
                 <TextBlock Text="Start" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <TextBox Width="75" Margin="5 0 0 0" Text="00:00:30"/>
+                <dxe:TextEdit x:Name="TimeStampLabel" EditValue="{Binding TimeStampText}" Width="75" Margin="5 0 0 0" MaskType="DateTime" MaskUseAsDisplayFormat="True"/>
 
-                <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0" Width="70"/>
+                <TextBlock Text="Interval" VerticalAlignment="Center" FontSize="13" Margin="10 0 0 0" Width="70"/>
                 <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                     <TextBlock Style="{StaticResource GeneralTextBlock}" Text="01:10:10" Width="70"/>
                 </Border>
@@ -179,17 +176,16 @@
             </DockPanel>
 
             <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
-                <dxe:ComboBoxEdit SelectedIndex="0" Width="90">
-                    <dxe:ComboBoxEditItem Content="000.0 μm"/>
-                    <dxe:ComboBoxEditItem Content="000 μm"/>
-                    <dxe:ComboBoxEditItem Content="000.0 mm"/>
-                    <dxe:ComboBoxEditItem Content="000 mm"/>
+                <dxe:ComboBoxEdit EditValue="{Binding SelectedZStackLabelType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="90">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ZStackLabelType}" SortMode="DisplayName"/>
+                    </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
 
                 <TextBlock Text="Start" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
                 <TextBox Width="75" Margin="5 0 0 0" Text="1032"/>
 
-                <TextBlock Text="Interval(μm)" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0" Width="80"/>
+                <TextBlock Text="Interval(μm)" VerticalAlignment="Center" FontSize="13" Margin="10 0 0 0" Width="80"/>
                 <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="10 0 0 0">
                     <TextBlock Style="{StaticResource GeneralTextBlock}" Text="35" Width="50"/>
                 </Border>

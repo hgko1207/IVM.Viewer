@@ -39,8 +39,10 @@
             <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding CropEnabled}" Content="Crop" Style="{StaticResource ToggleButton}" Width="60" Margin="5 0 0 0"/>
             <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="All Crop" Style="{StaticResource GrayGradientButton}" 
                              Margin="5 0 0 0" Command="{Binding AllCropCommand}"/>
-            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="Export" Style="{StaticResource GrayGradientButton}" 
-                             Width="60" Margin="20 0 0 0" Command="{Binding ExportCropCommand}"/>
+            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="Export Crop" Style="{StaticResource GrayGradientButton}" 
+                             Width="90" Margin="10 0 0 0" Command="{Binding ExportCropCommand}"/>
+
+            <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" Width="60" Margin="25 0 0 0" Command="{Binding ExportCommand}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

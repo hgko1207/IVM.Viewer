@@ -354,11 +354,17 @@ namespace IVM.Studio.ViewModels.UserControls
                     }
 
                     int scaleBarSize = annotationInfo.ScaleBarSize;
-                    int scaleBarThickness = annotationInfo.ScaleBarThickness;
 
                     // 스케일 바
                     if (annotationInfo.ScaleBarEnabled && fovSizeX > 0 && fovSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fovSizeX && scaleBarSize < fovSizeY)
-                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, scaleBarThickness, 3, 9);
+                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 9, 
+                            annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel);
+
+                    if (annotationInfo.TimeStampEnabled)
+                        imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, 9);
+
+                    if (annotationInfo.ZStackLabelEnabled)
+                        imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, 9);
 
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);
@@ -743,7 +749,7 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// ExportCrop
+        /// Export Crop
         /// </summary>
         private void ExportCrop()
         {

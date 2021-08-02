@@ -8,6 +8,18 @@ using Prism.Events;
 using Prism.Ioc;
 using System.Windows.Input;
 
+/**
+ * @Class Name : RotateCropPanelViewModel.cs
+ * @Description : 회전 및 자리그 화면 뷰 모델
+ * @
+ * @ 수정일         수정자              수정내용
+ * @ ----------   ---------   -------------------------------
+ * @ 2021.07.30     고형균              최초생성
+ *
+ * @author 고형균
+ * @since 2021.07.30
+ * @version 1.0
+ */
 namespace IVM.Studio.ViewModels.UserControls
 {
     public class RotateCropPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<RotateCropPanel>
@@ -29,6 +41,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand RotationCommand { get; private set; }
         public ICommand ReflectCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
+        public ICommand ExportCommand { get; private set; }
 
         public AnnotationInfo AnnotationInfo { get; set; }
 
@@ -41,6 +54,7 @@ namespace IVM.Studio.ViewModels.UserControls
             RotationCommand = new DelegateCommand<string>(Rotation);
             ReflectCommand = new DelegateCommand<string>(Reflect);
             RotationResetCommand = new DelegateCommand(RotationReset);
+            ExportCommand = new DelegateCommand(Export);
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
@@ -100,6 +114,14 @@ namespace IVM.Studio.ViewModels.UserControls
         private void RotationReset()
         {
             EventAggregator.GetEvent<RotationResetEvent>().Publish();
+        }
+
+        /// <summary>
+        /// Export 이벤트
+        /// </summary>
+        private void Export()
+        {
+            EventAggregator.GetEvent<DrawExportEvent>().Publish();
         }
     }
 }

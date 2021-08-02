@@ -37,6 +37,34 @@ namespace IVM.Studio.Models
         mm
     }
 
+    public enum TimeSpanType
+    {
+        [Display(Name = "hh:mm:ss", Order = 1)]
+        hh_mm_ss,
+        [Display(Name = "hh:mm", Order = 2)]
+        hh_mm,
+        [Display(Name = "mm:ss", Order = 3)]
+        mm_ss,
+        [Display(Name = "00 sec", Order = 4)]
+        sec,
+        [Display(Name = "00 min", Order = 5)]
+        min,
+        [Display(Name = "00 h", Order = 6)]
+        h,
+    }
+
+    public enum ZStackLabelType
+    {
+        [Display(Name = "000.0 μm", Order = 1)]
+        Label1,
+        [Display(Name = "000 μm", Order = 2)]
+        Label2,
+        [Display(Name = "000.0 mm", Order = 3)]
+        Label3,
+        [Display(Name = "000 mm", Order = 4)]
+        Label4,
+    }
+
     public enum ZStackProjectionType
     {
         [Description("Maximum")]

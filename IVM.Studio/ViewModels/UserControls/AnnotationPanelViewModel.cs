@@ -2,8 +2,11 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using IVM.Studio.Utils;
+using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Ioc;
+using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
@@ -21,7 +24,7 @@ using System.Windows.Input;
  */
 namespace IVM.Studio.ViewModels.UserControls
 {
-    public class AnnotationPanelViewModel : ViewModelBase
+    public class AnnotationPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<AnnotationPanel>
     {
         private List<string> fontItemList;
         public List<string> FontItemList
@@ -37,9 +40,43 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref selectedFontItem, value);
         }
 
+        private TimeSpanType selectedDateTimeType;
+        public TimeSpanType SelectedDateTimeType
+        {
+            get => selectedDateTimeType;
+            set
+            {
+                if (SetProperty(ref selectedDateTimeType, value))
+                    SelectDateTime(value);
+            }
+        }
+
+        private DateTime timeStampText;
+        public DateTime TimeStampText
+        {
+            get => timeStampText;
+            set 
+            {
+                if (SetProperty(ref timeStampText, value))
+                    AnnotationInfo.TimeStampText = value.ToString(CommonUtil.TimaSpanToMask(SelectedDateTimeType));
+            } 
+        }
+
+        private ZStackLabelType selectedZStackLabelType;
+        public ZStackLabelType SelectedZStackLabelType
+        {
+            get => selectedZStackLabelType;
+            set
+            {
+                if (SetProperty(ref selectedZStackLabelType, value))
+                    SelectZStackLabelType(value);
+            }
+        }
+
         public ICommand AddDrawCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
-        public ICommand ExportCommand { get; private set; }
+
+        private AnnotationPanel view;
 
         public AnnotationInfo AnnotationInfo { get; set; }
 
@@ -51,14 +88,51 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             AddDrawCommand = new DelegateCommand(AddDraw);
             ClearCommand = new DelegateCommand(Clear);
-            ExportCommand = new DelegateCommand(Export);
-
             AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
 
             FontItemList = new List<string>();
             FontItemList.Add("돋음");
 
             SelectedFontItem = FontItemList[0];
+
+            SelectedDateTimeType = TimeSpanType.hh_mm_ss;
+        }
+
+        /// <summary>
+        /// OnLoaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnLoaded(AnnotationPanel view)
+        {
+            this.view = view;
+            SelectDateTime(SelectedDateTimeType);
+        }
+
+        /// <summary>
+        /// OnUnloaded
+        /// </summary>
+        /// <param name="view"></param>
+        public void OnUnloaded(AnnotationPanel view)
+        {
+        }
+
+        /// <summary>
+        /// Select DateTime
+        /// </summary>
+        /// <param name="type"></param>
+        private void SelectDateTime(TimeSpanType type)
+        {
+            view.TimeStampLabel.Mask = CommonUtil.TimaSpanToMask(type);
+            AnnotationInfo.TimeStampText = TimeStampText.ToString(CommonUtil.TimaSpanToMask(SelectedDateTimeType));
+        }
+
+        /// <summary>
+        /// Select ZStackLabelType
+        /// </summary>
+        /// <param name="type"></param>
+        private void SelectZStackLabelType(ZStackLabelType type)
+        {
+
         }
 
         /// <summary>
@@ -75,14 +149,6 @@ namespace IVM.Studio.ViewModels.UserControls
         private void Clear()
         {
             EventAggregator.GetEvent<DrawClearEvent>().Publish();
-        }
-
-        /// <summary>
-        /// Export 이벤트
-        /// </summary>
-        private void Export()
-        {
-            EventAggregator.GetEvent<DrawExportEvent>().Publish();
         }
     }
 }

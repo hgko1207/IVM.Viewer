@@ -1,4 +1,5 @@
 ﻿using IVM.Studio.Models;
+using IVM.Studio.Utils;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
@@ -370,6 +371,66 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// Draw Rectangle
+        /// </summary>
+        /// <param name="annotationImage"></param>
+        /// <param name="displayImage"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="color"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawRectangle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+                        bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
+                int width = Math.Abs(x1 - x2);
+                int height = Math.Abs(y1 - y2);
+
+                x1 = Math.Min(x1, x2);
+                y1 = Math.Min(y1, y2);
+
+                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                {
+                    g1.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
+                    g2.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="annotationImage"></param>
+        /// <param name="displayImage"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="color"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawCircle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+                            bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+            }
+        }
+
+        /// <summary>
         /// 주어진 비트맵 이미지에 스케일 바를 그립니다.
         /// </summary>
         /// <param name="image"></param>
@@ -402,48 +463,102 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
-        /// Draw Rectangle
+        /// 주어진 비트맵 이미지에 스케일 바를 그립니다.
         /// </summary>
-        /// <param name="annotationImage"></param>
-        /// <param name="displayImage"></param>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
+        /// <param name="image"></param>
+        /// <param name="fOVSizeX"></param>
+        /// <param name="fOVSizeY"></param>
+        /// <param name="length"></param>
         /// <param name="thickness"></param>
-        /// <param name="color"></param>
-        /// <param name="horizontalReflect"></param>
-        /// <param name="verticalReflect"></param>
-        /// <param name="rotate"></param>
-        public void DrawRectangle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
-                            bool horizontalReflect, bool verticalReflect, int rotate)
+        /// <param name="margin"></param>
+        /// <param name="xAxis"></param>
+        /// <param name="yAxis"></param>
+        public void DrawScaleBar(Bitmap image, int fOVSizeX, int fOVSizeY, int length, int thickness, int margin, 
+            bool xAxis, bool yAxis, PositionType positionType, ScaleBarLabelType labelType)
         {
-            using (Graphics g1 = Graphics.FromImage(annotationImage))
-            using (Graphics g2 = Graphics.FromImage(displayImage))
+            using (Graphics graphics = Graphics.FromImage(image))
+            using (Pen pen = new Pen(Brushes.White, thickness))
             {
-                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+                int canvasWidth = image.Width;
+                int canvasHeight = image.Height;
+                Size scaleBarX = new Size((int)((double)canvasWidth / fOVSizeX * length), 0);
+                Size scaleBarY = new Size(0, (int)((double)canvasHeight / fOVSizeY * length));
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? canvasWidth - margin : margin, canvasHeight - margin);
 
-                int width = Math.Abs(x1 - x2);
-                int height = Math.Abs(y1 - y2);
+                if (xAxis)
+                    graphics.DrawLine(pen, startPoint, positionType == PositionType.RIGHT ? startPoint - scaleBarX : startPoint + scaleBarX);
+                if (yAxis)
+                    graphics.DrawLine(pen, startPoint, startPoint - scaleBarY);
 
-                x1 = Math.Min(x1, x2);
-                y1 = Math.Min(y1, y2);
-
-                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                if (labelType != ScaleBarLabelType.None)
                 {
-                    g1.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
-                    g2.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
+                    string text = (labelType == ScaleBarLabelType.μm ? length : length / 1000) + " " + labelType.ToString();
+                    using (Font font = new Font("돋움", 14))
+                    {
+                        SizeF size = graphics.MeasureString(text, font);
+                        float left = (positionType == PositionType.RIGHT ? startPoint.X - (scaleBarX.Width / 2) : startPoint.X + (scaleBarX.Width / 2)) - size.Width / 2f;
+                        float top = canvasHeight - (margin * 2) - thickness - size.Height / 2f;
+
+                        using (Brush brush = new SolidBrush(Color.White))
+                        {
+                            graphics.DrawString(text, font, brush, new PointF(left, top));
+                        }
+                    }
                 }
             }
         }
 
-        public void DrawCircle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
-                            bool horizontalReflect, bool verticalReflect, int rotate)
+        /// <summary>
+        /// 주어진 비트맵 이미지에 TimeStamp 텍스트를 추가한다.
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="timeSpanText"></param>
+        /// <param name="positionType"></param>
+        /// <param name="margin"></param>
+        public void DrawTimeStampLabel(Bitmap image, string timeSpanText, PositionType positionType, int margin)
         {
-            using (Graphics g1 = Graphics.FromImage(annotationImage))
-            using (Graphics g2 = Graphics.FromImage(displayImage))
+            using (Graphics graphics = Graphics.FromImage(image))
+            using (Font font = new Font("돋움", 14))
             {
-                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+                int canvasWidth = image.Width;
+
+                SizeF size = graphics.MeasureString(timeSpanText, font);
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
+                
+                float left = startPoint.X - size.Width / 2f;
+                float top = startPoint.Y - size.Height / 2f;
+
+                using (Brush brush = new SolidBrush(Color.White))
+                {
+                    graphics.DrawString(timeSpanText, font, brush, new PointF(startPoint.X, startPoint.Y));
+                }
+            }
+        }
+
+        /// <summary>
+        /// 주어진 비트맵 이미지에 ZStack 텍스트를 추가한다.
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="zStackText"></param>
+        /// <param name="positionType"></param>
+        /// <param name="margin"></param>
+        public void DrawZStackLabel(Bitmap image, string zStackText, PositionType positionType, int margin)
+        {
+            using (Graphics graphics = Graphics.FromImage(image))
+            using (Font font = new Font("돋움", 14))
+            {
+                int canvasWidth = image.Width;
+
+                SizeF size = graphics.MeasureString(zStackText, font);
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
+
+                float left = startPoint.X - size.Width / 2f;
+                float top = startPoint.Y - size.Height / 2f;
+
+                using (Brush brush = new SolidBrush(Color.White))
+                {
+                    graphics.DrawString(zStackText, font, brush, new PointF(startPoint.X, startPoint.Y));
+                }
             }
         }
 

@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+using System;
 using System.Windows.Input;
 using WPFDrawing = System.Windows.Media;
 
@@ -349,6 +350,13 @@ namespace IVM.Studio.Models
             set => SetProperty(ref timeStampPosition, value);
         }
 
+        private string timeStampText;
+        public string TimeStampText
+        {
+            get => timeStampText;
+            set => SetProperty(ref timeStampText, value);
+        }
+
         private bool timeStampEnabled;
         public bool TimeStampEnabled
         {
@@ -368,6 +376,13 @@ namespace IVM.Studio.Models
         {
             get => zStackLabelPosition;
             set => SetProperty(ref zStackLabelPosition, value);
+        }
+
+        private string zStackLabelText;
+        public string ZStackLabelText
+        {
+            get => zStackLabelText;
+            set => SetProperty(ref zStackLabelText, value);
         }
 
         private bool zStackLabelEnabled;
@@ -420,7 +435,7 @@ namespace IVM.Studio.Models
             ScaleBarPosition = PositionType.RIGHT;
             ScaleBarLabel = ScaleBarLabelType.None;
 
-            TimeStampPosition = PositionType.RIGHT;
+            TimeStampPosition = PositionType.LEFT;
 
             ZStackLabelPosition = PositionType.RIGHT;
         }

@@ -160,6 +160,7 @@
     <Compile Include="Services\WindowByHistogramService.cs" />
     <Compile Include="Utils\ButtonStyleConverter.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
+    <Compile Include="Utils\CommonUtil.cs" />
     <Compile Include="Utils\EnumToCollectionExtension.cs" />
     <Compile Include="ViewModels\ChannelHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
