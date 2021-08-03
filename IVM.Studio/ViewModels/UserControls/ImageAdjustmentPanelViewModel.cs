@@ -140,39 +140,39 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (SetProperty(ref allWindowOpend, value))
                 {
 
-                    if (value)
-                    {
-                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
-                        mainViewerWindow.Show();
-
-                        FileInfo currentFile = dataManager.CurrentFile;
-                        if (currentFile != null)
-                        {
-                            Metadata metadata = dataManager.Metadata;
-                            if (dataManager.ViewerName == nameof(ImageViewer))
-                                EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
-                            else
-                                EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
-                        }
-                    }
-                    else
-                    {
-                        dataManager.MainViewerOpend = false;
-                        EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
-                    }
-
-                    //MainViewerWindow mainViewerWindow = new MainViewerWindow() { Topmost = true, WindowId = ++dataManager.MainWindowSeq };
-                    //mainViewerWindow.Show();
-
-                    //FileInfo currentFile = dataManager.CurrentFile;
-                    //if (currentFile != null)
+                    //if (value)
                     //{
-                    //    Metadata metadata = dataManager.Metadata;
-                    //    if (dataManager.ViewerName == nameof(ImageViewer))
-                    //        EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
-                    //    else
-                    //        EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                    //    MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
+                    //    mainViewerWindow.Show();
+
+                    //    FileInfo currentFile = dataManager.CurrentFile;
+                    //    if (currentFile != null)
+                    //    {
+                    //        Metadata metadata = dataManager.Metadata;
+                    //        if (dataManager.ViewerName == nameof(ImageViewer))
+                    //            EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                    //        else
+                    //            EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                    //    }
                     //}
+                    //else
+                    //{
+                    //    dataManager.MainViewerOpend = false;
+                    //    EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
+                    //}
+
+                    MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
+                    mainViewerWindow.Show();
+
+                    FileInfo currentFile = dataManager.CurrentFile;
+                    if (currentFile != null)
+                    {
+                        Metadata metadata = dataManager.Metadata;
+                        if (dataManager.ViewerName == nameof(ImageViewer))
+                            EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                        else
+                            EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                    }
                 }
             }
         }

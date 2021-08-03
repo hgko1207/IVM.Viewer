@@ -50,7 +50,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref selectedDAPIColorMap, value))
-                    colorChannelInfoMap[ChannelType.DAPI].ColorMap = value;
+                    DAPIChannel.ColorMap = value;
             }
         }
 
@@ -61,7 +61,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref selectedGFPColorMap, value))
-                    colorChannelInfoMap[ChannelType.GFP].ColorMap = value;
+                    GFPChannel.ColorMap = value;
             }
         }
 
@@ -72,7 +72,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref selectedRFPColorMap, value))
-                    colorChannelInfoMap[ChannelType.RFP].ColorMap = value;
+                    RFPChannel.ColorMap = value;
             }
         }
 
@@ -83,7 +83,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref selectedNIRColorMap, value))
-                    colorChannelInfoMap[ChannelType.NIR].ColorMap = value;
+                    NIRChannel.ColorMap = value;
             }
         }
 
@@ -94,7 +94,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _DAPIColorMapEnabled, value))
-                    colorChannelInfoMap[ChannelType.DAPI].ColorMapEnabled = value;
+                    DAPIChannel.ColorMapEnabled = value;
             }
         }
 
@@ -105,7 +105,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _GFPColorMapEnabled, value))
-                    colorChannelInfoMap[ChannelType.GFP].ColorMapEnabled = value;
+                    GFPChannel.ColorMapEnabled = value;
             }
         }
 
@@ -116,7 +116,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _RFPColorMapEnabled, value))
-                    colorChannelInfoMap[ChannelType.RFP].ColorMapEnabled = value;
+                    RFPChannel.ColorMapEnabled = value;
             }
         }
 
@@ -127,7 +127,7 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref _NIRColorMapEnabled, value))
-                    colorChannelInfoMap[ChannelType.NIR].ColorMapEnabled = value;
+                    NIRChannel.ColorMapEnabled = value;
             }
         }
 
@@ -142,6 +142,11 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
+        public ColorChannelModel DAPIChannel { get; set; }
+        public ColorChannelModel GFPChannel { get; set; }
+        public ColorChannelModel RFPChannel { get; set; }
+        public ColorChannelModel NIRChannel { get; set; }
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -153,11 +158,15 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
 
             colorChannelInfoMap = Container.Resolve<DataManager>().ColorChannelInfoMap;
+            DAPIChannel = colorChannelInfoMap[ChannelType.DAPI];
+            GFPChannel = colorChannelInfoMap[ChannelType.GFP];
+            RFPChannel = colorChannelInfoMap[ChannelType.RFP];
+            NIRChannel = colorChannelInfoMap[ChannelType.NIR];
 
-            SelectedDAPIColorMap = colorChannelInfoMap[ChannelType.DAPI].ColorMap;
-            SelectedGFPColorMap = colorChannelInfoMap[ChannelType.GFP].ColorMap;
-            SelectedRFPColorMap = colorChannelInfoMap[ChannelType.RFP].ColorMap;
-            SelectedNIRColorMap = colorChannelInfoMap[ChannelType.NIR].ColorMap;
+            SelectedDAPIColorMap = DAPIChannel.ColorMap;
+            SelectedGFPColorMap = GFPChannel.ColorMap;
+            SelectedRFPColorMap = RFPChannel.ColorMap;
+            SelectedNIRColorMap = NIRChannel.ColorMap;
 
             IsLock = true;
         }

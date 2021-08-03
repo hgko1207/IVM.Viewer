@@ -14,7 +14,7 @@ namespace IVM.Studio.Models
 {
     public class ColorMapModel
     {
-        public ColorMap ColorMap { get; set; }
+        public ColorMap Color { get; set; }
 
         public string Image { get; set; }
     }

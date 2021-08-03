@@ -82,7 +82,7 @@
                 <dxe:ComboBoxEdit.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5 0">
-                            <TextBlock Text="{Binding ColorMap}" Width="90" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Color}" Width="90" VerticalAlignment="Center"/>
                             <Image Source="{Binding Image}" Width="160"/>
                         </StackPanel>
                     </DataTemplate>
@@ -95,7 +95,7 @@
                 <dxe:ComboBoxEdit.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5 0">
-                            <TextBlock Text="{Binding ColorMap}" Width="90" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Color}" Width="90" VerticalAlignment="Center"/>
                             <Image Source="{Binding Image}" Width="160"/>
                         </StackPanel>
                     </DataTemplate>
@@ -108,7 +108,7 @@
                 <dxe:ComboBoxEdit.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5 0">
-                            <TextBlock Text="{Binding ColorMap}" Width="90" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Color}" Width="90" VerticalAlignment="Center"/>
                             <Image Source="{Binding Image}" Width="160"/>
                         </StackPanel>
                     </DataTemplate>
@@ -121,7 +121,7 @@
                 <dxe:ComboBoxEdit.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Margin="5 0">
-                            <TextBlock Text="{Binding ColorMap}" Width="90" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Color}" Width="90" VerticalAlignment="Center"/>
                             <Image Source="{Binding Image}" Width="160"/>
                         </StackPanel>
                     </DataTemplate>

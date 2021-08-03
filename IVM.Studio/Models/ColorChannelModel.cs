@@ -21,7 +21,7 @@ using System.Windows.Media;
  */
 namespace IVM.Studio.Models
 {
-    public enum ChannelType 
+    public enum ChannelType
     {
         DAPI, GFP, RFP, NIR, ALL
     }
