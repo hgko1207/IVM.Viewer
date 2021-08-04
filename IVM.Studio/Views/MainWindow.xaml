@@ -75,6 +75,7 @@
                                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 8 10 8" Grid.Column="1">
                                     <dx:SimpleButton Content="Previous" Width="80" Style="{StaticResource GrayGradientButton}" Command="{Binding PreviousSlideCommand}"/>
                                     <dx:SimpleButton Content="Next" Width="80" Margin="5 0 0 0" Style="{StaticResource GrayGradientButton}" Command="{Binding NextSlideCommand}"/>
+                                    <dx:SimpleButton Content="Open" Width="80" Margin="5 0 0 0" Style="{StaticResource GrayGradientButton}" Command="{Binding WindowOpenCommand}"/>
                                 </StackPanel>
                             </Grid>
                         </dxdo:DocumentPanel>

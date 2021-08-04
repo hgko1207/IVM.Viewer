@@ -252,6 +252,7 @@ namespace IVM.Studio.ViewModels
         public ICommand RefreshCommand { get; private set; }
         public ICommand PreviousSlideCommand { get; private set; }
         public ICommand NextSlideCommand { get; private set; }
+        public ICommand WindowOpenCommand { get; private set; }
 
         public ICommand PlaySlideShowCommand { get; private set; }
 
@@ -301,6 +302,7 @@ namespace IVM.Studio.ViewModels
             RefreshCommand = new DelegateCommand(Refresh);
             PreviousSlideCommand = new DelegateCommand(PreviousSlide);
             NextSlideCommand = new DelegateCommand(NextSlide);
+            WindowOpenCommand = new DelegateCommand(WindowOpen);
 
             PlaySlideShowCommand = new DelegateCommand<string>(PlaySlideShow);
 
@@ -423,6 +425,27 @@ namespace IVM.Studio.ViewModels
                 return;
 
             SelectedSlideInfo = SlideInfoCollection[idx + 1];
+        }
+
+        /// <summary>
+        /// Window Open
+        /// </summary>
+        private void WindowOpen()
+        {
+            MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
+            mainViewerWindow.Show();
+
+            FileInfo currentFile = dataManager.CurrentFile;
+            if (currentFile != null)
+            {
+                Metadata metadata = dataManager.Metadata;
+                if (dataManager.ViewerName == nameof(ImageViewer))
+                    EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+                else
+                    EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
+            }
+
+            EventAggregator.GetEvent<ViewerPageChangedEvent>().Publish();
         }
 
         /// <summary>

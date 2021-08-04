@@ -88,7 +88,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void ViewerChanged()
         {
-            string viewerName = Container.Resolve<DataManager>().ViewerName;
+            string viewerName = dataManager.ViewerName;
             if (viewerName == nameof(VideoViewer))
             {
                 Title = "Video Viewer";
