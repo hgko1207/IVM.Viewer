@@ -32,7 +32,7 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref viewerPage, value);
         }
 
-        private MainViewerWindow window;
+        private MainViewerWindow view;
 
         private UserControl imagePage;
         private UserControl videoPage;
@@ -56,18 +56,18 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnLoaded(MainViewerWindow view)
         {
-            this.window = view;
-            window.Closed += WindowClosed;
-            window.Activated += WindowActivated;
-            window.Deactivated += WindowDeactivated;
+            this.view = view;
+            view.Closed += WindowClosed;
+            view.Activated += WindowActivated;
+            view.Deactivated += WindowDeactivated;
 
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Subscribe(ViewerChanged);
-            EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(() => window.Close());
+            EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(() => view.Close());
 
             imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId };
             videoPage = new VideoViewer() { WindowId = view.WindowId };
 
-            ViewerChanged();
+            InitViewerChanged();
 
             dataManager.MainViewerOpend = true;
             EventAggregator.GetEvent<MainViewerOpendEvent>().Publish();
@@ -80,13 +80,13 @@ namespace IVM.Studio.ViewModels
         public void OnUnloaded(MainViewerWindow view)
         {
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Unsubscribe(ViewerChanged);
-            EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(() => window.Close());
+            EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(() => this.view.Close());
         }
 
         /// <summary>
         /// 뷰어 변경
         /// </summary>
-        private void ViewerChanged()
+        private void InitViewerChanged()
         {
             string viewerName = dataManager.ViewerName;
             if (viewerName == nameof(VideoViewer))
@@ -96,8 +96,19 @@ namespace IVM.Studio.ViewModels
             }
             else
             {
-                Title = "Image Viewer - #" + window.WindowId;
+                Title = "Image Viewer - #" + view.WindowId;
                 ViewerPage = imagePage;
+            }
+        }
+
+        /// <summary>
+        /// 뷰어 변경
+        /// </summary>
+        private void ViewerChanged()
+        {
+            if (view.WindowId == dataManager.MainWindowId)
+            {
+                InitViewerChanged();
             }
         }
 
@@ -108,9 +119,9 @@ namespace IVM.Studio.ViewModels
         /// <param name="e"></param>
         private void WindowActivated(object sender, EventArgs e)
         {
-            if (window.IsActive)
+            if (view.IsActive)
             {
-                dataManager.MainWindowId = window.WindowId;
+                dataManager.MainWindowId = view.WindowId;
             }
         }
 

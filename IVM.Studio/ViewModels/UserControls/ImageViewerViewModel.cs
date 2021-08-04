@@ -126,6 +126,8 @@ namespace IVM.Studio.ViewModels.UserControls
             ViewPortMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ViewPortMouseMove);
             ViewPortMouseUpCommand = new DelegateCommand<MouseButtonEventArgs>(ViewPortMouseUp);
 
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
+
             currentZoomRatio = 100;
             DisplayingImageWidth = double.NaN;
             currentRotate = 0;
@@ -144,8 +146,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public void OnLoaded(ImageViewer view)
         {
             this.view = view;
-
-            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
+            
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
@@ -156,6 +157,9 @@ namespace IVM.Studio.ViewModels.UserControls
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl, ThreadOption.UIThread);
             EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop, ThreadOption.UIThread);
+
+            // 디스플레이
+            InternalDisplayImage(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -164,7 +168,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(ImageViewer view)
         {
-            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
@@ -228,10 +231,8 @@ namespace IVM.Studio.ViewModels.UserControls
             currentRotate = 0;
 
             // 디스플레이
-            InternalDisplayImage(dataManager.MainWindowId);
-
-            // 슬라이드쇼
-            //Container.Resolve<SlideShowService>().ContinueSlideShow();
+            if (view != null && view.WindowId == dataManager.MainWindowId)
+                InternalDisplayImage(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -481,7 +482,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="zoomRatio"></param>
         private void ZoomRatioControl(int zoomRatio)
         {
-            DisplayingImageWidth = originalImage.Width * (zoomRatio / 100d);
+            if (originalImage != null && dataManager.MainWindowId == view.WindowId)
+                DisplayingImageWidth = originalImage.Width * (zoomRatio / 100d);
         }
 
         /// <summary>

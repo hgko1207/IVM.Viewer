@@ -1,5 +1,7 @@
 ﻿using IVM.Studio.Models.Events;
+using IVM.Studio.Models.Views;
 using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Events;
@@ -42,6 +44,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public ICommand ResetZoomRatioCommand { get; private set; }
 
+        public SliderControlInfo SliderControlInfo { get; set; }
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -50,7 +54,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             ResetZoomRatioCommand = new DelegateCommand(ResetZoomRatio);
 
-            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Subscribe(ZoomRatioChanged, ThreadOption.UIThread);
+            SliderControlInfo = container.Resolve<DataManager>().SliderControlInfo;
 
             ZoomRatioValue = 100;
         }
@@ -61,6 +65,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnLoaded(DisplayControlPanel view)
         {
+            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Subscribe(ZoomRatioChanged, ThreadOption.UIThread);
         }
 
         /// <summary>
@@ -78,7 +83,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="zoomRatio"></param>
         private void ZoomRatioChanged(int zoomRatio)
         {
-            ZoomRatioValue = zoomRatio;  
+            ZoomRatioValue = zoomRatio;
         }
 
         /// <summary>

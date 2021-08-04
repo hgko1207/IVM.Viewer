@@ -73,6 +73,13 @@ namespace IVM.Studio.Models.Events
     public class DisplaySlideEvent : PubSubEvent<bool> { }
 
     public class PlaySlideShowEvent : PubSubEvent { }
+    public class StopSlideShowEvent : PubSubEvent { }
+    public class EnableImageSlidersEvent : PubSubEvent<SlidersParam> { }
+    public class SlidersParam
+    {
+        public string CurrentSlidesPath { get; set; }
+        public string SlideName { get; set; }
+    }
 
     public class PlayVideoEvent : PubSubEvent { }
     public class PauseVideoEvent : PubSubEvent { }

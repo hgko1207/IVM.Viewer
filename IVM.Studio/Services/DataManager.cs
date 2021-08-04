@@ -4,7 +4,6 @@ using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Controls;
 using static IVM.Studio.Models.Common;
 using WPFDrawing = System.Windows.Media;
 
@@ -25,12 +24,7 @@ namespace IVM.Studio.Services
         /// <summary>메타데이터 정보</summary>
         public Metadata Metadata { get; set; }
 
-        public UserControl ViewerPage { get; set; }
-
         public string ViewerName { get; set; }
-
-        /// <summary>선택된 파일 정보</summary>
-        public SlideInfo SelectedSlideInfo { get; set; }
 
         public Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; set; }
 
