@@ -267,12 +267,20 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref drawTriangleEnabled, value) && value)
                 {
-                    PenEnabled = false;
-                    TextEnabled = false;
-                    EraserEnabled = false;
-                    DrawRectangleEnabled = false;
-                    DrawCircleEnabled = false;
-                    CropEnabled = false;
+                    if (value)
+                    {
+                        PenEnabled = false;
+                        TextEnabled = false;
+                        EraserEnabled = false;
+                        DrawRectangleEnabled = false;
+                        DrawCircleEnabled = false;
+                        CropEnabled = false;
+                        eventAggregator.GetEvent<EnableDrawEvent>().Publish();
+                    }
+                    else
+                    {
+                        eventAggregator.GetEvent<DisableDrawEvent>().Publish();
+                    }
                 }
             }
         }

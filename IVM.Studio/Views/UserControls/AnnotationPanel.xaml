@@ -183,9 +183,9 @@
                 </dxe:ComboBoxEdit>
 
                 <TextBlock Text="Start" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <TextBox Width="75" Margin="5 0 0 0" Text="1032"/>
+                <dxe:TextEdit x:Name="ZStackLabel" EditValue="{Binding ZStackLabelText}" Width="75" Margin="5 0 0 0" MaskType="Numeric" MaskUseAsDisplayFormat="True"/>
 
-                <TextBlock Text="Interval(μm)" VerticalAlignment="Center" FontSize="13" Margin="10 0 0 0" Width="80"/>
+                <TextBlock VerticalAlignment="Center" FontSize="13" Margin="10 0 0 0" Width="80">Interval(<Run Text="{Binding ZStackLabelUnit}"></Run>)</TextBlock>
                 <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="10 0 0 0">
                     <TextBlock Style="{StaticResource GeneralTextBlock}" Text="35" Width="50"/>
                 </Border>

@@ -98,17 +98,18 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private FileInfo fileToDisplay;
 
-        private System.Windows.Point? imagePreviousPoint;
-        private System.Windows.Point? viewPortPreviousPoint;
-
         private ImageService imageService { get; set; }
 
         private DataManager dataManager;
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
         private AnnotationInfo annotationInfo;
 
+        private System.Windows.Point? imagePreviousPoint;
+        private System.Windows.Point? viewPortPreviousPoint;
+
         private System.Windows.Shapes.Rectangle drawRectangle;
         private System.Windows.Shapes.Ellipse drawEllipse;
+        private System.Windows.Shapes.Polygon drawTriangle;
 
         /// <summary>
         /// 생성자
@@ -118,6 +119,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             MouseWheelCommand = new DelegateCommand<MouseWheelEventArgs>(MouseWheel);
             SizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(SizeChanged);
+
             ImageMouseDownCommand = new DelegateCommand<MouseButtonEventArgs>(ImageMouseDown);
             ImageMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ImageMouseMove);
             ImageMouseUpCommand = new DelegateCommand<MouseButtonEventArgs>(ImageMouseUp);
@@ -147,7 +149,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
             
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(InternalDisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
 
@@ -159,7 +161,7 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop, ThreadOption.UIThread);
 
             // 디스플레이
-            InternalDisplayImage(dataManager.MainWindowId);
+            DisplayImage(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -168,7 +170,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(ImageViewer view)
         {
-            EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(InternalDisplayImage);
+            EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(DisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
 
@@ -232,13 +234,13 @@ namespace IVM.Studio.ViewModels.UserControls
 
             // 디스플레이
             if (view != null && view.WindowId == dataManager.MainWindowId)
-                InternalDisplayImage(dataManager.MainWindowId);
+                DisplayImage(dataManager.MainWindowId);
         }
 
         /// <summary>
         /// 지정한 색상값에 따라 이미지의 색상을 투영한 후, 어노테이션 이미지를 붙여 화면에 표시하고, 히스토그램을 생성하는 내부 메서드
         /// </summary>
-        private async void InternalDisplayImage(int id)
+        private async void DisplayImage(int id)
         {
             if (id == 0 || fileToDisplay == null || disableRefreshImageEvent)
                 return;
@@ -262,8 +264,8 @@ namespace IVM.Studio.ViewModels.UserControls
                         using (Bitmap img1 = imageService.TranslateColor(bitmap, currentColorMatrix))
                         using (Bitmap img2 = imageService.ApplyColorMaps(img1, colormaps))
                         {
-                            InternalDisplayAnnotatedImage(img2);
-                            InternalDisplayHistogram(img2);
+                            DisplayAnnotatedImage(img2);
+                            DisplayHistogram(img2);
                         }
                     }
                 }
@@ -330,7 +332,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// AnnotatedImage 생성
         /// </summary>
         /// <param name="image"></param>
-        private void InternalDisplayAnnotatedImage(Bitmap image)
+        private void DisplayAnnotatedImage(Bitmap image)
         {
             using (Bitmap workingImage = new Bitmap(image))
             {
@@ -361,9 +363,11 @@ namespace IVM.Studio.ViewModels.UserControls
                         imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 9, 
                             annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel);
 
+                    // TimeStack
                     if (annotationInfo.TimeStampEnabled)
                         imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, 9);
 
+                    // ZStackLabel
                     if (annotationInfo.ZStackLabelEnabled)
                         imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, 9);
 
@@ -381,7 +385,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// 히스토그램 생성
         /// </summary>
         /// <param name="imgage"></param>
-        private void InternalDisplayHistogram(Bitmap imgage)
+        private void DisplayHistogram(Bitmap imgage)
         {
             using (Bitmap hist = imageService.CreateHistogram(imgage, currentTranslationByChannel, currentVisibilityByChannel))
             {
@@ -413,77 +417,6 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             annotationImage = null;
             EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
-        }
-
-        /// <summary>
-        /// 회전 이벤트
-        /// </summary>
-        /// <param name="type"></param>
-        private void Rotation(string type)
-        {
-            switch (type)
-            {
-                case "Left":
-                    currentRotate++;
-                    currentRotate %= 4;
-                    break;
-                case "Right":
-                    currentRotate--;
-                    currentRotate %= 4;
-
-                    if (currentRotate < 0)
-                        currentRotate += 4;
-                    break;
-            }
-
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
-        }
-
-        /// <summary>
-        /// 좌우 또는 상하 반전 이벤트
-        /// </summary>
-        /// <param name="type"></param>
-        private void Reflect(string type)
-        {
-            switch (type)
-            {
-                case "HorizontalLeft":
-                    horizontalReflect = false;
-                    break;
-                case "HorizontalRight":
-                    horizontalReflect = true;
-                    break;
-                case "VerticalTop":
-                    verticalReflect = false;
-                    break;
-                case "VerticalBottom":
-                    verticalReflect = true;
-                    break;
-            }
-
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
-        }
-
-        /// <summary>
-        /// 회전 및 반전 초기화
-        /// </summary>
-        private void RotationReset()
-        {
-            currentRotate = 0;
-            horizontalReflect = false;
-            verticalReflect = false;
-
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
-        }
-
-        /// <summary>
-        /// ZoomRatio 변경 시
-        /// </summary>
-        /// <param name="zoomRatio"></param>
-        private void ZoomRatioControl(int zoomRatio)
-        {
-            if (originalImage != null && dataManager.MainWindowId == view.WindowId)
-                DisplayingImageWidth = originalImage.Width * (zoomRatio / 100d);
         }
 
         /// <summary>
@@ -534,7 +467,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ImageMouseMove(MouseEventArgs e)
         {
-            if ((annotationInfo.PenEnabled || annotationInfo.EraserEnabled) && e.LeftButton == MouseButtonState.Pressed)
+            if ((annotationInfo.PenEnabled || annotationInfo.EraserEnabled || annotationInfo.DrawRectangleEnabled) && e.LeftButton == MouseButtonState.Pressed)
             {
                 System.Windows.Point position = e.GetPosition(view.ImageView);
 
@@ -566,6 +499,25 @@ namespace IVM.Studio.ViewModels.UserControls
                         horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
                     );
                 }
+                else if (annotationInfo.DrawRectangleEnabled)
+                {
+                    if (imagePreviousPoint != null)
+                    {
+                        int x1 = (int)Math.Round(imagePreviousPoint.Value.X / currentZoomRatio * 100);
+                        int y1 = (int)Math.Round(imagePreviousPoint.Value.Y / currentZoomRatio * 100);
+                        int x2 = (int)Math.Round(position.X / currentZoomRatio * 100);
+                        int y2 = (int)Math.Round(position.Y / currentZoomRatio * 100);
+
+                        int x = Math.Min(x1, x2);
+                        int y = Math.Min(y1, y2);
+
+                        int width = Math.Abs(x1 - x2);
+                        int height = Math.Abs(y1 - y2);
+
+                        imageService.DrawRectangle(annotationImage, displayingImageGDI, x, y, width, height, annotationInfo.DrawThickness, annotationInfo.DrawColor,
+                                horizontalReflect, verticalReflect, currentRotate);
+                    }
+                }
 
                 DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
             }
@@ -577,55 +529,58 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ImageMouseUp(MouseButtonEventArgs e)
         {
-            System.Windows.Point position = e.GetPosition(view.ImageView);
-
-            if (annotationInfo.PenEnabled || annotationInfo.EraserEnabled || annotationInfo.TextEnabled)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (annotationImage == null)
-                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
+                System.Windows.Point position = e.GetPosition(view.ImageView);
 
-                if (annotationInfo.PenEnabled && imagePreviousPoint != null)
+                if (annotationInfo.PenEnabled || annotationInfo.EraserEnabled || annotationInfo.TextEnabled)
                 {
-                    imageService.DrawPen(
-                        annotationImage: annotationImage, displayImage: displayingImageGDI,
-                        x1: (int)Math.Round(imagePreviousPoint.Value.X / currentZoomRatio * 100), y1: (int)Math.Round(imagePreviousPoint.Value.Y / currentZoomRatio * 100),
-                        x2: (int)Math.Round(position.X / currentZoomRatio * 100), y2: (int)Math.Round(position.Y / currentZoomRatio * 100),
-                        thickness: annotationInfo.PenThickness, color: annotationInfo.PenColor,
-                        horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
-                    );
-                }
-                else if (annotationInfo.EraserEnabled)
-                {
-                    imageService.DrawEraser(
-                        annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
-                        colorMatrix: currentColorMatrix,
-                        x: (int)Math.Round(position.X / currentZoomRatio * 100), y: (int)Math.Round(position.Y / currentZoomRatio * 100),
-                        thickness: annotationInfo.EraserThickness,
-                        horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
-                    );
-                }
-                else if (annotationInfo.TextEnabled)
-                {
-                    if (!InputBoxWindow.IsShow)
+                    if (annotationImage == null)
+                        annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
+
+                    if (annotationInfo.PenEnabled && imagePreviousPoint != null)
                     {
-                        InputBoxWindow inputBoxWindow = new InputBoxWindow(EventAggregator) { Topmost = true };
-                        inputBoxWindow.Show();
-
-                        TextAnnotationDialogParam param = new TextAnnotationDialogParam(
-                            Title: "",
-                            Content: "Please enter text.",
-                            X: (int)Math.Round(position.X / currentZoomRatio * 100),
-                            Y: (int)Math.Round(position.Y / currentZoomRatio * 100)
+                        imageService.DrawPen(
+                            annotationImage: annotationImage, displayImage: displayingImageGDI,
+                            x1: (int)Math.Round(imagePreviousPoint.Value.X / currentZoomRatio * 100), y1: (int)Math.Round(imagePreviousPoint.Value.Y / currentZoomRatio * 100),
+                            x2: (int)Math.Round(position.X / currentZoomRatio * 100), y2: (int)Math.Round(position.Y / currentZoomRatio * 100),
+                            thickness: annotationInfo.PenThickness, color: annotationInfo.PenColor,
+                            horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
                         );
-
-                        EventAggregator.GetEvent<TextAnnotationDialogEvent>().Publish(param);
                     }
+                    else if (annotationInfo.EraserEnabled)
+                    {
+                        imageService.DrawEraser(
+                            annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
+                            colorMatrix: currentColorMatrix,
+                            x: (int)Math.Round(position.X / currentZoomRatio * 100), y: (int)Math.Round(position.Y / currentZoomRatio * 100),
+                            thickness: annotationInfo.EraserThickness,
+                            horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
+                        );
+                    }
+                    else if (annotationInfo.TextEnabled)
+                    {
+                        if (!InputBoxWindow.IsShow)
+                        {
+                            InputBoxWindow inputBoxWindow = new InputBoxWindow(EventAggregator) { Topmost = true };
+                            inputBoxWindow.Show();
+
+                            TextAnnotationDialogParam param = new TextAnnotationDialogParam(
+                                Title: "",
+                                Content: "Please enter text.",
+                                X: (int)Math.Round(position.X / currentZoomRatio * 100),
+                                Y: (int)Math.Round(position.Y / currentZoomRatio * 100)
+                            );
+
+                            EventAggregator.GetEvent<TextAnnotationDialogEvent>().Publish(param);
+                        }
+                    }
+
+                    DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
                 }
 
-                DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
+                imagePreviousPoint = null;
             }
-
-            imagePreviousPoint = null;
         }
 
         /// <summary>
@@ -634,7 +589,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ViewPortMouseDown(MouseButtonEventArgs e)
         {
-            viewPortPreviousPoint = e.GetPosition(view.ImageView);
+            if (e.ChangedButton == MouseButton.Left)
+                viewPortPreviousPoint = e.GetPosition(view.ImageOverlayCanvas);
         }
 
         /// <summary>
@@ -645,7 +601,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                System.Windows.Point position = e.GetPosition(view.ImageView);
+                System.Windows.Point position = e.GetPosition(view.ImageOverlayCanvas);
 
                 if (viewPortPreviousPoint == null)
                 {
@@ -653,8 +609,8 @@ namespace IVM.Studio.ViewModels.UserControls
                     return;
                 }
 
-                double left = Math.Min(position.X, viewPortPreviousPoint.Value.X);
-                double top = Math.Min(position.Y, viewPortPreviousPoint.Value.Y);
+                double x = Math.Min(position.X, viewPortPreviousPoint.Value.X);
+                double y = Math.Min(position.Y, viewPortPreviousPoint.Value.Y);
                 double width = Math.Abs(position.X - viewPortPreviousPoint.Value.X);
                 double height;
 
@@ -663,12 +619,16 @@ namespace IVM.Studio.ViewModels.UserControls
                 else
                     height = Math.Abs(position.Y - viewPortPreviousPoint.Value.Y);
 
+                Console.WriteLine("ViewPortMouseMove viewPortPreviousPoint => ", viewPortPreviousPoint.Value.X, viewPortPreviousPoint.Value.Y);
+                Console.WriteLine("ViewPortMouseMove position => ", position.X, position.Y);
+                Console.WriteLine("ViewPortMouseMove => ", x, y, width, height);
+
                 if (annotationInfo.CropCrosshairEnabled)
                 {
                     if (annotationInfo.CropRectangleEnabled)
-                        EventAggregator.GetEvent<DrawCropBoxEvent>().Publish(new DrawParam(left, top, width, height));
+                        EventAggregator.GetEvent<DrawCropBoxEvent>().Publish(new DrawParam(x, y, width, height));
                     else if (annotationInfo.CropCircleEnabled)
-                        EventAggregator.GetEvent<DrawCropCircleEvent>().Publish(new DrawParam(left, top, width, height));
+                        EventAggregator.GetEvent<DrawCropCircleEvent>().Publish(new DrawParam(x, y, width, height));
                 }
                 else if (annotationInfo.DrawRectangleEnabled)
                 {
@@ -686,8 +646,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     drawRectangle.Width = width;
                     drawRectangle.Height = height;
-                    Canvas.SetTop(drawRectangle, top);
-                    Canvas.SetLeft(drawRectangle, left);
+                    Canvas.SetLeft(drawRectangle, x);
+                    Canvas.SetTop(drawRectangle, y);
                 }
                 else if (annotationInfo.DrawCircleEnabled)
                 {
@@ -696,7 +656,7 @@ namespace IVM.Studio.ViewModels.UserControls
                         drawEllipse = new System.Windows.Shapes.Ellipse()
                         {
                             Stroke = new SolidColorBrush(annotationInfo.DrawColor),
-                            StrokeThickness = 2
+                            StrokeThickness = annotationInfo.DrawThickness
                         };
 
                         Panel.SetZIndex(drawEllipse, 1);
@@ -705,8 +665,31 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     drawEllipse.Width = width;
                     drawEllipse.Height = height;
-                    Canvas.SetTop(drawEllipse, top);
-                    Canvas.SetLeft(drawEllipse, left);
+                    Canvas.SetLeft(drawEllipse, x);
+                    Canvas.SetTop(drawEllipse, y);
+                }
+                else if (annotationInfo.DrawTriangleEnabled)
+                {
+                    if (drawTriangle == null)
+                    {
+                        drawTriangle = new System.Windows.Shapes.Polygon()
+                        {
+                            Stroke = new SolidColorBrush(annotationInfo.DrawColor),
+                            StrokeThickness = annotationInfo.DrawThickness
+                        };
+
+                        Panel.SetZIndex(drawTriangle, 1);
+                        view.ImageOverlayCanvas.Children.Add(drawTriangle);
+                    }
+
+                    PointCollection Points = new PointCollection();
+                    Points.Add(new System.Windows.Point((position.X - viewPortPreviousPoint.Value.X) / 2, viewPortPreviousPoint.Value.Y));
+                    Points.Add(new System.Windows.Point(position.X, position.Y));
+                    Points.Add(new System.Windows.Point(viewPortPreviousPoint.Value.X, position.Y));
+                    drawTriangle.Points = Points;
+
+                    Canvas.SetLeft(drawTriangle, x);
+                    Canvas.SetTop(drawTriangle, y);
                 }
             }
         }
@@ -717,37 +700,60 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="e"></param>
         private void ViewPortMouseUp(MouseButtonEventArgs e)
         {
-            System.Windows.Point position = e.GetPosition(view.ImageView);
-
-            if (annotationInfo.CropCrosshairEnabled)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                annotationInfo.CropCrosshairEnabled = false;
+                System.Windows.Point position = e.GetPosition(view.ImageOverlayCanvas);
+
+                if (annotationInfo.CropCrosshairEnabled)
+                {
+                    annotationInfo.CropCrosshairEnabled = false;
+                }
+                else if (annotationInfo.DrawRectangleEnabled)
+                {
+                    if (annotationImage == null)
+                        annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
+
+                    if (viewPortPreviousPoint != null)
+                    {
+                        int x1 = (int)Math.Round(viewPortPreviousPoint.Value.X / currentZoomRatio * 100);
+                        int y1 = (int)Math.Round(viewPortPreviousPoint.Value.Y / currentZoomRatio * 100);
+                        int x2 = (int)Math.Round(position.X / currentZoomRatio * 100);
+                        int y2 = (int)Math.Round(position.Y / currentZoomRatio * 100);
+
+                        int x = Math.Min(x1, x2);
+                        int y = Math.Min(y1, y2);
+                        int width = Math.Abs(x1 - x2);
+                        int height = Math.Abs(y1 - y2);
+
+                        Console.WriteLine("ViewPortMouseUp viewPortPreviousPoint => ", viewPortPreviousPoint.Value.X, viewPortPreviousPoint.Value.Y);
+                        Console.WriteLine("ViewPortMouseUp position => ", position.X, position.Y);
+                        Console.WriteLine("ViewPortMouseUp => ", x, y, width, height);
+
+                        imageService.DrawRectangle(annotationImage, displayingImageGDI, x, y, width, height, annotationInfo.DrawThickness, annotationInfo.DrawColor,
+                                horizontalReflect, verticalReflect, currentRotate);
+
+                        DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
+
+                        view.ImageOverlayCanvas.Children.Remove(drawRectangle);
+                        drawRectangle = null;
+                    }
+                }
+                else if (annotationInfo.DrawCircleEnabled)
+                {
+                    //if (annotationImage == null)
+                    //    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
+
+                    //view.ImageOverlayCanvas.Children.Remove(drawEllipse);
+                    //drawEllipse = null;
+
+                    //imageService.DrawCircle(annotationImage, displayingImageGDI, x, y, width, height, annotationInfo.DrawThickness, annotationInfo.DrawColor,
+                    //        horizontalReflect, verticalReflect, currentRotate);
+
+                    //DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
+                }
+
+                viewPortPreviousPoint = null;
             }
-            else if (annotationInfo.DrawRectangleEnabled)
-            {
-                if (annotationImage == null)
-                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
-
-                view.ImageOverlayCanvas.Children.Remove(drawRectangle);
-                drawRectangle = null;
-
-                imageService.DrawRectangle(
-                        annotationImage: annotationImage, displayImage: displayingImageGDI,
-                        x1: (int)Math.Round(viewPortPreviousPoint.Value.X / currentZoomRatio * 100), y1: (int)Math.Round(viewPortPreviousPoint.Value.Y / currentZoomRatio * 100),
-                        x2: (int)Math.Round(position.X / currentZoomRatio * 100), y2: (int)Math.Round(position.Y / currentZoomRatio * 100),
-                        thickness: annotationInfo.DrawThickness, color: annotationInfo.DrawColor,
-                        horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
-                    );
-
-                DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
-            }
-            else if (annotationInfo.DrawCircleEnabled)
-            {
-                if (annotationImage == null)
-                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
-            }
-
-            viewPortPreviousPoint = null;
         }
 
         /// <summary>
@@ -819,6 +825,77 @@ namespace IVM.Studio.ViewModels.UserControls
                     DisplayingImageWidth = originalImage.Width * (newScale / 100d);
                 }
             }
+        }
+
+        /// <summary>
+        /// 회전 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void Rotation(string type)
+        {
+            switch (type)
+            {
+                case "Left":
+                    currentRotate++;
+                    currentRotate %= 4;
+                    break;
+                case "Right":
+                    currentRotate--;
+                    currentRotate %= 4;
+
+                    if (currentRotate < 0)
+                        currentRotate += 4;
+                    break;
+            }
+
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+        }
+
+        /// <summary>
+        /// 좌우 또는 상하 반전 이벤트
+        /// </summary>
+        /// <param name="type"></param>
+        private void Reflect(string type)
+        {
+            switch (type)
+            {
+                case "HorizontalLeft":
+                    horizontalReflect = false;
+                    break;
+                case "HorizontalRight":
+                    horizontalReflect = true;
+                    break;
+                case "VerticalTop":
+                    verticalReflect = false;
+                    break;
+                case "VerticalBottom":
+                    verticalReflect = true;
+                    break;
+            }
+
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+        }
+
+        /// <summary>
+        /// 회전 및 반전 초기화
+        /// </summary>
+        private void RotationReset()
+        {
+            currentRotate = 0;
+            horizontalReflect = false;
+            verticalReflect = false;
+
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+        }
+
+        /// <summary>
+        /// ZoomRatio 변경 시
+        /// </summary>
+        /// <param name="zoomRatio"></param>
+        private void ZoomRatioControl(int zoomRatio)
+        {
+            if (originalImage != null && dataManager.MainWindowId == view.WindowId)
+                DisplayingImageWidth = originalImage.Width * (zoomRatio / 100d);
         }
     }
 }

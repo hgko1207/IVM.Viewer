@@ -371,20 +371,20 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
-        /// Draw Rectangle
+        /// 주어진 비트맵 이미지에 사각형을 그립니다.
         /// </summary>
         /// <param name="annotationImage"></param>
         /// <param name="displayImage"></param>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         /// <param name="thickness"></param>
         /// <param name="color"></param>
         /// <param name="horizontalReflect"></param>
         /// <param name="verticalReflect"></param>
         /// <param name="rotate"></param>
-        public void DrawRectangle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+        public void DrawRectangle(Bitmap annotationImage, Bitmap displayImage, int x, int y, int width, int height, int thickness, WPFDrawing.Color color,
                         bool horizontalReflect, bool verticalReflect, int rotate)
         {
             using (Graphics g1 = Graphics.FromImage(annotationImage))
@@ -392,41 +392,41 @@ namespace IVM.Studio.Services
             {
                 g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
 
-                int width = Math.Abs(x1 - x2);
-                int height = Math.Abs(y1 - y2);
-
-                x1 = Math.Min(x1, x2);
-                y1 = Math.Min(y1, y2);
-
                 using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
                 {
-                    g1.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
-                    g2.DrawRectangle(pen, new Rectangle(x1, y1, width, height));
+                    g1.DrawRectangle(pen, new Rectangle(x, y, width, height));
+                    g2.DrawRectangle(pen, new Rectangle(x, y, width, height));
                 }
             }
         }
 
         /// <summary>
-        /// 
+        /// 주어진 비트맵 이미지에 원을 그립니다.
         /// </summary>
         /// <param name="annotationImage"></param>
         /// <param name="displayImage"></param>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         /// <param name="thickness"></param>
         /// <param name="color"></param>
         /// <param name="horizontalReflect"></param>
         /// <param name="verticalReflect"></param>
         /// <param name="rotate"></param>
-        public void DrawCircle(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+        public void DrawCircle(Bitmap annotationImage, Bitmap displayImage, int x, int y, int width, int height, int thickness, WPFDrawing.Color color,
                             bool horizontalReflect, bool verticalReflect, int rotate)
         {
             using (Graphics g1 = Graphics.FromImage(annotationImage))
             using (Graphics g2 = Graphics.FromImage(displayImage))
             {
                 g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
+                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                {
+                    g1.DrawEllipse(pen, new Rectangle(x, y, width, height));
+                    g2.DrawEllipse(pen, new Rectangle(x, y, width, height));
+                }
             }
         }
 

@@ -53,8 +53,9 @@
                 </dxmvvm:Interaction.Behaviors>
             </Image>
 
-            <Canvas Panel.ZIndex="0" x:Name="ImageOverlayCanvas" Background="Transparent">
+            <Canvas x:Name="ImageOverlayCanvas" Panel.ZIndex="0" Background="Transparent">
                 <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="MouseWheel" Command="{Binding MouseWheelCommand}" PassEventArgsToCommand="True"/>
                     <dxmvvm:EventToCommand EventName="MouseDown" Command="{Binding ViewPortMouseDownCommand}" PassEventArgsToCommand="True"/>
                     <dxmvvm:EventToCommand EventName="MouseMove" Command="{Binding ViewPortMouseMoveCommand}" PassEventArgsToCommand="True"/>
                     <dxmvvm:EventToCommand EventName="MouseUp" Command="{Binding ViewPortMouseUpCommand}" PassEventArgsToCommand="True"/>

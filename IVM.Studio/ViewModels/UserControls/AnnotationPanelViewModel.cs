@@ -69,8 +69,29 @@ namespace IVM.Studio.ViewModels.UserControls
             set
             {
                 if (SetProperty(ref selectedZStackLabelType, value))
+                {
                     SelectZStackLabelType(value);
+                    ZStackLabelUnit = GetZStackUnit(value);
+                }
             }
+        }
+
+        private float zStackLabelText;
+        public float ZStackLabelText
+        {
+            get => zStackLabelText;
+            set
+            {
+                if (SetProperty(ref zStackLabelText, value))
+                    AnnotationInfo.ZStackLabelText = value.ToString(CommonUtil.ZStackLabelToMask(SelectedZStackLabelType)) + " " + ZStackLabelUnit;
+            }
+        }
+
+        private string zStackLabelUnit;
+        public string ZStackLabelUnit
+        {
+            get => zStackLabelUnit;
+            set => SetProperty(ref zStackLabelUnit, value);
         }
 
         public ICommand AddDrawCommand { get; private set; }
@@ -94,8 +115,6 @@ namespace IVM.Studio.ViewModels.UserControls
             FontItemList.Add("돋음");
 
             SelectedFontItem = FontItemList[0];
-
-            SelectedDateTimeType = TimeSpanType.hh_mm_ss;
         }
 
         /// <summary>
@@ -105,7 +124,13 @@ namespace IVM.Studio.ViewModels.UserControls
         public void OnLoaded(AnnotationPanel view)
         {
             this.view = view;
+
+            SelectedDateTimeType = TimeSpanType.hh_mm_ss;
             SelectDateTime(SelectedDateTimeType);
+
+            SelectedZStackLabelType = ZStackLabelType.Label1;
+            ZStackLabelUnit = GetZStackUnit(SelectedZStackLabelType);
+            SelectZStackLabelType(SelectedZStackLabelType);
         }
 
         /// <summary>
@@ -132,7 +157,9 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="type"></param>
         private void SelectZStackLabelType(ZStackLabelType type)
         {
-
+            string mask = CommonUtil.ZStackLabelToMask(type);
+            view.ZStackLabel.Mask = mask;
+            AnnotationInfo.ZStackLabelText = ZStackLabelText.ToString(mask) + " " + ZStackLabelUnit;
         }
 
         /// <summary>
@@ -149,6 +176,26 @@ namespace IVM.Studio.ViewModels.UserControls
         private void Clear()
         {
             EventAggregator.GetEvent<DrawClearEvent>().Publish();
+        }
+
+        /// <summary>
+        /// GetZStackUnit
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private string GetZStackUnit(ZStackLabelType type)
+        {
+            switch (type)
+            {
+                case ZStackLabelType.Label1:
+                case ZStackLabelType.Label3:
+                    return "μm";
+                case ZStackLabelType.Label2:
+                case ZStackLabelType.Label4:
+                    return "mm";
+                default:
+                    return "";
+            }
         }
     }
 }

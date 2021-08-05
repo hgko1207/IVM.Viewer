@@ -34,7 +34,7 @@ namespace IVM.Studio.Views.UserControls
         }
 
         /// <summary>
-        /// CanvasToTop
+        /// Canvas To Top
         /// </summary>
         private void CanvasToTop()
         {
@@ -43,7 +43,7 @@ namespace IVM.Studio.Views.UserControls
         }
 
         /// <summary>
-        /// ImageToTop
+        /// Image To Top
         /// </summary>
         private void ImageToTop()
         {
