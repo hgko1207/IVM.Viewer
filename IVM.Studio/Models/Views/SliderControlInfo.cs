@@ -5,6 +5,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,10 +27,10 @@ namespace IVM.Studio.Models.Views
 {
     public class SliderControlInfo : BindableBase
     {
-        public bool ZSSliderEnabled => ZSSliderMaximum > 1 && dataManager.MainViewerOpend;
-        public bool MSSliderEnabled => MSSliderMaximum > 1 && dataManager.MainViewerOpend;
-        public bool MPSliderEnabled => MPSliderMaximum > 1 && dataManager.MainViewerOpend;
-        public bool TLSliderEnabled => TLSliderMaximum > 1 && dataManager.MainViewerOpend;
+        public bool ZSSliderEnabled => ZSSliderMaximum > 1;
+        public bool MSSliderEnabled => MSSliderMaximum > 1;
+        public bool MPSliderEnabled => MPSliderMaximum > 1;
+        public bool TLSliderEnabled => TLSliderMaximum > 1;
 
         private int _ZSSliderMinimum;
         public int ZSSliderMinimum
@@ -236,8 +237,8 @@ namespace IVM.Studio.Models.Views
             eventAggregator.GetEvent<PlaySlideShowEvent>().Subscribe(InternalPlaySlideShow);
             eventAggregator.GetEvent<StopSlideShowEvent>().Subscribe(StopSlideShow);
             eventAggregator.GetEvent<EnableImageSlidersEvent>().Subscribe(EnableImageSliders);
-            eventAggregator.GetEvent<MainViewerOpendEvent>().Subscribe(SliderStateChanged);
-            eventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(SliderStateChanged);
+            //eventAggregator.GetEvent<MainViewerOpendEvent>().Subscribe(SliderStateChanged);
+            eventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(StopSlideShow);
 
             dataManager = container.Resolve<DataManager>();
 
@@ -305,6 +306,8 @@ namespace IVM.Studio.Models.Views
         /// <param name="type"></param>
         private void PlaySlideShow(string type)
         {
+            Console.WriteLine("PlaySlideShow");
+
             container.Resolve<SlideShowService>().StopSlideShow();
 
             switch (type)
@@ -395,6 +398,8 @@ namespace IVM.Studio.Models.Views
         /// </summary>
         private void InternalPlaySlideShow()
         {
+            Console.WriteLine("InternalPlaySlideShow");
+
             switch (CurrentPlayingSlider)
             {
                 case 0: // ZStack
@@ -455,17 +460,6 @@ namespace IVM.Studio.Models.Views
         {
             container.Resolve<SlideShowService>().StopSlideShow();
             CurrentPlayingSlider = -1;
-        }
-
-        /// <summary>
-        /// 슬라이더 상태 변경
-        /// </summary>
-        private void SliderStateChanged()
-        {
-            RaisePropertyChanged(nameof(ZSSliderEnabled));
-            RaisePropertyChanged(nameof(TLSliderEnabled));
-            RaisePropertyChanged(nameof(MSSliderEnabled));
-            RaisePropertyChanged(nameof(MPSliderEnabled));
         }
     }
 }

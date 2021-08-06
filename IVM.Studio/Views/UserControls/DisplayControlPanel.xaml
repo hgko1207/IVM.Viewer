@@ -40,8 +40,8 @@
             <!-- Z-Stack -->
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Z-Stack" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="ZStack"
-                    DataContext="{Binding SliderControlInfo}" IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding ZSSliderEnabled}"/>
+            <dx:SimpleButton Grid.Row="0" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding ZSSliderPlaying, Mode=OneWay}" 
+                             Command="{Binding PlaySlideShowCommand}" CommandParameter="ZStack" IsEnabled="{Binding ZSSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
 
             <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" IsMoveToPointEnabled="True"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
@@ -79,8 +79,8 @@
             <!-- Mosaic -->
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="Mosaic"
-                    DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MSSliderPlaying, Mode=OneWay}" IsEnabled="{Binding MSSliderEnabled}"/>
+            <dx:SimpleButton Grid.Row="2" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MSSliderPlaying, Mode=OneWay}" 
+                             Command="{Binding PlaySlideShowCommand}" CommandParameter="Mosaic" IsEnabled="{Binding MSSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
 
             <Slider Grid.Row="2" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding MSSliderMinimum}" Maximum="{Binding MSSliderMaximum}" Value="{Binding MSSliderValue, Delay=500}" IsEnabled="{Binding MSSliderEnabled}"/>
@@ -92,8 +92,8 @@
             <!-- Multi-Spot(Multi Position) -->
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Multi-Spot" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="MultiPosition"
-                    DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" IsEnabled="{Binding MPSliderEnabled}"/>
+            <dx:SimpleButton Grid.Row="4" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" 
+                             Command="{Binding PlaySlideShowCommand}" CommandParameter="MultiPosition" IsEnabled="{Binding MPSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
 
             <Slider Grid.Row="4" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding MPSliderMinimum}" Maximum="{Binding MPSliderMaximum}" Value="{Binding MPSliderValue, Delay=500}" IsEnabled="{Binding MPSliderEnabled}"/>
@@ -105,8 +105,8 @@
             <!-- Time-lapse -->
             <TextBlock Grid.Row="6" Grid.Column="0" Text="Time-lapse" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{StaticResource PlayAndPauseButton}" Command="{Binding PlaySlideShowCommand}" CommandParameter="TimeLapse"
-                    DataContext="{Binding SliderControlInfo}" IsChecked="{Binding TLSliderPlaying, Mode=OneWay}" IsEnabled="{Binding TLSliderEnabled}"/>
+            <dx:SimpleButton Grid.Row="6" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding TLSliderPlaying, Mode=OneWay}"
+                             Command="{Binding PlaySlideShowCommand}" CommandParameter="TimeLapse" IsEnabled="{Binding TLSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
 
             <Slider Grid.Row="6" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding TLSliderMinimum}" Maximum="{Binding TLSliderMaximum}" Value="{Binding TLSliderValue, Delay=500}" IsEnabled="{Binding TLSliderEnabled}"/>
@@ -145,7 +145,7 @@
                     </DockPanel>
 
                     <Slider Minimum="10" Maximum="300" Margin="0 10 0 10" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" 
-                    Value="{Binding ZoomRatioValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                            Value="{Binding ZoomRatioValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                     <DockPanel>
                         <dxe:SpinEdit MinValue="10" MaxValue="300" Width="60" IsFloatValue="False" Value="{Binding ZoomRatioValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
@@ -172,12 +172,12 @@
                             <TextBlock TextAlignment="Center" Text="(FPS)" Margin="0 -4 0 0"/>
                         </StackPanel>
 
-                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowFps}" Width="60" Margin="10 0 0 0"/>
+                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowFps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="10 0 0 0"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="Repeat" VerticalAlignment="Center"/>
-                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowRepeat}" Width="60" Margin="10 0 0 0"/>
+                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowRepeat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="10 0 0 0"/>
                     </StackPanel>
                 </DockPanel>
 

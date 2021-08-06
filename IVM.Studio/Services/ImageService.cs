@@ -429,6 +429,17 @@ namespace IVM.Studio.Services
             }
         }
 
+        /// <summary>
+        /// 주어진 비트맵 이미지에 삼각형을 그립니다.
+        /// </summary>
+        /// <param name="annotationImage"></param>
+        /// <param name="displayImage"></param>
+        /// <param name="points"></param>
+        /// <param name="thickness"></param>
+        /// <param name="color"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
         public void DrawTriangle(Bitmap annotationImage, Bitmap displayImage, Point[] points, int thickness, WPFDrawing.Color color,
                             bool horizontalReflect, bool verticalReflect, int rotate)
         {
@@ -488,7 +499,7 @@ namespace IVM.Studio.Services
         /// <param name="margin"></param>
         /// <param name="xAxis"></param>
         /// <param name="yAxis"></param>
-        public void DrawScaleBar(Bitmap image, int fOVSizeX, int fOVSizeY, int length, int thickness, int margin, 
+        public void DrawScaleBar(Bitmap image, int fOVSizeX, int fOVSizeY, int length, int thickness, int margin,
             bool xAxis, bool yAxis, PositionType positionType, ScaleBarLabelType labelType)
         {
             using (Graphics graphics = Graphics.FromImage(image))
@@ -527,25 +538,27 @@ namespace IVM.Studio.Services
         /// 주어진 비트맵 이미지에 TimeStamp 텍스트를 추가한다.
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="timeSpanText"></param>
+        /// <param name="text"></param>
         /// <param name="positionType"></param>
+        /// <param name="fontSize"></param>
+        /// <param name="color"></param>
         /// <param name="margin"></param>
-        public void DrawTimeStampLabel(Bitmap image, string timeSpanText, PositionType positionType, int margin)
+        public void DrawTimeStampLabel(Bitmap image, string text, PositionType positionType, int fontSize, WPFDrawing.Color color, int margin)
         {
             using (Graphics graphics = Graphics.FromImage(image))
-            using (Font font = new Font("돋움", 14))
+            using (Font font = new Font("돋움", fontSize))
             {
                 int canvasWidth = image.Width;
 
-                SizeF size = graphics.MeasureString(timeSpanText, font);
+                SizeF size = graphics.MeasureString(text, font);
                 Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
                 
                 float left = startPoint.X - size.Width / 2f;
                 float top = startPoint.Y - size.Height / 2f;
 
-                using (Brush brush = new SolidBrush(Color.White))
+                using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
                 {
-                    graphics.DrawString(timeSpanText, font, brush, new PointF(startPoint.X, startPoint.Y));
+                    graphics.DrawString(text, font, brush, new PointF(startPoint.X, startPoint.Y));
                 }
             }
         }
@@ -554,25 +567,27 @@ namespace IVM.Studio.Services
         /// 주어진 비트맵 이미지에 ZStack 텍스트를 추가한다.
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="zStackText"></param>
+        /// <param name="text"></param>
         /// <param name="positionType"></param>
+        /// <param name="fontSize"></param>
+        /// <param name="color"></param>
         /// <param name="margin"></param>
-        public void DrawZStackLabel(Bitmap image, string zStackText, PositionType positionType, int margin)
+        public void DrawZStackLabel(Bitmap image, string text, PositionType positionType, int fontSize, WPFDrawing.Color color, int margin)
         {
             using (Graphics graphics = Graphics.FromImage(image))
-            using (Font font = new Font("돋움", 14))
+            using (Font font = new Font("돋움", fontSize))
             {
                 int canvasWidth = image.Width;
 
-                SizeF size = graphics.MeasureString(zStackText, font);
+                SizeF size = graphics.MeasureString(text, font);
                 Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
 
                 float left = startPoint.X - size.Width / 2f;
                 float top = startPoint.Y - size.Height / 2f;
 
-                using (Brush brush = new SolidBrush(Color.White))
+                using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
                 {
-                    graphics.DrawString(zStackText, font, brush, new PointF(startPoint.X, startPoint.Y));
+                    graphics.DrawString(text, font, brush, new PointF(startPoint.X, startPoint.Y));
                 }
             }
         }
@@ -591,7 +606,7 @@ namespace IVM.Studio.Services
         /// <param name="verticalReflect"></param>
         /// <param name="rotate"></param>
         /// <returns></returns>
-        private GDIDrawing.Drawing2D.Matrix GetTransformToOriginal(int imageWidth, int imageHeight, bool horizontalReflect, bool verticalReflect, int rotate)
+        private Matrix GetTransformToOriginal(int imageWidth, int imageHeight, bool horizontalReflect, bool verticalReflect, int rotate)
         {
             //GDIDrawing.Drawing2D.Matrix matrix = new GDIDrawing.Drawing2D.Matrix();
             //// 원점을 이미지의 중앙으로 이동하고 회전

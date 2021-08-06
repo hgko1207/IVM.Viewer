@@ -38,6 +38,13 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref invertEnabled, value);
         }
 
+        private bool allCropEnabled;
+        public bool AllCropEnabled
+        {
+            get => allCropEnabled;
+            set => SetProperty(ref allCropEnabled, value);
+        }
+
         public ICommand RotationCommand { get; private set; }
         public ICommand ReflectCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
@@ -77,7 +84,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(RotateCropPanel view)
         {
-            EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(DisplayImageWithMetadata);
         }
 
         /// <summary>

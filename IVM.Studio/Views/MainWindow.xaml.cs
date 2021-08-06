@@ -1,5 +1,4 @@
 ﻿using DevExpress.Xpf.Core;
-using System.Windows;
 using System.Windows.Input;
 
 namespace IVM.Studio.Views
@@ -18,13 +17,5 @@ namespace IVM.Studio.Views
         {
             e.Handled = true;
         }
-
-        //private void ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        //{
-        //    if (ZStackSlider.SelectionStart > e.NewValue || ZStackSlider.SelectionEnd < e.NewValue)
-        //    {
-        //        ZStackSlider.Value = e.OldValue;
-        //    }
-        //}
     }
 }

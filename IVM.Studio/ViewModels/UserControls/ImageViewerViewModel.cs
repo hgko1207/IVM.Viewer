@@ -155,20 +155,21 @@ namespace IVM.Studio.ViewModels.UserControls
             this.view = view;
 
             EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
-            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread, false, param => view.WindowId == dataManager.MainWindowId);
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread, true, param => view.WindowId == dataManager.MainWindowId);
 
-            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
+            EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(DisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawUndoEvent>().Subscribe(DrawUndo, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawRedoEvent>().Subscribe(DrawRedo, ThreadOption.UIThread);
 
-            EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation, ThreadOption.UIThread);
-            EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect, ThreadOption.UIThread);
-            EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset, ThreadOption.UIThread);
+            EventAggregator.GetEvent<RotationEvent>().Subscribe(Rotation);
+            EventAggregator.GetEvent<ReflectEvent>().Subscribe(Reflect);
+            EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
 
-            EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl, ThreadOption.UIThread);
-            EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop, ThreadOption.UIThread);
+            EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl);
+            EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop);
+            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
 
             // 디스플레이
             DisplayImage(dataManager.MainWindowId);
@@ -195,6 +196,10 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ExportCropEvent>().Unsubscribe(ExportCrop);
         }
 
+        /// <summary>
+        /// Colormap 정렬
+        /// </summary>
+        /// <returns></returns>
         private List<ColorChannelModel> OrderByColor()
         {
             return colorChannelInfoMap.Values.OrderBy(c => c.Color).ToList();
@@ -222,8 +227,6 @@ namespace IVM.Studio.ViewModels.UserControls
             if (param.SlideChanged)
                 bitmapList.Clear();
 
-            Console.WriteLine("DisplayImageWithMetadata");
-
             disableRefreshImageEvent = false;
 
             DisplayImageWithoutMetadata(param.FileInfo);
@@ -247,9 +250,6 @@ namespace IVM.Studio.ViewModels.UserControls
             annotationImage?.Dispose();
             annotationImage = null;
 
-            // 로테이션 초기화
-            currentRotate = 0;
-
             // 디스플레이
             if (view != null && view.WindowId == dataManager.MainWindowId)
                 DisplayImage(dataManager.MainWindowId);
@@ -260,7 +260,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private async void DisplayImage(int id)
         {
-            if (id == 0 || fileToDisplay == null || disableRefreshImageEvent)
+            if (id == 0 || fileToDisplay == null || disableRefreshImageEvent || view.WindowId != dataManager.MainWindowId)
                 return;
 
             // 이미지 표시는 히스토그램 생성 등으로 인해 오래 걸리므로 백그라운드에서 처리
@@ -383,11 +383,11 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     // TimeStack
                     if (annotationInfo.TimeStampEnabled)
-                        imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, 9);
+                        imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
 
                     // ZStackLabel
                     if (annotationInfo.ZStackLabelEnabled)
-                        imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, 9);
+                        imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
 
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);
@@ -828,33 +828,58 @@ namespace IVM.Studio.ViewModels.UserControls
             if (displayingImageGDI == null)
                 return;
 
-            GetPositionToCropParam param = new GetPositionToCropParam();
-            EventAggregator.GetEvent<GetPositionToCropEvent>().Publish(param);
+            if (view != null && view.WindowId == dataManager.MainWindowId)
+            {
+                GetPositionToCropParam param = new GetPositionToCropParam();
+                EventAggregator.GetEvent<GetPositionToCropEvent>().Publish(param);
 
-            if (!param.Routed)
+                if (!param.Routed)
+                    return;
+
+                param.Left = Math.Max(param.Left / currentZoomRatio * 100, 0);
+                param.Top = Math.Max(param.Top / currentZoomRatio * 100, 0);
+
+                param.Width = param.Width / currentZoomRatio * 100;
+                if (displayingImageGDI.Width < param.Width)
+                    param.Width = displayingImageGDI.Width;
+
+                param.Height = param.Height / currentZoomRatio * 100;
+                if (displayingImageGDI.Height < param.Height)
+                    param.Height = displayingImageGDI.Height;
+
+                VistaSaveFileDialog dlg = new VistaSaveFileDialog
+                {
+                    DefaultExt = ".png",
+                    Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
+                };
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                    {
+                        bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Draw Export
+        /// </summary>
+        private void DrawExport()
+        {
+            if (displayingImageGDI == null)
                 return;
 
-            param.Left = Math.Max(param.Left / currentZoomRatio * 100, 0);
-            param.Top = Math.Max(param.Top / currentZoomRatio * 100, 0);
-
-            param.Width = param.Width / currentZoomRatio * 100;
-            if (displayingImageGDI.Width < param.Width)
-                param.Width = displayingImageGDI.Width;
-
-            param.Height = param.Height / currentZoomRatio * 100;
-            if (displayingImageGDI.Height < param.Height)
-                param.Height = displayingImageGDI.Height;
-
-            VistaSaveFileDialog dlg = new VistaSaveFileDialog
+            if (view != null && view.WindowId == dataManager.MainWindowId)
             {
-                DefaultExt = ".png",
-                Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
-            };
-            if (dlg.ShowDialog().GetValueOrDefault())
-            {
-                using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                VistaSaveFileDialog dlg = new VistaSaveFileDialog
                 {
-                    bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    DefaultExt = ".png",
+                    Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
+                };
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
         }

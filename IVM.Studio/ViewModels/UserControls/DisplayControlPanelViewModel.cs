@@ -62,7 +62,7 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// 
+        /// OnLoaded
         /// </summary>
         /// <param name="view"></param>
         public void OnLoaded(DisplayControlPanel view)

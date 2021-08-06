@@ -74,11 +74,11 @@ namespace IVM.Studio.Services
         /// 기존 슬라이드쇼 태스크의 카운트를 1 진행합니다. 카운트가 진행될 때마다 지정한 시간만큼 대기한 후 <seealso cref="PlaySlideShowEvent"/> 이벤트를 발생시킵니다.
         /// </summary>
         /// <returns>이미 슬라이드쇼가 진행중이 아닌 경우 실행되지 않으며 이 경우 false가 반환됩니다. 실행에 성공하면 true를 반환합니다.</returns>
-        public bool ContinueSlideShow()
+        public async void ContinueSlideShow()
         {
             if (NowPlaying)
             {
-                Task.Run(() => {
+                await Task.Run(() => {
                     Thread.Sleep(sleep);
                     if (currentCount == 1)
                     {
@@ -92,13 +92,11 @@ namespace IVM.Studio.Services
                     else
                         currentCount--;
 
+                    Console.WriteLine(currentCount);
+
                     EventAggregator.GetEvent<PlaySlideShowEvent>().Publish();
                 });
-
-                return true;
             }
-
-            return false;
         }
     }
 }

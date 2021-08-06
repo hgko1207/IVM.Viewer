@@ -73,7 +73,7 @@
                 <Slider Grid.Row="2" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" 
                         SelectionStart="-0.4" Minimum="-0.4" Maximum="0.4" Value="{Binding AllBrightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="2" Width="50" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="2" Width="52" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
                               Value="{Binding AllBrightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
 
@@ -178,27 +178,27 @@
                 <Slider DataContext="{Binding DAPIChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" 
                         SelectionStart="-0.4" Minimum="-0.4" Maximum="0.4" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Column="2" DataContext="{Binding DAPIChannel}" Width="50" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
+                <dxe:SpinEdit Grid.Column="2" DataContext="{Binding DAPIChannel}" Width="52" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
                               Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <!-- GFP -->
                 <Slider Grid.Row="2" DataContext="{Binding GFPChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="-0.4" Minimum="-0.4" Maximum="0.4" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="2" DataContext="{Binding GFPChannel}" Width="50" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="2" DataContext="{Binding GFPChannel}" Width="52" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
                               Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- RFP -->
                 <Slider Grid.Row="4" DataContext="{Binding RFPChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="-0.4" Minimum="-0.4" Maximum="0.4" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="4" Grid.Column="2" DataContext="{Binding RFPChannel}" Width="50" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
+                <dxe:SpinEdit Grid.Row="4" Grid.Column="2" DataContext="{Binding RFPChannel}" Width="52" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
                               Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- NIR -->
                 <Slider Grid.Row="6" DataContext="{Binding NIRChannel}" TickFrequency="0.05" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="-0.4" Minimum="-0.4" Maximum="0.4" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
-                <dxe:SpinEdit Grid.Row="6" Grid.Column="2" DataContext="{Binding NIRChannel}" Width="50" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
+                <dxe:SpinEdit Grid.Row="6" Grid.Column="2" DataContext="{Binding NIRChannel}" Width="52" Height="30" Increment="0.05" MinValue="-0.4" MaxValue="0.4" IsFloatValue="True"
                               Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
 
