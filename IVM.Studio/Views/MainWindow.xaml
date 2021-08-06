@@ -8,7 +8,6 @@
         xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-        xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:util="clr-namespace:IVM.Studio.Utils"
@@ -16,7 +15,7 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
         Title="IVM Studio" Height="1040" Width="1920" Top="0" MinWidth="1600"
-        TitleAlignment="Center" Icon="{dx:DXImage SvgImages/Icon Builder/Actions_Image.svg}">
+        TitleAlignment="Center">
 
     <Window.Resources>
         <util:IndexFromOneConverter x:Key="IndexFromOneConverter"/>

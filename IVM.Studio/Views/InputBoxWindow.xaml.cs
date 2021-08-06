@@ -34,6 +34,7 @@ namespace IVM.Studio.Views
             eventAggregator.GetEvent<TextAnnotationEvent>().Publish(new TextAnnotationParam(param.X, param.Y, InputText.Text));
 
             Close();
+            IsShow = false;
         }
 
         private void CloseClick(object sender, RoutedEventArgs e)

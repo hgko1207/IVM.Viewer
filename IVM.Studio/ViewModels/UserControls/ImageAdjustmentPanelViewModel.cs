@@ -434,10 +434,10 @@ namespace IVM.Studio.ViewModels.UserControls
             Metadata metadata = param.Metadata;
             if (metadata != null)
             {
-                DAPIColorChannel.Color = metadata.ChA == "0" ? Colors.Red : ConvertMetadataToColor(metadata.ChA);
-                GFPColorChannel.Color = metadata.ChB == "0" ? Colors.Green : ConvertMetadataToColor(metadata.ChB);
-                RFPColorChannel.Color = metadata.ChC == "0" ? Colors.Blue : ConvertMetadataToColor(metadata.ChC);
-                NIRColorChannel.Color = metadata.ChD == "0" ? Colors.Alpha : ConvertMetadataToColor(metadata.ChD);
+                DAPIColorChannel.SetPropertyColor(metadata.ChA == "0" ? Colors.Red : ConvertMetadataToColor(metadata.ChA), param.SlideChanged);
+                GFPColorChannel.SetPropertyColor(metadata.ChB == "0" ? Colors.Green : ConvertMetadataToColor(metadata.ChB), param.SlideChanged);
+                RFPColorChannel.SetPropertyColor(metadata.ChC == "0" ? Colors.Blue : ConvertMetadataToColor(metadata.ChC), param.SlideChanged);
+                NIRColorChannel.SetPropertyColor(metadata.ChD == "0" ? Colors.Alpha : ConvertMetadataToColor(metadata.ChD), param.SlideChanged);
             }
 
             RefreshColorStyle();
@@ -474,10 +474,15 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void VisibleFromColor()
         {
-            DAPIColorChannel.Visible = DAPIColor == "Alpha" ? false : true;
-            GFPColorChannel.Visible = GFPColor == "Alpha" ? false : true;
-            RFPColorChannel.Visible = RFPColor == "Alpha" ? false : true;
-            NIRColorChannel.Visible = NIRColor == "Alpha" ? false : true;
+            DAPIColorChannel.SetPropertyVisible(DAPIColor == "Alpha" ? false : true);
+            GFPColorChannel.SetPropertyVisible(GFPColor == "Alpha" ? false : true);
+            RFPColorChannel.SetPropertyVisible(RFPColor == "Alpha" ? false : true);
+            NIRColorChannel.SetPropertyVisible(NIRColor == "Alpha" ? false : true);
+
+            //DAPIColorChannel.Visible = DAPIColor == "Alpha" ? false : true;
+            //GFPColorChannel.Visible = GFPColor == "Alpha" ? false : true;
+            //RFPColorChannel.Visible = RFPColor == "Alpha" ? false : true;
+            //NIRColorChannel.Visible = NIRColor == "Alpha" ? false : true;
         }
 
         /// <summary>
