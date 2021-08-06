@@ -244,6 +244,19 @@ namespace IVM.Studio.Models
             return SetProperty(ref _ColorLevelLowerValue, colorLevelLowerValue, nameof(ColorLevelLowerValue));
         }
 
+        public bool SetPropertyVisible(bool value)
+        {
+            return SetProperty(ref visible, value, nameof(Visible));
+        }
+
+        public void SetPropertyColor(Colors value, bool init)
+        {
+            if (init)
+                SetProperty(ref color, value, nameof(Color));
+            else
+                Color = value;
+        }
+
         /// <summary>
         /// string to color
         /// </summary>

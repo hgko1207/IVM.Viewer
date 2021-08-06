@@ -153,7 +153,10 @@ namespace IVM.Studio.ViewModels.UserControls
         public void OnLoaded(ImageViewer view)
         {
             this.view = view;
-            
+
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread, false, param => view.WindowId == dataManager.MainWindowId);
+
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
@@ -177,6 +180,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(ImageViewer view)
         {
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(DisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
@@ -214,6 +218,11 @@ namespace IVM.Studio.ViewModels.UserControls
                 fovSizeX = 0;
                 fovSizeY = 0;
             }
+
+            if (param.SlideChanged)
+                bitmapList.Clear();
+
+            Console.WriteLine("DisplayImageWithMetadata");
 
             disableRefreshImageEvent = false;
 
@@ -382,12 +391,12 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);
-
-                    bitmapList.Add(new Bitmap(bitmap));
+                    DisplayingImage = imageService.ConvertGDIBitmapToWPF(bitmap);
+                    DisplayingImageWidth = bitmap.Width * (currentZoomRatio / 100d);
 
                     displayWidth = bitmap.Width;
 
-                    DisplayingImage = imageService.ConvertGDIBitmapToWPF(bitmap);
+                    bitmapList.Add(new Bitmap(bitmap));
                 }
             }
         }
@@ -753,11 +762,18 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void DrawClear()
         {
-            annotationImage = null;
-            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+            if (view != null && view.WindowId == dataManager.MainWindowId)
+            {
+                if (bitmapList.Count > 0)
+                {
+                    annotationImage = null;
+                    displayingImageGDI = new Bitmap(bitmapList[0]);
+                    DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
 
-            bitmapList.Clear();
-            tempBitmapList.Clear();
+                    bitmapList.RemoveRange(1, bitmapList.Count - 1);
+                    tempBitmapList.Clear();
+                }
+            }
         }
 
         /// <summary>
@@ -765,12 +781,15 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void DrawUndo()
         {
-            if (bitmapList.Count > 1)
+            if (view != null && view.WindowId == dataManager.MainWindowId)
             {
-                tempBitmapList.Add(bitmapList[bitmapList.Count - 1]);
-                bitmapList.RemoveAt(bitmapList.Count - 1);
+                if (bitmapList.Count > 1)
+                {
+                    tempBitmapList.Add(bitmapList[bitmapList.Count - 1]);
+                    bitmapList.RemoveAt(bitmapList.Count - 1);
 
-                RefreshDisplay();
+                    RefreshDisplay();
+                }
             }
         }
 
@@ -779,12 +798,15 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void DrawRedo()
         {
-            if (tempBitmapList.Count > 0)
+            if (view != null && view.WindowId == dataManager.MainWindowId)
             {
-                bitmapList.Add(tempBitmapList[tempBitmapList.Count - 1]);
-                tempBitmapList.RemoveAt(tempBitmapList.Count - 1);
+                if (tempBitmapList.Count > 0)
+                {
+                    bitmapList.Add(tempBitmapList[tempBitmapList.Count - 1]);
+                    tempBitmapList.RemoveAt(tempBitmapList.Count - 1);
 
-                RefreshDisplay();
+                    RefreshDisplay();
+                }
             }
         }
 
