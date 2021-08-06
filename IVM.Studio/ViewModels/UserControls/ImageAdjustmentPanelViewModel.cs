@@ -342,11 +342,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(ImageAdjustmentPanel view)
         {
-            EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(RefreshMetadata);
-            EventAggregator.GetEvent<MainViewerClosedEvent>().Unsubscribe(() => AllWindowOpend = false);
-            EventAggregator.GetEvent<HistogramClosedEvent>().Unsubscribe(() => AllHistogramOpend = false);
-            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Unsubscribe(ChWindowClosed);
-            EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Unsubscribe(ChHistogramClosed);
         }
 
         /// <summary>

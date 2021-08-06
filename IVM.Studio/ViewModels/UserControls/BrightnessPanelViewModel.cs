@@ -121,7 +121,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(BrightnessPanel view)
         {
-            EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(RefreshMetadata);
         }
 
         /// <summary>
@@ -131,10 +130,10 @@ namespace IVM.Studio.ViewModels.UserControls
         private void RefreshMetadata(DisplayParam param)
         {
             if (!IsLockBrightness)
-                AllBrightness = 0;
+                ResetBrightness();
 
             if (!IsLockContrast)
-                AllContrast = 1;
+                ResetContrast();
         }
 
         /// <summary>

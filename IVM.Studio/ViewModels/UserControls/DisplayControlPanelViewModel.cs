@@ -54,6 +54,8 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             ResetZoomRatioCommand = new DelegateCommand(ResetZoomRatio);
 
+            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Subscribe(ZoomRatioChanged, ThreadOption.UIThread);
+
             SliderControlInfo = container.Resolve<DataManager>().SliderControlInfo;
 
             ZoomRatioValue = 100;
@@ -65,7 +67,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnLoaded(DisplayControlPanel view)
         {
-            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Subscribe(ZoomRatioChanged, ThreadOption.UIThread);
         }
 
         /// <summary>
@@ -74,7 +75,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(DisplayControlPanel view)
         {
-            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Unsubscribe(ZoomRatioChanged);
         }
 
         /// <summary>
