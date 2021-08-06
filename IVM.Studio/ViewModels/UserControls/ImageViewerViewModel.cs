@@ -154,6 +154,9 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread, false, param => view.WindowId == dataManager.MainWindowId);
+
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(DisplayImage, ThreadOption.UIThread, true, id => id == view.WindowId);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
             EventAggregator.GetEvent<DrawClearEvent>().Subscribe(DrawClear, ThreadOption.UIThread);
@@ -177,6 +180,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(ImageViewer view)
         {
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(DisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
@@ -214,6 +218,11 @@ namespace IVM.Studio.ViewModels.UserControls
                 fovSizeX = 0;
                 fovSizeY = 0;
             }
+
+            if (param.SlideChanged)
+                bitmapList.Clear();
+
+            Console.WriteLine("DisplayImageWithMetadata");
 
             disableRefreshImageEvent = false;
 
@@ -383,11 +392,11 @@ namespace IVM.Studio.ViewModels.UserControls
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);
                     DisplayingImage = imageService.ConvertGDIBitmapToWPF(bitmap);
+                    DisplayingImageWidth = bitmap.Width * (currentZoomRatio / 100d);
 
                     displayWidth = bitmap.Width;
 
                     bitmapList.Add(new Bitmap(bitmap));
-                    //DisplayingImageWidth = displayWidth;
                 }
             }
         }

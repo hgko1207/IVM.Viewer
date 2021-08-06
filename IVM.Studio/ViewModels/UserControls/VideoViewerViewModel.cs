@@ -122,14 +122,20 @@ namespace IVM.Studio.ViewModels.UserControls
             view.MediaPlayer.SourceProvider.MediaPlayer.TimeChanged += MediaPlayerTimeChanged;
             view.MediaPlayer.SourceProvider.MediaPlayer.EndReached += MediaPlayerEndReached; ;
 
-            if (displayParam != null)
-                view.MediaPlayer.SourceProvider.MediaPlayer.Play(displayParam.FileInfo);
+            EventAggregator.GetEvent<DisplayVideoEvent>().Unsubscribe(InitialPlayVideo);
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(StopVideo);
+
+            EventAggregator.GetEvent<DisplayVideoEvent>().Subscribe(InitialPlayVideo, ThreadOption.UIThread);
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(StopVideo, ThreadOption.BackgroundThread);
 
             EventAggregator.GetEvent<PlayVideoEvent>().Subscribe(PlayVideo, ThreadOption.BackgroundThread);
             EventAggregator.GetEvent<PauseVideoEvent>().Subscribe(PauseVideo, ThreadOption.BackgroundThread);
             EventAggregator.GetEvent<SeekVideoEvent>().Subscribe(SeekVideo, ThreadOption.BackgroundThread);
 
             EventAggregator.GetEvent<PlayingVideoEvent>().Subscribe(PlayingVideo);
+
+            if (displayParam != null)
+                view.MediaPlayer.SourceProvider.MediaPlayer.Play(displayParam.FileInfo);
         }
 
         /// <summary>
@@ -138,6 +144,9 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(VideoViewer view)
         {
+            EventAggregator.GetEvent<DisplayVideoEvent>().Unsubscribe(InitialPlayVideo);
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(StopVideo);
+
             EventAggregator.GetEvent<PlayVideoEvent>().Unsubscribe(PlayVideo);
             EventAggregator.GetEvent<PlayVideoEvent>().Unsubscribe(PauseVideo);
             EventAggregator.GetEvent<SeekVideoEvent>().Unsubscribe(SeekVideo);
