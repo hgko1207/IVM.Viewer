@@ -304,7 +304,6 @@ namespace IVM.Studio.Services
         public void DrawEraser(Bitmap annotationImage, Bitmap displayImage, Bitmap originalImage, float[][] colorMatrix, int x, int y, int thickness,
                                bool horizontalReflect, bool verticalReflect, int rotate)
         {
-
             int left = (int)(x - thickness / 2d);
             int right = (int)(x + thickness / 2d);
             int top = (int)(y - thickness / 2d);
@@ -426,6 +425,22 @@ namespace IVM.Studio.Services
                 {
                     g1.DrawEllipse(pen, new Rectangle(x, y, width, height));
                     g2.DrawEllipse(pen, new Rectangle(x, y, width, height));
+                }
+            }
+        }
+
+        public void DrawTriangle(Bitmap annotationImage, Bitmap displayImage, Point[] points, int thickness, WPFDrawing.Color color,
+                            bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
+                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                {
+                    g1.DrawPolygon(pen, points);
+                    g2.DrawPolygon(pen, points);
                 }
             }
         }

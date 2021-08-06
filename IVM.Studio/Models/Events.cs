@@ -64,6 +64,8 @@ namespace IVM.Studio.Models.Events
     }
 
     public class DrawClearEvent : PubSubEvent { }
+    public class DrawUndoEvent : PubSubEvent { }
+    public class DrawRedoEvent : PubSubEvent { }
     public class DrawExportEvent : PubSubEvent { }
 
     public class RotationEvent : PubSubEvent<string> { }

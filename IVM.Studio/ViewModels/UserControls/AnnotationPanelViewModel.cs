@@ -96,6 +96,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public ICommand AddDrawCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
+        public ICommand UndoCommand { get; private set; }
+        public ICommand RedoCommand { get; private set; }
 
         private AnnotationPanel view;
 
@@ -108,7 +110,10 @@ namespace IVM.Studio.ViewModels.UserControls
         public AnnotationPanelViewModel(IContainerExtension container) : base(container)
         {
             AddDrawCommand = new DelegateCommand(AddDraw);
-            ClearCommand = new DelegateCommand(Clear);
+            ClearCommand = new DelegateCommand(() => EventAggregator.GetEvent<DrawClearEvent>().Publish());
+            UndoCommand = new DelegateCommand(() => EventAggregator.GetEvent<DrawUndoEvent>().Publish());
+            RedoCommand = new DelegateCommand(() => EventAggregator.GetEvent<DrawRedoEvent>().Publish());
+
             AnnotationInfo = Container.Resolve<DataManager>().AnnotationInfo;
 
             FontItemList = new List<string>();
@@ -168,14 +173,6 @@ namespace IVM.Studio.ViewModels.UserControls
         private void AddDraw()
         {
 
-        }
-
-        /// <summary>
-        /// Clear 이벤트
-        /// </summary>
-        private void Clear()
-        {
-            EventAggregator.GetEvent<DrawClearEvent>().Publish();
         }
 
         /// <summary>
