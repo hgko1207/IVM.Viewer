@@ -23,6 +23,13 @@ namespace IVM.Studio.Views.UserControls
         public I3DMainViewer()
         {
             InitializeComponent();
+
+            MouseMove += Control_MouseMove;
+        }
+
+        private void Control_MouseMove(object sender, MouseEventArgs e)
+        {
+            isv.InvalidateVisual();
         }
     }
 }

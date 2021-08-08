@@ -45,6 +45,8 @@ namespace ivm
             Fname.Text = string.Format("{0}", vw.scene.tex3D.GetImagePath());
             RotX.Text = string.Format("{0}", ViewParam.CAMERA_ANGLE.x);
             RotY.Text = string.Format("{0}", ViewParam.CAMERA_ANGLE.y);
+
+            vw.InvalidateVisual();
         }
 
         private void IntensityRSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
