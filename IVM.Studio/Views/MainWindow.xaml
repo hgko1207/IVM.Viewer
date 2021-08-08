@@ -33,12 +33,20 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <dxdo:LayoutPanel Grid.Row="0" ShowCaption="False" ShowBorder="False">
+        <dxdo:LayoutPanel Grid.Row="0" Grid.Column="0" ShowCaption="False" ShowBorder="False">
             <dxb:MainMenuControl FontSize="14">
                 <dxb:BarSubItem Content=" File " Command="{Binding OpenFolderCommand}"/>
                 <dxb:BarSubItem Content=" Edit " Command="{Binding RefreshCommand}"/>
                 <dxb:BarSubItem Content=" View "/>
             </dxb:MainMenuControl>
+        </dxdo:LayoutPanel>
+        <dxdo:LayoutPanel Grid.Row="0" Grid.Column="1" ShowCaption="False" ShowBorder="False">
+            <dxb:ToolBarControl DockPanel.Dock="Top" 
+                                AllowQuickCustomization="False" AllowCustomizationMenu="False" 
+                                AllowCollapse="False" AllowDrop="False" AllowHide="False" BarItemDisplayMode="ContentAndGlyph">
+                <dxb:BarCheckItem Name="btnMode2D" Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" Margin="0,0,8,0" IsChecked="True" />
+                <dxb:BarCheckItem Name="btnMode3D" Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" Margin="0,0,8,0" />
+            </dxb:ToolBarControl>
         </dxdo:LayoutPanel>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
@@ -173,7 +181,7 @@
             </dxdo:DockLayoutManager>
         </ScrollViewer>
 
-        <dxdo:DockLayoutManager Grid.Row="1" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
+        <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
             <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
                 <!--<dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Viewer" AllowClose="False">

@@ -87,6 +87,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\DevExpress.Mvvm.v21.1.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Printing.v21.1.Core, Version=21.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\DevExpress.Printing.v21.1.Core.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Xpf.Controls.v21.1, Version=21.1.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\DevExpress.Xpf.Controls.v21.1.dll</HintPath>
@@ -454,6 +458,8 @@
     <Content Include="ffmpeg\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\icon_2d.png" />
+    <Resource Include="Resources\Images\icon_3d.png" />
     <Resource Include="Studio.ico" />
     <SplashScreen Include="Resources\IVIM_program.png" />
     <Resource Include="Resources\Images\triangle.png" />
