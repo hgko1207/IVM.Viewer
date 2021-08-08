@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVM.Studio", "IVM.Studio\IV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVM.ImageStackViewLib", "IVM.ImageStackViewLib\IVM.ImageStackViewLib.csproj", "{1451E18E-3E3A-4C6D-942E-744580A82B63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageStackViewTest", "IVM.ImageStackViewTest\ImageStackViewTest.csproj", "{C9C72EF3-114D-408B-BC1C-CA9C5CA41236}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IVM.ImageStackViewTest", "IVM.ImageStackViewTest\IVM.ImageStackViewTest.csproj", "{C9C72EF3-114D-408B-BC1C-CA9C5CA41236}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
