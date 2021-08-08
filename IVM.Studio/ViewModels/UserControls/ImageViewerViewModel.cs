@@ -61,6 +61,9 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand ViewPortMouseMoveCommand { get; private set; }
         public ICommand ViewPortMouseUpCommand { get; private set; }
 
+        public ICommand ScrollViewerSizeChangedCommand { get; private set; }
+        public ICommand ScrollViewerScrollChangedCommand { get; private set; }
+
         private Bitmap originalImage;
         private Bitmap flippedOriginalImage;
         private Bitmap annotationImage;
@@ -71,9 +74,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <summary>뷰에서 표시 될 현재 이미지의 줌 배율입니다. 단위는 퍼센트입니다.</summary>
         /// <remarks>이미지의 표시 배율을 뷰모델에서 조정할 경우 <see cref="DisplayingImageWidth"/>를 사용합니다.</remarks>
         private int currentZoomRatio;
-
-        /// <summary>이미지 새로고침 이벤트를 비활성화하는 플래그입니다.</summary>
-        private bool disableRefreshImageEvent;
 
         private int[] currentTranslationByChannel => OrderByColor().Select(s => (int)s.Color).ToArray();
         private bool[] currentVisibilityByChannel => OrderByColor().Select(s => s.Visible).ToArray();
@@ -130,7 +130,11 @@ namespace IVM.Studio.ViewModels.UserControls
             ViewPortMouseMoveCommand = new DelegateCommand<MouseEventArgs>(ViewPortMouseMove);
             ViewPortMouseUpCommand = new DelegateCommand<MouseButtonEventArgs>(ViewPortMouseUp);
 
+            ScrollViewerSizeChangedCommand = new DelegateCommand(SizeChanged);
+            ScrollViewerScrollChangedCommand = new DelegateCommand(SizeChanged);
+
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
+            EventAggregator.GetEvent<MainViewerUnloadEvent>().Subscribe(MainViewwerUnload);
 
             currentZoomRatio = 100;
             DisplayingImageWidth = double.NaN;
@@ -153,9 +157,6 @@ namespace IVM.Studio.ViewModels.UserControls
         public void OnLoaded(ImageViewer view)
         {
             this.view = view;
-
-            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
-            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread, true, param => view.WindowId == dataManager.MainWindowId);
 
             EventAggregator.GetEvent<RefreshImageEvent>().Subscribe(DisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Subscribe(DrawAnnotationText, ThreadOption.UIThread);
@@ -181,7 +182,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(ImageViewer view)
         {
-            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshImageEvent>().Unsubscribe(DisplayImage);
             EventAggregator.GetEvent<TextAnnotationEvent>().Unsubscribe(DrawAnnotationText);
             EventAggregator.GetEvent<DrawClearEvent>().Unsubscribe(DrawClear);
@@ -194,6 +194,15 @@ namespace IVM.Studio.ViewModels.UserControls
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Unsubscribe(ZoomRatioControl);
             EventAggregator.GetEvent<ExportCropEvent>().Unsubscribe(ExportCrop);
+        }
+
+        private void MainViewwerUnload(int windowId)
+        {
+            if (windowId == dataManager.MainWindowId)
+            {
+                EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
+                EventAggregator.GetEvent<MainViewerUnloadEvent>().Unsubscribe(MainViewwerUnload);
+            }
         }
 
         /// <summary>
@@ -211,8 +220,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="param"></param>
         private void DisplayImageWithMetadata(DisplayParam param)
         {
-            disableRefreshImageEvent = true;
-
             if (param.Metadata != null)
             {
                 fovSizeX = param.Metadata.FovX;
@@ -224,23 +231,10 @@ namespace IVM.Studio.ViewModels.UserControls
                 fovSizeY = 0;
             }
 
-            if (param.SlideChanged)
-                bitmapList.Clear();
-
-            disableRefreshImageEvent = false;
-
-            DisplayImageWithoutMetadata(param.FileInfo);
-        }
-
-        /// <summary>
-        /// DisplayImageWithoutMetadata
-        /// </summary>
-        /// <param name="file"></param>
-        private void DisplayImageWithoutMetadata(FileInfo file)
-        {
+            FileInfo file = param.FileInfo;
             // 레지스트레이션 체크
             FileInfo registrationFile = new FileInfo(Path.Combine(file.DirectoryName, Path.GetFileNameWithoutExtension(file.Name) + "_Reg" + file.Extension));
-            
+
             if (registrationFile.Exists)
                 fileToDisplay = registrationFile;
             else
@@ -250,9 +244,17 @@ namespace IVM.Studio.ViewModels.UserControls
             annotationImage?.Dispose();
             annotationImage = null;
 
-            // 디스플레이
             if (view != null && view.WindowId == dataManager.MainWindowId)
+            {
+                if (param.SlideChanged)
+                    bitmapList.Clear();
+
+                // 디스플레이
                 DisplayImage(dataManager.MainWindowId);
+
+                // 슬라이드쇼
+                Container.Resolve<SlideShowService>().ContinueSlideShow();
+            }
         }
 
         /// <summary>
@@ -260,7 +262,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private async void DisplayImage(int id)
         {
-            if (id == 0 || fileToDisplay == null || disableRefreshImageEvent || view.WindowId != dataManager.MainWindowId)
+            if (id == 0 || fileToDisplay == null || view.WindowId != dataManager.MainWindowId)
                 return;
 
             // 이미지 표시는 히스토그램 생성 등으로 인해 오래 걸리므로 백그라운드에서 처리
@@ -456,7 +458,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
             currentZoomRatio = (int)Math.Round(width.Value / displayWidth * 100);
 
-            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Publish(currentZoomRatio);
+            SizeChanged();
         }
 
         /// <summary>
@@ -985,6 +987,22 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (originalImage != null && dataManager.MainWindowId == view.WindowId)
                 DisplayingImageWidth = originalImage.Width * (zoomRatio / 100d);
+        }
+
+        /// <summary>
+        /// 스크롤 뷰 사이즈 변경 or 스크롤 변경 시
+        /// </summary>
+        private void SizeChanged()
+        {
+            if (displayingImageGDI != null)
+            {
+                EventAggregator.GetEvent<NavigatorChangeEvent>().Publish(new NavigatorParam
+                {
+                    ImageWidth = displayingImageGDI.Width,
+                    ImageHeight = displayingImageGDI.Height,
+                    ZoomRatio = currentZoomRatio
+                });
+            }
         }
     }
 }

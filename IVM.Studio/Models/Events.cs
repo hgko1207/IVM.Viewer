@@ -21,6 +21,7 @@ namespace IVM.Studio.Models.Events
     public class MainViewerCloseEvent : PubSubEvent { }
     /// <summary> 메인 뷰어 윈도우가 종료 될때 </summary>
     public class MainViewerClosedEvent : PubSubEvent { }
+    public class MainViewerUnloadEvent : PubSubEvent<int> { }
 
     /// <summary> 메인 Viewer 변경 이벤트 </summary>
     public class ViewerPageChangedEvent : PubSubEvent { }
@@ -134,7 +135,6 @@ namespace IVM.Studio.Models.Events
         }
     }
 
-    public class ZoomRatioChangedEvent : PubSubEvent<int> { }
     public class ZoomRatioControlEvent : PubSubEvent<int> { }
 
     public class EnableDrawEvent : PubSubEvent { }
@@ -176,4 +176,12 @@ namespace IVM.Studio.Models.Events
     }
 
     public class ExportCropEvent : PubSubEvent { }
+
+    public class NavigatorChangeEvent : PubSubEvent<NavigatorParam> { }
+    public class NavigatorParam
+    {
+        public double ImageWidth { get; set; }
+        public double ImageHeight { get; set; }
+        public int ZoomRatio { get; set; }
+    }
 }

@@ -8,7 +8,7 @@
              xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:utils="clr-namespace:IVM.Studio.Utils"
-             xmlns:models="clr-namespace:IVM.Studio.Models"
+             xmlns:model="clr-namespace:IVM.Studio.Models"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
@@ -16,27 +16,49 @@
              d:DesignHeight="450" d:DesignWidth="800">
     
     <StackPanel Margin="10">
-        <StackPanel>
-            <TextBlock Text="Video Processing" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+        <StackPanel Margin="5 0 0 0">
+            <TextBlock Text="Noise Filter" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <DockPanel Margin="5 4 0 0">
+            <DockPanel Margin="0 5 0 0">
+                <TextBlock Text="Average frames" VerticalAlignment="Center" Width="100" FontWeight="Bold"/>
+                
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Average frames" VerticalAlignment="Center"/>
+                    <TextBlock Text="Applied Ch." VerticalAlignment="Center" Width="90"/>
+                    <dxe:ComboBoxEdit ShowSizeGrip="True" IsTextEditable="False" Width="90" SelectedIndex="0">
+                        <dxe:ComboBoxEditItem>4 Channels</dxe:ComboBoxEditItem>
+                    </dxe:ComboBoxEdit>
 
-                    <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="40 0 0 0"/>
+                    <TextBlock Text="Average" VerticalAlignment="Center" Width="60" Margin="25 0 0 0"/>
+                    <dxe:SpinEdit IsFloatValue="False" Width="50" Height="28" />
                     <TextBlock Text="Frames" VerticalAlignment="Center" Margin="8 0 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
+                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
+            </DockPanel>
+
+            <DockPanel Margin="0 5 0 0">
+                <TextBlock Text="Median" VerticalAlignment="Center" Width="100" FontWeight="Bold"/>
+                
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Reference Ch." VerticalAlignment="Center" Width="90"/>
+                    <dxe:ComboBoxEdit ItemsSource="{Binding ColorChannelItems}" DisplayMember="Name" SelectedIndex="0"
+                                      ShowSizeGrip="True" IsTextEditable="False" Width="90"/>
+
+                    <TextBlock Text="Radius" VerticalAlignment="Center" Width="60" Margin="25 0 0 0"/>
+                    <dxe:SpinEdit IsFloatValue="False" Width="50" Height="28"/>
+                    <TextBlock Text="Pixels" VerticalAlignment="Center" Margin="8 0 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
             </DockPanel>
         </StackPanel>
 
-        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 6" />
+        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
-        <StackPanel>
+        <StackPanel Margin="5 0 0 0">
             <TextBlock Text="Motion Compensation" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <DockPanel Margin="5 4 0 0">
+            <DockPanel Margin="0 5 0 0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -63,52 +85,55 @@
                     <dxe:ComboBoxEdit Grid.Row="2" Grid.Column="5" ItemsSource="{Binding ColorChannelItems}" EditValue="{Binding SelectedRotationItem}" DisplayMember="Name" ShowSizeGrip="True" IsTextEditable="False"/>
                 </Grid>
 
-                <dx:SimpleButton HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
+                <dx:SimpleButton HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
             </DockPanel>
         </StackPanel>
 
-        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 6" />
+        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
-        <StackPanel>
-            <TextBlock Text="Z-stack Processing" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+        <DockPanel Margin="5 5 0 0">
+            <TextBlock Text="Z-Projection" VerticalAlignment="Center" Style="{StaticResource TitleText}" Width="100"/>
 
-            <DockPanel Margin="5 4 0 0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Z-stack Projection" VerticalAlignment="Center"/>
+            <dxe:ComboBoxEdit EditValue="{Binding SelectedProjection}" ShowSizeGrip="True" IsTextEditable="False" Width="150" Height="28">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ZStackProjectionType}"/>
+                </dxmvvm:Interaction.Behaviors>
+            </dxe:ComboBoxEdit>
+            
+            <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="25 0 0 0" Minimum="1" Maximum="7" Width="120"
+                              SelectionStart="1" SelectionEnd="7">
+                <dxe:TrackBarEdit.StyleSettings>
+                    <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                </dxe:TrackBarEdit.StyleSettings>
+            </dxe:TrackBarEdit>
 
-                    <dxe:ComboBoxEdit EditValue="{Binding SelectedProjection}" 
-                                      ShowSizeGrip="True" IsTextEditable="False" Width="160" Height="28" Margin="30 0 0 0">
-                        <dxe:ComboBoxEdit>
-                            <dxmvvm:Interaction.Behaviors>
-                                <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type models:ZStackProjectionType}"/>
-                            </dxmvvm:Interaction.Behaviors>
-                        </dxe:ComboBoxEdit>
-                    </dxe:ComboBoxEdit>
-                </StackPanel>
+            <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="10 0 0 0" Padding="5 0" Height="28">
+                <TextBlock Text="1 / 7" Style="{StaticResource GeneralTextBlock}"/>
+            </Border>
 
-                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
-            </DockPanel>
-        </StackPanel>
+            <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
+        </DockPanel>
 
-        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 6" />
+        <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
-        <StackPanel>
-            <TextBlock Text="Mosaic Processing" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+        <DockPanel Margin="5 5 0 0">
+            <TextBlock Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}" Width="100"/>
 
-            <DockPanel Margin="5 4 0 0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Mosaic" VerticalAlignment="Center"/>
-                    
-                    <TextBlock Text="Edge Crop" VerticalAlignment="Center" Margin="30 0 0 0"/>
-                    <dxe:ComboBoxEdit ItemsSource="{utils:EnumToCollectionExtension EnumType={x:Type models:EdgeCropType}}" EditValue="{Binding SelectedEdgeCrop}" 
-                                      ShowSizeGrip="True" IsTextEditable="False" Width="120" Height="28" Margin="10 0 0 0"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Edge Crop" VerticalAlignment="Center"/>
 
-                    <TextBlock Text="Overlap (%)" VerticalAlignment="Center" Margin="25 0 0 0"/>
-                    <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="10 0 0 0"/>
-                </StackPanel>
+                <dxe:ComboBoxEdit EditValue="{Binding SelectedEdgeCrop}" ShowSizeGrip="True" IsTextEditable="False" Width="120" Height="28" Margin="10 0 0 0">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:EdgeCropType}"/>
+                    </dxmvvm:Interaction.Behaviors>
+                </dxe:ComboBoxEdit>
 
-                <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource ToggleButton}" Width="90" Content="Apply" Margin="10 0 0 0" />
-            </DockPanel>
-        </StackPanel>
+                <TextBlock Text="Overlap (%)" VerticalAlignment="Center" Margin="25 0 0 0"/>
+                <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
+        </DockPanel>
     </StackPanel>
 </UserControl>
