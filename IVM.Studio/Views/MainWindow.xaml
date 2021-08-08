@@ -44,14 +44,14 @@
             <dxb:ToolBarControl DockPanel.Dock="Top" 
                                 AllowQuickCustomization="False" AllowCustomizationMenu="False" 
                                 AllowCollapse="False" AllowDrop="False" AllowHide="False" BarItemDisplayMode="ContentAndGlyph">
-                <dxb:BarCheckItem Name="btnMode2D" Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" 
+                <dxb:BarCheckItem Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" 
                                   Command="{Binding Change2DModeCommand}" Margin="0,0,8,0" IsChecked="{Binding Checked2DMode}" />
-                <dxb:BarCheckItem Name="btnMode3D" Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" 
+                <dxb:BarCheckItem Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" 
                                   Command="{Binding Change3DModeCommand}" Margin="0,0,8,0" IsChecked="{Binding Checked3DMode}" />
             </dxb:ToolBarControl>
         </dxdo:LayoutPanel>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="0" dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap">
+        <ScrollViewer Grid.Row="1" Grid.Column="0" dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap" Visibility="{Binding VisUI2D}">
             <dxdo:DockLayoutManager ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
                 <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical">
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="300">
@@ -183,7 +183,40 @@
             </dxdo:DockLayoutManager>
         </ScrollViewer>
 
-        <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
+        <ScrollViewer Grid.Row="1" Grid.Column="0" dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap" Visibility="{Binding VisUI3D}">
+            <dxdo:DockLayoutManager ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
+                <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical">
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="300">
+                        <dxdo:DocumentPanel Caption="3D/4D Import" AllowClose="False">
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="3D Data Parameter" AllowClose="False">
+                        </dxdo:DocumentPanel>
+                    </dxdo:DocumentGroup>
+
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">
+                        <dxdo:DocumentPanel Caption="3D/4D Display" AllowClose="False">
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Slice Viewer" AllowClose="False">
+                        </dxdo:DocumentPanel>
+                    </dxdo:DocumentGroup>
+
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="325">
+                        <dxdo:DocumentPanel Caption="Recording" AllowClose="False">
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Free-hand Recording" AllowClose="False">
+                        </dxdo:DocumentPanel>
+                    </dxdo:DocumentGroup>
+                </dxdo:LayoutGroup>
+            </dxdo:DockLayoutManager>
+        </ScrollViewer>
+
+        <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop" Visibility="{Binding VisUI2D}">
             <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
                 <!--<dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
                         <dxdo:DocumentPanel Caption="Viewer" AllowClose="False">
@@ -202,5 +235,9 @@
                 </dxdo:LayoutPanel>
             </dxdo:LayoutGroup>
         </dxdo:DockLayoutManager>
+
+        <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop" Visibility="{Binding VisUI3D}">
+        </dxdo:DockLayoutManager>
+
     </Grid>
 </dx:ThemedWindow>

@@ -84,6 +84,20 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref checked3DMode, value);
         }
 
+        private Visibility visUI2D = Visibility.Visible;
+        public Visibility VisUI2D
+        {
+            get => visUI2D;
+            set => SetProperty(ref visUI2D, value);
+        }
+
+        private Visibility visUI3D = Visibility.Hidden;
+        public Visibility VisUI3D
+        {
+            get => visUI3D;
+            set => SetProperty(ref visUI3D, value);
+        }
+
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
         public ICommand PreviousSlideCommand { get; private set; }
@@ -315,12 +329,18 @@ namespace IVM.Studio.ViewModels
         {
             Checked2DMode = true;
             Checked3DMode = false;
+
+            VisUI2D = Visibility.Visible;
+            VisUI3D = Visibility.Hidden;
         }
 
         private void Change3DMode()
         {
             Checked2DMode = false;
             Checked3DMode = true;
+
+            VisUI2D = Visibility.Hidden;
+            VisUI3D = Visibility.Visible;
         }
 
         /// <summary>
