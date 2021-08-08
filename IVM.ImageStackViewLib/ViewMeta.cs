@@ -1,0 +1,89 @@
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace ivm
+{
+    public class ViewMeta
+    {
+        ImageStackView view;
+
+        public int pixelWidth = 0;
+        public int pixelHeight = 0;
+        public int umWidth = 0;
+        public int umHeight = 0;
+        public float pixelPerUM_X = 1.0f;
+        public float pixelPerUM_Y = 1.0f;
+        public float pixelPerUM_Z = 1.0f;
+
+        public ViewMeta(ImageStackView v)
+        {
+            view = v;
+        }
+
+        bool ParseCSV(string csvPath)
+        {
+            using (FileStream fs = new FileStream(csvPath, FileMode.Open))
+            {
+                using (StreamReader sr = new StreamReader(fs, Encoding.UTF8, false))
+                {
+                    string l = sr.ReadLine();
+                    if (l == null)
+                        return false;
+
+                    List<string> keys = l.Split(',').ToList();
+                    var iStageZ = keys.FindIndex(k => k.Contains("StageZ"));
+                    var iFovX = keys.FindIndex(k => k.Contains("FovX"));
+                    var iFovY = keys.FindIndex(k => k.Contains("FovY"));
+                    var iXpixel = keys.FindIndex(k => k.Contains("Xpixel"));
+                    var iYpixel = keys.FindIndex(k => k.Contains("Ypixel"));
+
+                    int[] vStageZs = { 0, 0 };
+
+                    int lcnt = 0;
+                    while ((l = sr.ReadLine()) != null)
+                    {
+                        List<string> vals = l.Split(',').ToList();
+                        int vStageZ = ViewCommon.IntParse(vals[iStageZ]);
+                        int vFovX = ViewCommon.IntParse(vals[iFovX]);
+                        int vFovY = ViewCommon.IntParse(vals[iFovY]);
+                        int vXpixel = ViewCommon.IntParse(vals[iXpixel]);
+                        int vYpixel = ViewCommon.IntParse(vals[iYpixel]);
+
+                        //Console.WriteLine("{0} {1} {2} {3} {4}", vStageZ, vFovX, vFovY, vXpixel, vYpixel);
+
+                        pixelPerUM_X = (float)vFovX / (float)vXpixel;
+                        pixelPerUM_Y = (float)vFovY / (float)vYpixel;
+
+                        umWidth = vFovX;
+                        umHeight = vFovY;
+
+                        vStageZs[lcnt] = vStageZ;
+
+                        lcnt++;
+                        if (lcnt >= 2)
+                            break;
+                    }
+
+                    pixelPerUM_Z = Math.Abs((float)vStageZs[1] - (float)vStageZs[0]);
+                }
+            }
+
+            return true;
+        }
+
+        public bool Load(string imgPath)
+        {
+            string metaPath = imgPath + ".csv";
+
+            if (!File.Exists(metaPath))
+                return false;
+
+            ParseCSV(metaPath);
+
+            return true;
+        }
+    }
+}

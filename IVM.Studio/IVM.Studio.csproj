@@ -176,6 +176,8 @@
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\I3DMainViewerViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\I3DImportPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ChannelProcessingPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PostProcessingPanelViewModel.cs" />
@@ -191,6 +193,12 @@
     </Compile>
     <Compile Include="Views\ChannelHistogramWindow.xaml.cs">
       <DependentUpon>ChannelHistogramWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3DMainViewer.xaml.cs">
+      <DependentUpon>I3DMainViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3DImportPanel.xaml.cs">
+      <DependentUpon>I3DImportPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\BrightnessPanel.xaml.cs">
       <DependentUpon>BrightnessPanel.xaml</DependentUpon>
@@ -236,6 +244,14 @@
     <Page Include="Views\MainViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\I3DMainViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\I3DImportPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserControls\AnnotationPanel.xaml">
       <SubType>Designer</SubType>
@@ -477,6 +493,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IVM.ImageStackViewLib\IVM.ImageStackViewLib.csproj">
+      <Project>{1451e18e-3e3a-4c6d-942e-744580a82b63}</Project>
+      <Name>IVM.ImageStackViewLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

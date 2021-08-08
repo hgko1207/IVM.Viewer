@@ -133,6 +133,10 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("PostProcessingPanel", typeof(PostProcessingPanel));
             RegionManager.RegisterViewWithRegion("RotateCropPanel", typeof(RotateCropPanel));
 
+            // 3D-Panels
+            RegionManager.RegisterViewWithRegion("I3DImportPanel", typeof(I3DImportPanel));
+            RegionManager.RegisterViewWithRegion("I3DMainViewer", typeof(I3DMainViewer));
+
             dataManager = container.Resolve<DataManager>();
             dataManager.Init(container, EventAggregator);
 
@@ -141,6 +145,8 @@ namespace IVM.Studio.ViewModels
             PreviousSlideCommand = new DelegateCommand(PreviousSlide);
             NextSlideCommand = new DelegateCommand(NextSlide);
             WindowOpenCommand = new DelegateCommand(WindowOpen);
+
+            // 2D / 3D Mode Change
             Change2DModeCommand = new DelegateCommand(Change2DMode);
             Change3DModeCommand = new DelegateCommand(Change3DMode);
 

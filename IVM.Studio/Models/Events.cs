@@ -176,4 +176,7 @@ namespace IVM.Studio.Models.Events
     }
 
     public class ExportCropEvent : PubSubEvent { }
+
+    // 3DView Events
+    public class I3DOpenEvent : PubSubEvent<string> { }
 }

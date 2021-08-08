@@ -1,0 +1,230 @@
+﻿<Window x:Class="ivm.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ivm"
+        xmlns:view="clr-namespace:ivm;assembly=ImageStackView"
+        mc:Ignorable="d"
+        Icon="viewer.ico"
+        Title="Image Stack Viewer" Width="1024" Height="1024">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <view:ImageStackView Grid.Row="0" x:Name="vw" />
+        <Grid Grid.Row="1" VerticalAlignment="Center" Background="White" >
+            <StackPanel
+				Margin="5,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="Path : " />
+                <TextBlock x:Name="Fname" Text="" />
+            </StackPanel>
+
+            <StackPanel
+				Margin="500,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="RotX : " />
+                <TextBlock x:Name="RotX" Text="" />
+            </StackPanel>
+
+            <StackPanel
+				Margin="750,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="RotY : " />
+                <TextBlock x:Name="RotY" Text="" />
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="2" VerticalAlignment="Center" Background="White" >
+            
+            <StackPanel
+				Margin="5,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal"
+                HorizontalAlignment="Stretch"
+                >
+                <TextBlock Text="Intensity Threshold : " />
+                <TextBlock x:Name="IntensityR" Text="" />
+                <TextBlock x:Name="IntensityG" Text="" />
+                <TextBlock x:Name="IntensityB" Text="" />
+            </StackPanel>
+            <Slider Margin="200,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="0" Maximum="100" Interval="1" 
+                    x:Name="IntensityRSlider" ValueChanged="IntensityRSlider_ValueChanged" />
+            <Slider Margin="290,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="0" Maximum="100" Interval="1" 
+                    x:Name="IntensityGSlider" ValueChanged="IntensityGSlider_ValueChanged" />
+            <Slider Margin="380,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="0" Maximum="100" Interval="1" 
+                    x:Name="IntensityBSlider" ValueChanged="IntensityBSlider_ValueChanged" />
+            <StackPanel
+				Margin="500,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="Show Axis : " />
+                <CheckBox x:Name="AxisChkBtn"
+                          Checked="AxisChkBtn_Checked"
+                          Unchecked="AxisChkBtn_Unchecked"/>
+            </StackPanel>
+            <StackPanel
+				Margin="600,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="Show Box : " />
+                <CheckBox x:Name="BoxChkBtn"
+                          Checked="BoxChkBtn_Checked"
+                          Unchecked="BoxChkBtn_Unchecked"/>
+            </StackPanel>
+            <StackPanel
+				Margin="700,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="Show Grid : " />
+                <CheckBox x:Name="GridChkBtn"
+                          Checked="GridChkBtn_Checked"
+                          Unchecked="GridChkBtn_Unchecked"/>
+            </StackPanel>
+            <StackPanel
+				Margin="800,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="Co-local : " />
+                <CheckBox x:Name="ColocalChkBtn"
+                          Checked="ColocalChkBtn_Checked"
+                          Unchecked="ColocalChkBtn_Unchecked"/>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="3" VerticalAlignment="Center" Background="White" >
+            <StackPanel
+				Margin="5,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal"
+                HorizontalAlignment="Stretch"
+                >
+                <TextBlock Text="Per-Pixel Iteration : " />
+                <TextBlock x:Name="PerPixIter" Text="" />
+            </StackPanel>
+            <Slider Margin="200,0,0,5" Width="280" HorizontalAlignment="Left"
+                    Minimum="2" Maximum="2000" Interval="1" Value="800"
+                    x:Name="PerPixIterSlider" ValueChanged="PerPixIterSlider_ValueChanged" />
+
+            <StackPanel
+				Margin="500,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal"
+                HorizontalAlignment="Stretch"
+                >
+                <TextBlock Text="BoxHeight : " />
+                <TextBlock x:Name="BoxHeight" Text="" />
+            </StackPanel>
+            <Slider Margin="600,0,0,5" Width="100" HorizontalAlignment="Left"
+                    Minimum="1" Maximum="30" Interval="1" Value="1"
+                    x:Name="BoxHeightSlider" ValueChanged="BoxHeightSlider_ValueChanged" />
+
+            <StackPanel
+				Margin="720,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal"
+                HorizontalAlignment="Stretch"
+                >
+                <TextBlock Text="Oblique-Depth : " />
+                <TextBlock x:Name="ObliqueDepth" Text="" />
+            </StackPanel>
+            <Slider Margin="840,0,0,5" Width="100" HorizontalAlignment="Left"
+                    Minimum="-100" Maximum="100" Interval="1" Value="0"
+                    x:Name="ObliqueDepthSlider" ValueChanged="ObliqueDepthSlider_ValueChanged" />
+        </Grid>
+        <Grid Grid.Row="4" VerticalAlignment="Center" Background="White" >
+            <StackPanel
+				Margin="5,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal"
+                HorizontalAlignment="Stretch"
+                >
+                <TextBlock Text="Alpha Weight : " />
+                <TextBlock x:Name="AlphaWeightR" Text="" />
+                <TextBlock x:Name="AlphaWeightG" Text="" />
+                <TextBlock x:Name="AlphaWeightB" Text="" />
+            </StackPanel>
+            <Slider Margin="200,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="1" Maximum="1000" Interval="1" Value="200"
+                    x:Name="AlphaWeightRSlider" ValueChanged="AlphaWeightRSlider_ValueChanged" />
+            <Slider Margin="290,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="1" Maximum="1000" Interval="1" Value="200"
+                    x:Name="AlphaWeightGSlider" ValueChanged="AlphaWeightGSlider_ValueChanged" />
+            <Slider Margin="380,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="1" Maximum="1000" Interval="1" Value="200"
+                    x:Name="AlphaWeightBSlider" ValueChanged="AlphaWeightBSlider_ValueChanged" />
+            <StackPanel
+				Margin="500,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="AutoRotX : " />
+                <CheckBox x:Name="AutoRotXBtn"
+                          Checked="AutoRotXBtn_Checked"
+                          Unchecked="AutoRotXBtn_Unchecked"/>
+            </StackPanel>
+            <StackPanel
+				Margin="600,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="AutoRotY : " />
+                <CheckBox x:Name="AutoRotYBtn"
+                          Checked="AutoRotYBtn_Checked"
+                          Unchecked="AutoRotYBtn_Unchecked"/>
+            </StackPanel>
+            <StackPanel
+				Margin="700,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <Button x:Name="CameraResetBtn"
+                        Click="CameraReset_Click">
+                    Camera-Reset
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="5" VerticalAlignment="Center" Background="White" >
+            <StackPanel
+				Margin="5,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal">
+                <TextBlock Text="RenderMode - Blend : " />                
+                <RadioButton Click="RenderModeBlend_Click" />
+                <TextBlock Text=" Added : " />
+                <RadioButton Click="RenderModeAdded_Click" IsChecked="True" />
+                <TextBlock Text=" Oblique : " />
+                <RadioButton Click="RenderModeOblique_Click"  />
+                <TextBlock Text=" Slice : " />
+                <RadioButton Click="RenderModeSlice_Click"  />
+            </StackPanel>
+            <StackPanel
+				Margin="500,0,0,0"
+				VerticalAlignment="Center"
+				Orientation="Horizontal"
+                HorizontalAlignment="Stretch"
+                >
+                <TextBlock Text="Slice : " />
+                <TextBlock x:Name="SliceX" Text="" />
+                <TextBlock x:Name="SliceY" Text="" />
+                <TextBlock x:Name="SliceZ" Text="" />
+            </StackPanel>
+            <Slider Margin="650,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="-100" Maximum="100" Interval="1" Value="0"
+                    x:Name="SliceXSlider" ValueChanged="SliceXSlider_ValueChanged" />
+            <Slider Margin="740,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="-100" Maximum="100" Interval="1" Value="0"
+                    x:Name="SliceYSlider" ValueChanged="SliceYSlider_ValueChanged" />
+            <Slider Margin="830,0,0,5" Width="90" HorizontalAlignment="Left"
+                    Minimum="-100" Maximum="100" Interval="1" Value="0"
+                    x:Name="SliceZSlider" ValueChanged="SliceZSlider_ValueChanged" />
+        </Grid>
+    </Grid>
+</Window>

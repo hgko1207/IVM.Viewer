@@ -1,0 +1,297 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using GlmNet;
+
+namespace ivm
+{
+    /// <summary>
+    /// ImageStackViewApp.xaml에 대한 상호 작용 논리
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            Loaded += Control_loaded;
+			MouseMove += Control_MouseMove;
+        }
+
+        private void Control_loaded(object sender, RoutedEventArgs e)
+        {
+            vw.Open(@"..\..\..\..\data\t");
+
+            AxisChkBtn.IsChecked = true;
+            BoxChkBtn.IsChecked = true;
+            GridChkBtn.IsChecked = true;
+            ColocalChkBtn.IsChecked = false;
+        }
+
+        private void Control_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point pt = e.GetPosition(vw);
+            Fname.Text = string.Format("{0}", vw.scene.tex3D.GetImagePath());
+            RotX.Text = string.Format("{0}", ViewParam.CAMERA_ANGLE.x);
+            RotY.Text = string.Format("{0}", ViewParam.CAMERA_ANGLE.y);
+        }
+
+        private void IntensityRSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.THRESHOLD_INTENSITY.x = (float)e.NewValue / (float)IntensityRSlider.Maximum;
+            IntensityR.Text = string.Format("{0:0.00} ", ViewParam.THRESHOLD_INTENSITY.x);
+        }
+
+        private void IntensityGSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.THRESHOLD_INTENSITY.y = (float)e.NewValue / (float)IntensityGSlider.Maximum;
+            IntensityG.Text = string.Format("{0:0.00} ", ViewParam.THRESHOLD_INTENSITY.y);
+        }
+
+        private void IntensityBSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.THRESHOLD_INTENSITY.z = (float)e.NewValue / (float)IntensityBSlider.Maximum;
+            IntensityB.Text = string.Format("{0:0.00} ", ViewParam.THRESHOLD_INTENSITY.z);
+        }
+
+        private void AxisChkBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SHOW_AXIS = true;
+        }
+
+        private void AxisChkBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SHOW_AXIS = false;
+        }
+
+        private void BoxChkBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SHOW_BOX = true;
+        }
+
+        private void BoxChkBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SHOW_BOX = false;
+        }
+
+        private void PerPixIterSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.PER_PIXEl_ITERATION = (float)e.NewValue;
+            PerPixIter.Text = string.Format("{0}", ViewParam.PER_PIXEl_ITERATION);
+        }
+
+        private void BoxHeightSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.BOX_HEIGHT = (float)e.NewValue / 10.0f;
+            BoxHeight.Text = string.Format("{0:0.00}", ViewParam.BOX_HEIGHT);
+
+            vw.UpdateBoxHeight();
+        }
+
+        private void GridChkBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SHOW_GRID = true;
+        }
+
+        private void GridChkBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SHOW_GRID = false;
+        }
+
+        private void AlphaWeightRSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.ALPHA_WEIGHT.x = (float)e.NewValue / 10.0f;
+            AlphaWeightR.Text = string.Format("{0:0.00 }", ViewParam.ALPHA_WEIGHT.x);
+        }
+
+        private void AlphaWeightGSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.ALPHA_WEIGHT.y = (float)e.NewValue / 10.0f;
+            AlphaWeightG.Text = string.Format("{0:0.00 }", ViewParam.ALPHA_WEIGHT.y);
+        }
+
+        private void AlphaWeightBSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.ALPHA_WEIGHT.z = (float)e.NewValue / 10.0f;
+            AlphaWeightB.Text = string.Format("{0:0.00 }", ViewParam.ALPHA_WEIGHT.z);
+        }
+
+        private void AutoRotXBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.CAMERA_VELOCITY.x = 1;
+        }
+
+        private void AutoRotXBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.CAMERA_VELOCITY.x = 0;
+        }
+
+        private void AutoRotYBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.CAMERA_VELOCITY.y = 1;
+        }
+
+        private void AutoRotYBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.CAMERA_VELOCITY.y = 0;
+        }
+
+        private void CameraReset_Click(object sender, RoutedEventArgs e)
+        {
+            vw.camera.Reset();
+        }
+
+        private void ColocalChkBtn_Checked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.IS_COLOCALIZATION = 1;
+        }
+
+        private void ColocalChkBtn_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.IS_COLOCALIZATION = 0;
+        }
+
+        private void ObliqueDepthSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.OBLIQUE_DEPTH = (float)e.NewValue / 100.0f;
+            ObliqueDepth.Text = string.Format("{0:0.00 }", ViewParam.OBLIQUE_DEPTH);
+        }
+
+        private void RenderModeBlend_Click(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.RENDER_MODE = ViewRenderMode.BLEND;
+            vw.scene.SetRenderMode(ViewRenderMode.BLEND);
+        }
+
+        private void RenderModeAdded_Click(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.RENDER_MODE = ViewRenderMode.ADDED;
+            vw.scene.SetRenderMode(ViewRenderMode.ADDED);
+        }
+
+        private void RenderModeOblique_Click(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.RENDER_MODE = ViewRenderMode.OBLIQUE;
+            vw.scene.SetRenderMode(ViewRenderMode.OBLIQUE);
+        }
+
+        private void RenderModeSlice_Click(object sender, RoutedEventArgs e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.RENDER_MODE = ViewRenderMode.SLICE;
+            vw.scene.SetRenderMode(ViewRenderMode.SLICE);
+        }
+
+        private void SliceXSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SLICE_DEPTH.x = (float)e.NewValue / 100.0f;
+            SliceX.Text = string.Format("{0:0.00 }", ViewParam.SLICE_DEPTH.x);
+        }
+
+        private void SliceYSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SLICE_DEPTH.y = (float)e.NewValue / 100.0f;
+            SliceY.Text = string.Format("{0:0.00 }", ViewParam.SLICE_DEPTH.y);
+        }
+
+        private void SliceZSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (vw.scene == null)
+                return;
+
+            ViewParam.SLICE_DEPTH.z = (float)e.NewValue / 100.0f;
+            SliceZ.Text = string.Format("{0:0.00 }", ViewParam.SLICE_DEPTH.z);
+        }
+    }
+}
