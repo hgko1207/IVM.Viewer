@@ -44,8 +44,10 @@
             <dxb:ToolBarControl DockPanel.Dock="Top" 
                                 AllowQuickCustomization="False" AllowCustomizationMenu="False" 
                                 AllowCollapse="False" AllowDrop="False" AllowHide="False" BarItemDisplayMode="ContentAndGlyph">
-                <dxb:BarCheckItem Name="btnMode2D" Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" Margin="0,0,8,0" IsChecked="True" />
-                <dxb:BarCheckItem Name="btnMode3D" Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" Margin="0,0,8,0" />
+                <dxb:BarCheckItem Name="btnMode2D" Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" 
+                                  Command="{Binding Change2DModeCommand}" Margin="0,0,8,0" IsChecked="{Binding Checked2DMode}" />
+                <dxb:BarCheckItem Name="btnMode3D" Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" 
+                                  Command="{Binding Change3DModeCommand}" Margin="0,0,8,0" IsChecked="{Binding Checked3DMode}" />
             </dxb:ToolBarControl>
         </dxdo:LayoutPanel>
 

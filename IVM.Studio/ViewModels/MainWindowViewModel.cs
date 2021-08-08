@@ -70,11 +70,27 @@ namespace IVM.Studio.ViewModels
             set => SetProperty(ref selectedFilename, value);
         }
 
+        private bool checked2DMode = true;
+        public bool Checked2DMode
+        {
+            get => checked2DMode;
+            set => SetProperty(ref checked2DMode, value);
+        }
+
+        private bool checked3DMode = false;
+        public bool Checked3DMode
+        {
+            get => checked3DMode;
+            set => SetProperty(ref checked3DMode, value);
+        }
+
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
         public ICommand PreviousSlideCommand { get; private set; }
         public ICommand NextSlideCommand { get; private set; }
         public ICommand WindowOpenCommand { get; private set; }
+        public ICommand Change2DModeCommand { get; private set; }
+        public ICommand Change3DModeCommand { get; private set; }
 
         private readonly IEnumerable<string> imageFileExtensions;
         private readonly IEnumerable<string> videoFileExtensions;
@@ -111,6 +127,8 @@ namespace IVM.Studio.ViewModels
             PreviousSlideCommand = new DelegateCommand(PreviousSlide);
             NextSlideCommand = new DelegateCommand(NextSlide);
             WindowOpenCommand = new DelegateCommand(WindowOpen);
+            Change2DModeCommand = new DelegateCommand(Change2DMode);
+            Change3DModeCommand = new DelegateCommand(Change3DMode);
 
             EventAggregator.GetEvent<DisplaySlideEvent>().Subscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
@@ -291,6 +309,18 @@ namespace IVM.Studio.ViewModels
                 else
                     EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
             }
+        }
+
+        private void Change2DMode()
+        {
+            Checked2DMode = true;
+            Checked3DMode = false;
+        }
+
+        private void Change3DMode()
+        {
+            Checked2DMode = false;
+            Checked3DMode = true;
         }
 
         /// <summary>
