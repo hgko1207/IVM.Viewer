@@ -6,7 +6,11 @@ using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
+using System;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 /**
  * @Class Name : DisplayControlPanelViewModel.cs
@@ -24,11 +28,15 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class DisplayControlPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<DisplayControlPanel>
     {
-        private bool isNavigator;
-        public bool IsNavigator
+        private bool navigatorEnabled;
+        public bool NavigatorEnabled
         {
-            get => isNavigator;
-            set => SetProperty(ref isNavigator, value);
+            get => navigatorEnabled;
+            set
+            {
+                if (SetProperty(ref navigatorEnabled, value))
+                    ShowNavigator(value);
+            }
         }
 
         private int zoomRatioValue;
@@ -44,7 +52,12 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public ICommand ResetZoomRatioCommand { get; private set; }
 
+        private DisplayControlPanel view;
+
         public SliderControlInfo SliderControlInfo { get; set; }
+
+        private NavigatorParam navigatorParam;
+        private Rectangle drawRectangle;
 
         /// <summary>
         /// 생성자
@@ -54,7 +67,7 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             ResetZoomRatioCommand = new DelegateCommand(ResetZoomRatio);
 
-            EventAggregator.GetEvent<ZoomRatioChangedEvent>().Subscribe(ZoomRatioChanged, ThreadOption.UIThread);
+            EventAggregator.GetEvent<NavigatorChangeEvent>().Subscribe(NavigatorChange, ThreadOption.UIThread);
 
             SliderControlInfo = container.Resolve<DataManager>().SliderControlInfo;
 
@@ -67,6 +80,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnLoaded(DisplayControlPanel view)
         {
+            this.view = view;
         }
 
         /// <summary>
@@ -78,12 +92,77 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Changed ZoomRatio
+        /// Show Navigator
         /// </summary>
-        /// <param name="zoomRatio"></param>
-        private void ZoomRatioChanged(int zoomRatio)
+        /// <param name="enabled"></param>
+        private void ShowNavigator(bool enabled)
         {
-            ZoomRatioValue = zoomRatio;
+            if (enabled)
+            {
+                if (drawRectangle == null)
+                {
+                    drawRectangle = new Rectangle()
+                    {
+                        Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#FFC000"),
+                        StrokeThickness = 2,
+                        Width = 0,
+                        Height = 0
+                    };
+
+                    view.NavigatorCanvas.Children.Add(drawRectangle);
+
+                    if (navigatorParam != null)
+                        DrawRectangle();
+                }
+            }
+            else
+            {
+                view.NavigatorCanvas.Children.Remove(drawRectangle);
+                drawRectangle = null;
+            }
+        }
+
+        /// <summary>
+        /// Changed Navigator
+        /// </summary>
+        /// <param name="navigatorParam"></param>
+        private void NavigatorChange(NavigatorParam navigatorParam)
+        {
+            this.navigatorParam = navigatorParam;
+
+            ZoomRatioValue = navigatorParam.ZoomRatio;
+
+            DrawRectangle();
+        }
+
+        /// <summary>
+        /// DrawRectangle()
+        /// </summary>
+        private void DrawRectangle()
+        {
+            if (drawRectangle != null)
+            {
+                double widthRatio = view.NavigatorCanvas.ActualWidth / navigatorParam.ImageWidth;
+                double heightRatio = view.NavigatorCanvas.ActualHeight / navigatorParam.ImageHeight;
+
+                GetPositionToCropParam positionParam = new GetPositionToCropParam();
+                EventAggregator.GetEvent<GetPositionToCropEvent>().Publish(positionParam);
+
+                positionParam.HorizontalOffset = Math.Max(positionParam.HorizontalOffset / ZoomRatioValue * 100, 0);
+                positionParam.VerticalOffset = Math.Max(positionParam.VerticalOffset / ZoomRatioValue * 100, 0);
+                positionParam.ViewportWidth = positionParam.ViewportWidth / ZoomRatioValue * 100;
+                if (navigatorParam.ImageWidth < positionParam.ViewportWidth)
+                    positionParam.ViewportWidth = navigatorParam.ImageWidth;
+
+                positionParam.ViewportHeight = positionParam.ViewportHeight / ZoomRatioValue * 100;
+                if (navigatorParam.ImageHeight < positionParam.ViewportHeight)
+                    positionParam.ViewportHeight = navigatorParam.ImageHeight;
+
+                drawRectangle.Width = positionParam.ViewportWidth * widthRatio;
+                drawRectangle.Height = positionParam.ViewportHeight * widthRatio;
+                Canvas.SetLeft(drawRectangle, positionParam.HorizontalOffset * widthRatio);
+                Canvas.SetTop(drawRectangle, positionParam.VerticalOffset * heightRatio);
+            }
         }
 
         /// <summary>

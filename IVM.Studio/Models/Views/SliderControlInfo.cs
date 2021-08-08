@@ -306,8 +306,6 @@ namespace IVM.Studio.Models.Views
         /// <param name="type"></param>
         private void PlaySlideShow(string type)
         {
-            Console.WriteLine("PlaySlideShow");
-
             container.Resolve<SlideShowService>().StopSlideShow();
 
             switch (type)
@@ -398,8 +396,6 @@ namespace IVM.Studio.Models.Views
         /// </summary>
         private void InternalPlaySlideShow()
         {
-            Console.WriteLine("InternalPlaySlideShow");
-
             switch (CurrentPlayingSlider)
             {
                 case 0: // ZStack

@@ -162,17 +162,17 @@
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
-                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="325">
+                    <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="320">
                         <dxdo:DocumentPanel Caption="Display Control" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="DisplayControlPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Channel Processing" AllowClose="False">
-                            <ContentControl prism:RegionManager.RegionName="ChannelProcessingPanel"/>
-                        </dxdo:DocumentPanel>
-
                         <dxdo:DocumentPanel Caption="Post Processing" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="PostProcessingPanel"/>
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Channel Processing" AllowClose="False">
+                            <ContentControl prism:RegionManager.RegionName="ChannelProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Image Export" AllowClose="False">

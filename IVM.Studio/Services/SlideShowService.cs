@@ -32,11 +32,11 @@ namespace IVM.Studio.Services
 
         public bool NowPlaying => repeat > 0 || currentCount > 0;
 
-        protected IEventAggregator EventAggregator;
+        protected IEventAggregator eventAggregator;
 
         public SlideShowService(IEventAggregator eventAggregator)
         {
-            this.EventAggregator = eventAggregator;
+            this.eventAggregator = eventAggregator;
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace IVM.Studio.Services
 
                     Console.WriteLine(currentCount);
 
-                    EventAggregator.GetEvent<PlaySlideShowEvent>().Publish();
+                    eventAggregator.GetEvent<PlaySlideShowEvent>().Publish();
                 });
             }
         }

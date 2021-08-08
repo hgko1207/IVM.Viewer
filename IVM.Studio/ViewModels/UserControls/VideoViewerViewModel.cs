@@ -94,6 +94,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private DisplayParam displayParam;
 
+        private DataManager dataManager;
+
         private (TimeSpan Current, TimeSpan Total) cachedPreviousTime;
 
         /// <summary>
@@ -104,10 +106,13 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             TrimCommand = new DelegateCommand(Trim);
             PlayPauseCommand = new DelegateCommand(PlayPauseVideo);
-            StopCommand = new DelegateCommand(StopVideo);
+            StopCommand = new DelegateCommand(Stop);
 
             EventAggregator.GetEvent<DisplayVideoEvent>().Subscribe(InitialPlayVideo, ThreadOption.UIThread);
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(StopVideo, ThreadOption.BackgroundThread);
+            EventAggregator.GetEvent<MainViewerUnloadEvent>().Subscribe(MainViewwerUnload);
+
+            dataManager = Container.Resolve<DataManager>();
         }
 
         /// <summary>
@@ -120,17 +125,12 @@ namespace IVM.Studio.ViewModels.UserControls
 
             view.MediaPlayer.SourceProvider.CreatePlayer(new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "libvlc")));
             view.MediaPlayer.SourceProvider.MediaPlayer.TimeChanged += MediaPlayerTimeChanged;
-            view.MediaPlayer.SourceProvider.MediaPlayer.EndReached += MediaPlayerEndReached; ;
-
-            EventAggregator.GetEvent<DisplayVideoEvent>().Unsubscribe(InitialPlayVideo);
-            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(StopVideo);
-
-            EventAggregator.GetEvent<DisplayVideoEvent>().Subscribe(InitialPlayVideo, ThreadOption.UIThread);
-            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(StopVideo, ThreadOption.BackgroundThread);
+            view.MediaPlayer.SourceProvider.MediaPlayer.EndReached += MediaPlayerEndReached;
 
             EventAggregator.GetEvent<PlayVideoEvent>().Subscribe(PlayVideo, ThreadOption.BackgroundThread);
             EventAggregator.GetEvent<PauseVideoEvent>().Subscribe(PauseVideo, ThreadOption.BackgroundThread);
             EventAggregator.GetEvent<SeekVideoEvent>().Subscribe(SeekVideo, ThreadOption.BackgroundThread);
+            EventAggregator.GetEvent<StopVideoEvent>().Subscribe(StopVideo, ThreadOption.BackgroundThread);
 
             EventAggregator.GetEvent<PlayingVideoEvent>().Subscribe(PlayingVideo);
 
@@ -144,14 +144,21 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnUnloaded(VideoViewer view)
         {
-            EventAggregator.GetEvent<DisplayVideoEvent>().Unsubscribe(InitialPlayVideo);
-            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(StopVideo);
-
             EventAggregator.GetEvent<PlayVideoEvent>().Unsubscribe(PlayVideo);
             EventAggregator.GetEvent<PlayVideoEvent>().Unsubscribe(PauseVideo);
             EventAggregator.GetEvent<SeekVideoEvent>().Unsubscribe(SeekVideo);
 
             EventAggregator.GetEvent<PlayingVideoEvent>().Unsubscribe(PlayingVideo);
+        }
+
+        private void MainViewwerUnload(int windowId)
+        {
+            if (windowId == dataManager.MainWindowId)
+            {
+                EventAggregator.GetEvent<DisplayVideoEvent>().Unsubscribe(InitialPlayVideo);
+                EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(StopVideo);
+                EventAggregator.GetEvent<MainViewerUnloadEvent>().Unsubscribe(MainViewwerUnload);
+            }
         }
 
         /// <summary>
@@ -285,9 +292,9 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Stop Video
+        /// Stop 버튼 클릭 시
         /// </summary>
-        private void StopVideo()
+        private void Stop()
         {
             IsPlaying = false;
             UpdateVideoCurrentTimeWithoutSeek(0);
@@ -313,6 +320,17 @@ namespace IVM.Studio.ViewModels.UserControls
         private void StopVideo(DisplayParam param)
         {
             StopVideo();
+        }
+
+        /// <summary>
+        /// Stop Video
+        /// </summary>
+        private void StopVideo()
+        {
+            if (view != null && view.MediaPlayer.SourceProvider.MediaPlayer != null)
+            {
+                view.MediaPlayer.SourceProvider.MediaPlayer.Stop();
+            }
         }
     }
 }

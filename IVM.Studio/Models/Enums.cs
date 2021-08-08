@@ -67,23 +67,23 @@ namespace IVM.Studio.Models
 
     public enum ZStackProjectionType
     {
-        [Description("Maximum")]
+        [Display(Name = "Maximum")]
         Maximum,
-        [Description("Minimum")]
+        [Display(Name = "Minimum")]
         Minimum,
-        [Description("Average intensity")]
+        [Display(Name = "Average Intensity")]
         Average
     }
 
     public enum EdgeCropType
     {
-        [Description("None")]
+        [Display(Name = "None")]
         None,
-        [Description("Default")]
+        [Display(Name = "Default")]
         Default,
-        [Description("Minimum")]
+        [Display(Name = "Minimum")]
         Minimum,
-        [Description("Maximum")]
+        [Display(Name = "Maximum")]
         Maximum
     }
 

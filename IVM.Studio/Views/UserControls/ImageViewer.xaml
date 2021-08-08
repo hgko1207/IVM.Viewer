@@ -42,6 +42,10 @@
     </UserControl.Resources>
 
     <ScrollViewer x:Name="DisplayingScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" UseLayoutRounding="True">
+        <dxmvvm:Interaction.Behaviors>
+            <dxmvvm:EventToCommand EventName="SizeChanged" Command="{Binding ScrollViewerSizeChangedCommand}"/>
+            <dxmvvm:EventToCommand EventName="ScrollChanged" Command="{Binding ScrollViewerScrollChangedCommand}"/>
+        </dxmvvm:Interaction.Behaviors>
         <Grid>
             <Image x:Name="ImageView" Panel.ZIndex="1" Source="{Binding DisplayingImage}" Width="{Binding DisplayingImageWidth}" RenderOptions.BitmapScalingMode="HighQuality">
                 <dxmvvm:Interaction.Behaviors>

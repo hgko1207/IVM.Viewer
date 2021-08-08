@@ -49,8 +49,8 @@ namespace IVM.Studio.Views.UserControls
                     Rectangle rect = new Rectangle();
                     rect.Width = 80;
                     rect.Height = 80;
-                    rect.Fill = (SolidColorBrush)(new BrushConverter().ConvertFrom("#262626"));
-                    rect.Stroke = (SolidColorBrush)(new BrushConverter().ConvertFrom("#515151"));
+                    rect.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#262626");
+                    rect.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#515151");
                     rect.Margin = new Thickness(5, 0, 0, 0);
 
                     stackPanel.Children.Add(rect);

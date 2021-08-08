@@ -64,8 +64,8 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Subscribe(ViewerChanged);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(() => view.Close());
 
-            imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId };
             videoPage = new VideoViewer() { WindowId = view.WindowId };
+            imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId };
 
             InitViewerChanged();
 
@@ -79,6 +79,8 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(MainViewerWindow view)
         {
+            EventAggregator.GetEvent<MainViewerUnloadEvent>().Publish(view.WindowId);
+
             EventAggregator.GetEvent<ViewerPageChangedEvent>().Unsubscribe(ViewerChanged);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(() => this.view.Close());
         }
@@ -91,7 +93,7 @@ namespace IVM.Studio.ViewModels
             string viewerName = dataManager.ViewerName;
             if (viewerName == nameof(VideoViewer))
             {
-                Title = "Video Viewer";
+                Title = "Video Viewer - #" + view.WindowId;
                 ViewerPage = videoPage;
             }
             else
