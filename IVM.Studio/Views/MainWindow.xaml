@@ -231,6 +231,7 @@
 
                 <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*">
                     <dxdo:DocumentPanel Caption="Slice View" AllowClose="False">
+                        <ContentControl prism:RegionManager.RegionName="I3DSliceViewer"/>
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>
             </dxdo:LayoutGroup>

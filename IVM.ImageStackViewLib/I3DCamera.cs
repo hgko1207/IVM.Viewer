@@ -5,7 +5,7 @@ using GlmNet;
 using System.Timers;
 using System.Windows.Threading;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     public class I3DCamera
     {

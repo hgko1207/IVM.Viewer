@@ -2,7 +2,7 @@
 using SharpGL.Enumerations;
 using GlmNet;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     public class I3DAxis
     {

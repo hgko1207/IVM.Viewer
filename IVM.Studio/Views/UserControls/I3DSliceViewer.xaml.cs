@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace IVM.Studio.Views.UserControls
+{
+    /// <summary>
+    /// ChannelProcessingPanel.xaml에 대한 상호 작용 논리
+    /// </summary>
+    public partial class I3DSliceViewer : UserControl
+    {
+        public I3DSliceViewer()
+        {
+            InitializeComponent();
+
+            MouseMove += Control_MouseMove;
+        }
+
+        private void Control_MouseMove(object sender, MouseEventArgs e)
+        {
+            isv.InvalidateVisual();
+        }
+    }
+}

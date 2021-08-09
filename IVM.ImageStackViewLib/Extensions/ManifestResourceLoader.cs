@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     /// <summary>
     /// A small helper class to load manifest resource files.

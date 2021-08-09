@@ -7,7 +7,7 @@ using SharpGL.VertexBuffers;
 using SharpGL.Shaders;
 using GlmNet;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     public class I3DBox
     {

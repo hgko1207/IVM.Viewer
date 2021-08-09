@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GlmNet;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     /// <summary>
     /// ImageStackViewApp.xaml에 대한 상호 작용 논리

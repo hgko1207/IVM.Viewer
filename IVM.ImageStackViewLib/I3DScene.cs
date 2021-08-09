@@ -3,7 +3,7 @@ using GlmNet;
 using System.Windows.Threading;
 using System;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     public class I3DScene
     {

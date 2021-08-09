@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     public class I3DTex3D
     {

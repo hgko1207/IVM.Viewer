@@ -4,7 +4,7 @@ using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     public class I3DMeta
     {

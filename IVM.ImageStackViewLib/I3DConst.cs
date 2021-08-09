@@ -1,4 +1,4 @@
-﻿namespace ivm
+﻿namespace IVM.Studio.I3D
 {
     public static class I3DVertexAttributes1
     {

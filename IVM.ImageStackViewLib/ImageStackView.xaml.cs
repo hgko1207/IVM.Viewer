@@ -12,7 +12,7 @@ using SharpGL.SceneGraph;
 using SharpGL.SceneGraph.Cameras;
 using SharpGL.SceneGraph.Core;
 
-namespace ivm
+namespace IVM.Studio.I3D
 {
     /// <summary>
     /// StackView.xaml에 대한 상호 작용 논리
