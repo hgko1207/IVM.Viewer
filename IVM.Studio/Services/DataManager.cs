@@ -37,8 +37,6 @@ namespace IVM.Studio.Services
 
         public WPFDrawing.ImageSource HistogramImage { get; set; }
 
-        public bool MainViewerOpend { get; set; }
-
         public AnnotationInfo AnnotationInfo { get; set; }
 
         public SliderControlInfo SliderControlInfo { get; set; }

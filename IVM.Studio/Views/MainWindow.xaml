@@ -13,7 +13,7 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen"
-        Title="IVM Studio" Height="1040" Width="1920" Top="0" MinWidth="1600"
+        Title="IVM Studio" Height="1060" Width="1920" Top="0" MinWidth="1600"
         TitleAlignment="Center">
 
     <Window.Resources>
@@ -33,23 +33,22 @@
         </Grid.ColumnDefinitions>
 
         <dxdo:LayoutPanel Grid.Row="0" Grid.Column="0" ShowCaption="False" ShowBorder="False">
-            <dxb:MainMenuControl FontSize="14">
-                <dxb:BarSubItem Content=" File " Command="{Binding OpenFolderCommand}"/>
-                <dxb:BarSubItem Content=" Edit " Command="{Binding RefreshCommand}"/>
-                <dxb:BarSubItem Content=" View "/>
-            </dxb:MainMenuControl>
-        </dxdo:LayoutPanel>
-        <dxdo:LayoutPanel Grid.Row="0" Grid.Column="1" ShowCaption="False" ShowBorder="False">
-            <dxb:ToolBarControl DockPanel.Dock="Top" 
-                                AllowQuickCustomization="False" AllowCustomizationMenu="False" 
-                                AllowCollapse="False" AllowDrop="False" AllowHide="False" BarItemDisplayMode="ContentAndGlyph">
-                <dxb:BarCheckItem Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" 
-                                  Command="{Binding Change2DModeCommand}" Margin="0,0,8,0" IsChecked="{Binding Checked2DMode}" />
-                <dxb:BarCheckItem Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" 
-                                  Command="{Binding Change3DModeCommand}" Margin="0,0,8,0" IsChecked="{Binding Checked3DMode}" />
-            </dxb:ToolBarControl>
-        </dxdo:LayoutPanel>
+            <DockPanel>
+                <dxb:MainMenuControl FontSize="14">
+                    <dxb:BarSubItem Content=" File " Command="{Binding OpenFolderCommand}"/>
+                    <dxb:BarSubItem Content=" Edit " Command="{Binding RefreshCommand}"/>
+                </dxb:MainMenuControl>
 
+                <dxb:ToolBarControl DockPanel.Dock="Top" AllowQuickCustomization="False" AllowCustomizationMenu="False" HorizontalAlignment="Right"
+                                AllowCollapse="False" AllowDrop="False" AllowHide="False" BarItemDisplayMode="ContentAndGlyph">
+                    <dxb:BarCheckItem Content="2D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_2d.png}" Padding="8 0"
+                                  Command="{Binding Change2DModeCommand}" IsChecked="{Binding Checked2DMode}" />
+                    <dxb:BarCheckItem Content="3D" Glyph="{dx:QualifiedImage Uri=../Resources/Images/icon_3d.png}" Padding="8 0"
+                                  Command="{Binding Change3DModeCommand}" IsChecked="{Binding Checked3DMode}" />
+                </dxb:ToolBarControl>
+            </DockPanel>
+        </dxdo:LayoutPanel>
+       
         <ScrollViewer Grid.Row="1" Grid.Column="0" dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap" Visibility="{Binding VisUI2D}">
             <dxdo:DockLayoutManager ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
                 <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical">
@@ -80,14 +79,8 @@
                                     </dxg:GridControl.Columns>
                                 </dxg:GridControl>
 
-                                <DockPanel Grid.Row="1" Margin="10 8 10 8" Grid.Column="1">
-                                    <dx:SimpleButton Content="Open" Width="80" Style="{StaticResource GrayGradientButton}" Command="{Binding WindowOpenCommand}"/>
-                                    
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                                        <dx:SimpleButton Content="Previous" Width="80" Style="{StaticResource GrayGradientButton}" Command="{Binding PreviousSlideCommand}"/>
-                                        <dx:SimpleButton Content="Next" Width="80" Margin="5 0 0 0" Style="{StaticResource GrayGradientButton}" Command="{Binding NextSlideCommand}"/>
-                                    </StackPanel>
-                                </DockPanel>
+                                <dx:SimpleButton  Grid.Row="1" Margin="10 8 10 8" Content="Open" Width="80" HorizontalAlignment="Right" 
+                                                  Style="{StaticResource GrayGradientButton}" Command="{Binding WindowOpenCommand}"/>
                             </Grid>
                         </dxdo:DocumentPanel>
 
@@ -96,7 +89,6 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition/>
-                                    <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Margin="10 0">
@@ -106,7 +98,7 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <dxg:GridControl Grid.Row="1" ItemsSource="{Binding MetadataCollection}" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 0 10 0">
+                                <dxg:GridControl Grid.Row="1" ItemsSource="{Binding MetadataCollection}" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 0 10 10">
                                     <dxg:GridControl.View>
                                         <dxg:TableView NavigationStyle="None" AutoWidth="True" ShowColumnHeaders="False" UseLegacyFilterPanel="False">
                                             <dxg:TableView.FormatConditions>
@@ -134,12 +126,11 @@
                                         </dxg:GridControlBand>
                                     </dxg:GridControl.Bands>
                                 </dxg:GridControl>
-
-                                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 8 10 8">
-                                    <dx:SimpleButton Content="Previous" Width="80" Style="{StaticResource GrayGradientButton}" Command="{Binding PreviousSlideCommand}"/>
-                                    <dx:SimpleButton Content="Next" Width="80" Margin="5 0 0 0" Style="{StaticResource GrayGradientButton}" Command="{Binding NextSlideCommand}"/>
-                                </StackPanel>
                             </Grid>
+                        </dxdo:DocumentPanel>
+
+                        <dxdo:DocumentPanel Caption="Window List" AllowClose="False">
+
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
@@ -172,10 +163,6 @@
 
                         <dxdo:DocumentPanel Caption="Channel Processing" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="ChannelProcessingPanel"/>
-                        </dxdo:DocumentPanel>
-
-                        <dxdo:DocumentPanel Caption="Image Export" AllowClose="False">
-
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>
@@ -219,21 +206,17 @@
 
         <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop" Visibility="{Binding VisUI2D}">
             <dxdo:LayoutGroup Caption="RightGroup" Orientation="Vertical">
-                <!--<dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
-                        <dxdo:DocumentPanel Caption="Viewer" AllowClose="False">
-                            <Frame NavigationUIVisibility="Hidden" Content="{Binding ViewerPanel}" />
-                        </dxdo:DocumentPanel>
-                    </dxdo:DocumentGroup>-->
+                <dxdo:DocumentGroup ItemHeight="80">
+                    <dxdo:DocumentPanel Caption="Rotate &amp; Crop" AllowClose="False" AllowHide="False">
+                        <ContentControl prism:RegionManager.RegionName="RotateCropPanel"/>
+                    </dxdo:DocumentPanel>
+                </dxdo:DocumentGroup>
+
+                <!--<dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="60">
+                    <ContentControl prism:RegionManager.RegionName="RotateCropPanel"/>
+                </dxdo:LayoutPanel>-->
 
                 <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" Background="#1F201D" ShowBorder="False"/>
-
-                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="50">
-                    <ContentControl prism:RegionManager.RegionName="RotateCropPanel"/>
-                </dxdo:LayoutPanel>
-
-                <dxdo:LayoutPanel ShowCaption="False" AllowClose="False" AllowHide="False" ItemHeight="150">
-                    <ContentControl prism:RegionManager.RegionName="ThumbnailPanel"/>
-                </dxdo:LayoutPanel>
             </dxdo:LayoutGroup>
         </dxdo:DockLayoutManager>
 
@@ -251,6 +234,5 @@
                 </dxdo:DocumentGroup>
             </dxdo:LayoutGroup>
         </dxdo:DockLayoutManager>
-
     </Grid>
 </dx:ThemedWindow>

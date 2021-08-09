@@ -131,38 +131,6 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        private bool allWindowOpend;
-        public bool AllWindowOpend
-        {
-            get => allWindowOpend;
-            set
-            {
-                if (SetProperty(ref allWindowOpend, value))
-                {
-                    if (value)
-                    {
-                        MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
-                        mainViewerWindow.Show();
-
-                        FileInfo currentFile = dataManager.CurrentFile;
-                        if (currentFile != null)
-                        {
-                            Metadata metadata = dataManager.Metadata;
-                            if (dataManager.ViewerName == nameof(ImageViewer))
-                                EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
-                            else
-                                EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
-                        }
-                    }
-                    else
-                    {
-                        dataManager.MainViewerOpend = false;
-                        EventAggregator.GetEvent<MainViewerCloseEvent>().Publish();
-                    }
-                }
-            }
-        }
-
         private bool _DAPIWindowOpend;
         public bool DAPIWindowOpend
         {
@@ -286,6 +254,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public ICommand ColorResetCommand { get; private set; }
         public ICommand AllVisibleCommand { get; private set; }
+        public ICommand AllChannelOpenCommand { get; private set; }
 
         public ICommand ResetHistogramCommand { get; private set; }
 
@@ -305,10 +274,10 @@ namespace IVM.Studio.ViewModels.UserControls
             NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
             ColorResetCommand = new DelegateCommand(ColorReset);
             AllVisibleCommand = new DelegateCommand(AllVisible);
+            AllChannelOpenCommand = new DelegateCommand(AllChannelOpen);
             ResetHistogramCommand = new DelegateCommand(ResetHistogram);
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(RefreshMetadata, ThreadOption.UIThread);
-            EventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(() => AllWindowOpend = false);
             EventAggregator.GetEvent<HistogramClosedEvent>().Subscribe(() => AllHistogramOpend = false);
             EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Subscribe(ChWindowClosed);
             EventAggregator.GetEvent<ChHistogramWindowClosedEvent>().Subscribe(ChHistogramClosed);
@@ -461,6 +430,17 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
+        /// Channel 윈도우 전체 오픈
+        /// /// </summary>
+        private void AllChannelOpen()
+        {
+            DAPIWindowOpend = true;
+            GFPWindowOpend = true;
+            RFPWindowOpend = true;
+            NIRWindowOpend = true;
+        }
+
+        /// <summary>
         /// Histgram Level 초기화
         /// </summary>
         private void ResetHistogram()
@@ -478,11 +458,6 @@ namespace IVM.Studio.ViewModels.UserControls
             GFPColorChannel.SetPropertyVisible(GFPColor == "Alpha" ? false : true);
             RFPColorChannel.SetPropertyVisible(RFPColor == "Alpha" ? false : true);
             NIRColorChannel.SetPropertyVisible(NIRColor == "Alpha" ? false : true);
-
-            //DAPIColorChannel.Visible = DAPIColor == "Alpha" ? false : true;
-            //GFPColorChannel.Visible = GFPColor == "Alpha" ? false : true;
-            //RFPColorChannel.Visible = RFPColor == "Alpha" ? false : true;
-            //NIRColorChannel.Visible = NIRColor == "Alpha" ? false : true;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using DevExpress.Xpf.Core;
+using IVM.Studio.Models;
 
 namespace IVM.Studio.Views
 {
@@ -7,11 +8,18 @@ namespace IVM.Studio.Views
     /// </summary>
     public partial class MainViewerWindow : ThemedWindow
     {
+        public WindowInfo WindowInfo { get; set; }
+
         public int WindowId { get; set; }
 
-        public MainViewerWindow()
+        public MainViewerWindow(WindowInfo windowInfo)
         {
             InitializeComponent();
+
+            WindowInfo = windowInfo;
+            WindowId = windowInfo.Seq;
+
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
         }
     }
 }

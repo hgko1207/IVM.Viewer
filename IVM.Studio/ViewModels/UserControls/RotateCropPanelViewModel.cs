@@ -24,6 +24,28 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class RotateCropPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<RotateCropPanel>
     {
+        private bool reflectHorizontalEnabled;
+        public bool ReflectHorizontalEnabled
+        {
+            get => reflectHorizontalEnabled;
+            set
+            {
+                if (SetProperty(ref reflectHorizontalEnabled, value))
+                    EventAggregator.GetEvent<ReflectEvent>().Publish(value ? "HorizontalRight" : "HorizontalLeft");
+            }
+        }
+
+        private bool reflectVerticalEnabled;
+        public bool ReflectVerticalEnabled
+        {
+            get => reflectVerticalEnabled;
+            set
+            {
+                if (SetProperty(ref reflectVerticalEnabled, value))
+                    EventAggregator.GetEvent<ReflectEvent>().Publish(value ? "VerticalBottom" : "VerticalTop");
+            }
+        }
+
         private bool isLockRotate;
         public bool IsLockRotate
         {
@@ -46,7 +68,6 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         public ICommand RotationCommand { get; private set; }
-        public ICommand ReflectCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
         public ICommand ExportCommand { get; private set; }
 
@@ -59,7 +80,6 @@ namespace IVM.Studio.ViewModels.UserControls
         public RotateCropPanelViewModel(IContainerExtension container) : base(container)
         {
             RotationCommand = new DelegateCommand<string>(Rotation);
-            ReflectCommand = new DelegateCommand<string>(Reflect);
             RotationResetCommand = new DelegateCommand(RotationReset);
             ExportCommand = new DelegateCommand(Export);
 
@@ -106,19 +126,12 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// 좌우 또는 상하 반전 이벤트
-        /// </summary>
-        /// <param name="type"></param>
-        private void Reflect(string type)
-        {
-            EventAggregator.GetEvent<ReflectEvent>().Publish(type);
-        }
-
-        /// <summary>
         /// 회전, 반전 초기화
         /// </summary>
         private void RotationReset()
         {
+            SetProperty(ref reflectHorizontalEnabled, false, nameof(ReflectHorizontalEnabled));
+            SetProperty(ref reflectVerticalEnabled, false, nameof(ReflectVerticalEnabled));
             EventAggregator.GetEvent<RotationResetEvent>().Publish();
         }
 
