@@ -219,6 +219,34 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 주어진 객체를 CSV로 직렬화합니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="rec"></param>
+        /// <returns></returns>
+        private string Serialize<T>(T rec)
+        {
+            List<string> serialized = new List<string>();
+            foreach (PropertyInfo prop in GetColumns<T>())
+            {
+                object value = prop.GetValue(rec);
+                if (value == null) continue;
+                serialized.Add(value.ToString());
+            }
+            return string.Join(",", serialized);
+        }
+
+        /// <summary>
+        /// 타입 <typeparamref name="T"/>의 프로퍼티 이름을 CSV로 직렬화합니다. CSV 제목 행에 사용될 수 있습니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        private string SerializeColumns<T>()
+        {
+            return string.Join(",", GetColumns<T>().Select(s => s.Name));
+        }
+
+        /// <summary>
         /// 주어진 문자열을 타입 <typeparamref name="T"/>의 객체로 역직렬화합니다.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -342,6 +370,70 @@ namespace IVM.Studio.Services
             int tlIndex = Array.FindIndex(imageModes, s => s == "TL");
 
             return (tlIndex == -1 ? 0 : counts[tlIndex], mpIndex == -1 ? 0 : counts[mpIndex], msIndex == -1 ? 0 : counts[msIndex], zsIndex == -1 ? 0 : counts[zsIndex]);
+        }
+
+        /// <summary>
+        /// 주어진 이미지 모드에 따라 해당 슬라이드 루트 아래에 파일이 위치할 최종 폴더를 생성합니다.
+        /// </summary>
+        /// <param name="slideRootDir"></param>
+        /// <param name="timeLapse"></param>
+        /// <param name="multiPosition"></param>
+        /// <param name="mosaic"></param>
+        /// <param name="zStack"></param>
+        /// <returns></returns>
+        public DirectoryInfo GetDirectoryWithImageMode(DirectoryInfo slideRootDir, int timeLapse, int multiPosition, int mosaic, int zStack)
+        {
+            List<string> Paths = new List<string> { slideRootDir.FullName };
+
+            if (timeLapse > 0) Paths.Add($"TL{timeLapse:D4}");
+            if (multiPosition > 0) Paths.Add($"MP{multiPosition:D4}");
+            if (mosaic > 0) Paths.Add($"MS{mosaic:D4}");
+            if (zStack > 0) Paths.Add($"ZS{zStack:D4}");
+
+            if (Paths.Count <= 2) 
+                return slideRootDir;
+            else 
+                Paths.RemoveAt(Paths.Count - 1);
+
+            return new DirectoryInfo(Path.Combine(Paths.ToArray()));
+        }
+
+        /// <summary>
+        /// 메타데이터 저장
+        /// </summary>
+        /// <param name="slidesRootPath"></param>
+        /// <param name="filePath"></param>
+        /// <param name="metadata"></param>
+        public void SaveMetadata(string slidesRootPath, string filePath, Metadata metadata) => SaveMetadata(slidesRootPath, new FileInfo(filePath), metadata);
+        public void SaveMetadata(string slidesRootPath, FileInfo file, Metadata metadata)
+        {
+            string filePath = file.DirectoryName;
+            string csvPath;
+            if (slidesRootPath == filePath)
+            {
+                // 단일 캡쳐인 경우: 메타데이터의 생성 날짜와 동일한 날짜로 저장.
+                csvPath = Path.Combine(slidesRootPath, $"{metadata.Time:yyyy-MM-dd}.csv");
+            }
+            else
+            {
+                // 이미지 모드 캡쳐인 경우: 캡쳐 폴더 이름과 같은 이름의 csv를 사용
+                csvPath = Path.Combine(slidesRootPath, filePath.Substring(slidesRootPath.Length).Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries)[0] + ".csv");
+            }
+            if (!File.Exists(csvPath))
+            {
+                using (StreamWriter csv = File.CreateText(csvPath))
+                {
+                    csv.WriteLine(SerializeColumns<Metadata>());
+                    csv.WriteLine(Serialize(metadata));
+                }
+            }
+            else
+            {
+                using (StreamWriter csv = File.AppendText(csvPath))
+                {
+                    csv.WriteLine(Serialize(metadata));
+                }
+            }
         }
 
         /// <summary>

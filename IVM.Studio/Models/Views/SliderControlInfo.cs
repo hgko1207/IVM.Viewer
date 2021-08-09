@@ -212,6 +212,23 @@ namespace IVM.Studio.Models.Views
             set => SetProperty(ref slideShowRepeat, value);
         }
 
+        private int _ZStackProjLowerIndex;
+        public int ZStackProjLowerIndex
+        {
+            get => _ZStackProjLowerIndex;
+            set => SetProperty(ref _ZStackProjLowerIndex, value);
+        }
+
+        private int _ZStackProjUpperIndex;
+        public int ZStackProjUpperIndex
+        {
+            get => _ZStackProjUpperIndex;
+            set => SetProperty(ref _ZStackProjUpperIndex, value);
+        }
+
+        public bool ZStackProjEnabled => ZSSliderEnabled && dataManager.ViewerName == nameof(ImageViewer);
+        public bool MosaicEnabled => MSSliderEnabled && dataManager.ViewerName == nameof(ImageViewer);
+
         public ICommand PlaySlideShowCommand { get; private set; }
 
         private IContainerExtension container;
@@ -239,6 +256,7 @@ namespace IVM.Studio.Models.Views
             eventAggregator.GetEvent<EnableImageSlidersEvent>().Subscribe(EnableImageSliders);
             //eventAggregator.GetEvent<MainViewerOpendEvent>().Subscribe(SliderStateChanged);
             eventAggregator.GetEvent<MainViewerClosedEvent>().Subscribe(StopSlideShow);
+            eventAggregator.GetEvent<ViewerPageChangedEvent>().Subscribe(ViewerPageChanged);
 
             dataManager = container.Resolve<DataManager>();
 
@@ -295,6 +313,9 @@ namespace IVM.Studio.Models.Views
                 TLSliderMinimum = 1;
                 TLSliderMaximum = tlCount;
                 TLSliderValue = tlCount == 0 ? 0 : 1;
+
+                ZStackProjLowerIndex = 1;
+                ZStackProjUpperIndex = zsCount;
             }
 
             DisableSlidersEvent = false;
@@ -456,6 +477,16 @@ namespace IVM.Studio.Models.Views
         {
             container.Resolve<SlideShowService>().StopSlideShow();
             CurrentPlayingSlider = -1;
+        }
+
+
+        /// <summary>
+        /// 메인 뷰어 변경 시
+        /// </summary>
+        private void ViewerPageChanged()
+        {
+            RaisePropertyChanged(nameof(ZStackProjEnabled));
+            RaisePropertyChanged(nameof(MosaicEnabled));
         }
     }
 }

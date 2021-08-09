@@ -23,8 +23,11 @@ namespace IVM.Studio.Models.Events
     public class MainViewerClosedEvent : PubSubEvent { }
     public class MainViewerUnloadEvent : PubSubEvent<int> { }
 
-    /// <summary> 메인 Viewer 변경 이벤트 </summary>
+    /// <summary> 메인 Viewer를 변경 할 때 </summary>
+    public class ViewerPageChangeEvent : PubSubEvent { }
+    /// <summary> 메인 Viewer가 변경 될 때 </summary>
     public class ViewerPageChangedEvent : PubSubEvent { }
+    public class RefreshFolderEvent : PubSubEvent<DirectoryInfo> { }
 
     /// <summary>히스토그램 윈도우를 종료 할때</summary>
     public class HistogramCloseEvent : PubSubEvent { }

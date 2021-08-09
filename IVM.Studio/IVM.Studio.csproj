@@ -163,6 +163,7 @@
     <Compile Include="Models\Views\AnnotationInfo.cs" />
     <Compile Include="Models\Views\PostProcessingInfo.cs" />
     <Compile Include="Models\Views\SliderControlInfo.cs" />
+    <Compile Include="Services\BatchImageService.cs" />
     <Compile Include="Services\DataManager.cs" />
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\SlideShowService.cs" />

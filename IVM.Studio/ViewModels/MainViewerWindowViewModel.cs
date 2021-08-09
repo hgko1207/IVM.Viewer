@@ -29,7 +29,11 @@ namespace IVM.Studio.ViewModels
         public UserControl ViewerPage
         {
             get => viewerPage;
-            set => SetProperty(ref viewerPage, value);
+            set
+            {
+                if (SetProperty(ref viewerPage, value))
+                    EventAggregator.GetEvent<ViewerPageChangedEvent>().Publish();
+            }
         }
 
         private MainViewerWindow view;
@@ -61,7 +65,7 @@ namespace IVM.Studio.ViewModels
             view.Activated += WindowActivated;
             view.Deactivated += WindowDeactivated;
 
-            EventAggregator.GetEvent<ViewerPageChangedEvent>().Subscribe(ViewerChanged);
+            EventAggregator.GetEvent<ViewerPageChangeEvent>().Subscribe(ViewerPageChange);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(() => view.Close());
 
             videoPage = new VideoViewer() { WindowId = view.WindowId };
@@ -81,7 +85,7 @@ namespace IVM.Studio.ViewModels
         {
             EventAggregator.GetEvent<MainViewerUnloadEvent>().Publish(view.WindowId);
 
-            EventAggregator.GetEvent<ViewerPageChangedEvent>().Unsubscribe(ViewerChanged);
+            EventAggregator.GetEvent<ViewerPageChangeEvent>().Unsubscribe(ViewerPageChange);
             EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(() => this.view.Close());
         }
 
@@ -106,7 +110,7 @@ namespace IVM.Studio.ViewModels
         /// <summary>
         /// 뷰어 변경
         /// </summary>
-        private void ViewerChanged()
+        private void ViewerPageChange()
         {
             if (view.WindowId == dataManager.MainWindowId)
             {

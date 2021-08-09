@@ -99,9 +99,12 @@
                     <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ZStackProjectionType}"/>
                 </dxmvvm:Interaction.Behaviors>
             </dxe:ComboBoxEdit>
-            
-            <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="25 0 0 0" Minimum="1" Maximum="7" Width="120"
-                              SelectionStart="1" SelectionEnd="7">
+
+            <dxe:TrackBarEdit DataContext="{Binding SliderControlInfo}" Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}"
+                              SelectionStart="{Binding ZStackProjLowerIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                              SelectionEnd="{Binding ZStackProjUpperIndex, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              IsEnabled="{Binding ZStackProjEnabled}"
+                            Style="{StaticResource HistogramSliderStyle}" Margin="25 0 0 0" Width="120">
                 <dxe:TrackBarEdit.StyleSettings>
                     <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
                                                     SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
@@ -112,7 +115,8 @@
                 <TextBlock Text="1 / 7" Style="{StaticResource GeneralTextBlock}"/>
             </Border>
 
-            <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
+            <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" 
+                             IsEnabled="{Binding ZStackProjEnabled}" Command="{Binding ZStackProjCommand}"/>
         </DockPanel>
 
         <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 8" />
@@ -130,10 +134,11 @@
                 </dxe:ComboBoxEdit>
 
                 <TextBlock Text="Overlap (%)" VerticalAlignment="Center" Margin="25 0 0 0"/>
-                <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="10 0 0 0"/>
+                <dxe:SpinEdit IsFloatValue="False" Width="60" Height="28" Margin="10 0 0 0" EditValue="{Binding MosaicOverlap, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </StackPanel>
 
-            <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" />
+            <dx:SimpleButton HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" Content="Apply" Margin="10 0 0 0" 
+                             IsEnabled="{Binding MosaicEnabled}" Command="{Binding MosaicCommand}"/>
         </DockPanel>
     </StackPanel>
 </UserControl>

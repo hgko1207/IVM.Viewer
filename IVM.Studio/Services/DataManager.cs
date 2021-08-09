@@ -18,6 +18,11 @@ namespace IVM.Studio.Services
 {
     public class DataManager
     {
+        /// <summary> 현재 선택된 슬라이드 정보 </summary>
+        public SlideInfo SelectedSlideInfo { get; set; }
+
+        public string CurrentSlidesPath { get; set; }
+
         /// <summary>표시 되고 있는 파일</summary>
         public FileInfo CurrentFile { get; set; }
 

@@ -52,6 +52,7 @@ namespace IVM.Studio.ViewModels
                     EventAggregator.GetEvent<StopSlideShowEvent>().Publish();
                     EventAggregator.GetEvent<EnableImageSlidersEvent>().Publish(new SlidersParam() { CurrentSlidesPath = currentSlidesPath, SlideName = value.Name });
                     DisplaySlide(true);
+                    dataManager.SelectedSlideInfo = value;
                 }
             }
         }
@@ -152,6 +153,7 @@ namespace IVM.Studio.ViewModels
 
             EventAggregator.GetEvent<DisplaySlideEvent>().Subscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
+            EventAggregator.GetEvent<RefreshFolderEvent>().Subscribe(RefreshFolder);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -175,6 +177,7 @@ namespace IVM.Studio.ViewModels
         {
             EventAggregator.GetEvent<DisplaySlideEvent>().Unsubscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(DisplayImageWithMetadata);
+            EventAggregator.GetEvent<RefreshFolderEvent>().Unsubscribe(RefreshFolder);
         }
 
         /// <summary>
@@ -282,11 +285,12 @@ namespace IVM.Studio.ViewModels
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(displayParam);
             }
 
+            dataManager.CurrentSlidesPath = currentSlidesPath;
             dataManager.CurrentFile = currentFile;
             dataManager.Metadata = metadata;
 
             if (slideChanged)
-                EventAggregator.GetEvent<ViewerPageChangedEvent>().Publish();
+                EventAggregator.GetEvent<ViewerPageChangeEvent>().Publish();
         }
 
         /// <summary>
@@ -362,6 +366,15 @@ namespace IVM.Studio.ViewModels
             Metadata metadata = param.Metadata;
             if (metadata != null)
                 MetadataCollection = Container.Resolve<FileService>().ToModel(metadata);
+        }
+
+        /// <summary>
+        /// Refresh Folder
+        /// </summary>
+        private void RefreshFolder(DirectoryInfo folder)
+        {
+            RefreshCommand.Execute(null);
+            SelectedSlideInfo = SlideInfoCollection.FirstOrDefault(s => s.Name == folder?.Name && s.Category == "Folder");
         }
     }
 }

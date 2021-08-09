@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using GDIDrawing = System.Drawing;
 using OpenCvDrawing = OpenCvSharp;
@@ -833,6 +834,121 @@ namespace IVM.Studio.Services
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 주어진 두 이미지를 가로로 합성하여 새 이미지를 만듭니다.
+        /// </summary>
+        /// <param name="originalImage">기존 이미지입니다. 결과 이미지에서 왼쪽에 위치합니다.</param>
+        /// <param name="newImage">새로 합성할 이미지입니다. 결과 이미지에서 오른쪽에 위치합니다. 기존 이미지와 높이가 맞지 않는 경우 리사이즈합니다.</param>
+        public OpenCvDrawing.Mat MosaicHConcat(OpenCvDrawing.Mat originalImage, OpenCvDrawing.Mat newImage)
+        {
+            using (OpenCvDrawing.Mat ResizedNewImage = newImage.Resize(new OpenCvDrawing.Size(newImage.Width, originalImage.Height)))
+            using (OpenCvDrawing.Mat template = ResizedNewImage[0, ResizedNewImage.Height, 0, (int)(ResizedNewImage.Width * 0.1)])
+            using (OpenCvDrawing.Mat matchBase = originalImage[0, ResizedNewImage.Height, originalImage.Width - ResizedNewImage.Width, originalImage.Width])
+            using (OpenCvDrawing.Mat matchResult = matchBase.MatchTemplate(template, OpenCvDrawing.TemplateMatchModes.CCorrNormed))
+            {
+                matchResult.MinMaxLoc(out _, out OpenCvDrawing.Point maxloc);
+                if (maxloc.X <= matchBase.Width - template.Width * 2)
+                {
+                    System.Diagnostics.Debug.WriteLine("HConcat failed");
+                    OpenCvDrawing.Mat ResultImage = new OpenCvDrawing.Mat();
+                    OpenCvDrawing.Cv2.HConcat(new OpenCvDrawing.Mat[] { originalImage, ResizedNewImage }, ResultImage);
+                    return ResultImage;
+                }
+                else
+                {
+                    int thresholdFromLeft = originalImage.Width - ResizedNewImage.Width + maxloc.X;
+                    int thresholdFromRight = matchBase.Width - maxloc.X;
+                    using (OpenCvDrawing.Mat OriginalImage_Left = originalImage[0, originalImage.Height, 0, thresholdFromLeft])
+                    using (OpenCvDrawing.Mat OriginalImage_Right = originalImage[0, originalImage.Height, thresholdFromLeft, originalImage.Width])
+                    using (OpenCvDrawing.Mat ResizedNewImage_Left = ResizedNewImage[0, ResizedNewImage.Height, 0, thresholdFromRight])
+                    using (OpenCvDrawing.Mat ResizedNewImage_Right = ResizedNewImage[0, ResizedNewImage.Height, thresholdFromRight, ResizedNewImage.Width])
+                    using (OpenCvDrawing.Mat PaddingImage = new OpenCvDrawing.Mat())
+                    {
+                        OpenCvDrawing.Mat ResultImage = new OpenCvDrawing.Mat();
+                        OpenCvDrawing.Cv2.Max(OriginalImage_Right, ResizedNewImage_Left, PaddingImage);
+                        OpenCvDrawing.Cv2.HConcat(new OpenCvDrawing.Mat[] { OriginalImage_Left, PaddingImage, ResizedNewImage_Right }, ResultImage);
+                        return ResultImage;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 주어진 두 이미지를 세로로 합성하여 새 이미지를 만듭니다.
+        /// </summary>
+        /// <param name="originalImage">기존 이미지입니다. 결과 이미지에서 위쪽에 위치합니다.</param>
+        /// <param name="newImage">새로 합성할 이미지입니다. 결과 이미지에서 아래쪽에 위치합니다. 기존 이미지와 너비가 맞지 않는 경우 리사이즈합니다</param>
+        public OpenCvDrawing.Mat MosaicVConcat(OpenCvDrawing.Mat originalImage, OpenCvDrawing.Mat newImage)
+        {
+            using (OpenCvDrawing.Mat ResizedNewImage = newImage.Resize(new OpenCvDrawing.Size(originalImage.Width, newImage.Height)))
+            using (OpenCvDrawing.Mat template = ResizedNewImage[0, (int)(ResizedNewImage.Height * 0.1), 0, ResizedNewImage.Width])
+            using (OpenCvDrawing.Mat matchBase = originalImage[originalImage.Height - ResizedNewImage.Height, originalImage.Height, 0, ResizedNewImage.Width])
+            using (OpenCvDrawing.Mat matchResult = matchBase.MatchTemplate(template, OpenCvDrawing.TemplateMatchModes.CCorrNormed))
+            {
+                matchResult.MinMaxLoc(out _, out OpenCvDrawing.Point maxloc);
+                if (maxloc.Y <= matchBase.Height - template.Height * 2)
+                {
+                    System.Diagnostics.Debug.WriteLine("VConcat failed");
+                    OpenCvDrawing.Mat ResultImage = new OpenCvDrawing.Mat();
+                    OpenCvDrawing.Cv2.VConcat(new OpenCvDrawing.Mat[] { originalImage, ResizedNewImage }, ResultImage);
+                    return ResultImage;
+                }
+                else
+                {
+                    int thresholdFromTop = originalImage.Height - ResizedNewImage.Height + maxloc.Y;
+                    int thresholdFromBottom = matchBase.Height - maxloc.Y;
+                    using (OpenCvDrawing.Mat OriginalImage_Top = originalImage[0, thresholdFromTop, 0, originalImage.Width])
+                    using (OpenCvDrawing.Mat OriginalImage_Bottom = originalImage[thresholdFromTop, originalImage.Height, 0, originalImage.Width])
+                    using (OpenCvDrawing.Mat ResizedNewImage_Top = ResizedNewImage[0, thresholdFromBottom, 0, ResizedNewImage.Width])
+                    using (OpenCvDrawing.Mat ResizedNewImage_Bottom = ResizedNewImage[thresholdFromBottom, ResizedNewImage.Height, 0, ResizedNewImage.Width])
+                    using (OpenCvDrawing.Mat PaddingImage = new OpenCvDrawing.Mat())
+                    {
+                        OpenCvDrawing.Mat ResultImage = new OpenCvDrawing.Mat();
+                        OpenCvDrawing.Cv2.Max(OriginalImage_Bottom, ResizedNewImage_Top, PaddingImage);
+                        OpenCvDrawing.Cv2.VConcat(new OpenCvDrawing.Mat[] { OriginalImage_Top, PaddingImage, ResizedNewImage_Bottom }, ResultImage);
+                        return ResultImage;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 주어진 <see cref="OpenCvDrawing.Mat"/> 이미지를 파일로 저장합니다.
+        /// </summary>
+        /// <param name="filePath32bit">저장할 32비트 이미지의 경로입니다. <paramref name="image"/>가 24비트이면 대신 24비트 이미지가 이 이름으로 저장됩니다.</param>
+        /// <param name="filePath24bit">저장할 24비트 이미지의 경로입니다. null이거나 <paramref name="image"/>가 24비트이면 저장하지 않습니다.</param>
+        public void SaveOpenCvImage(OpenCvDrawing.Mat image, string filePath32bit, string filePath24bit)
+        {
+            SaveOpenCvImage(image, filePath32bit);
+            try
+            {
+                using (OpenCvDrawing.Mat image24 = image.CvtColor(OpenCvDrawing.ColorConversionCodes.BGRA2BGR))
+                {
+                    SaveOpenCvImage(image24, filePath24bit);
+                }
+            }
+            catch { }
+        }
+
+        /// <summary>
+        /// 이미지를 파일로 저장합니다.
+        /// </summary>
+        /// <param name="Image"></param>
+        /// <param name="fileName"></param>
+        private void SaveOpenCvImage(OpenCvDrawing.Mat Image, string fileName)
+        {
+            if (Path.GetExtension(fileName).Equals(".png", StringComparison.OrdinalIgnoreCase))
+            {
+                Image.ImWrite(fileName);
+            }
+            else
+            {
+                string tempfile = Path.GetFileNameWithoutExtension(fileName) + "_temp.png";
+                Image.ImWrite(tempfile);
+                File.Move(tempfile, fileName);
+            }
         }
     }
 }
