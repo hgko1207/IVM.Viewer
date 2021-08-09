@@ -43,8 +43,8 @@ namespace ivm
         {
             Point pt = e.GetPosition(vw);
             Fname.Text = string.Format("{0}", vw.scene.tex3D.GetImagePath());
-            RotX.Text = string.Format("{0}", ViewParam.CAMERA_ANGLE.x);
-            RotY.Text = string.Format("{0}", ViewParam.CAMERA_ANGLE.y);
+            RotX.Text = string.Format("{0}", vw.param.CAMERA_ANGLE.x);
+            RotY.Text = string.Format("{0}", vw.param.CAMERA_ANGLE.y);
 
             vw.InvalidateVisual();
         }
@@ -54,8 +54,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.THRESHOLD_INTENSITY.x = (float)e.NewValue / (float)IntensityRSlider.Maximum;
-            IntensityR.Text = string.Format("{0:0.00} ", ViewParam.THRESHOLD_INTENSITY.x);
+            vw.param.THRESHOLD_INTENSITY.x = (float)e.NewValue / (float)IntensityRSlider.Maximum;
+            IntensityR.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY.x);
         }
 
         private void IntensityGSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -63,8 +63,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.THRESHOLD_INTENSITY.y = (float)e.NewValue / (float)IntensityGSlider.Maximum;
-            IntensityG.Text = string.Format("{0:0.00} ", ViewParam.THRESHOLD_INTENSITY.y);
+            vw.param.THRESHOLD_INTENSITY.y = (float)e.NewValue / (float)IntensityGSlider.Maximum;
+            IntensityG.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY.y);
         }
 
         private void IntensityBSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -72,8 +72,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.THRESHOLD_INTENSITY.z = (float)e.NewValue / (float)IntensityBSlider.Maximum;
-            IntensityB.Text = string.Format("{0:0.00} ", ViewParam.THRESHOLD_INTENSITY.z);
+            vw.param.THRESHOLD_INTENSITY.z = (float)e.NewValue / (float)IntensityBSlider.Maximum;
+            IntensityB.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY.z);
         }
 
         private void AxisChkBtn_Checked(object sender, RoutedEventArgs e)
@@ -81,7 +81,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SHOW_AXIS = true;
+            vw.param.SHOW_AXIS = true;
         }
 
         private void AxisChkBtn_Unchecked(object sender, RoutedEventArgs e)
@@ -89,7 +89,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SHOW_AXIS = false;
+            vw.param.SHOW_AXIS = false;
         }
 
         private void BoxChkBtn_Checked(object sender, RoutedEventArgs e)
@@ -97,7 +97,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SHOW_BOX = true;
+            vw.param.SHOW_BOX = true;
         }
 
         private void BoxChkBtn_Unchecked(object sender, RoutedEventArgs e)
@@ -105,7 +105,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SHOW_BOX = false;
+            vw.param.SHOW_BOX = false;
         }
 
         private void PerPixIterSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -113,8 +113,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.PER_PIXEl_ITERATION = (float)e.NewValue;
-            PerPixIter.Text = string.Format("{0}", ViewParam.PER_PIXEl_ITERATION);
+            vw.param.PER_PIXEl_ITERATION = (float)e.NewValue;
+            PerPixIter.Text = string.Format("{0}", vw.param.PER_PIXEl_ITERATION);
         }
 
         private void BoxHeightSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -122,8 +122,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.BOX_HEIGHT = (float)e.NewValue / 10.0f;
-            BoxHeight.Text = string.Format("{0:0.00}", ViewParam.BOX_HEIGHT);
+            vw.param.BOX_HEIGHT = (float)e.NewValue / 10.0f;
+            BoxHeight.Text = string.Format("{0:0.00}", vw.param.BOX_HEIGHT);
 
             vw.UpdateBoxHeight();
         }
@@ -133,7 +133,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SHOW_GRID = true;
+            vw.param.SHOW_GRID = true;
         }
 
         private void GridChkBtn_Unchecked(object sender, RoutedEventArgs e)
@@ -141,7 +141,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SHOW_GRID = false;
+            vw.param.SHOW_GRID = false;
         }
 
         private void AlphaWeightRSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -149,8 +149,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.ALPHA_WEIGHT.x = (float)e.NewValue / 10.0f;
-            AlphaWeightR.Text = string.Format("{0:0.00 }", ViewParam.ALPHA_WEIGHT.x);
+            vw.param.ALPHA_WEIGHT.x = (float)e.NewValue / 10.0f;
+            AlphaWeightR.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.x);
         }
 
         private void AlphaWeightGSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -158,8 +158,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.ALPHA_WEIGHT.y = (float)e.NewValue / 10.0f;
-            AlphaWeightG.Text = string.Format("{0:0.00 }", ViewParam.ALPHA_WEIGHT.y);
+            vw.param.ALPHA_WEIGHT.y = (float)e.NewValue / 10.0f;
+            AlphaWeightG.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.y);
         }
 
         private void AlphaWeightBSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -167,8 +167,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.ALPHA_WEIGHT.z = (float)e.NewValue / 10.0f;
-            AlphaWeightB.Text = string.Format("{0:0.00 }", ViewParam.ALPHA_WEIGHT.z);
+            vw.param.ALPHA_WEIGHT.z = (float)e.NewValue / 10.0f;
+            AlphaWeightB.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.z);
         }
 
         private void AutoRotXBtn_Checked(object sender, RoutedEventArgs e)
@@ -176,7 +176,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.CAMERA_VELOCITY.x = 1;
+            vw.param.CAMERA_VELOCITY.x = 1;
         }
 
         private void AutoRotXBtn_Unchecked(object sender, RoutedEventArgs e)
@@ -184,7 +184,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.CAMERA_VELOCITY.x = 0;
+            vw.param.CAMERA_VELOCITY.x = 0;
         }
 
         private void AutoRotYBtn_Checked(object sender, RoutedEventArgs e)
@@ -192,7 +192,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.CAMERA_VELOCITY.y = 1;
+            vw.param.CAMERA_VELOCITY.y = 1;
         }
 
         private void AutoRotYBtn_Unchecked(object sender, RoutedEventArgs e)
@@ -200,7 +200,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.CAMERA_VELOCITY.y = 0;
+            vw.param.CAMERA_VELOCITY.y = 0;
         }
 
         private void CameraReset_Click(object sender, RoutedEventArgs e)
@@ -213,7 +213,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.IS_COLOCALIZATION = 1;
+            vw.param.IS_COLOCALIZATION = 1;
         }
 
         private void ColocalChkBtn_Unchecked(object sender, RoutedEventArgs e)
@@ -221,7 +221,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.IS_COLOCALIZATION = 0;
+            vw.param.IS_COLOCALIZATION = 0;
         }
 
         private void ObliqueDepthSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -229,8 +229,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.OBLIQUE_DEPTH = (float)e.NewValue / 100.0f;
-            ObliqueDepth.Text = string.Format("{0:0.00 }", ViewParam.OBLIQUE_DEPTH);
+            vw.param.OBLIQUE_DEPTH = (float)e.NewValue / 100.0f;
+            ObliqueDepth.Text = string.Format("{0:0.00 }", vw.param.OBLIQUE_DEPTH);
         }
 
         private void RenderModeBlend_Click(object sender, RoutedEventArgs e)
@@ -238,7 +238,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.RENDER_MODE = ViewRenderMode.BLEND;
+            vw.param.RENDER_MODE = ViewRenderMode.BLEND;
             vw.scene.SetRenderMode(ViewRenderMode.BLEND);
         }
 
@@ -247,7 +247,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.RENDER_MODE = ViewRenderMode.ADDED;
+            vw.param.RENDER_MODE = ViewRenderMode.ADDED;
             vw.scene.SetRenderMode(ViewRenderMode.ADDED);
         }
 
@@ -256,7 +256,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.RENDER_MODE = ViewRenderMode.OBLIQUE;
+            vw.param.RENDER_MODE = ViewRenderMode.OBLIQUE;
             vw.scene.SetRenderMode(ViewRenderMode.OBLIQUE);
         }
 
@@ -265,7 +265,7 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.RENDER_MODE = ViewRenderMode.SLICE;
+            vw.param.RENDER_MODE = ViewRenderMode.SLICE;
             vw.scene.SetRenderMode(ViewRenderMode.SLICE);
         }
 
@@ -274,8 +274,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SLICE_DEPTH.x = (float)e.NewValue / 100.0f;
-            SliceX.Text = string.Format("{0:0.00 }", ViewParam.SLICE_DEPTH.x);
+            vw.param.SLICE_DEPTH.x = (float)e.NewValue / 100.0f;
+            SliceX.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.x);
         }
 
         private void SliceYSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -283,8 +283,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SLICE_DEPTH.y = (float)e.NewValue / 100.0f;
-            SliceY.Text = string.Format("{0:0.00 }", ViewParam.SLICE_DEPTH.y);
+            vw.param.SLICE_DEPTH.y = (float)e.NewValue / 100.0f;
+            SliceY.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.y);
         }
 
         private void SliceZSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -292,8 +292,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            ViewParam.SLICE_DEPTH.z = (float)e.NewValue / 100.0f;
-            SliceZ.Text = string.Format("{0:0.00 }", ViewParam.SLICE_DEPTH.z);
+            vw.param.SLICE_DEPTH.z = (float)e.NewValue / 100.0f;
+            SliceZ.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.z);
         }
     }
 }

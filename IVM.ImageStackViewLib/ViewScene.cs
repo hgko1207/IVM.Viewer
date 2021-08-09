@@ -93,12 +93,12 @@ namespace ivm
             // calculate box-height
             if (h == -1.0f)
             {
-                ViewParam.BOX_HEIGHT = (float)tex3D.GetDepth() / (float)tex3D.GetWidth();
-                ViewParam.BOX_HEIGHT *= view.scene.meta.pixelPerUM_Z / view.scene.meta.pixelPerUM_X;
+                view.param.BOX_HEIGHT = (float)tex3D.GetDepth() / (float)tex3D.GetWidth();
+                view.param.BOX_HEIGHT *= view.scene.meta.pixelPerUM_Z / view.scene.meta.pixelPerUM_X;
             }
             else
             {
-                ViewParam.BOX_HEIGHT = h;
+                view.param.BOX_HEIGHT = h;
             }
             
             view.scene.UpdateMesh(gl);
@@ -118,13 +118,13 @@ namespace ivm
 
         public void UpdateModelviewMatrix()
         {
-            float s = ViewParam.CAMERA_SCALE_FACTOR;
-            float rx = ViewParam.CAMERA_ANGLE.x;
-            float ry = ViewParam.CAMERA_ANGLE.y;
+            float s = view.param.CAMERA_SCALE_FACTOR;
+            float rx = view.param.CAMERA_ANGLE.x;
+            float ry = view.param.CAMERA_ANGLE.y;
 
             // camera transform
             mat4 viewRot = glm.rotate(mat4.identity(), ViewCommon.Deg2Rad(0), new vec3(1, 0, 0));
-            mat4 viewTrn = glm.translate(mat4.identity(), ViewParam.CAMERA_POS);
+            mat4 viewTrn = glm.translate(mat4.identity(), view.param.CAMERA_POS);
             mat4 viewMatrix = viewTrn * viewRot;
 
             // world transform
@@ -162,7 +162,7 @@ namespace ivm
             matGridObj = gridMatrix;
 
             // axis must be screen space matrix.
-            mat4 axisTrn = glm.translate(mat4.identity(), ViewParam.AXIS_POS);
+            mat4 axisTrn = glm.translate(mat4.identity(), view.param.AXIS_POS);
             matAxisView = axisTrn * rotY * rotZ;
         }
 
@@ -191,52 +191,52 @@ namespace ivm
                 return;
 
             // Clear the color and depth buffers.
-            gl.ClearColor(ViewParam.BG_COLOR.x, ViewParam.BG_COLOR.y, ViewParam.BG_COLOR.z, 1.0f);
+            gl.ClearColor(view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z, 1.0f);
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
 
-            if (ViewParam.RENDER_MODE == ViewRenderMode.SLICE)
+            if (view.param.RENDER_MODE == ViewRenderMode.SLICE)
             {
-                oblique.RenderOblique(gl, matProjOrtho, matSliceZView, matSliceZRot, ViewParam.SLICE_DEPTH.z * ViewParam.BOX_HEIGHT);
-                oblique.RenderOblique(gl, matProjOrtho, matSliceYView, matSliceYRot, ViewParam.SLICE_DEPTH.y);
-                oblique.RenderOblique(gl, matProjOrtho, matSliceXView, matSliceXRot, ViewParam.SLICE_DEPTH.x);
+                oblique.RenderOblique(gl, matProjOrtho, matSliceZView, matSliceZRot, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
+                oblique.RenderOblique(gl, matProjOrtho, matSliceYView, matSliceYRot, view.param.SLICE_DEPTH.y);
+                oblique.RenderOblique(gl, matProjOrtho, matSliceXView, matSliceXRot, view.param.SLICE_DEPTH.x);
 
-                if (ViewParam.SHOW_BOX)
+                if (view.param.SHOW_BOX)
                 {
-                    box.RenderOutline(gl, matProjOrtho, matSliceZView, ViewParam.SLICE_LINE_COLOR_Z);
-                    box.RenderOutline(gl, matProjOrtho, matSliceYView, ViewParam.SLICE_LINE_COLOR_Y);
-                    box.RenderOutline(gl, matProjOrtho, matSliceXView, ViewParam.SLICE_LINE_COLOR_X);
+                    box.RenderOutline(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_Z);
+                    box.RenderOutline(gl, matProjOrtho, matSliceYView, view.param.SLICE_LINE_COLOR_Y);
+                    box.RenderOutline(gl, matProjOrtho, matSliceXView, view.param.SLICE_LINE_COLOR_X);
 
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, ViewParam.SLICE_LINE_COLOR_X, ViewAxisDirection.X, ViewParam.SLICE_DEPTH.x);
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, ViewParam.SLICE_LINE_COLOR_Y, ViewAxisDirection.Y, ViewParam.SLICE_DEPTH.y);
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceXView, ViewParam.SLICE_LINE_COLOR_Z, ViewAxisDirection.Z1, ViewParam.SLICE_DEPTH.z * ViewParam.BOX_HEIGHT);
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceYView, ViewParam.SLICE_LINE_COLOR_Z, ViewAxisDirection.Z2, ViewParam.SLICE_DEPTH.z * ViewParam.BOX_HEIGHT);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_X, ViewAxisDirection.X, view.param.SLICE_DEPTH.x);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_Y, ViewAxisDirection.Y, view.param.SLICE_DEPTH.y);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceXView, view.param.SLICE_LINE_COLOR_Z, ViewAxisDirection.Z1, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceYView, view.param.SLICE_LINE_COLOR_Z, ViewAxisDirection.Z2, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
                 }
 
                 // grid-text
-                if (ViewParam.SHOW_GRID && ViewParam.SHOW_GRID_TEXT)
+                if (view.param.SHOW_GRID && view.param.SHOW_GRID_TEXT)
                     box.RenderGridText(gl, matProjOrtho, matSliceZView);
             }
             else
             {
                 // draw box outline
-                if (ViewParam.SHOW_GRID)
+                if (view.param.SHOW_GRID)
                     box.RenderGrid(gl, matProj, matGridView, matGridObj);
 
-                if (ViewParam.SHOW_BOX)
-                    box.RenderOutline(gl, matProj, matGridView, ViewParam.BOX_COLOR);
+                if (view.param.SHOW_BOX)
+                    box.RenderOutline(gl, matProj, matGridView, view.param.BOX_COLOR);
 
                 // 3d-volume rendering
-                if (ViewParam.RENDER_MODE == ViewRenderMode.BLEND || ViewParam.RENDER_MODE == ViewRenderMode.ADDED)
+                if (view.param.RENDER_MODE == ViewRenderMode.BLEND || view.param.RENDER_MODE == ViewRenderMode.ADDED)
                     box.RenderVolume3D(gl, matProj, matModelView);
-                else if (ViewParam.RENDER_MODE == ViewRenderMode.OBLIQUE)
-                    oblique.RenderOblique(gl, matProj, matModelView, matModelRot, ViewParam.OBLIQUE_DEPTH);
+                else if (view.param.RENDER_MODE == ViewRenderMode.OBLIQUE)
+                    oblique.RenderOblique(gl, matProj, matModelView, matModelRot, view.param.OBLIQUE_DEPTH);
                 
                 // grid-text
-                if (ViewParam.SHOW_GRID && ViewParam.SHOW_GRID_TEXT)
+                if (view.param.SHOW_GRID && view.param.SHOW_GRID_TEXT)
                     box.RenderGridText(gl, matProj, matGridView);
 
                 // draw axis
-                if (ViewParam.SHOW_AXIS)
+                if (view.param.SHOW_AXIS)
                     axis.Render(gl, matAxisView);
             }
         }

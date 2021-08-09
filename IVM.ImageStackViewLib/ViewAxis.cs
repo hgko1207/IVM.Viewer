@@ -24,7 +24,7 @@ namespace ivm
             vertices[0].x = 0.0f; // front
             vertices[0].y = 0.0f;
             vertices[0].z = 0;
-            vertices[1].x = ViewParam.AXIS_HEIGHT; // back
+            vertices[1].x = view.param.AXIS_HEIGHT; // back
             vertices[1].y = 0.0f;
             vertices[1].z = 0;
 
@@ -33,7 +33,7 @@ namespace ivm
             vertices[2].y = 0.0f;
             vertices[2].z = 0;
             vertices[3].x = 0.0f; // back
-            vertices[3].y = ViewParam.AXIS_HEIGHT;
+            vertices[3].y = view.param.AXIS_HEIGHT;
             vertices[3].z = 0;
 
             //------------------------- Z -------------------------
@@ -42,7 +42,7 @@ namespace ivm
             vertices[4].z = 0;
             vertices[5].x = 0.0f; // back
             vertices[5].y = 0.0f;
-            vertices[5].z = ViewParam.AXIS_HEIGHT;
+            vertices[5].z = view.param.AXIS_HEIGHT;
         }
 
         public void Render(OpenGL gl, mat4 mview)
@@ -86,7 +86,7 @@ namespace ivm
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = ViewParam.TEXT_SIZE;
+            int fs = view.param.TEXT_SIZE;
 
             vec4 px = mview * new vec4(vertices[1].x, vertices[1].y, vertices[1].z, 1);
             px.x = (px.x + 1.0f) / 2.0f * aw;

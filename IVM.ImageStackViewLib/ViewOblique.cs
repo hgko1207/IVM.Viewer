@@ -57,8 +57,8 @@ namespace ivm
 
             Plane pln = new Plane(pdir.x, pdir.y, pdir.z, pdir.w);
 
-            vec3 aabb_min = new vec3(-1.0f, -1.0f, -ViewParam.BOX_HEIGHT);
-            vec3 aabb_max = new vec3(1.0f, 1.0f, ViewParam.BOX_HEIGHT);
+            vec3 aabb_min = new vec3(-1.0f, -1.0f, -view.param.BOX_HEIGHT);
+            vec3 aabb_max = new vec3(1.0f, 1.0f, view.param.BOX_HEIGHT);
 
             //vec3 aabb_min = new vec3(-1.0f, -1.0f, -1.0f);
             //vec3 aabb_max = new vec3(1.0f, 1.0f, 1.0f);
@@ -76,7 +76,7 @@ namespace ivm
             {
                 uvs[i].x = vertices[i].x * 0.5f + 0.5f;
                 uvs[i].y = vertices[i].y * 0.5f + 0.5f;
-                uvs[i].z = -(vertices[i].z / ViewParam.BOX_HEIGHT) * 0.5f + 0.5f;
+                uvs[i].z = -(vertices[i].z / view.param.BOX_HEIGHT) * 0.5f + 0.5f;
             }
 
             // fill vertexbuffer
@@ -114,7 +114,7 @@ namespace ivm
             // Set the matrices.
             shader.SetUniformMatrix4(gl, "matProj", mproj.to_array());
             shader.SetUniformMatrix4(gl, "matModelView", mview.to_array());
-            shader.SetUniform3(gl, "BG_COLOR", ViewParam.BG_COLOR.x, ViewParam.BG_COLOR.y, ViewParam.BG_COLOR.z);
+            shader.SetUniform3(gl, "BG_COLOR", view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z);
 
             view.scene.tex3D.Bind(gl);
 
@@ -141,13 +141,13 @@ namespace ivm
             }
             else if (axis == ViewAxisDirection.X)
             {
-                vertdepth[0] = new vec3(-1.0f, depth, ViewParam.BOX_HEIGHT);
-                vertdepth[1] = new vec3( 1.0f, depth, ViewParam.BOX_HEIGHT);
+                vertdepth[0] = new vec3(-1.0f, depth, view.param.BOX_HEIGHT);
+                vertdepth[1] = new vec3( 1.0f, depth, view.param.BOX_HEIGHT);
             }
             else if (axis == ViewAxisDirection.Y)
             {
-                vertdepth[0] = new vec3(depth, -1.0f, ViewParam.BOX_HEIGHT);
-                vertdepth[1] = new vec3(depth,  1.0f, ViewParam.BOX_HEIGHT);
+                vertdepth[0] = new vec3(depth, -1.0f, view.param.BOX_HEIGHT);
+                vertdepth[1] = new vec3(depth,  1.0f, view.param.BOX_HEIGHT);
             }
 
             gl.MatrixMode(OpenGL.GL_PROJECTION);

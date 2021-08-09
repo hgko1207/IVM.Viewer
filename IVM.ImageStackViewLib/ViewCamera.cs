@@ -20,13 +20,13 @@ namespace ivm
 
         public void Update()
         {
-            Rotate(ViewParam.CAMERA_VELOCITY.x, ViewParam.CAMERA_VELOCITY.y);
+            Rotate(view.param.CAMERA_VELOCITY.x, view.param.CAMERA_VELOCITY.y);
         }
 
         public void Reset()
         {
-            ViewParam.CAMERA_VELOCITY = new vec2(0, 0);
-            ViewParam.CAMERA_ANGLE = new vec2(0, 0);
+            view.param.CAMERA_VELOCITY = new vec2(0, 0);
+            view.param.CAMERA_ANGLE = new vec2(0, 0);
     }
 
         public void Control_MouseButtonDown(object sender, MouseEventArgs e)
@@ -48,18 +48,18 @@ namespace ivm
 
         public void Rotate(float x, float y)
         {
-            ViewParam.CAMERA_ANGLE.x += x * 1.0f;
-            ViewParam.CAMERA_ANGLE.y += y * 1.0f;
+            view.param.CAMERA_ANGLE.x += x * 1.0f;
+            view.param.CAMERA_ANGLE.y += y * 1.0f;
 
-            if (ViewParam.CAMERA_ANGLE.x < -360.0f)
-                ViewParam.CAMERA_ANGLE.x += 360.0f;
-            if (ViewParam.CAMERA_ANGLE.x > 360.0f)
-                ViewParam.CAMERA_ANGLE.x -= 360.0f;
+            if (view.param.CAMERA_ANGLE.x < -360.0f)
+                view.param.CAMERA_ANGLE.x += 360.0f;
+            if (view.param.CAMERA_ANGLE.x > 360.0f)
+                view.param.CAMERA_ANGLE.x -= 360.0f;
 
-            if (ViewParam.CAMERA_ANGLE.y < -360.0f)
-                ViewParam.CAMERA_ANGLE.y += 360.0f;
-            if (ViewParam.CAMERA_ANGLE.y > 360.0f)
-                ViewParam.CAMERA_ANGLE.y -= 360.0f;
+            if (view.param.CAMERA_ANGLE.y < -360.0f)
+                view.param.CAMERA_ANGLE.y += 360.0f;
+            if (view.param.CAMERA_ANGLE.y > 360.0f)
+                view.param.CAMERA_ANGLE.y -= 360.0f;
 
             view.scene.UpdateModelviewMatrix();
         }
@@ -68,10 +68,10 @@ namespace ivm
         {
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
-            float z = -ViewParam.CAMERA_POS.z;
+            float z = -view.param.CAMERA_POS.z;
 
-            ViewParam.CAMERA_POS.x += x * (1.0f / aw * z);
-            ViewParam.CAMERA_POS.y -= y * (1.0f / ah * z);
+            view.param.CAMERA_POS.x += x * (1.0f / aw * z);
+            view.param.CAMERA_POS.y -= y * (1.0f / ah * z);
 
             view.scene.UpdateModelviewMatrix();
         }
@@ -105,11 +105,11 @@ namespace ivm
         {
             if (e.Delta > 0)
             {
-                ViewParam.CAMERA_SCALE_FACTOR *= 1.1f;
+                view.param.CAMERA_SCALE_FACTOR *= 1.1f;
             }
             else
             {
-                ViewParam.CAMERA_SCALE_FACTOR /= 1.1f;
+                view.param.CAMERA_SCALE_FACTOR /= 1.1f;
             }
 
             view.scene.UpdateModelviewMatrix();

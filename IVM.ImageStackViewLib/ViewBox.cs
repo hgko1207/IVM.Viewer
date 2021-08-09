@@ -53,81 +53,81 @@ namespace ivm
             //------------------------- TOP -------------------------
             vertices[i].x = -1.0f; // left-bottom
             vertices[i].y = -1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = -1.0f; // left-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-bottom
             vertices[i].y = -1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             //------------------------- BOTTOM -------------------------
             vertices[i].x = -1.0f; // left-bottom
             vertices[i].y = -1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i].x = -1.0f; // left-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-bottom
             vertices[i].y = -1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             //------------------------- FRONT -------------------------
             vertices[i  ].x = -1.0f; // left-bottom
             vertices[i  ].y = -1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i  ].x = -1.0f; // left-top
             vertices[i  ].y = -1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i  ].x = 1.0f; // right-top
             vertices[i  ].y = -1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i  ].x = 1.0f; // right-bottom
             vertices[i  ].y = -1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             //------------------------- BACK -------------------------
             vertices[i].x = -1.0f; // left-bottom
             vertices[i].y = 1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i].x = -1.0f; // left-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-bottom
             vertices[i].y = 1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             //------------------------- LEFT -------------------------
             vertices[i].x = -1.0f; // left-bottom
             vertices[i].y = 1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i].x = -1.0f; // left-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = -1.0f; // right-top
             vertices[i].y = -1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = -1.0f; // right-bottom
             vertices[i].y = -1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             //------------------------- RIGHT -------------------------
             vertices[i].x = 1.0f; // left-bottom
             vertices[i].y = 1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // left-top
             vertices[i].y = 1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-top
             vertices[i].y = -1.0f;
-            vertices[i++].z = ViewParam.BOX_HEIGHT;
+            vertices[i++].z = view.param.BOX_HEIGHT;
             vertices[i].x = 1.0f; // right-bottom
             vertices[i].y = -1.0f;
-            vertices[i++].z = -ViewParam.BOX_HEIGHT;
+            vertices[i++].z = -view.param.BOX_HEIGHT;
 
             i = 0;
             uvs = new vec3[vertCount];
@@ -320,25 +320,25 @@ namespace ivm
             if (!view.scene.IsLoaded())
                 return;
 
-            float dw = (float)ViewParam.GRID_DIST / (float)view.scene.tex3D.GetWidth();
-            float dh = (float)ViewParam.GRID_DIST / (float)view.scene.tex3D.GetDepth();
+            float dw = (float)view.param.GRID_DIST / (float)view.scene.tex3D.GetWidth();
+            float dh = (float)view.param.GRID_DIST / (float)view.scene.tex3D.GetDepth();
             List<vec3> vertlst = new List<vec3>();
             List<vec3> normlst = new List<vec3>();
 
             //------------------------- TOP -> BOTTOM -------------------------
             for (float i = dh; i <= 1.0f; i += dh)
             {
-                vertlst.Add(new vec3(-1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3(-1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
 
-                vertlst.Add(new vec3(-1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
                                              
-                vertlst.Add(new vec3( 1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f,  1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
 
-                vertlst.Add(new vec3( 1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3(-1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f, -1.0f, -1.0f * (i * 2.0f - 1.0f) * view.param.BOX_HEIGHT));
 
                 normlst.Add(new vec3(-1.0f, 0.0f, 0.0f));
                 normlst.Add(new vec3(-1.0f, 0.0f, 0.0f));
@@ -355,17 +355,17 @@ namespace ivm
             //------------------------- FRONT -> BACK -------------------------
             for (float i = dw; i <= 1.0f; i += dw)
             {
-                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f), -ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f),  ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f), -view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f),  view.param.BOX_HEIGHT));
                 
-                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f),  ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f),  ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f),  view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f),  view.param.BOX_HEIGHT));
                 
-                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f),  ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f), -ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f),  view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f), -view.param.BOX_HEIGHT));
 
-                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f), -ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f), -ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f, 1.0f * (i * 2.0f - 1.0f), -view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3(-1.0f, 1.0f * (i * 2.0f - 1.0f), -view.param.BOX_HEIGHT));
 
                 normlst.Add(new vec3(-1.0f, 0.0f, 0.0f));
                 normlst.Add(new vec3(-1.0f, 0.0f, 0.0f));
@@ -382,17 +382,17 @@ namespace ivm
             //------------------------- LEFT -> RIGHT -------------------------
             for (float i = dw; i <= 1.0f; i += dw)
             {
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f, -ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f,  ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f, -view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f,  view.param.BOX_HEIGHT));
 
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f,  ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f,  ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f,  view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f,  view.param.BOX_HEIGHT));
                 
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f,  ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f, -ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f,  view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f, -view.param.BOX_HEIGHT));
                 
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f, -ViewParam.BOX_HEIGHT));
-                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f, -ViewParam.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f), -1.0f, -view.param.BOX_HEIGHT));
+                vertlst.Add(new vec3( 1.0f * (i * 2.0f - 1.0f),  1.0f, -view.param.BOX_HEIGHT));
 
                 normlst.Add(new vec3( 0.0f, 1.0f,  0.0f));
                 normlst.Add(new vec3( 0.0f, 1.0f,  0.0f));
@@ -460,7 +460,7 @@ namespace ivm
             gl.Disable(OpenGL.GL_TEXTURE_2D);
             gl.LineWidth(1.0f);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
-            gl.Color(ViewParam.GRID_COLOR.x, ViewParam.GRID_COLOR.y, ViewParam.GRID_COLOR.z, ViewParam.GRID_COLOR.w);
+            gl.Color(view.param.GRID_COLOR.x, view.param.GRID_COLOR.y, view.param.GRID_COLOR.z, view.param.GRID_COLOR.w);
 
             gl.PolygonMode(FaceMode.FrontAndBack, PolygonMode.Lines);
 
@@ -490,15 +490,15 @@ namespace ivm
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = ViewParam.TEXT_SIZE;
+            int fs = view.param.TEXT_SIZE;
 
-            vec4 pw = mproj * mview * new vec4(0, -1, -ViewParam.BOX_HEIGHT, 1);
+            vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);
             pw = new vec4(pw.x / pw.w, pw.y / pw.w, pw.z / pw.w, 1);
             pw.x = (pw.x + 1.0f) / 2.0f * aw;
             pw.y = (pw.y + 1.0f) / 2.0f * ah;
             gl.DrawText((int)pw.x, (int)pw.y - mg - fs, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
 
-            vec4 ph = mproj * mview * new vec4(1, 0, -ViewParam.BOX_HEIGHT, 1);
+            vec4 ph = mproj * mview * new vec4(1, 0, -view.param.BOX_HEIGHT, 1);
             ph = new vec4(ph.x / ph.w, ph.y / ph.w, ph.z / ph.w, 1);
             ph.x = (ph.x + 1.0f) / 2.0f * aw;
             ph.y = (ph.y + 1.0f) / 2.0f * ah;
@@ -525,13 +525,13 @@ namespace ivm
             shader.SetUniformMatrix4(gl, "invProj", invProj.to_array());
             shader.SetUniformMatrix4(gl, "invModelView", invModelView.to_array());
 
-            shader.SetUniform3(gl, "BG_COLOR", ViewParam.BG_COLOR.x, ViewParam.BG_COLOR.y, ViewParam.BG_COLOR.z);
-            shader.SetUniform3(gl, "THRESHOLD_INTENSITY", ViewParam.THRESHOLD_INTENSITY.x, ViewParam.THRESHOLD_INTENSITY.y, ViewParam.THRESHOLD_INTENSITY.z);
-            shader.SetUniform3(gl, "ALPHA_WEIGHT", ViewParam.ALPHA_WEIGHT.x, ViewParam.ALPHA_WEIGHT.y, ViewParam.ALPHA_WEIGHT.z);
-            shader.SetUniform1(gl, "PER_PIXEl_ITERATION", ViewParam.PER_PIXEl_ITERATION);
-            shader.SetUniform1(gl, "BOX_HEIGHT", ViewParam.BOX_HEIGHT);
-            shader.SetUniform1(gl, "RENDER_MODE", ViewParam.RENDER_MODE);
-            shader.SetUniform1(gl, "IS_COLOCALIZATION", ViewParam.IS_COLOCALIZATION);
+            shader.SetUniform3(gl, "BG_COLOR", view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z);
+            shader.SetUniform3(gl, "THRESHOLD_INTENSITY", view.param.THRESHOLD_INTENSITY.x, view.param.THRESHOLD_INTENSITY.y, view.param.THRESHOLD_INTENSITY.z);
+            shader.SetUniform3(gl, "ALPHA_WEIGHT", view.param.ALPHA_WEIGHT.x, view.param.ALPHA_WEIGHT.y, view.param.ALPHA_WEIGHT.z);
+            shader.SetUniform1(gl, "PER_PIXEl_ITERATION", view.param.PER_PIXEl_ITERATION);
+            shader.SetUniform1(gl, "BOX_HEIGHT", view.param.BOX_HEIGHT);
+            shader.SetUniform1(gl, "RENDER_MODE", view.param.RENDER_MODE);
+            shader.SetUniform1(gl, "IS_COLOCALIZATION", view.param.IS_COLOCALIZATION);
 
             view.scene.tex3D.Bind(gl);
             

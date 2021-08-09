@@ -106,7 +106,7 @@ namespace ivm
         {
             textures[currentTexIdx].Unbind(gl);
 
-            if ((DateTime.Now - lastTick).TotalMilliseconds > ViewParam.TIMELAPSE_TEXTURE_DELAY)
+            if ((DateTime.Now - lastTick).TotalMilliseconds > view.param.TIMELAPSE_TEXTURE_DELAY)
             {
                 lastTick = DateTime.Now;
 

@@ -21,6 +21,7 @@ namespace ivm
     {
         public ViewScene scene = null;
         public ViewCamera camera = null;
+        public ViewParam param = null;
 
         OpenGL gl = null;
 
@@ -42,6 +43,7 @@ namespace ivm
         private void OpenGLControl_Initialized(object sender, OpenGLRoutedEventArgs args)
         {
             camera = new ViewCamera(this);
+            param = new ViewParam();
 
             // init Scene
             gl = args.OpenGL;
