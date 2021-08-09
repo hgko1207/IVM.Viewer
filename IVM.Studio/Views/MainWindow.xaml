@@ -197,6 +197,7 @@
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">
                         <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
+                            <ContentControl prism:RegionManager.RegionName="I3D3DViewPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="3D/4D Display" AllowClose="False">

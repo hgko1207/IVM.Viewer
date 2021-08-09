@@ -179,6 +179,7 @@
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3DDataParamPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\I3D3DViewPanel.cs" />
     <Compile Include="ViewModels\UserControls\I3DMainViewerViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3DImportPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
@@ -199,6 +200,9 @@
     </Compile>
     <Compile Include="Views\UserControls\I3DDataParamPanel.xaml.cs">
       <DependentUpon>I3DDataParamPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3D3DViewPanel.xaml.cs">
+      <DependentUpon>I3D3DViewPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\I3DMainViewer.xaml.cs">
       <DependentUpon>I3DMainViewer.xaml</DependentUpon>
@@ -252,6 +256,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\I3DDataParamPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\I3D3DViewPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
