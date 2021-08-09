@@ -13,6 +13,7 @@
             OpenGLDraw="OpenGLControl_Draw" 
             OpenGLInitialized="OpenGLControl_Initialized"
             Resized="OpenGLControl_Resized"
-            RenderContextType="FBO" />
+            RenderContextType="FBO"
+            RenderTrigger="Manual"/>
     </Grid>
 </UserControl>

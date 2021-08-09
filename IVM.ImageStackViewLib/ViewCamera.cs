@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using GlmNet;
 using System.Timers;
+using System.Windows.Threading;
 
 namespace ivm
 {
@@ -11,19 +12,13 @@ namespace ivm
         ImageStackView view = null;
 
         Point lastbtnPt = new Point(0, 0);
-        Timer tUpd; // 업데이트 타이머
-
+        
         public ViewCamera(ImageStackView v)
         {
             view = v;
-
-            tUpd = new Timer();
-            tUpd.Elapsed += new ElapsedEventHandler(UpdateTick);
-            tUpd.Interval = 1000 / 60; // 60 FPS
-            tUpd.Start();
         }
 
-        private void UpdateTick(object sender, ElapsedEventArgs e)
+        public void Update()
         {
             Rotate(ViewParam.CAMERA_VELOCITY.x, ViewParam.CAMERA_VELOCITY.y);
         }

@@ -1,5 +1,7 @@
 ﻿using SharpGL;
 using GlmNet;
+using System.Windows.Threading;
+using System;
 
 namespace ivm
 {
@@ -7,6 +9,7 @@ namespace ivm
     {
         ImageStackView view;
         OpenGL ogl;
+        DispatcherTimer tUpd; // 업데이트 타이머
 
         public ViewTex3D tex3D;
         public ViewAxis axis;
@@ -43,6 +46,17 @@ namespace ivm
             oblique = new ViewOblique(v);
             tex3D = new ViewTex3D(v);
             meta = new ViewMeta(v);
+
+            tUpd = new DispatcherTimer();
+            tUpd.Tick += UpdateTick;
+            tUpd.Start();
+        }
+
+        private void UpdateTick(object sender, EventArgs e)
+        {
+            view.camera.Update();
+
+            view.RenderTarget.DoRender();
         }
 
         public bool Open(OpenGL gl, string imgPath)
