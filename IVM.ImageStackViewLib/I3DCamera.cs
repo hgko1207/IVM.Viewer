@@ -7,13 +7,13 @@ using System.Windows.Threading;
 
 namespace ivm
 {
-    public class ViewCamera
+    public class I3DCamera
     {
         ImageStackView view = null;
 
         Point lastbtnPt = new Point(0, 0);
         
-        public ViewCamera(ImageStackView v)
+        public I3DCamera(ImageStackView v)
         {
             view = v;
         }

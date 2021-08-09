@@ -2,7 +2,7 @@
 
 namespace ivm
 {
-    public class ViewParam
+    public class I3DParam
     {
         // render
         public vec3 BG_COLOR = new vec3(0.0f, 0.0f, 0.0f);

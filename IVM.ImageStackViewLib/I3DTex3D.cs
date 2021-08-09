@@ -7,10 +7,9 @@ using System.Linq;
 
 namespace ivm
 {
-    public class ViewTex3D
+    public class I3DTex3D
     {
         ImageStackView view;
-        OpenGL ogl;
 
         List<Texture3D> textures;
         string imagePath = "";
@@ -18,7 +17,7 @@ namespace ivm
         int currentTexIdx = 0;
         DateTime lastTick = DateTime.Now;
 
-        public ViewTex3D(ImageStackView v)
+        public I3DTex3D(ImageStackView v)
         {
             view = v;
 
@@ -47,7 +46,7 @@ namespace ivm
             foreach (string imgpath in files)
             {
                 string ext = Path.GetExtension(imgpath).ToLower();
-                if (ViewConst.IN_IMG_EXTS.Contains(ext))
+                if (I3DConst.IN_IMG_EXTS.Contains(ext))
                     return true;
             }
 
@@ -57,15 +56,13 @@ namespace ivm
         private void Init()
         {
             foreach (Texture3D tex in textures)
-                tex.Delete(ogl);
+                tex.Delete(view.gl);
 
             textures.Clear();
         }
 
         public bool Load(OpenGL gl, string imgPath)
         {
-            ogl = gl;
-
             if (!Directory.Exists(imgPath))
                 return false;
 

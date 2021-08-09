@@ -8,7 +8,7 @@ using System;
 
 namespace ivm
 {
-    public class ViewOblique
+    public class I3DOblique
     {
         ImageStackView view = null;
 
@@ -26,7 +26,7 @@ namespace ivm
         // oblique shader
         ShaderProgram shader;
 
-        public ViewOblique(ImageStackView v)
+        public I3DOblique(ImageStackView v)
         {
             view = v;
 
@@ -45,8 +45,8 @@ namespace ivm
             shader.Create(gl,
                 ManifestResourceLoader.LoadTextFile(vert),
                 ManifestResourceLoader.LoadTextFile(frag), null);
-            shader.BindAttributeLocation(gl, VertexAttributes2.Position, "vPosition");
-            shader.BindAttributeLocation(gl, VertexAttributes2.TexCoord, "vTexCoord");
+            shader.BindAttributeLocation(gl, I3DVertexAttributes2.Position, "vPosition");
+            shader.BindAttributeLocation(gl, I3DVertexAttributes2.TexCoord, "vTexCoord");
         }
 
         public void UpdateMesh(OpenGL gl, mat4 mrot, float depth)
@@ -55,7 +55,7 @@ namespace ivm
             mat4 irot = glm.inverse(mrot);
             pdir = irot * pdir;
 
-            Plane pln = new Plane(pdir.x, pdir.y, pdir.z, pdir.w);
+            I3DPlane pln = new I3DPlane(pdir.x, pdir.y, pdir.z, pdir.w);
 
             vec3 aabb_min = new vec3(-1.0f, -1.0f, -view.param.BOX_HEIGHT);
             vec3 aabb_max = new vec3(1.0f, 1.0f, view.param.BOX_HEIGHT);
@@ -70,7 +70,7 @@ namespace ivm
             vertices[4] = new vec3(0, 0, 0);
             vertices[5] = new vec3(0, 0, 0);
 
-            ViewCommon.calc_plane_aabb_intersection_points(pln, aabb_min, aabb_max, ref vertices, ref vertCount);
+            I3DCommon.calc_plane_aabb_intersection_points(pln, aabb_min, aabb_max, ref vertices, ref vertCount);
 
             for (int i = 0; i < vertCount; ++i)
             {
@@ -95,10 +95,10 @@ namespace ivm
 
             // Create the vertex data buffer.
             vertexBuffer.Bind(gl);
-            vertexBuffer.SetData(gl, VertexAttributes2.Position, vertices.SelectMany(v => v.to_array()).ToArray(), false, 3);
+            vertexBuffer.SetData(gl, I3DVertexAttributes2.Position, vertices.SelectMany(v => v.to_array()).ToArray(), false, 3);
 
             uvsBuffer.Bind(gl);
-            uvsBuffer.SetData(gl, VertexAttributes2.TexCoord, uvs.SelectMany(v => v.to_array()).ToArray(), false, 3);
+            uvsBuffer.SetData(gl, I3DVertexAttributes2.TexCoord, uvs.SelectMany(v => v.to_array()).ToArray(), false, 3);
 
             vertArray.Unbind(gl);
         }
@@ -129,22 +129,22 @@ namespace ivm
 
         public void RenderDepthLine(OpenGL gl, mat4 mproj, mat4 mview, vec4 lcol, uint axis, float depth)
         {
-            if (axis == ViewAxisDirection.Z1)
+            if (axis == I3DAxisDirection.Z1)
             {
                 vertdepth[0] = new vec3(-1.0f, -1.0f, -depth);
                 vertdepth[1] = new vec3( 1.0f, -1.0f, -depth);
             }
-            else if (axis == ViewAxisDirection.Z2)
+            else if (axis == I3DAxisDirection.Z2)
             {
                 vertdepth[0] = new vec3( 1.0f, -1.0f, -depth);
                 vertdepth[1] = new vec3( 1.0f,  1.0f, -depth);
             }
-            else if (axis == ViewAxisDirection.X)
+            else if (axis == I3DAxisDirection.X)
             {
                 vertdepth[0] = new vec3(-1.0f, depth, view.param.BOX_HEIGHT);
                 vertdepth[1] = new vec3( 1.0f, depth, view.param.BOX_HEIGHT);
             }
-            else if (axis == ViewAxisDirection.Y)
+            else if (axis == I3DAxisDirection.Y)
             {
                 vertdepth[0] = new vec3(depth, -1.0f, view.param.BOX_HEIGHT);
                 vertdepth[1] = new vec3(depth,  1.0f, view.param.BOX_HEIGHT);

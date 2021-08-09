@@ -9,7 +9,7 @@ using GlmNet;
 
 namespace ivm
 {
-    public class ViewBox
+    public class I3DBox
     {
         ImageStackView view = null;
 
@@ -26,7 +26,7 @@ namespace ivm
         // volume shader
         ShaderProgram shader;
 
-        public ViewBox(ImageStackView v)
+        public I3DBox(ImageStackView v)
         {
             view = v;
         }
@@ -41,9 +41,9 @@ namespace ivm
             shader.Create(gl,
                 ManifestResourceLoader.LoadTextFile(vert),
                 ManifestResourceLoader.LoadTextFile(frag), null);
-            shader.BindAttributeLocation(gl, VertexAttributes1.Position, "vPosition");
-            shader.BindAttributeLocation(gl, VertexAttributes1.Normal, "vNormal");
-            shader.BindAttributeLocation(gl, VertexAttributes1.TexCoord, "vTexCoord");
+            shader.BindAttributeLocation(gl, I3DVertexAttributes1.Position, "vPosition");
+            shader.BindAttributeLocation(gl, I3DVertexAttributes1.Normal, "vNormal");
+            shader.BindAttributeLocation(gl, I3DVertexAttributes1.TexCoord, "vTexCoord");
         }
 
         public void CreateMesh(OpenGL gl)
@@ -300,17 +300,17 @@ namespace ivm
             var vertexBuffer = new VertexBuffer();
             vertexBuffer.Create(gl);
             vertexBuffer.Bind(gl);
-            vertexBuffer.SetData(gl, VertexAttributes1.Position, vertices.SelectMany(v => v.to_array()).ToArray(), false, 3);
+            vertexBuffer.SetData(gl, I3DVertexAttributes1.Position, vertices.SelectMany(v => v.to_array()).ToArray(), false, 3);
 
             var normalsBuffer = new VertexBuffer();
             normalsBuffer.Create(gl);
             normalsBuffer.Bind(gl);
-            normalsBuffer.SetData(gl, VertexAttributes1.Normal, normals.SelectMany(v => v.to_array()).ToArray(), false, 3);
+            normalsBuffer.SetData(gl, I3DVertexAttributes1.Normal, normals.SelectMany(v => v.to_array()).ToArray(), false, 3);
 
             var uvsBuffer = new VertexBuffer();
             uvsBuffer.Create(gl);
             uvsBuffer.Bind(gl);
-            uvsBuffer.SetData(gl, VertexAttributes1.TexCoord, uvs.SelectMany(v => v.to_array()).ToArray(), false, 3);
+            uvsBuffer.SetData(gl, I3DVertexAttributes1.TexCoord, uvs.SelectMany(v => v.to_array()).ToArray(), false, 3);
 
             vertArray.Unbind(gl);
         }

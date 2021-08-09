@@ -3,7 +3,7 @@ using GlmNet;
 
 namespace ivm
 {
-    public class ViewCommon
+    public class I3DCommon
     {
         public static float Deg2Rad(float deg)
         {
@@ -25,7 +25,7 @@ namespace ivm
         }
 
 
-        private static bool ray_to_plane(vec3 orig, vec3 dir, Plane pln, ref float OutT, ref float OutVD)
+        private static bool ray_to_plane(vec3 orig, vec3 dir, I3DPlane pln, ref float OutT, ref float OutVD)
         {
             OutVD = pln.a * dir.x + pln.b * dir.y + pln.c * dir.z;
             if (OutVD == 0.0f)
@@ -35,7 +35,7 @@ namespace ivm
             return true;
         }
 
-        private static void sort_points(ref vec3[] points, int point_count, Plane pln)
+        private static void sort_points(ref vec3[] points, int point_count, I3DPlane pln)
         {
             if (point_count == 0) 
                 return;
@@ -60,7 +60,7 @@ namespace ivm
         // Maximum out_point_count == 6, so out_points must point to 6-element array.
         // out_point_count == 0 mean no intersection.
         // out_points are not sorted.
-        public static void calc_plane_aabb_intersection_points(Plane pln, vec3 aabb_min, vec3 aabb_max,
+        public static void calc_plane_aabb_intersection_points(I3DPlane pln, vec3 aabb_min, vec3 aabb_max,
             ref vec3[] out_points, ref int out_point_count)
         {
             out_point_count = 0;

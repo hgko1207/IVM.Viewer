@@ -19,11 +19,10 @@ namespace ivm
     /// </summary>
     public partial class ImageStackView : UserControl
     {
-        public ViewScene scene = null;
-        public ViewCamera camera = null;
-        public ViewParam param = null;
-
-        OpenGL gl = null;
+        public I3DScene scene = null;
+        public I3DCamera camera = null;
+        public I3DParam param = null;
+        public OpenGL gl = null;
 
         public ImageStackView()
         {
@@ -42,12 +41,12 @@ namespace ivm
 
         private void OpenGLControl_Initialized(object sender, OpenGLRoutedEventArgs args)
         {
-            camera = new ViewCamera(this);
-            param = new ViewParam();
+            camera = new I3DCamera(this);
+            param = new I3DParam();
 
             // init Scene
             gl = args.OpenGL;
-            scene = new ViewScene(this);
+            scene = new I3DScene(this);
             scene.Init(gl);
             scene.UpdateModelviewMatrix();
         }

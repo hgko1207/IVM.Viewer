@@ -5,17 +5,16 @@ using System;
 
 namespace ivm
 {
-    public class ViewScene
+    public class I3DScene
     {
         ImageStackView view;
-        OpenGL ogl;
         DispatcherTimer tUpd; // 업데이트 타이머
 
-        public ViewTex3D tex3D;
-        public ViewAxis axis;
-        public ViewBox box;
-        public ViewOblique oblique;
-        public ViewMeta meta;
+        public I3DTex3D tex3D;
+        public I3DAxis axis;
+        public I3DBox box;
+        public I3DOblique oblique;
+        public I3DMeta meta;
 
         bool loadedTexture = false;
         bool loadedMeta = false;
@@ -37,15 +36,15 @@ namespace ivm
         mat4 matSliceXView = mat4.identity();
         mat4 matSliceXRot = mat4.identity();
 
-        public ViewScene(ImageStackView v)
+        public I3DScene(ImageStackView v)
         {
             view = v;
 
-            axis = new ViewAxis(v);
-            box = new ViewBox(v);
-            oblique = new ViewOblique(v);
-            tex3D = new ViewTex3D(v);
-            meta = new ViewMeta(v);
+            axis = new I3DAxis(v);
+            box = new I3DBox(v);
+            oblique = new I3DOblique(v);
+            tex3D = new I3DTex3D(v);
+            meta = new I3DMeta(v);
 
             tUpd = new DispatcherTimer();
             tUpd.Tick += UpdateTick;
@@ -61,8 +60,6 @@ namespace ivm
 
         public bool Open(OpenGL gl, string imgPath)
         {
-            ogl = gl;
-
             loadedMeta = meta.Load(imgPath);
             loadedTexture = tex3D.Load(gl, imgPath);
 
@@ -78,13 +75,13 @@ namespace ivm
 
         public void SetRenderMode(uint m)
         {
-            if (m == ViewRenderMode.SLICE)
+            if (m == I3DRenderMode.SLICE)
             {
-                UpdateHeight(ogl, 0.25f);
+                UpdateHeight(view.gl, 0.25f);
             }
             else
             {
-                UpdateHeight(ogl);
+                UpdateHeight(view.gl);
             }
         }
 
@@ -123,14 +120,14 @@ namespace ivm
             float ry = view.param.CAMERA_ANGLE.y;
 
             // camera transform
-            mat4 viewRot = glm.rotate(mat4.identity(), ViewCommon.Deg2Rad(0), new vec3(1, 0, 0));
+            mat4 viewRot = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(0), new vec3(1, 0, 0));
             mat4 viewTrn = glm.translate(mat4.identity(), view.param.CAMERA_POS);
             mat4 viewMatrix = viewTrn * viewRot;
 
             // world transform
             mat4 scale = glm.scale(mat4.identity(), new vec3(s, s, s));
-            mat4 rotY = glm.rotate(mat4.identity(), ViewCommon.Deg2Rad(ry), new vec3(1, 0, 0));
-            mat4 rotZ = glm.rotate(mat4.identity(), ViewCommon.Deg2Rad(rx), new vec3(0, 0, 1));
+            mat4 rotY = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(ry), new vec3(1, 0, 0));
+            mat4 rotZ = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(rx), new vec3(0, 0, 1));
             mat4 modelMatrix = scale * rotY * rotZ;
             matModelView = viewMatrix * modelMatrix;
             matModelRot = rotY * rotZ;
@@ -144,12 +141,12 @@ namespace ivm
             matSliceZView = vtz * viewRot * sls;
             matSliceZRot = mat4.identity();
 
-            mat4 sry = glm.rotate(mat4.identity(), ViewCommon.Deg2Rad(-90), new vec3(0, 1, 0));
+            mat4 sry = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(-90), new vec3(0, 1, 0));
             mat4 vty = glm.translate(mat4.identity(), new vec3(sx + 0.35f, sy, -5));
             matSliceYView = vty * viewRot * sls * sry;
             matSliceYRot = sry;
 
-            mat4 srx = glm.rotate(mat4.identity(), ViewCommon.Deg2Rad(-90), new vec3(1, 0, 0));
+            mat4 srx = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(-90), new vec3(1, 0, 0));
             mat4 vtx = glm.translate(mat4.identity(), new vec3(sx, sy - 0.35f, -5));
             matSliceXView = vtx * viewRot * sls * srx;
             matSliceXRot = srx;
@@ -194,7 +191,7 @@ namespace ivm
             gl.ClearColor(view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z, 1.0f);
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
 
-            if (view.param.RENDER_MODE == ViewRenderMode.SLICE)
+            if (view.param.RENDER_MODE == I3DRenderMode.SLICE)
             {
                 oblique.RenderOblique(gl, matProjOrtho, matSliceZView, matSliceZRot, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
                 oblique.RenderOblique(gl, matProjOrtho, matSliceYView, matSliceYRot, view.param.SLICE_DEPTH.y);
@@ -206,10 +203,10 @@ namespace ivm
                     box.RenderOutline(gl, matProjOrtho, matSliceYView, view.param.SLICE_LINE_COLOR_Y);
                     box.RenderOutline(gl, matProjOrtho, matSliceXView, view.param.SLICE_LINE_COLOR_X);
 
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_X, ViewAxisDirection.X, view.param.SLICE_DEPTH.x);
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_Y, ViewAxisDirection.Y, view.param.SLICE_DEPTH.y);
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceXView, view.param.SLICE_LINE_COLOR_Z, ViewAxisDirection.Z1, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
-                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceYView, view.param.SLICE_LINE_COLOR_Z, ViewAxisDirection.Z2, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_X, I3DAxisDirection.X, view.param.SLICE_DEPTH.x);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceZView, view.param.SLICE_LINE_COLOR_Y, I3DAxisDirection.Y, view.param.SLICE_DEPTH.y);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceXView, view.param.SLICE_LINE_COLOR_Z, I3DAxisDirection.Z1, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
+                    oblique.RenderDepthLine(gl, matProjOrtho, matSliceYView, view.param.SLICE_LINE_COLOR_Z, I3DAxisDirection.Z2, view.param.SLICE_DEPTH.z * view.param.BOX_HEIGHT);
                 }
 
                 // grid-text
@@ -226,9 +223,9 @@ namespace ivm
                     box.RenderOutline(gl, matProj, matGridView, view.param.BOX_COLOR);
 
                 // 3d-volume rendering
-                if (view.param.RENDER_MODE == ViewRenderMode.BLEND || view.param.RENDER_MODE == ViewRenderMode.ADDED)
+                if (view.param.RENDER_MODE == I3DRenderMode.BLEND || view.param.RENDER_MODE == I3DRenderMode.ADDED)
                     box.RenderVolume3D(gl, matProj, matModelView);
-                else if (view.param.RENDER_MODE == ViewRenderMode.OBLIQUE)
+                else if (view.param.RENDER_MODE == I3DRenderMode.OBLIQUE)
                     oblique.RenderOblique(gl, matProj, matModelView, matModelRot, view.param.OBLIQUE_DEPTH);
                 
                 // grid-text

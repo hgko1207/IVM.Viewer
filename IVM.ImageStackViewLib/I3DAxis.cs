@@ -4,14 +4,14 @@ using GlmNet;
 
 namespace ivm
 {
-    public class ViewAxis
+    public class I3DAxis
     {
         ImageStackView view;
 
         vec3[] vertices;
         const int vertCount = 6;
 
-        public ViewAxis(ImageStackView v)
+        public I3DAxis(ImageStackView v)
         {
             view = v;
         }

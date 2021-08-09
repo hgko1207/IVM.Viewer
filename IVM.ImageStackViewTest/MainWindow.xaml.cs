@@ -238,8 +238,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            vw.param.RENDER_MODE = ViewRenderMode.BLEND;
-            vw.scene.SetRenderMode(ViewRenderMode.BLEND);
+            vw.param.RENDER_MODE = I3DRenderMode.BLEND;
+            vw.scene.SetRenderMode(I3DRenderMode.BLEND);
         }
 
         private void RenderModeAdded_Click(object sender, RoutedEventArgs e)
@@ -247,8 +247,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            vw.param.RENDER_MODE = ViewRenderMode.ADDED;
-            vw.scene.SetRenderMode(ViewRenderMode.ADDED);
+            vw.param.RENDER_MODE = I3DRenderMode.ADDED;
+            vw.scene.SetRenderMode(I3DRenderMode.ADDED);
         }
 
         private void RenderModeOblique_Click(object sender, RoutedEventArgs e)
@@ -256,8 +256,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            vw.param.RENDER_MODE = ViewRenderMode.OBLIQUE;
-            vw.scene.SetRenderMode(ViewRenderMode.OBLIQUE);
+            vw.param.RENDER_MODE = I3DRenderMode.OBLIQUE;
+            vw.scene.SetRenderMode(I3DRenderMode.OBLIQUE);
         }
 
         private void RenderModeSlice_Click(object sender, RoutedEventArgs e)
@@ -265,8 +265,8 @@ namespace ivm
             if (vw.scene == null)
                 return;
 
-            vw.param.RENDER_MODE = ViewRenderMode.SLICE;
-            vw.scene.SetRenderMode(ViewRenderMode.SLICE);
+            vw.param.RENDER_MODE = I3DRenderMode.SLICE;
+            vw.scene.SetRenderMode(I3DRenderMode.SLICE);
         }
 
         private void SliceXSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

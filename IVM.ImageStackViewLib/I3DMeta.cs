@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ivm
 {
-    public class ViewMeta
+    public class I3DMeta
     {
         ImageStackView view;
 
@@ -18,7 +18,7 @@ namespace ivm
         public float pixelPerUM_Y;
         public float pixelPerUM_Z;
 
-        public ViewMeta(ImageStackView v)
+        public I3DMeta(ImageStackView v)
         {
             view = v;
         }
@@ -57,11 +57,11 @@ namespace ivm
                     while ((l = sr.ReadLine()) != null)
                     {
                         List<string> vals = l.Split(',').ToList();
-                        int vStageZ = ViewCommon.IntParse(vals[iStageZ]);
-                        int vFovX = ViewCommon.IntParse(vals[iFovX]);
-                        int vFovY = ViewCommon.IntParse(vals[iFovY]);
-                        int vXpixel = ViewCommon.IntParse(vals[iXpixel]);
-                        int vYpixel = ViewCommon.IntParse(vals[iYpixel]);
+                        int vStageZ = I3DCommon.IntParse(vals[iStageZ]);
+                        int vFovX = I3DCommon.IntParse(vals[iFovX]);
+                        int vFovY = I3DCommon.IntParse(vals[iFovY]);
+                        int vXpixel = I3DCommon.IntParse(vals[iXpixel]);
+                        int vYpixel = I3DCommon.IntParse(vals[iYpixel]);
 
                         //Console.WriteLine("{0} {1} {2} {3} {4}", vStageZ, vFovX, vFovY, vXpixel, vYpixel);
 

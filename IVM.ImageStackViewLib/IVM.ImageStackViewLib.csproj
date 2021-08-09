@@ -70,17 +70,17 @@
     <Compile Include="Extensions\ManifestResourceLoader.cs" />
     <Compile Include="Extensions\Texture3D.cs" />
     <Compile Include="Extensions\Texture2D.cs" />
-    <Compile Include="ViewAxis.cs" />
-    <Compile Include="ViewMeta.cs" />
-    <Compile Include="ViewPlane.cs" />
-    <Compile Include="ViewOblique.cs" />
-    <Compile Include="ViewCamera.cs" />
-    <Compile Include="ViewBox.cs" />
-    <Compile Include="ViewCommon.cs" />
-    <Compile Include="ViewParam.cs" />
-    <Compile Include="ViewConst.cs" />
-    <Compile Include="ViewScene.cs" />
-    <Compile Include="ViewTex3D.cs" />
+    <Compile Include="I3DAxis.cs" />
+    <Compile Include="I3DMeta.cs" />
+    <Compile Include="I3DPlane.cs" />
+    <Compile Include="I3DOblique.cs" />
+    <Compile Include="I3DCamera.cs" />
+    <Compile Include="I3DBox.cs" />
+    <Compile Include="I3DCommon.cs" />
+    <Compile Include="I3DParam.cs" />
+    <Compile Include="I3DConst.cs" />
+    <Compile Include="I3DScene.cs" />
+    <Compile Include="I3DTex3D.cs" />
     <Page Include="ImageStackView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
