@@ -39,7 +39,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref visible, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -57,7 +57,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref color, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -70,33 +70,33 @@ namespace IVM.Studio.Models
                 if (SetProperty(ref display, value))
                 {
                     if (value)
-                        ContainerExtension.Resolve<WindowByChannelService>().ShowDisplay(Index, AlwaysTopEnabled);
+                        containerExtension.Resolve<WindowByChannelService>().ShowDisplay(Index, AlwaysTopEnabled);
                     else
-                        ContainerExtension.Resolve<WindowByChannelService>().CloseDisplay(Index);
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                        containerExtension.Resolve<WindowByChannelService>().CloseDisplay(Index);
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
                 }
             }
         }
 
-        private float _Brightness;
+        private float brightness;
         public float Brightness
         {
-            get => _Brightness;
+            get => brightness;
             set
             {
-                if (SetProperty(ref _Brightness, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                if (SetProperty(ref brightness, value))
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
-        private float _Contrast;
+        private float contrast;
         public float Contrast
         {
-            get => _Contrast;
+            get => contrast;
             set
             {
-                if (SetProperty(ref _Contrast, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                if (SetProperty(ref contrast, value))
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -107,7 +107,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref colorMap, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -118,7 +118,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref colorMapEnabled, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
@@ -129,7 +129,7 @@ namespace IVM.Studio.Models
             set
             {
                 if (SetProperty(ref alwaysTopEnabled, value))
-                    ContainerExtension.Resolve<WindowByChannelService>().ChangeOwner(Index, value);
+                    containerExtension.Resolve<WindowByChannelService>().ChangeOwner(Index, value);
             }
         }
 
@@ -142,9 +142,9 @@ namespace IVM.Studio.Models
                 if (SetProperty(ref histogram, value))
                 {
                     if (value)
-                        ContainerExtension.Resolve<WindowByHistogramService>().ShowDisplay(ChannelType, AlwaysTopEnabled);
+                        containerExtension.Resolve<WindowByHistogramService>().ShowDisplay(ChannelType, AlwaysTopEnabled);
                     else
-                        ContainerExtension.Resolve<WindowByHistogramService>().CloseDisplay(Index);
+                        containerExtension.Resolve<WindowByHistogramService>().CloseDisplay(Index);
                 }
             }
         }
@@ -157,40 +157,40 @@ namespace IVM.Studio.Models
         }
 
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 낮은 쪽 값입니다.</summary>
-        private int _ColorLevelLowerValue;
+        private int colorLevelLowerValue;
         public int ColorLevelLowerValue
         {
-            get => _ColorLevelLowerValue;
+            get => colorLevelLowerValue;
             set
             {
-                if (SetProperty(ref _ColorLevelLowerValue, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                if (SetProperty(ref colorLevelLowerValue, value))
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
         /// <summary>이미지 컬러 레벨값을 지정하는 범위의 높은 쪽 값입니다.</summary>
-        private int _ColorLevelUpperValue;
+        private int colorLevelUpperValue;
         public int ColorLevelUpperValue
         {
-            get => _ColorLevelUpperValue;
+            get => colorLevelUpperValue;
             set
             {
-                if (SetProperty(ref _ColorLevelUpperValue, value))
-                    EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
+                if (SetProperty(ref colorLevelUpperValue, value))
+                    eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
             }
         }
 
-        public IContainerExtension ContainerExtension;
-        public IEventAggregator EventAggregator;
+        private IContainerExtension containerExtension;
+        private IEventAggregator eventAggregator;
 
         private DataManager dataManager;
 
         public ColorChannelModel(ChannelType type, string channelName, bool visible, Colors color, bool display, float brightness, float contrast, 
                 int lowerLevel, int upperLevel, IContainerExtension containerExtension, IEventAggregator eventAggregator)
         {
-            this.ContainerExtension = containerExtension;
-            this.EventAggregator = eventAggregator;
-            dataManager = containerExtension.Resolve<DataManager>();
+            this.containerExtension = containerExtension;
+            this.eventAggregator = eventAggregator;
+            this.dataManager = containerExtension.Resolve<DataManager>();
 
             this.Index = (int) type;
             this.ChannelType = type;
@@ -198,11 +198,11 @@ namespace IVM.Studio.Models
             this.visible = visible;
             this.color = color;
             this.display = display;
-            this._Brightness = brightness;
-            this._Contrast = contrast;
+            this.brightness = brightness;
+            this.contrast = contrast;
             this.colorMap = ColorMap.Hot;
-            this._ColorLevelLowerValue = lowerLevel;
-            this._ColorLevelUpperValue = upperLevel;
+            this.colorLevelLowerValue = lowerLevel;
+            this.colorLevelUpperValue = upperLevel;
             this.alwaysTopEnabled = true;
 
             eventAggregator.GetEvent<ChViewerWindowCloseEvent>().Subscribe(ClosedDisplay);
@@ -224,31 +224,41 @@ namespace IVM.Studio.Models
                 SetProperty(ref display, false, nameof(Display));
         }
 
-        public bool UpdateBrightnessWithoutRefresh(float brightness)
+        public bool UpdateBrightnessWithoutRefresh(float value)
         {
-            return SetProperty(ref _Brightness, brightness, nameof(Brightness));
+            return base.SetProperty(ref this.brightness, value, nameof(Brightness));
         }
 
-        public bool UpdateContrastWithoutRefresh(float contrast)
+        public bool UpdateContrastWithoutRefresh(float value)
         {
-            return SetProperty(ref _Contrast, contrast, nameof(Contrast));
+            return SetProperty(ref contrast, value, nameof(Contrast));
         }
 
-        public bool UpdateColorLevelUpperWithoutRefresh(int colorLevelUpperValue)
+        public bool UpdateColorLevelUpperWithoutRefresh(int value)
         {
-            return SetProperty(ref _ColorLevelUpperValue, colorLevelUpperValue, nameof(ColorLevelUpperValue));
+            return SetProperty(ref colorLevelUpperValue, value, nameof(ColorLevelUpperValue));
         }
 
-        public bool UpdateColorLevelLowerWithoutRefresh(int colorLevelLowerValue)
+        public bool UpdateColorLevelLowerWithoutRefresh(int value)
         {
-            return SetProperty(ref _ColorLevelLowerValue, colorLevelLowerValue, nameof(ColorLevelLowerValue));
+            return SetProperty(ref colorLevelLowerValue, value, nameof(ColorLevelLowerValue));
         }
 
+        /// <summary>
+        /// Visible SetProperty
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool SetPropertyVisible(bool value)
         {
             return SetProperty(ref visible, value, nameof(Visible));
         }
 
+        /// <summary>
+        /// Color SetProperty
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="init"></param>
         public void SetPropertyColor(Colors value, bool init)
         {
             if (init)

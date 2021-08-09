@@ -9,7 +9,6 @@
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
-        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         xmlns:util="clr-namespace:IVM.Studio.Utils"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"

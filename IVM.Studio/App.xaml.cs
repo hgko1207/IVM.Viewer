@@ -28,7 +28,6 @@ namespace IVM.Studio
 
             //Dark color variation  
             //Telerik.Windows.Controls.Office2019Palette.LoadPreset(Telerik.Windows.Controls.Office2019Palette.ColorVariation.Dark);
-
             Telerik.Windows.Controls.FluentPalette.LoadPreset(Telerik.Windows.Controls.FluentPalette.ColorVariation.Dark);
 
             base.OnStartup(e);

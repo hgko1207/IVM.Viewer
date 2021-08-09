@@ -15,6 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>게시\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,7 +28,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -457,9 +457,6 @@
   <ItemGroup>
     <Resource Include="Resources\Images\reflect_vertical_bottom.png" />
     <Resource Include="Resources\Images\reflect_vertical_top.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\crop_circle.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Play_16x16.png" />
