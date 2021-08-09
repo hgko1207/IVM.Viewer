@@ -95,6 +95,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private bool verticalReflect;
         private int currentRotate;
 
+        private FileInfo fileInfo;
         private FileInfo fileToDisplay;
 
         private ImageService imageService { get; set; }
@@ -231,14 +232,23 @@ namespace IVM.Studio.ViewModels.UserControls
                 fovSizeY = 0;
             }
 
-            FileInfo file = param.FileInfo;
+            if (fileInfo == null)
+            {
+                fileInfo = param.FileInfo;
+            } 
+            else
+            {
+                if (view.WindowId == dataManager.MainWindowId)
+                    fileInfo = param.FileInfo;
+            }
+
             // 레지스트레이션 체크
-            FileInfo registrationFile = new FileInfo(Path.Combine(file.DirectoryName, Path.GetFileNameWithoutExtension(file.Name) + "_Reg" + file.Extension));
+            FileInfo registrationFile = new FileInfo(Path.Combine(fileInfo.DirectoryName, Path.GetFileNameWithoutExtension(fileInfo.Name) + "_Reg" + fileInfo.Extension));
 
             if (registrationFile.Exists)
                 fileToDisplay = registrationFile;
             else
-                fileToDisplay = file;
+                fileToDisplay = fileInfo;
 
             // 어노테이션 초기화
             annotationImage?.Dispose();

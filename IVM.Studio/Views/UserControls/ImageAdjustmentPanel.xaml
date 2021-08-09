@@ -126,8 +126,8 @@
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Ch." HorizontalAlignment="Center"/>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="Hist." HorizontalAlignment="Center"/>
 
-                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource ToggleButton}" Content="All" IsChecked="{Binding AllWindowOpend}" />
-                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="All" IsChecked="{Binding AllHistogramOpend}"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource GrayGradientButton}" Content="ALL" Command="{Binding AllChannelOpenCommand}"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="ALL" IsChecked="{Binding AllHistogramOpend}"/>
             </Grid>
         </Grid>
 

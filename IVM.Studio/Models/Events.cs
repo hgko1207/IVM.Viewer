@@ -16,12 +16,10 @@ using System.IO;
  */
 namespace IVM.Studio.Models.Events
 {
-    public class MainViewerOpendEvent : PubSubEvent { }
-    /// <summary> 메인 뷰어 윈도우를 종료 할때 </summary>
-    public class MainViewerCloseEvent : PubSubEvent { }
     /// <summary> 메인 뷰어 윈도우가 종료 될때 </summary>
     public class MainViewerClosedEvent : PubSubEvent { }
     public class MainViewerUnloadEvent : PubSubEvent<int> { }
+    public class MainWindowDeactivatedEvent : PubSubEvent<int> { }
 
     /// <summary> 메인 Viewer를 변경 할 때 </summary>
     public class ViewerPageChangeEvent : PubSubEvent { }

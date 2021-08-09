@@ -66,15 +66,12 @@ namespace IVM.Studio.ViewModels
             view.Deactivated += WindowDeactivated;
 
             EventAggregator.GetEvent<ViewerPageChangeEvent>().Subscribe(ViewerPageChange);
-            EventAggregator.GetEvent<MainViewerCloseEvent>().Subscribe(() => view.Close());
+            EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Subscribe(MainWindowDeactivated);
 
             videoPage = new VideoViewer() { WindowId = view.WindowId };
             imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId };
 
             InitViewerChanged();
-
-            dataManager.MainViewerOpend = true;
-            EventAggregator.GetEvent<MainViewerOpendEvent>().Publish();
         }
 
         /// <summary>
@@ -84,9 +81,7 @@ namespace IVM.Studio.ViewModels
         public void OnUnloaded(MainViewerWindow view)
         {
             EventAggregator.GetEvent<MainViewerUnloadEvent>().Publish(view.WindowId);
-
             EventAggregator.GetEvent<ViewerPageChangeEvent>().Unsubscribe(ViewerPageChange);
-            EventAggregator.GetEvent<MainViewerCloseEvent>().Unsubscribe(() => this.view.Close());
         }
 
         /// <summary>
@@ -128,6 +123,8 @@ namespace IVM.Studio.ViewModels
             if (view.IsActive)
             {
                 dataManager.MainWindowId = view.WindowId;
+                EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Publish(view.WindowId);
+                view.ActivatedBorder.BorderThickness = new Thickness(1);
             }
         }
 
@@ -141,13 +138,24 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
+        /// 다른 창이 활성화 될 때
+        /// </summary>
+        /// <param name="windowId"></param>
+        private void MainWindowDeactivated(int windowId)
+        {
+            if (windowId == dataManager.MainWindowId)
+            {
+                view.ActivatedBorder.BorderThickness = new Thickness(0);
+            }
+        }
+
+        /// <summary>
         /// Window 종료 시킬 때
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void WindowClosed(object sender, EventArgs e)
         {
-            dataManager.MainViewerOpend = false;
             EventAggregator.GetEvent<MainViewerClosedEvent>().Publish();
         }
     }

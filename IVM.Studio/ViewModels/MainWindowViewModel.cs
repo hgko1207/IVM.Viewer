@@ -16,7 +16,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 /**
@@ -129,7 +128,7 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("AnnotationPanel", typeof(AnnotationPanel));
             RegionManager.RegisterViewWithRegion("ColormapPanel", typeof(ColormapPanel));
             RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControlPanel));
-            RegionManager.RegisterViewWithRegion("ThumbnailPanel", typeof(ThumbnailPanel));
+            //RegionManager.RegisterViewWithRegion("ThumbnailPanel", typeof(ThumbnailPanel));
             RegionManager.RegisterViewWithRegion("ChannelProcessingPanel", typeof(ChannelProcessingPanel));
             RegionManager.RegisterViewWithRegion("PostProcessingPanel", typeof(PostProcessingPanel));
             RegionManager.RegisterViewWithRegion("RotateCropPanel", typeof(RotateCropPanel));
@@ -324,7 +323,9 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void WindowOpen()
         {
-            MainViewerWindow mainViewerWindow = new MainViewerWindow() { Owner = Application.Current.MainWindow, WindowId = ++dataManager.MainWindowSeq };
+            WindowInfo windowInfo = new WindowInfo() { Name = SelectedSlideInfo.Name, Seq = ++dataManager.MainWindowSeq };
+
+            MainViewerWindow mainViewerWindow = new MainViewerWindow(windowInfo) { Owner = Application.Current.MainWindow };
             mainViewerWindow.Show();
 
             if (currentFile != null)

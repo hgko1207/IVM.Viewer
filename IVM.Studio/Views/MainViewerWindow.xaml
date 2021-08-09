@@ -8,9 +8,9 @@
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="735" Width="1000" Left="720" Top="70">
-    
-    <Grid>
+        Title="{Binding Title}" Height="1000" Width="1000">
+
+    <Border x:Name="ActivatedBorder" BorderBrush="#FFC000">
         <Frame NavigationUIVisibility="Hidden" Content="{Binding ViewerPage}" />
-    </Grid>
+    </Border>
 </dx:ThemedWindow>
