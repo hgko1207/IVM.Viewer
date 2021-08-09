@@ -136,6 +136,7 @@ namespace IVM.Studio.ViewModels
 
             // 3D-Panels
             RegionManager.RegisterViewWithRegion("I3DImportPanel", typeof(I3DImportPanel));
+            RegionManager.RegisterViewWithRegion("I3DDataParamPanel", typeof(I3DDataParamPanel));
             RegionManager.RegisterViewWithRegion("I3DMainViewer", typeof(I3DMainViewer));
 
             dataManager = container.Resolve<DataManager>();

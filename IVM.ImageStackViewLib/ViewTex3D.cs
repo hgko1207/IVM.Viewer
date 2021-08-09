@@ -10,6 +10,7 @@ namespace ivm
     public class ViewTex3D
     {
         ImageStackView view;
+        OpenGL ogl;
 
         List<Texture3D> textures;
         string imagePath = "";
@@ -53,10 +54,22 @@ namespace ivm
             return false;
         }
 
+        private void Init()
+        {
+            foreach (Texture3D tex in textures)
+                tex.Delete(ogl);
+
+            textures.Clear();
+        }
+
         public bool Load(OpenGL gl, string imgPath)
         {
+            ogl = gl;
+
             if (!Directory.Exists(imgPath))
                 return false;
+
+            Init();
 
             // try load 4D
             if (!IsValidTexturePath(imgPath))

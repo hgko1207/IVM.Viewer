@@ -7,13 +7,19 @@
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
-             xmlns:utils="clr-namespace:IVM.Studio.Utils"
              xmlns:models="clr-namespace:IVM.Studio.Models"
+             xmlns:util="clr-namespace:IVM.Studio.Utils"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <util:IndexFromOneConverter x:Key="IndexFromOneConverter"/>
+        <dx:Format x:Key="valueFormat" Foreground="Gray" />
+    </UserControl.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -32,7 +38,7 @@
                                      Command="{Binding OpenFolderCommand}"
                                      Width="80" Height="28" Content="Select" Margin="15 0 0 0"/>
                     <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
-                        <TextBlock Style="{StaticResource GeneralTextBlock}" Text="" />
+                        <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding CurrentImgPath}" TextAlignment="Left" />
                     </Border>
                 </DockPanel>
             </DockPanel>
@@ -45,11 +51,13 @@
                 <TextBlock DockPanel.Dock="Left" Text="3D Data List" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
                 <StackPanel HorizontalAlignment="Right">
                     <dx:SimpleButton Content="Show" Style="{StaticResource GrayGradientButton}" 
-                                     Width="80" Height="28" VerticalAlignment="Center"/>
+                                     Width="80" Height="28" VerticalAlignment="Center"
+                                     Command="{Binding OpenSelectedCommand}"/>
                 </StackPanel>
             </DockPanel>
 
-            <dxg:GridControl Height="145" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 8 0 8">
+            <dxg:GridControl Height="145" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 8 0 8"
+                             ItemsSource="{Binding ImgPathCollection}" CurrentItem="{Binding SelectedImgInfo}" SelectedItem="{Binding SelectedImgInfo}">
                 <dxg:GridControl.View>
                     <dxg:TableView />
                 </dxg:GridControl.View>
@@ -57,31 +65,14 @@
                     <dxg:GridColumn Width="50" Header="#">
                         <dxg:GridColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                                           Text="{Binding RowData.RowHandle.Value, Converter={StaticResource IndexFromOneConverter}}" />
                             </DataTemplate>
                         </dxg:GridColumn.CellTemplate>
                     </dxg:GridColumn>
                     <dxg:GridColumn Header="Path" Width="2*" FieldName="Path"/>
                 </dxg:GridControl.Columns>
             </dxg:GridControl>
-
-            <!--<dxg:GridControl ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="10 10 10 0" Grid.ColumnSpan="2">
-                <dxg:GridControl.View>
-                    <dxg:TableView AllowScrollToFocusedRow="True" AllowSorting="False" AllowPerPixelScrolling="True" AllowScrollAnimation="True" />
-                </dxg:GridControl.View>
-
-                <dxg:GridControl.Columns>
-                    <dxg:GridColumn Width="50" Header="#">
-                        <dxg:GridColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </dxg:GridColumn.CellTemplate>
-                    </dxg:GridColumn>
-                    <dxg:GridColumn Header="Category" Width="*" FieldName="Category"/>
-                    <dxg:GridColumn Header="Filename" Width="2*" FieldName="Name"/>
-                </dxg:GridControl.Columns>
-            </dxg:GridControl>-->
         </StackPanel>
     </Grid>
 

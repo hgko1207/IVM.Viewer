@@ -6,6 +6,7 @@ using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using static IVM.Studio.Models.Common;
 
@@ -15,7 +16,29 @@ namespace IVM.Studio.ViewModels.UserControls
     {
         public ICommand OpenFolderCommand { get; private set; }
 
-        private string currentSlidesPath;
+        private string currentImgPath;
+
+        public string CurrentImgPath
+        {
+            get => currentImgPath;
+            set => SetProperty(ref currentImgPath, value);
+        }
+
+        private ObservableCollection<I3DPathInfo> imgPathCollection = new ObservableCollection<I3DPathInfo>();
+        public ObservableCollection<I3DPathInfo> ImgPathCollection
+        {
+            get => imgPathCollection;
+            set => SetProperty(ref imgPathCollection, value);
+        }
+
+        private I3DPathInfo selectedImgInfo;
+        public I3DPathInfo SelectedImgInfo
+        {
+            get => selectedImgInfo;
+            set => SetProperty(ref selectedImgInfo, value);
+        }
+
+        public ICommand OpenSelectedCommand { get; private set; }
 
         /// <summary>
         /// 생성자
@@ -24,18 +47,29 @@ namespace IVM.Studio.ViewModels.UserControls
         public I3DImportPanelViewModel(IContainerExtension container) : base(container)
         {
             OpenFolderCommand = new DelegateCommand(OpenFolder);
+            OpenSelectedCommand = new DelegateCommand(OpenSelected);
         }
 
         private void OpenFolder()
         {
             VistaFolderBrowserDialog folderBrowserDialog = new VistaFolderBrowserDialog();
-            if (!string.IsNullOrEmpty(currentSlidesPath))
-                folderBrowserDialog.SelectedPath = currentSlidesPath;
+            if (!string.IsNullOrEmpty(CurrentImgPath))
+                folderBrowserDialog.SelectedPath = CurrentImgPath;
 
             if (folderBrowserDialog.ShowDialog().GetValueOrDefault())
-                currentSlidesPath = folderBrowserDialog.SelectedPath;
+                CurrentImgPath = folderBrowserDialog.SelectedPath;
 
-            EventAggregator.GetEvent<I3DOpenEvent>().Publish(currentSlidesPath);
+            I3DPathInfo pathInfo = new I3DPathInfo() { Path = CurrentImgPath };
+            ImgPathCollection.Add(pathInfo);
+
+            EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
+        }
+
+        private void OpenSelected()
+        {
+            CurrentImgPath = SelectedImgInfo.Path;
+
+            EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
         }
     }
 }

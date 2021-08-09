@@ -191,14 +191,15 @@
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="3D Data Parameter" AllowClose="False">
+                            <ContentControl prism:RegionManager.RegionName="I3DDataParamPanel"/>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">
-                        <dxdo:DocumentPanel Caption="3D/4D Display" AllowClose="False">
+                        <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
+                        <dxdo:DocumentPanel Caption="3D/4D Display" AllowClose="False">
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Slice Viewer" AllowClose="False">

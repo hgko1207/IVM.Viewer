@@ -10,17 +10,28 @@ namespace ivm
     {
         ImageStackView view;
 
-        public int pixelWidth = 0;
-        public int pixelHeight = 0;
-        public int umWidth = 0;
-        public int umHeight = 0;
-        public float pixelPerUM_X = 1.0f;
-        public float pixelPerUM_Y = 1.0f;
-        public float pixelPerUM_Z = 1.0f;
+        public int pixelWidth;
+        public int pixelHeight;
+        public int umWidth;
+        public int umHeight;
+        public float pixelPerUM_X;
+        public float pixelPerUM_Y;
+        public float pixelPerUM_Z;
 
         public ViewMeta(ImageStackView v)
         {
             view = v;
+        }
+
+        void Init()
+        {
+            pixelWidth = 0;
+            pixelHeight = 0;
+            umWidth = 0;
+            umHeight = 0;
+            pixelPerUM_X = 1.0f;
+            pixelPerUM_Y = 1.0f;
+            pixelPerUM_Z = 1.0f;
         }
 
         bool ParseCSV(string csvPath)
@@ -80,6 +91,8 @@ namespace ivm
 
             if (!File.Exists(metaPath))
                 return false;
+
+            Init();
 
             ParseCSV(metaPath);
 
