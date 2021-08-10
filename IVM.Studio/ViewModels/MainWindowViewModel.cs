@@ -183,14 +183,9 @@ namespace IVM.Studio.ViewModels
         {
             mainWindow = view;
 
+            // create I3D windows
             snapper = new WindowSnapper(mainWindow, mainWindow.i3dmv, "I3D_MAIN_VIEW", @".\I3D\IVM.I3DApp.exe");
-            
             mainWindow.i3dmv.Loaded += I3dmv_Loaded;
-        }
-
-        private void I3dmv_Loaded(object sender, RoutedEventArgs e)
-        {
-            //snapper.InvokeProcess();
         }
 
         /// <summary>
@@ -203,6 +198,14 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshFolderEvent>().Unsubscribe(RefreshFolder);
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Unsubscribe(I3DWindowLoaded);
+
+            // kill I3D windows
+            snapper.KillProcess();
+        }
+
+        private void I3dmv_Loaded(object sender, RoutedEventArgs e)
+        {
+            snapper.InvokeProcess();
         }
 
         /// <summary>
@@ -369,6 +372,8 @@ namespace IVM.Studio.ViewModels
 
             VisUI2D = Visibility.Visible;
             VisUI3D = Visibility.Hidden;
+
+            snapper.Hide();
         }
 
         private void Change3DMode()
@@ -378,6 +383,8 @@ namespace IVM.Studio.ViewModels
 
             VisUI2D = Visibility.Hidden;
             VisUI3D = Visibility.Visible;
+
+            snapper.Show();
         }
 
         /// <summary>
@@ -411,6 +418,7 @@ namespace IVM.Studio.ViewModels
 
             // 3d-viewer windows attach
             snapper.Attach();
+            snapper.Hide();
         }
     }
 }

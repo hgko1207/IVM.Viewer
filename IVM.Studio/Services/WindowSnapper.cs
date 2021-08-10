@@ -53,6 +53,7 @@ namespace IVM.Studio.Services
             public static int WS_CAPTION = WS_BORDER | WS_DLGFRAME; // window with a title bar
 
             public static uint WM_PAINT = 0x000F;
+            public static uint WM_CLOSE = 0x0010;
 
             public static short SWP_NOMOVE = 0X2;
             public static short SWP_NOSIZE = 1;
@@ -98,6 +99,11 @@ namespace IVM.Studio.Services
             //});
         }
 
+        public void KillProcess()
+        {
+            WinHelper.SendMessage(childHandle, WinHelper.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+        }
+
         public void Attach()
         {
             // find child handle
@@ -115,6 +121,16 @@ namespace IVM.Studio.Services
             }
         }
 
+        public void Hide()
+        {
+            WinHelper.ShowWindow(childHandle, WinHelper.SW_HIDE);
+        }
+
+        public void Show()
+        {
+            WinHelper.ShowWindow(childHandle, WinHelper.SW_SHOW);
+        }
+
         private void ArrangeWindows()
         {
             // Moves the otherWindow on top of childPlaceHolder
@@ -123,8 +139,8 @@ namespace IVM.Studio.Services
             
             WinHelper.MoveWindow(childHandle, (int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y, true);
 
-            WinHelper.ShowWindowAsync(childHandle, WinHelper.SW_SHOWNORMAL);
-            WinHelper.SetForegroundWindow(childHandle);
+            //WinHelper.ShowWindow(childHandle, WinHelper.SW_SHOWNORMAL);
+            //WinHelper.SetForegroundWindow(childHandle);
         }
 
         private IntPtr GetWindowHandle(string windowTitle)

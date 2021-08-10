@@ -6,7 +6,9 @@
         xmlns:view="clr-namespace:IVM.Studio.I3D;assembly=IVM.I3DViewer"
         mc:Ignorable="d"
         Icon="Studio.ico"
-        Title="" Width="1000" Height="1000">
+        WindowStyle="None"
+        ShowActivated="False"
+        Title="" Width="0" Height="0">
     <!--WindowStyle="None"-->
     <!--ShowActivated="False"-->
     <view:I3DViewer x:Name="vw" />
