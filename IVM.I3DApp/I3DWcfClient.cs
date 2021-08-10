@@ -9,10 +9,10 @@ namespace IVM.Studio.I3D
         ServiceHost host;
         public I3DServerContract channel;
 
-        public void Listen(string viewtype)
+        public void Listen(int viewtype)
         {
             string url = "";
-            if (viewtype == "I3D_MAIN_VIEW")
+            if (viewtype == (int)I3DViewType.MAIN_VIEW)
                 url = I3DWcfUrl.mainViewUrl;
             else
                 url = I3DWcfUrl.sliceViewUrl;

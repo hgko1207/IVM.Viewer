@@ -37,7 +37,8 @@ namespace IVM.Studio.ViewModels
         MainWindow mainWindow; // entry MainWindow
 
         // for I3D Viewers
-        WindowSnapper snapper;
+        WindowSnapper snapper1; // 3d-main-view
+        WindowSnapper snapper2; // 3d-slice-view
         I3DWcfServer wcfserver;
 
         private ObservableCollection<SlideInfo> slideInfoCollection;
@@ -184,8 +185,10 @@ namespace IVM.Studio.ViewModels
             mainWindow = view;
 
             // create I3D windows
-            snapper = new WindowSnapper(mainWindow, mainWindow.i3dmv, "I3D_MAIN_VIEW", @".\I3D\IVM.I3DApp.exe");
+            snapper1 = new WindowSnapper(mainWindow, mainWindow.i3dmv, "I3D_MAIN_VIEW", @".\I3D\IVM.I3DApp.exe");
+            snapper2 = new WindowSnapper(mainWindow, mainWindow.i3dsv, "I3D_SLICE_VIEW", @".\I3D\IVM.I3DApp.exe");
             mainWindow.i3dmv.Loaded += I3dmv_Loaded;
+            mainWindow.i3dsv.Loaded += I3dsv_Loaded;
         }
 
         /// <summary>
@@ -200,12 +203,18 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Unsubscribe(I3DWindowLoaded);
 
             // kill I3D windows
-            snapper.KillProcess();
+            snapper1.KillProcess();
+            snapper2.KillProcess();
         }
 
         private void I3dmv_Loaded(object sender, RoutedEventArgs e)
         {
-            snapper.InvokeProcess();
+            snapper1.InvokeProcess();
+        }
+
+        private void I3dsv_Loaded(object sender, RoutedEventArgs e)
+        {
+            snapper2.InvokeProcess();
         }
 
         /// <summary>
@@ -373,7 +382,8 @@ namespace IVM.Studio.ViewModels
             VisUI2D = Visibility.Visible;
             VisUI3D = Visibility.Hidden;
 
-            snapper.Hide();
+            snapper1.Hide();
+            snapper2.Hide();
         }
 
         private void Change3DMode()
@@ -384,7 +394,8 @@ namespace IVM.Studio.ViewModels
             VisUI2D = Visibility.Hidden;
             VisUI3D = Visibility.Visible;
 
-            snapper.Show();
+            snapper1.Show();
+            snapper2.Show();
         }
 
         /// <summary>
@@ -417,8 +428,18 @@ namespace IVM.Studio.ViewModels
             wcfserver.Connect(viewtype);
 
             // 3d-viewer windows attach
-            snapper.Attach();
-            snapper.Hide();
+            if (viewtype == (int)I3DViewType.MAIN_VIEW)
+            {
+                snapper1.UpdateHandle();
+                snapper1.Attach();
+                snapper1.Hide();
+            }
+            else
+            {
+                snapper2.UpdateHandle();
+                snapper2.Attach();
+                snapper2.Hide();
+            }
         }
     }
 }

@@ -7,7 +7,8 @@ namespace IVM.Studio.Services
     public class I3DWcfServer
     {
         ServiceHost host;
-        public I3DClientContract channel;
+        public I3DClientContract channel1;
+        public I3DClientContract channel2;
 
         public void Init(IEventAggregator e)
         {
@@ -35,7 +36,10 @@ namespace IVM.Studio.Services
             factory.Endpoint.Contract.ContractType = typeof(I3DClientContract);
 
             // server channel
-            channel = factory.CreateChannel();
+            if (viewtype == (int)I3DViewType.MAIN_VIEW)
+                channel1 = factory.CreateChannel();
+            else
+                channel2 = factory.CreateChannel();
         }
     }
 }

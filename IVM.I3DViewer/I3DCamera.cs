@@ -12,15 +12,34 @@ namespace IVM.Studio.I3D
         I3DViewer view = null;
 
         Point lastbtnPt = new Point(0, 0);
-        
+
+        public delegate void UpdateDelegate();
+        public UpdateDelegate updateFunc = null;
+
+        public bool thisFrameChanged = false;
+        Timer timer;
+
         public I3DCamera(I3DViewer v)
         {
             view = v;
+
+            timer = new Timer();
+            timer.Interval = 1000 / 30; // 30 FPS
+            timer.Elapsed += new ElapsedEventHandler(UpdateTick);
+            timer.Start();
         }
 
-        public void Update()
+        private void UpdateTick(object sender, ElapsedEventArgs e)
         {
-            Rotate(view.param.CAMERA_VELOCITY.x, view.param.CAMERA_VELOCITY.y);
+            //Rotate(view.param.CAMERA_VELOCITY.x, view.param.CAMERA_VELOCITY.y);
+
+            if (thisFrameChanged)
+            {
+                if (updateFunc != null)
+                    updateFunc();
+         
+                thisFrameChanged = false;
+            }
         }
 
         public void Reset()
@@ -62,6 +81,8 @@ namespace IVM.Studio.I3D
                 view.param.CAMERA_ANGLE.y -= 360.0f;
 
             view.scene.UpdateModelviewMatrix();
+
+            thisFrameChanged = true;
         }
 
         public void Translate(float x, float y)
@@ -74,6 +95,8 @@ namespace IVM.Studio.I3D
             view.param.CAMERA_POS.y -= y * (1.0f / ah * z);
 
             view.scene.UpdateModelviewMatrix();
+
+            thisFrameChanged = true;
         }
 
         public void Control_MouseMove(object sender, MouseEventArgs e)
@@ -113,6 +136,8 @@ namespace IVM.Studio.I3D
             }
 
             view.scene.UpdateModelviewMatrix();
+
+            thisFrameChanged = true;
         }
     }
 }

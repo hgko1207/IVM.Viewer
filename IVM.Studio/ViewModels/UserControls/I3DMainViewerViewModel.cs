@@ -31,16 +31,26 @@ namespace IVM.Studio.ViewModels.UserControls
             this.view = view;
 
             EventAggregator.GetEvent<I3DOpenEvent>().Subscribe(Open, ThreadOption.UIThread);
+            EventAggregator.GetEvent<I3DCameraUpdateEvent>().Subscribe(UpdateCamera);
         }
 
         public void OnUnloaded(I3DMainViewer view)
         {
             EventAggregator.GetEvent<I3DOpenEvent>().Unsubscribe(Open);
+            EventAggregator.GetEvent<I3DCameraUpdateEvent>().Unsubscribe(UpdateCamera);
         }
 
         private void Open(string path)
         {
-            wcfserver.channel.OnOpen(path);
+            wcfserver.channel1.OnOpen(path);
+        }
+
+        private void UpdateCamera(CameraUpdateParam p)
+        {
+            if (p.viewtype == (int)I3DViewType.MAIN_VIEW)
+                return;
+
+            wcfserver.channel1.OnUpdateCamera(p.px, p.py, p.pz, p.ax, p.ay, p.s);
         }
     }
 }

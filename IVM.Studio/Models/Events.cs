@@ -189,4 +189,17 @@ namespace IVM.Studio.Models.Events
     // 3DView Events
     public class I3DOpenEvent : PubSubEvent<string> { }
     public class I3DWindowLoadedEvent : PubSubEvent<int> { }
+
+    public class CameraUpdateParam
+    {
+        public int viewtype { get; set; }
+        public float px { get; set; }
+        public float py { get; set; }
+        public float pz { get; set; }
+        public float ax { get; set; }
+        public float ay { get; set; }
+        public float s { get; set; }
+    }
+
+    public class I3DCameraUpdateEvent : PubSubEvent<CameraUpdateParam> { }
 }

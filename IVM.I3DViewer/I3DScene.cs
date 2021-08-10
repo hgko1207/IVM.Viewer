@@ -8,7 +8,7 @@ namespace IVM.Studio.I3D
     public class I3DScene
     {
         I3DViewer view;
-        DispatcherTimer tUpd; // 업데이트 타이머
+        DispatcherTimer timer; // 업데이트 타이머
 
         public I3DTex3D tex3D;
         public I3DAxis axis;
@@ -46,15 +46,13 @@ namespace IVM.Studio.I3D
             tex3D = new I3DTex3D(v);
             meta = new I3DMeta(v);
 
-            tUpd = new DispatcherTimer();
-            tUpd.Tick += UpdateTick;
-            tUpd.Start();
+            timer = new DispatcherTimer();
+            timer.Tick += UpdateTick;
+            timer.Start();
         }
 
         private void UpdateTick(object sender, EventArgs e)
         {
-            view.camera.Update();
-
             view.RenderTarget.DoRender();
         }
 

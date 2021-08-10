@@ -84,19 +84,16 @@ namespace IVM.Studio.Services
 
         public void InvokeProcess()
         {
-            //Task.Run(() =>
-            //{
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = childExec;
-                psi.Arguments = childTitle + " " + childTitle;
-                psi.WindowStyle = ProcessWindowStyle.Hidden;
-                psi.UseShellExecute = false;
-                psi.CreateNoWindow = true; // muse be useshell-execute disable
-                psi.RedirectStandardInput = false;
-                psi.RedirectStandardOutput = false;
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = childExec;
+            psi.Arguments = childTitle + " " + childTitle;
+            psi.WindowStyle = ProcessWindowStyle.Hidden;
+            psi.UseShellExecute = false;
+            psi.CreateNoWindow = true; // muse be useshell-execute disable
+            psi.RedirectStandardInput = false;
+            psi.RedirectStandardOutput = false;
 
-                Process.Start(psi);
-            //});
+            Process.Start(psi);
         }
 
         public void KillProcess()
@@ -104,21 +101,19 @@ namespace IVM.Studio.Services
             WinHelper.SendMessage(childHandle, WinHelper.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public void Attach()
+        public void UpdateHandle()
         {
             // find child handle
             childHandle = GetWindowHandle(childTitle);
-            if (childHandle != IntPtr.Zero)
-            {
-                // attach
-                WinHelper.SetWindowLong(childHandle, WinHelper.GWL_STYLE,
-                    WinHelper.GetWindowLong(childHandle, WinHelper.GWL_STYLE) | WinHelper.WS_CHILD);
-                WinHelper.SetWindowLong(childHandle, WinHelper.GWL_STYLE, WinHelper.WS_VISIBLE);
-                WinHelper.SetParent(childHandle, ownerHandle);
+        }
 
-                // adjustment window position.
-                ArrangeWindows();
-            }
+        public void Attach()
+        {
+            // attach
+            WinHelper.SetWindowLong(childHandle, WinHelper.GWL_STYLE,
+                WinHelper.GetWindowLong(childHandle, WinHelper.GWL_STYLE) | WinHelper.WS_CHILD);
+            WinHelper.SetWindowLong(childHandle, WinHelper.GWL_STYLE, WinHelper.WS_VISIBLE);
+            WinHelper.SetParent(childHandle, ownerHandle);
         }
 
         public void Hide()
@@ -129,6 +124,8 @@ namespace IVM.Studio.Services
         public void Show()
         {
             WinHelper.ShowWindow(childHandle, WinHelper.SW_SHOW);
+
+            ArrangeWindows();
         }
 
         private void ArrangeWindows()
@@ -138,9 +135,6 @@ namespace IVM.Studio.Services
             Point bottomRight = placeHolder.TransformToAncestor(ownerWindow).Transform(new Point(placeHolder.ActualWidth, placeHolder.ActualHeight));
             
             WinHelper.MoveWindow(childHandle, (int)topLeft.X, (int)topLeft.Y, (int)bottomRight.X - (int)topLeft.X, (int)bottomRight.Y - (int)topLeft.Y, true);
-
-            //WinHelper.ShowWindow(childHandle, WinHelper.SW_SHOWNORMAL);
-            //WinHelper.SetForegroundWindow(childHandle);
         }
 
         private IntPtr GetWindowHandle(string windowTitle)

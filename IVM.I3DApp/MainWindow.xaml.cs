@@ -12,6 +12,7 @@ namespace IVM.Studio.I3D
     public partial class MainWindow : Window
     {
         I3DWcfClient wcfclient;
+        int viewtype = 1;
 
         public String AppTitle;
 
@@ -28,21 +29,15 @@ namespace IVM.Studio.I3D
 
         private void Control_loaded(object sender, RoutedEventArgs e)
         {
-            //vw.Open(@"..\..\..\..\data\t");
-
             string[] args = Environment.GetCommandLineArgs();
-
             string title = "";
-            string viewtypestr = "";
-            int viewtype = 0;
 
             if (args.Length >= 3)
             {
                 title = args[1];
-                viewtypestr = args[2];
-                if (viewtypestr == "I3D_MAIN_VIEW")
+                if (title == "I3D_MAIN_VIEW")
                     viewtype = (int)I3DViewType.MAIN_VIEW;
-                else
+                else if(title == "I3D_SLICE_VIEW")
                     viewtype = (int)I3DViewType.SLICE_VIEW;
             }
 
@@ -50,14 +45,38 @@ namespace IVM.Studio.I3D
             this.Title = title;
 
             // wcf connect & send loaded message to ivm-studio
-            wcfclient.Listen(viewtypestr);
-            wcfclient.Connect();
-            Task.Run(() => wcfclient.channel.OnWindowLoaded(viewtype));
+            if (viewtype != -1)
+            {
+                wcfclient.Listen(viewtype);
+                wcfclient.Connect();
+                Task.Run(() => wcfclient.channel.OnWindowLoaded(viewtype));
+            }
+
+            // init viewer
+            InitViewer(viewtype);
         }
 
         private void Control_MouseMove(object sender, MouseEventArgs e)
         {
             vw.InvalidateVisual();
+        }
+
+        private void InitViewer(int viewtype)
+        {
+            vw.param.RENDER_MODE = I3DRenderMode.ADDED;
+            if (viewtype == (int)I3DViewType.SLICE_VIEW)
+                vw.param.RENDER_MODE = I3DRenderMode.OBLIQUE;
+
+            vw.camera.updateFunc = UpdateCamera;
+        }
+
+        private void UpdateCamera()
+        {
+            wcfclient.channel.OnUpdateCamera(
+                viewtype,
+                vw.param.CAMERA_POS.x, vw.param.CAMERA_POS.y, vw.param.CAMERA_POS.z,
+                vw.param.CAMERA_ANGLE.x, vw.param.CAMERA_ANGLE.y,
+                vw.param.CAMERA_SCALE_FACTOR);
         }
     }
 }
