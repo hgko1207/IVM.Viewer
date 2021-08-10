@@ -188,4 +188,5 @@ namespace IVM.Studio.Models.Events
 
     // 3DView Events
     public class I3DOpenEvent : PubSubEvent<string> { }
+    public class I3DWindowLoadedEvent : PubSubEvent<int> { }
 }

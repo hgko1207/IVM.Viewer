@@ -133,6 +133,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -170,7 +171,10 @@
     <Compile Include="Services\ImageService.cs" />
     <Compile Include="Services\SlideShowService.cs" />
     <Compile Include="Services\VideoTrimService.cs" />
+    <Compile Include="Services\I3DWcfService.cs" />
     <Compile Include="Services\WindowByHistogramService.cs" />
+    <Compile Include="Services\I3DWcfServer.cs" />
+    <Compile Include="Services\WindowSnapper.cs" />
     <Compile Include="Utils\ButtonStyleConverter.cs" />
     <Compile Include="Utils\ChannelNameConverter.cs" />
     <Compile Include="Utils\CommonUtil.cs" />
@@ -418,6 +422,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="I3D\IVM.I3DApp.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -492,6 +499,27 @@
     <Resource Include="Resources\Images\Pause_16x16.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="I3D\GlmNet.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\IVM.I3DApp.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\IVM.I3DViewer.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\IVM.I3DWcfService.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\SharpGL.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\SharpGL.SceneGraph.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\SharpGL.WPF.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="libvlc\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -519,10 +547,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IVM.ImageStackViewLib\IVM.ImageStackViewLib.csproj">
-      <Project>{1451e18e-3e3a-4c6d-942e-744580a82b63}</Project>
-      <Name>IVM.ImageStackViewLib</Name>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IVM.I3DService\IVM.I3DWcfService.csproj">
+      <Project>{928cb683-f582-43ef-b8e3-7e7439dc371b}</Project>
+      <Name>IVM.I3DWcfService</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

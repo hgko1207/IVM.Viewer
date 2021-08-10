@@ -43,6 +43,7 @@ namespace IVM.Studio
             containerRegistry.RegisterSingleton<DataManager>();
             containerRegistry.RegisterSingleton<VideoTrimService>();
             containerRegistry.RegisterSingleton<BatchImageService>();
+            containerRegistry.RegisterSingleton<I3DWcfServer>();
         }
 
         protected override void ConfigureViewModelLocator()

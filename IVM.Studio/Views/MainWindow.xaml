@@ -225,7 +225,7 @@
             <dxdo:LayoutGroup Caption="RightGroup" Orientation="Horizontal">
                 <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*">
                     <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
-                        <ContentControl prism:RegionManager.RegionName="I3DMainViewer"/>
+                        <ContentControl x:Name="i3dmv" prism:RegionManager.RegionName="I3DMainViewer"/>
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>
 

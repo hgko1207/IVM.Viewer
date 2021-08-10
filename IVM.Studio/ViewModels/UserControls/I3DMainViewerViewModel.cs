@@ -6,6 +6,8 @@ using IVM.Studio.Views.UserControls;
 using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using static IVM.Studio.Models.Common;
 
 namespace IVM.Studio.ViewModels.UserControls
@@ -13,6 +15,7 @@ namespace IVM.Studio.ViewModels.UserControls
     public class I3DMainViewerViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<I3DMainViewer>
     {
         private I3DMainViewer view;
+        I3DWcfServer wcfserver;
 
         /// <summary>
         /// 생성자
@@ -20,6 +23,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public I3DMainViewerViewModel(IContainerExtension container) : base(container)
         {
+            wcfserver = container.Resolve<I3DWcfServer>();
         }
 
         public void OnLoaded(I3DMainViewer view)
@@ -36,7 +40,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void Open(string path)
         {
-            view.isv.Open(path);
+            wcfserver.channel.OnOpen(path);
         }
     }
 }

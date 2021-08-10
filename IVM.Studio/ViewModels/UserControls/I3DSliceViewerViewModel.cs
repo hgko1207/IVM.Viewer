@@ -3,7 +3,6 @@ using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views.UserControls;
-using IVM.Studio.I3D;
 using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
@@ -27,8 +26,6 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
-            view.isv.param.RENDER_MODE = I3DRenderMode.OBLIQUE;
-
             EventAggregator.GetEvent<I3DOpenEvent>().Subscribe(Open, ThreadOption.UIThread);
         }
 
@@ -39,7 +36,6 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void Open(string path)
         {
-            view.isv.Open(path);
         }
     }
 }

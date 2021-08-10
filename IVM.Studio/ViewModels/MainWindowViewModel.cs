@@ -34,6 +34,12 @@ namespace IVM.Studio.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<MainWindow>
     {
+        MainWindow mainWindow; // entry MainWindow
+
+        // for I3D Viewers
+        WindowSnapper snapper;
+        I3DWcfServer wcfserver;
+
         private ObservableCollection<SlideInfo> slideInfoCollection;
         public ObservableCollection<SlideInfo> SlideInfoCollection => slideInfoCollection ?? (slideInfoCollection = new ObservableCollection<SlideInfo>());
 
@@ -156,11 +162,17 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<DisplaySlideEvent>().Subscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
             EventAggregator.GetEvent<RefreshFolderEvent>().Subscribe(RefreshFolder);
+            EventAggregator.GetEvent<I3DWindowLoadedEvent>().Subscribe(I3DWindowLoaded);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
 
             SliderControlInfo = dataManager.SliderControlInfo;
+
+            // I3DViewer Remote Communication
+            wcfserver = container.Resolve<I3DWcfServer>();
+            wcfserver.Init(EventAggregator);
+            wcfserver.Listen();
         }
 
         /// <summary>
@@ -169,6 +181,16 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnLoaded(MainWindow view)
         {
+            mainWindow = view;
+
+            snapper = new WindowSnapper(mainWindow, mainWindow.i3dmv, "I3D_MAIN_VIEW", @".\I3D\IVM.I3DApp.exe");
+            
+            mainWindow.i3dmv.Loaded += I3dmv_Loaded;
+        }
+
+        private void I3dmv_Loaded(object sender, RoutedEventArgs e)
+        {
+            //snapper.InvokeProcess();
         }
 
         /// <summary>
@@ -180,6 +202,7 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<DisplaySlideEvent>().Unsubscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshFolderEvent>().Unsubscribe(RefreshFolder);
+            EventAggregator.GetEvent<I3DWindowLoadedEvent>().Unsubscribe(I3DWindowLoaded);
         }
 
         /// <summary>
@@ -379,6 +402,15 @@ namespace IVM.Studio.ViewModels
         {
             RefreshCommand.Execute(null);
             SelectedSlideInfo = SlideInfoCollection.FirstOrDefault(s => s.Name == folder?.Name && s.Category == "Folder");
+        }
+
+        private void I3DWindowLoaded(int viewtype)
+        {
+            // cross connection
+            wcfserver.Connect(viewtype);
+
+            // 3d-viewer windows attach
+            snapper.Attach();
         }
     }
 }
