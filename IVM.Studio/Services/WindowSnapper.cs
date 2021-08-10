@@ -86,7 +86,7 @@ namespace IVM.Studio.Services
         {
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.FileName = childExec;
-            psi.Arguments = childTitle + " " + childTitle;
+            psi.Arguments = childTitle;
             psi.WindowStyle = ProcessWindowStyle.Hidden;
             psi.UseShellExecute = false;
             psi.CreateNoWindow = true; // muse be useshell-execute disable

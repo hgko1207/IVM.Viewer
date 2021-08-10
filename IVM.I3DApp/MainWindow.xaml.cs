@@ -12,7 +12,7 @@ namespace IVM.Studio.I3D
     public partial class MainWindow : Window
     {
         I3DWcfClient wcfclient;
-        int viewtype = 1;
+        int viewtype = -1;
 
         public String AppTitle;
 
@@ -32,7 +32,7 @@ namespace IVM.Studio.I3D
             string[] args = Environment.GetCommandLineArgs();
             string title = "";
 
-            if (args.Length >= 3)
+            if (args.Length >= 2)
             {
                 title = args[1];
                 if (title == "I3D_MAIN_VIEW")
