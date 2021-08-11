@@ -128,10 +128,6 @@
                                 </dxg:GridControl>
                             </Grid>
                         </dxdo:DocumentPanel>
-
-                        <dxdo:DocumentPanel Caption="Window List" AllowClose="False">
-
-                        </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">

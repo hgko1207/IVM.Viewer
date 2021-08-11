@@ -94,7 +94,6 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref zStackLabelUnit, value);
         }
 
-        public ICommand AddDrawCommand { get; private set; }
         public ICommand ClearCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
@@ -109,7 +108,6 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public AnnotationPanelViewModel(IContainerExtension container) : base(container)
         {
-            AddDrawCommand = new DelegateCommand(AddDraw);
             ClearCommand = new DelegateCommand(() => EventAggregator.GetEvent<DrawClearEvent>().Publish());
             UndoCommand = new DelegateCommand(() => EventAggregator.GetEvent<DrawUndoEvent>().Publish());
             RedoCommand = new DelegateCommand(() => EventAggregator.GetEvent<DrawRedoEvent>().Publish());
@@ -165,14 +163,6 @@ namespace IVM.Studio.ViewModels.UserControls
             string mask = CommonUtil.ZStackLabelToMask(type);
             view.ZStackLabel.Mask = mask;
             AnnotationInfo.ZStackLabelText = ZStackLabelText.ToString(mask) + " " + ZStackLabelUnit;
-        }
-
-        /// <summary>
-        /// Add Draw 이벤트
-        /// </summary>
-        private void AddDraw()
-        {
-
         }
 
         /// <summary>

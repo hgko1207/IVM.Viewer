@@ -72,14 +72,13 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand ResetBrightnessCommand { get; private set; }
         public ICommand ResetContrastCommand { get; private set; }
 
+        private DataManager dataManager;
         private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
         public ColorChannelModel DAPIChannel { get; set; }
         public ColorChannelModel GFPChannel { get; set; }
         public ColorChannelModel RFPChannel { get; set; }
         public ColorChannelModel NIRChannel { get; set; }
-
-        private DataManager dataManager;
 
         /// <summary>
         /// 생성자

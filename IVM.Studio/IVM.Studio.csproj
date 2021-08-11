@@ -312,10 +312,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UserControls\ImageControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\UserControls\ImageViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -352,7 +348,6 @@
     <Compile Include="ViewModels\UserControls\ColormapPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\DisplayControlPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageAdjustmentPanelViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\ImageControlViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ImageViewerViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="Views\ChannelViewerWindow.xaml.cs">
@@ -372,9 +367,6 @@
     </Compile>
     <Compile Include="Views\UserControls\ImageAdjustmentPanel.xaml.cs">
       <DependentUpon>ImageAdjustmentPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControls\ImageControl.xaml.cs">
-      <DependentUpon>ImageControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ImageViewer.xaml.cs">
       <DependentUpon>ImageViewer.xaml</DependentUpon>
