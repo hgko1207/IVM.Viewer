@@ -72,6 +72,7 @@ namespace IVM.Studio.Services
         String childTitle;
         Window ownerWindow;
         ContentControl placeHolder;
+        bool processLoaded;
 
         public WindowSnapper(Window owner, ContentControl holder, String title, String exec)
         {
@@ -80,10 +81,14 @@ namespace IVM.Studio.Services
             childExec = exec;
             childTitle = title;
             ownerHandle = new WindowInteropHelper(ownerWindow).Handle;
+            processLoaded = false;
         }
 
         public void InvokeProcess()
         {
+            if (processLoaded)
+                return;
+
             ProcessStartInfo psi = new ProcessStartInfo();
             psi.FileName = childExec;
             psi.Arguments = childTitle;
@@ -94,6 +99,10 @@ namespace IVM.Studio.Services
             psi.RedirectStandardOutput = false;
 
             Process.Start(psi);
+
+            Console.WriteLine("InvokeProcess {0}", childTitle);
+
+            processLoaded = true;
         }
 
         public void KillProcess()
@@ -125,6 +134,13 @@ namespace IVM.Studio.Services
         {
             WinHelper.ShowWindow(childHandle, WinHelper.SW_SHOW);
 
+            ArrangeWindows();
+
+            placeHolder.SizeChanged += PlaceHolder_SizeChanged;
+        }
+
+        private void PlaceHolder_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
             ArrangeWindows();
         }
 

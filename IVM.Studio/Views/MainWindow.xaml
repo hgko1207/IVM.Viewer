@@ -224,13 +224,17 @@
         <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop" Visibility="{Binding VisUI3D}">
             <dxdo:LayoutGroup Caption="RightGroup" Orientation="Horizontal">
                 <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*">
-                    <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
+                    <dxdo:DocumentPanel Caption="3D View" 
+                                        AllowClose="False" AllowSizing="False" AllowDock="False"
+                                        AllowDrag="False" AllowDrop="False" AllowFloat="False" AllowMove="False">
                         <ContentControl x:Name="i3dmv" prism:RegionManager.RegionName="I3DMainViewer"/>
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>
 
                 <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*">
-                    <dxdo:DocumentPanel Caption="Slice View" AllowClose="False">
+                    <dxdo:DocumentPanel Caption="Slice View" 
+                                        AllowClose="False" AllowSizing="False" AllowDock="False"
+                                        AllowDrag="False" AllowDrop="False" AllowFloat="False" AllowMove="False">
                         <ContentControl x:Name="i3dsv" prism:RegionManager.RegionName="I3DSliceViewer"/>
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>

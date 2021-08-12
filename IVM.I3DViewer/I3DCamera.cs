@@ -55,9 +55,9 @@ namespace IVM.Studio.I3D
             if (e.LeftButton == MouseButtonState.Pressed || e.MiddleButton == MouseButtonState.Pressed)
             {
                 lastbtnPt = pt;
-            }
 
-            view.RenderTarget.CaptureMouse();
+                view.RenderTarget.CaptureMouse();
+            }
         }
 
         public void Control_MouseButtonUp(object sender, MouseEventArgs e)
