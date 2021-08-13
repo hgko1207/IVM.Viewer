@@ -34,13 +34,6 @@ namespace IVM.Studio.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<MainWindow>
     {
-        MainWindow mainWindow; // entry MainWindow
-
-        // for I3D Viewers
-        WindowSnapper snapper1; // 3d-main-view
-        WindowSnapper snapper2; // 3d-slice-view
-        I3DWcfServer wcfserver;
-
         private ObservableCollection<SlideInfo> slideInfoCollection;
         public ObservableCollection<SlideInfo> SlideInfoCollection => slideInfoCollection ?? (slideInfoCollection = new ObservableCollection<SlideInfo>());
 
@@ -107,11 +100,16 @@ namespace IVM.Studio.ViewModels
 
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand RefreshCommand { get; private set; }
-        public ICommand PreviousSlideCommand { get; private set; }
-        public ICommand NextSlideCommand { get; private set; }
         public ICommand WindowOpenCommand { get; private set; }
         public ICommand Change2DModeCommand { get; private set; }
         public ICommand Change3DModeCommand { get; private set; }
+
+        private MainWindow mainWindow; // entry MainWindow
+
+        // for I3D Viewers
+        private WindowSnapper snapper1; // 3d-main-view
+        private WindowSnapper snapper2; // 3d-slice-view
+        private I3DWcfServer wcfserver;
 
         private readonly IEnumerable<string> imageFileExtensions;
         private readonly IEnumerable<string> videoFileExtensions;
@@ -152,8 +150,6 @@ namespace IVM.Studio.ViewModels
 
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             RefreshCommand = new DelegateCommand(Refresh);
-            PreviousSlideCommand = new DelegateCommand(PreviousSlide);
-            NextSlideCommand = new DelegateCommand(NextSlide);
             WindowOpenCommand = new DelegateCommand(WindowOpen);
 
             // 2D / 3D Mode Change
@@ -251,7 +247,7 @@ namespace IVM.Studio.ViewModels
                     if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, approvedExtensions, true).Any())
                         continue;
 
-                    SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name };
+                    SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name, Format = FolderNameToFormat(imageFolder.Name) };
                     SlideInfoCollection.Add(slideInfo);
 
                     if (first)
@@ -263,7 +259,9 @@ namespace IVM.Studio.ViewModels
 
                 foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, approvedExtensions, false))
                 {
-                    SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name };
+                    string format = imageFileExtensions.Any(s => s.Equals(fileInfo.Extension, StringComparison.InvariantCultureIgnoreCase)) ? "PNG" : "AVI";
+
+                    SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name, Format = format };
                     SlideInfoCollection.Add(slideInfo);
 
                     if (first)
@@ -273,6 +271,26 @@ namespace IVM.Studio.ViewModels
                     }
                 }
             }
+        }
+
+        private string FolderNameToFormat(string forderName)
+        {
+            string format = "";
+
+            string[] names = forderName.Split('-');
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (i + 1 == names.Length)
+                {
+                    format += names[i].Substring(0, 2);
+                }
+                else
+                {
+                    format += names[i] + "_";
+                }
+            }
+
+            return format;
         }
 
         /// <summary>
@@ -331,30 +349,6 @@ namespace IVM.Studio.ViewModels
         }
 
         /// <summary>
-        /// Previous 버튼 클릭 시
-        /// </summary>
-        private void PreviousSlide()
-        {
-            int idx = SlideInfoCollection.IndexOf(SelectedSlideInfo);
-            if (idx <= 0)
-                return;
-
-            SelectedSlideInfo = SlideInfoCollection[idx - 1];
-        }
-
-        /// <summary>
-        /// Next 버튼 클릭 시
-        /// </summary>
-        private void NextSlide()
-        {
-            int idx = SlideInfoCollection.IndexOf(SelectedSlideInfo);
-            if (idx < 0 || idx >= SlideInfoCollection.Count - 1)
-                return;
-
-            SelectedSlideInfo = SlideInfoCollection[idx + 1];
-        }
-
-        /// <summary>
         /// Window Open
         /// </summary>
         private void WindowOpen()
@@ -374,6 +368,9 @@ namespace IVM.Studio.ViewModels
             }
         }
 
+        /// <summary>
+        /// Change 2DMode
+        /// </summary>
         private void Change2DMode()
         {
             Checked2DMode = true;
@@ -386,6 +383,9 @@ namespace IVM.Studio.ViewModels
             snapper2.Hide();
         }
 
+        /// <summary>
+        /// Change 3DMode
+        /// </summary>
         private void Change3DMode()
         {
             Checked2DMode = false;

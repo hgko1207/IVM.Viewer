@@ -14,7 +14,7 @@
              Background="#30302E"
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid Margin="5">
+    <Grid Margin="5 8">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -92,7 +92,7 @@
             </StackPanel>
         </Grid>
 
-        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 7" />
+        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
         <StackPanel Grid.Row="2" Margin="5 0">
             <DockPanel VerticalAlignment="Center">
@@ -106,7 +106,7 @@
                 </StackPanel>
             </DockPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+            <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
                 <TextBlock Text="Size" VerticalAlignment="Center" FontSize="13"/>
                 <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="60" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
                 <TextBlock Text="μm" VerticalAlignment="Center" Margin="4 0 0 0"/>
@@ -131,7 +131,7 @@
             </StackPanel>
         </StackPanel>
 
-        <ContentControl Grid.Row="3" Template="{StaticResource HorizontalLine}" Margin="0 7" />
+        <ContentControl Grid.Row="3" Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
         <StackPanel Grid.Row="4" Margin="5 0">
             <DockPanel VerticalAlignment="Center">
@@ -141,7 +141,7 @@
                                  Width="80" Height="28" Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
             </DockPanel>
             
-            <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+            <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
                 <dxe:ComboBoxEdit EditValue="{Binding SelectedDateTimeType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="90">
                     <dxmvvm:Interaction.Behaviors>
                         <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:TimeSpanType}" SortMode="DisplayName"/>
@@ -165,7 +165,7 @@
             </StackPanel>
         </StackPanel>
 
-        <ContentControl Grid.Row="5" Template="{StaticResource HorizontalLine}" Margin="0 7" />
+        <ContentControl Grid.Row="5" Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
         <StackPanel Grid.Row="6" Margin="5 0">
             <DockPanel>
@@ -175,7 +175,7 @@
                                  Width="80" Height="28" Content="Display" HorizontalAlignment="Right" Margin="15 0 0 0"/>
             </DockPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0 6 0 0">
+            <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
                 <dxe:ComboBoxEdit EditValue="{Binding SelectedZStackLabelType, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="90">
                     <dxmvvm:Interaction.Behaviors>
                         <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ZStackLabelType}" SortMode="DisplayName"/>

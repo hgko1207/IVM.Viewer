@@ -22,10 +22,66 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid Margin="0 0 0 4">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="Channel" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                <Grid Margin="0 5 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="4"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <dx:SimpleButton Style="{StaticResource SkyGradientButton}" Command="{Binding SaveImageCommand}" Height="40" Padding="0 0 0 4">
+                        <TextBlock TextAlignment="Center" FontSize="12">Save<LineBreak/>Image</TextBlock>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource SkyGradientButton}" Command="{Binding SaveSequenceCommand}" Height="40" Padding="0 0 0 4">
+                        <TextBlock TextAlignment="Center" FontSize="12">Save<LineBreak/>Sequence</TextBlock>
+                    </dx:SimpleButton>
+                </Grid>
+            </StackPanel>
+
+            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 0 8 0" />
+
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Level" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+                <DockPanel Margin="5 5 0 0" >
+                    <TextBlock Text="Adjust" VerticalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="Lock" Width="60" Height="40" IsChecked="{Binding IsLockHistogram}"/>
+                        <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Reset" Width="60" Height="40" Margin="4 0 0 0" Command="{Binding ResetHistogramCommand}"/>
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+
+            <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 0 8 0" />
+
+            <StackPanel Grid.Column="4">
+                <TextBlock Text="Sub-Window" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                
+                <dx:SimpleButton Style="{StaticResource SkyGradientButton}" Margin="0 5 0 0" Content="Close All" Height="40" Padding="10 0" Command="{Binding SaveImageCommand}"/>
+            </StackPanel>
+        </Grid>
+
+        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 8" />
+
+        <Grid Margin="0 0 0 4" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
@@ -36,7 +92,6 @@
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="36"/>
                     <RowDefinition/>
                     <RowDefinition Height="2"/>
                     <RowDefinition/>
@@ -48,25 +103,22 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Channel" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                <TextBlock Grid.Column="1" Text="Color" HorizontalAlignment="Center" Margin="12,0"/>
+                <TextBlock Grid.Column="3" Text="Visible" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="7,0"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="Color" HorizontalAlignment="Center" Margin="12,0"/>
-                <TextBlock Grid.Row="1" Grid.Column="3" Text="Visible" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="7,0"/>
-
-                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
                     <TextBlock TextAlignment="Center" Text="Master" FontSize="14" FontWeight="Bold"/>
                     <TextBlock TextAlignment="Center" Text="(4 channels)" Margin="0 -3 0 0" FontSize="11"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset" Command="{Binding ColorResetCommand}" Margin="0,0,0,1"/>
-                <dx:SimpleButton Grid.Row="3" Grid.Column="3" Style="{StaticResource GrayGradientButton}" Content="ALL" Width="50" Command="{Binding AllVisibleCommand, Delay=500}" Grid.ColumnSpan="2" Margin="0,0,0,1"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{StaticResource GrayGradientButton}" Content="Reset" Command="{Binding ColorResetCommand}" Margin="0,0,0,1"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="3" Style="{StaticResource GrayGradientButton}" Content="ALL" Width="50" Command="{Binding AllVisibleCommand, Delay=500}" Grid.ColumnSpan="2" Margin="0,0,0,1"/>
             </Grid>
 
-            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
+            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 0 8 0" />
 
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="36"/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
@@ -78,26 +130,13 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.ColumnSpan="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Black" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="4" Text="White" HorizontalAlignment="Center"/>
 
-                    <TextBlock Text="Level" Style="{StaticResource TitleText}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <dxe:SpinEdit Grid.Row="1" Grid.Column="0" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit Grid.Row="1" Grid.Column="4" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
-                    <dx:SimpleButton Grid.Column="1" Style="{StaticResource ToggleButton}" Content="Lock" Width="50" Height="28" IsChecked="{Binding IsLockHistogram}"/>
-                    <dx:SimpleButton Grid.Column="2" Style="{StaticResource GrayGradientButton}" Content="Reset" Height="28" Margin="4 0 0 0" Command="{Binding ResetHistogramCommand}"/>
-                </Grid>
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Black" HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="4" Text="White" HorizontalAlignment="Center"/>
-
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="0" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
-                <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                <dxe:TrackBarEdit Grid.Row="1" Grid.Column="2" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
                                   SelectionStart="{Binding AllLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
                                   SelectionEnd="{Binding AllLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
                     <dxe:TrackBarEdit.StyleSettings>
@@ -107,11 +146,10 @@
                 </dxe:TrackBarEdit>
             </Grid>
 
-            <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
+            <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="8 0 8 0" />
 
             <Grid Grid.Column="4">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="36"/>
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
@@ -121,19 +159,17 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.ColumnSpan="3" Text="Window" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                <TextBlock Grid.Column="0" Text="Ch." HorizontalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="Hist." HorizontalAlignment="Center"/>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Ch." HorizontalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="2" Text="Hist." HorizontalAlignment="Center"/>
-
-                <dx:SimpleButton Grid.Row="2" Grid.Column="0" Style="{StaticResource GrayGradientButton}" Content="ALL" Command="{Binding AllChannelOpenCommand}"/>
-                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="ALL" IsChecked="{Binding AllHistogramOpend}"/>
+                <dx:SimpleButton Grid.Row="1" Grid.Column="0" Style="{StaticResource GrayGradientButton}" Content="ALL" Command="{Binding AllChannelOpenCommand}"/>
+                <dx:SimpleButton Grid.Row="1" Grid.Column="2" Style="{StaticResource ToggleButton}" Content="ALL" IsChecked="{Binding AllHistogramOpend}"/>
             </Grid>
         </Grid>
 
-        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 5" />
+        <ContentControl Grid.Row="3" Template="{StaticResource HorizontalLine}" Margin="0 5" />
 
-        <Grid Grid.Row="2" Margin="0 5" MinHeight="160">
+        <Grid Grid.Row="4" Margin="0 5" MinHeight="160">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>

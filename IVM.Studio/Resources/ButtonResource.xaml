@@ -207,6 +207,21 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="SkyGradientButton" TargetType="dx:SimpleButton" BasedOn="{StaticResource ButtonBase}">
+        <Setter Property="Background" Value="{StaticResource GrayGradientButtonBackground}" />
+        <Setter Property="Foreground" Value="#00B0F0" />
+        <Setter Property="FontWeight" Value="Black" />
+        <Setter Property="FontSize" Value="12" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource GrayGradientActiveButtonBackground}" />
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="{StaticResource GrayGradientCheckedButtonBackground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="OrangeGradientButton" TargetType="{x:Type dx:SimpleButton}" BasedOn="{StaticResource ButtonBase}">
         <Setter Property="Background" Value="{StaticResource OrangeGradientButtonBackground}"/>
         <Style.Triggers>

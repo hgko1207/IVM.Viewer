@@ -247,6 +247,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public ColorChannelModel RFPColorChannel { get; set; }
         public ColorChannelModel NIRColorChannel { get; set; }
 
+        public ICommand SaveImageCommand { get; private set; }
         public ICommand DAPIColorChangedCommand { get; private set; }
         public ICommand GFPColorChangedCommand { get; private set; }
         public ICommand RFPColorChangedCommand { get; private set; }
@@ -268,6 +269,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public ImageAdjustmentPanelViewModel(IContainerExtension container) : base(container)
         {
+            SaveImageCommand = new DelegateCommand(SaveImage);
             DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
             GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
             RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
@@ -322,6 +324,14 @@ namespace IVM.Studio.ViewModels.UserControls
             GFPColor = ConvertColorToString(GFPColorChannel.Color);
             RFPColor = ConvertColorToString(RFPColorChannel.Color);
             NIRColor = ConvertColorToString(NIRColorChannel.Color);
+        }
+
+        /// <summary>
+        /// Save Image
+        /// </summary>
+        private void SaveImage()
+        {
+            EventAggregator.GetEvent<DrawExportEvent>().Publish();
         }
 
         /// <summary>
