@@ -2,6 +2,7 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using IVM.Studio.Utils;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
@@ -212,7 +213,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <returns></returns>
         private List<ColorChannelModel> OrderByColor()
         {
-            return colorChannelInfoMap.Values.OrderBy(c => c.Color).ToList();
+            return colorChannelInfoMap.Values.OrderBy(c => c.InitColor).ToList();
         }
 
         /// <summary>
@@ -305,7 +306,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
                     {
                         if (type == ChannelType.ALL)
-                            continue;
+                        continue;
 
                         ColorChannelModel colorChannelModel = colorChannelInfoMap[type];
 
@@ -332,8 +333,7 @@ namespace IVM.Studio.ViewModels.UserControls
                                     Container.Resolve<WindowByChannelService>().DisplayImage((int)type, img);
                                     using (Bitmap hist = imageService.CreateHistogram(img2, currentTranslationByChannel, new bool[4] { true, true, true, false }))
                                     {
-                                        ImageSource histogramImage = imageService.ConvertGDIBitmapToWPF(hist);
-                                        colorChannelModel.HistogramImage = histogramImage;
+                                        colorChannelModel.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                                         EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
@@ -346,8 +346,7 @@ namespace IVM.Studio.ViewModels.UserControls
                                     Container.Resolve<WindowByChannelService>().DisplayImage((int)type, imgwpf);
                                     using (Bitmap hist = imageService.CreateHistogram(img, currentTranslationByChannel, visibilityByChannel))
                                     {
-                                        ImageSource histogramImage = imageService.ConvertGDIBitmapToWPF(hist);
-                                        colorChannelModel.HistogramImage = histogramImage;
+                                        colorChannelModel.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
                                         EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
