@@ -43,7 +43,7 @@ namespace IVM.Studio.Models.Events
     /// <summary>채널별 윈도우를 종료 할때</summary>
     public class ChViewerWindowCloseEvent : PubSubEvent<int> { }
     /// <summary>채널별 윈도우가 종료 될때</summary>
-    public class ChViewerWindowClosedEvent : PubSubEvent<int> { }
+    public class ChViewerWindowClosedEvent : PubSubEvent<ChannelType> { }
 
     public class ChHistogramWindowCloseEvent : PubSubEvent<int> { }
     public class ChHistogramWindowClosedEvent : PubSubEvent<ChannelType> { }

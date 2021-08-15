@@ -1,4 +1,5 @@
-﻿using IVM.Studio.ViewModels;
+﻿using IVM.Studio.Models;
+using IVM.Studio.ViewModels;
 using IVM.Studio.Views;
 using System;
 using System.Collections.Generic;
@@ -33,36 +34,38 @@ namespace IVM.Studio.Services
         /// <summary>
         /// Display 창 열기
         /// </summary>
-        /// <param name="channel"></param>
+        /// <param name="index"></param>
+        /// <param name="channelType"></param>
         /// <param name="alwaysTop"></param>
-        public void ShowDisplay(int channel, bool alwaysTop)
+        public void ShowDisplay(int index, ChannelType channelType, bool alwaysTop)
         {
-            if (channel < 0 || channel >= 4)
+            if (index < 0 || index >= 4)
                 return;
 
-            if (channelViewerWindows[channel] == null)
+            if (channelViewerWindows[index] == null)
             {
-                channelViewerWindows[channel] = new ChannelViewerWindow();
-                ChangeOwner(channel, alwaysTop);
+                channelViewerWindows[index] = new ChannelViewerWindow();
+                ChangeOwner(index, alwaysTop);
             }
 
             // 저장된 위치 불러오기
-            string pos = ConfigurationManager.AppSettings.Get($"Channel{channel}Position");
+            string pos = ConfigurationManager.AppSettings.Get($"Channel{index}Position");
             if (pos != null)
             {
                 List<double> parsedPosition = pos.Split(';').Select(s => Convert.ToDouble(s)).ToList();
-                channelViewerWindows[channel].Top = parsedPosition[0];
-                channelViewerWindows[channel].Left = parsedPosition[1];
-                channelViewerWindows[channel].Width = parsedPosition[2];
-                channelViewerWindows[channel].Height = parsedPosition[3];
+                channelViewerWindows[index].Top = parsedPosition[0];
+                channelViewerWindows[index].Left = parsedPosition[1];
+                channelViewerWindows[index].Width = parsedPosition[2];
+                channelViewerWindows[index].Height = parsedPosition[3];
             }
 
             // 띄우기
-            channelViewerWindows[channel].Show();
-            if (channelViewerWindows[channel].DataContext is ChannelViewerWindowViewModel vm)
+            channelViewerWindows[index].Show();
+            if (channelViewerWindows[index].DataContext is ChannelViewerWindowViewModel vm)
             {
-                vm.Title = $"Display #{channel + 1}";
-                vm.Channel = channel;
+                vm.Title = $"Display #{index + 1}";
+                vm.Channel = index;
+                vm.ChannelType = channelType;
             }
         }
 

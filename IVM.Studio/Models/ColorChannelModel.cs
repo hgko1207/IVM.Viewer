@@ -61,6 +61,13 @@ namespace IVM.Studio.Models
             }
         }
 
+        private Colors initColor;
+        public Colors InitColor
+        {
+            get => initColor;
+            set => SetProperty(ref initColor, value);
+        }
+
         private bool display;
         public bool Display
         {
@@ -70,9 +77,9 @@ namespace IVM.Studio.Models
                 if (SetProperty(ref display, value))
                 {
                     if (value)
-                        containerExtension.Resolve<WindowByChannelService>().ShowDisplay(Index, AlwaysTopEnabled);
+                        containerExtension.Resolve<WindowByChannelService>().ShowDisplay((int)InitColor, ChannelType, AlwaysTopEnabled);
                     else
-                        containerExtension.Resolve<WindowByChannelService>().CloseDisplay(Index);
+                        containerExtension.Resolve<WindowByChannelService>().CloseDisplay((int)InitColor);
                     eventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
                 }
             }
@@ -262,7 +269,10 @@ namespace IVM.Studio.Models
         public void SetPropertyColor(Colors value, bool init)
         {
             if (init)
+            {
                 SetProperty(ref color, value, nameof(Color));
+                InitColor = value;
+            }
             else
                 Color = value;
         }

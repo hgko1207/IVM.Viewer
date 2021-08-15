@@ -2,11 +2,13 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
+using IVM.Studio.Utils;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -247,6 +249,7 @@ namespace IVM.Studio.ViewModels.UserControls
         public ColorChannelModel RFPColorChannel { get; set; }
         public ColorChannelModel NIRColorChannel { get; set; }
 
+        public ICommand SaveImageCommand { get; private set; }
         public ICommand DAPIColorChangedCommand { get; private set; }
         public ICommand GFPColorChangedCommand { get; private set; }
         public ICommand RFPColorChangedCommand { get; private set; }
@@ -268,6 +271,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public ImageAdjustmentPanelViewModel(IContainerExtension container) : base(container)
         {
+            SaveImageCommand = new DelegateCommand(SaveImage);
             DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
             GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
             RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
@@ -322,6 +326,14 @@ namespace IVM.Studio.ViewModels.UserControls
             GFPColor = ConvertColorToString(GFPColorChannel.Color);
             RFPColor = ConvertColorToString(RFPColorChannel.Color);
             NIRColor = ConvertColorToString(NIRColorChannel.Color);
+        }
+
+        /// <summary>
+        /// Save Image
+        /// </summary>
+        private void SaveImage()
+        {
+            EventAggregator.GetEvent<DrawExportEvent>().Publish();
         }
 
         /// <summary>
@@ -392,6 +404,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private void ColorReset()
         {
             RefreshMetadata(new DisplayParam(null, dataManager.Metadata, true));
+            EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 
         /// <summary>
@@ -477,21 +490,21 @@ namespace IVM.Studio.ViewModels.UserControls
         /// 채널 뷰어 윈도우 종료될 때
         /// </summary>
         /// <param name="channel"></param>
-        private void ChWindowClosed(int channel)
+        private void ChWindowClosed(ChannelType channel)
         {
             switch (channel)
             {
-                case (int)ChannelType.DAPI:
-                    DAPIWindowOpend = false;
+                case ChannelType.DAPI:
+                    SetProperty(ref _DAPIWindowOpend, false, nameof(DAPIWindowOpend));
                     break;
-                case (int)ChannelType.GFP:
-                    GFPWindowOpend = false;
+                case ChannelType.GFP:
+                    SetProperty(ref _GFPWindowOpend, false, nameof(GFPWindowOpend));
                     break;
-                case (int)ChannelType.RFP:
-                    RFPWindowOpend = false;
+                case ChannelType.RFP:
+                    SetProperty(ref _RFPWindowOpend, false, nameof(RFPWindowOpend));
                     break;
-                case (int)ChannelType.NIR:
-                    NIRWindowOpend = false;
+                case ChannelType.NIR:
+                    SetProperty(ref _NIRWindowOpend, false, nameof(NIRWindowOpend));
                     break;
             }
         }

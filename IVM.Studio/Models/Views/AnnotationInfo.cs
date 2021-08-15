@@ -36,7 +36,12 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref cropRectangleEnabled, value))
                 {
-                    CropCircleEnabled = value ? false : true;
+                    if (value)
+                    {
+                        CropCircleEnabled = false;
+                        CropTriangleEnabled = false;
+                    }
+
                     if (CropEnabled)
                     {
                         CropEnabled = false;
@@ -54,7 +59,35 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref cropCircleEnabled, value))
                 {
-                    CropRectangleEnabled = value ? false : true;
+                    if (value)
+                    {
+                        CropRectangleEnabled = false;
+                        CropTriangleEnabled = false;
+                    }
+
+                    if (CropEnabled)
+                    {
+                        CropEnabled = false;
+                        CropEnabled = true;
+                    }
+                }
+            }
+        }
+
+        private bool cropTriangleEnabled;
+        public bool CropTriangleEnabled
+        {
+            get => cropTriangleEnabled;
+            set
+            {
+                if (SetProperty(ref cropTriangleEnabled, value))
+                {
+                    if (value)
+                    {
+                        CropRectangleEnabled = false;
+                        CropCircleEnabled = false;
+                    }
+
                     if (CropEnabled)
                     {
                         CropEnabled = false;

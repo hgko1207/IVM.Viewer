@@ -69,7 +69,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public ICommand RotationCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
-        public ICommand ExportCommand { get; private set; }
+        
 
         public AnnotationInfo AnnotationInfo { get; set; }
 
@@ -81,7 +81,6 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             RotationCommand = new DelegateCommand<string>(Rotation);
             RotationResetCommand = new DelegateCommand(RotationReset);
-            ExportCommand = new DelegateCommand(Export);
 
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
 
@@ -133,14 +132,6 @@ namespace IVM.Studio.ViewModels.UserControls
             SetProperty(ref reflectHorizontalEnabled, false, nameof(ReflectHorizontalEnabled));
             SetProperty(ref reflectVerticalEnabled, false, nameof(ReflectVerticalEnabled));
             EventAggregator.GetEvent<RotationResetEvent>().Publish();
-        }
-
-        /// <summary>
-        /// Export 이벤트
-        /// </summary>
-        private void Export()
-        {
-            EventAggregator.GetEvent<DrawExportEvent>().Publish();
         }
     }
 }

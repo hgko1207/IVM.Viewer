@@ -1,4 +1,5 @@
-﻿using IVM.Studio.Models.Events;
+﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Views;
 using Prism.Ioc;
@@ -31,6 +32,8 @@ namespace IVM.Studio.ViewModels
         private ChannelViewerWindow view;
 
         public int Channel { get; set; }
+
+        public ChannelType ChannelType { get; set; }
 
         /// <summary>
         /// 생성자
@@ -76,7 +79,7 @@ namespace IVM.Studio.ViewModels
         /// <param name="e"></param>
         private void WindowClosed(object sender, EventArgs e)
         {
-            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Publish(Channel);
+            EventAggregator.GetEvent<ChViewerWindowClosedEvent>().Publish(ChannelType);
         }
     }
 }
