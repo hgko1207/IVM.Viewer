@@ -67,40 +67,18 @@
                 <StackPanel Grid.Row="1">
                     <DockPanel Margin="0 4 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="X-axis" FontSize="14" FontWeight="Bold"/>
-                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" />
-                        <!--<dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>-->
+                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding RotXValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="-180" MaxValue="180" />
                         <Slider Margin="5 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-180" Value="{Binding RotXValue}" Minimum="-180" Maximum="180" />
                     </DockPanel>
                     <DockPanel Margin="0 0 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="Y-axis" FontSize="14" FontWeight="Bold"/>
-                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" />
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>
+                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding RotYValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="-180" MaxValue="180" />
+                        <Slider Margin="5 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-180" Value="{Binding RotYValue}" Minimum="-180" Maximum="180" />
                     </DockPanel>
                     <DockPanel Margin="0 0 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="Z-axis" FontSize="14" FontWeight="Bold"/>
-                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" />
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>
+                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding RotZValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="-180" MaxValue="180" />
+                        <Slider Margin="5 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-180" Value="{Binding RotZValue}" Minimum="-180" Maximum="180" />
                     </DockPanel>
                 </StackPanel>
             </Grid>
