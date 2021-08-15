@@ -126,9 +126,13 @@ namespace IVM.Studio.I3D
             mat4 scale = glm.scale(mat4.identity(), new vec3(s, s, s));
             mat4 rotY = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(ry), new vec3(1, 0, 0));
             mat4 rotZ = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(rx), new vec3(0, 0, 1));
-            mat4 modelMatrix = scale * rotY * rotZ;
+            mat4 rot = rotY * rotZ;
+
+            rot = view.camera.transformMatrix;
+
+            mat4 modelMatrix = scale * rot;
             matModelView = viewMatrix * modelMatrix;
-            matModelRot = rotY * rotZ;
+            matModelRot = rot;
 
             // slice transform
             float slf = 0.25f;
@@ -152,13 +156,13 @@ namespace IVM.Studio.I3D
             // grid must be bigger more than object.
             float sgridf = 1.001f;
             mat4 sgrid = glm.scale(mat4.identity(), new vec3(s * sgridf, s * sgridf, s * sgridf));
-            mat4 gridMatrix = sgrid * rotY * rotZ;
+            mat4 gridMatrix = sgrid * rot;
             matGridView = viewMatrix * gridMatrix;
             matGridObj = gridMatrix;
 
             // axis must be screen space matrix.
             mat4 axisTrn = glm.translate(mat4.identity(), view.param.AXIS_POS);
-            matAxisView = axisTrn * rotY * rotZ;
+            matAxisView = axisTrn * rot;
         }
 
         public void Init(OpenGL gl)
