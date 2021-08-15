@@ -72,11 +72,27 @@ namespace IVM.Studio.I3D
 
         private void UpdateCamera()
         {
+            if (viewtype == -1)
+                return;
+
             wcfclient.channel.OnUpdateCamera(
                 viewtype,
                 vw.param.CAMERA_POS.x, vw.param.CAMERA_POS.y, vw.param.CAMERA_POS.z,
                 vw.param.CAMERA_ANGLE.x, vw.param.CAMERA_ANGLE.y, vw.param.CAMERA_ANGLE.z,
                 vw.param.CAMERA_SCALE_FACTOR);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            // disable "alt + f4"
+            if (Keyboard.Modifiers == ModifierKeys.Alt && e.SystemKey == Key.F4)
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                base.OnKeyDown(e);
+            }
         }
     }
 }

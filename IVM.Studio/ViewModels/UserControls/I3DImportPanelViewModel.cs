@@ -59,10 +59,13 @@ namespace IVM.Studio.ViewModels.UserControls
             if (folderBrowserDialog.ShowDialog().GetValueOrDefault())
                 CurrentImgPath = folderBrowserDialog.SelectedPath;
 
-            I3DPathInfo pathInfo = new I3DPathInfo() { Path = CurrentImgPath };
-            ImgPathCollection.Add(pathInfo);
+            if (CurrentImgPath != null)
+            {
+                I3DPathInfo pathInfo = new I3DPathInfo() { Path = CurrentImgPath };
+                ImgPathCollection.Add(pathInfo);
 
-            EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
+                EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
+            }
         }
 
         private void OpenSelected()
