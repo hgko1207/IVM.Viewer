@@ -22,7 +22,7 @@ namespace IVM.Studio.Services
         void OnOpen(string path);
 
         [OperationContract]
-        void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float s);
+        void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
     }
 
     [ServiceContract]
@@ -32,6 +32,6 @@ namespace IVM.Studio.Services
         void OnWindowLoaded(int viewtype);
 
         [OperationContract]
-        void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float s);
+        void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s);
     }
 }

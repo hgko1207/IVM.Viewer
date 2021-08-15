@@ -2,6 +2,7 @@
 using GlmNet;
 using System.Windows.Threading;
 using System;
+using SharpGL.SceneGraph;
 
 namespace IVM.Studio.I3D
 {
@@ -114,8 +115,9 @@ namespace IVM.Studio.I3D
         public void UpdateModelviewMatrix()
         {
             float s = view.param.CAMERA_SCALE_FACTOR;
-            float rx = view.param.CAMERA_ANGLE.x;
-            float ry = view.param.CAMERA_ANGLE.y;
+            //float rx = view.param.CAMERA_ANGLE.x;
+            //float ry = view.param.CAMERA_ANGLE.y;
+            //float rz = view.param.CAMERA_ANGLE.z;
 
             // camera transform
             mat4 viewRot = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(0), new vec3(1, 0, 0));
@@ -124,11 +126,14 @@ namespace IVM.Studio.I3D
 
             // world transform
             mat4 scale = glm.scale(mat4.identity(), new vec3(s, s, s));
-            mat4 rotY = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(ry), new vec3(1, 0, 0));
-            mat4 rotZ = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(rx), new vec3(0, 0, 1));
-            mat4 rot = rotY * rotZ;
+            //mat4 rotY = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(ry), new vec3(1, 0, 0));
+            //mat4 rotZ = glm.rotate(mat4.identity(), I3DCommon.Deg2Rad(rx), new vec3(0, 0, 1));
+            //mat4 rot = rotY * rotZ;
 
-            rot = view.camera.transformMatrix;
+            Matrix mrot3 = view.camera.Matrix3FromEuler(view.param.CAMERA_ANGLE);
+            mat4 rot = view.camera.Matrix4fSetRotationFromMatrix3f(mrot3);
+
+            //rot = view.camera.transformMatrix;
 
             mat4 modelMatrix = scale * rot;
             matModelView = viewMatrix * modelMatrix;

@@ -13,14 +13,10 @@ namespace IVM.Studio.I3D
         I3DViewer view = null;
 
         // for translate
-        Point lastbtnPt = new Point(0, 0);
+        Point? lastTrnPt = null;
 
         // for rotate
-        public mat4 transformMatrix = mat4.identity();
-        Matrix thisRotationMatrix = new Matrix(Matrix.Identity(3));
-        Matrix lastRotationMatrix = new Matrix(Matrix.Identity(3));
-        Vertex startVector = new Vertex(0, 0, 0);
-        Vertex currentVector = new Vertex(0, 0, 0);
+        Vertex? lastRotVec = null;
 
         public delegate void UpdateDelegate();
         public UpdateDelegate updateFunc = null;
@@ -54,10 +50,10 @@ namespace IVM.Studio.I3D
         public void Reset()
         {
             view.param.CAMERA_VELOCITY = new vec2(0, 0);
-            view.param.CAMERA_ANGLE = new vec2(0, 0);
+            view.param.CAMERA_ANGLE = new vec3(0, 0, 0);
         }
 
-        public Vertex MapToSphere(float x, float y)
+        private Vertex MapToSphere(float x, float y)
         {
             // hyperboloid mapping taken from https://www.opengl.org/wiki/Object_Mouse_Trackball
 
@@ -80,7 +76,7 @@ namespace IVM.Studio.I3D
             else
                 P.Z = (float)(0.5f * (radius_squared)) / (float)Math.Sqrt(XY_squared);  // hyperboloid
 
-            Console.WriteLine("MapToSphere: {0:0.00} {1:0.00} {2:0.00}", P.X, P.Y, P.Z);
+            //Console.WriteLine("MapToSphere: {0:0.00} {1:0.00} {2:0.00}", P.X, P.Y, P.Z);
             return P;
         }
 
@@ -93,7 +89,7 @@ namespace IVM.Studio.I3D
             if (cross.Magnitude() > 1.0e-5)
             {
                 // The quaternion is the transform.
-                return new float[] { cross.X, cross.Y, cross.Z, startVector.ScalarProduct(sv) };
+                return new float[] { cross.X, cross.Y, cross.Z, sv.ScalarProduct(sv) };
             }
             else
             {
@@ -126,13 +122,11 @@ namespace IVM.Studio.I3D
             return matrix;
         }
 
-        private mat4 Matrix4fSetRotationFromMatrix3f(Matrix matrix)
+        public mat4 Matrix4fSetRotationFromMatrix3f(Matrix matrix)
         {
             Matrix t = new Matrix(Matrix.Identity(4));
 
             float scale = t.TempSVD();
-            //scale = 1.0f;
-            //Console.WriteLine("{0}", scale);
             t.FromOtherMatrix(matrix, 3, 3);
             t.Multiply(scale, 3, 3);
 
@@ -148,20 +142,76 @@ namespace IVM.Studio.I3D
             return m;
         }
 
+        private vec3 EulerFromMatrix3(Matrix m)
+        {
+            vec3 e = new vec3();
+
+            double[,] a = m.AsArray;
+
+            // Pitch
+            e.x = (float)Math.Asin(-a[2, 1]);
+
+            if (Math.Cos(e.x) > 0.0001f) // not at poles
+            {
+                e.y = (float)Math.Atan2(a[2, 0], a[2, 2]); // Yaw
+                e.z = (float)Math.Atan2(a[0, 1], a[1, 1]); // Roll
+            }
+            else
+            {
+                e.y = 0; // Yaw
+                e.z = (float)Math.Atan2(-a[1, 0], a[0, 0]); // Roll
+            }
+
+            //Console.WriteLine(" Euler: {0:0.00} {1:0.00} {2:0.00}", e.x, e.y, e.z);
+
+            return e;
+        }
+
+        public Matrix Matrix3FromEuler(vec3 e)
+        {
+            Matrix m = new Matrix(Matrix.Identity(3));
+
+            double[,] a = m.AsArray;
+
+            float cosY = (float)Math.Cos(e.y); // Yaw
+            float sinY = (float)Math.Sin(e.y);
+
+            float cosP = (float)Math.Cos(e.x); // Pitch
+            float sinP = (float)Math.Sin(e.x);
+
+            float cosR = (float)Math.Cos(e.z); // Roll
+            float sinR = (float)Math.Sin(e.z);
+
+            a[0, 0] = cosY * cosR + sinY * sinP * sinR;
+            a[1, 0] = cosR * sinY * sinP - sinR * cosY;
+            a[2, 0] = cosP * sinY;
+
+            a[0, 1] = cosP * sinR;
+            a[1, 1] = cosR * cosP;
+            a[2, 1] = -sinP;
+
+            a[0, 2] = sinR * cosY * sinP - sinY * cosR;
+            a[1, 2] = sinY * sinR + cosR * cosY * sinP;
+            a[2, 2] = cosP * cosY;
+
+            m = new Matrix(a);
+            return m;
+        }
+
         public void Control_MouseButtonDown(object sender, MouseEventArgs e)
         {
             Point pt = e.GetPosition(view.RenderTarget);
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                startVector = MapToSphere((float)pt.X, (float)pt.Y);
+                lastRotVec = MapToSphere((float)pt.X, (float)pt.Y);
 
                 view.RenderTarget.CaptureMouse();
             }
 
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
-                lastbtnPt = pt;
+                lastTrnPt = pt;
 
                 view.RenderTarget.CaptureMouse();
             }
@@ -169,46 +219,60 @@ namespace IVM.Studio.I3D
 
         public void Control_MouseButtonUp(object sender, MouseEventArgs e)
         {
-            // init rotate transform
-            lastRotationMatrix.FromOtherMatrix(thisRotationMatrix, 3, 3);
-            thisRotationMatrix.SetIdentity();
-            startVector = new Vertex(0, 0, 0);
+            lastTrnPt = null;
+            lastRotVec = null;
 
             view.RenderTarget.ReleaseMouseCapture();
         }
 
         public void Rotate(float x, float y)
         {
-            currentVector = MapToSphere(x, y);
+            Vertex curRotVec = MapToSphere(x, y);
 
-            // todo need solid tuple types.
-            // Calculate the quaternion.
-            float[] quaternion = CalculateQuaternion(startVector, currentVector);
-            Console.WriteLine("q: {0:0.00} {1:0.00} {2:0.00} {3:0.00}",
-                quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+            if (lastRotVec != null)
+            {
+                // todo need solid tuple types.
+                // Calculate the quaternion.
+                float[] quaternion = CalculateQuaternion(lastRotVec.Value, curRotVec);
+                //Console.WriteLine("q: {0:0.00} {1:0.00} {2:0.00} {3:0.00}",
+                //    quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
 
-            // Set Our Final Transform's Rotation From This One
-            thisRotationMatrix = Matrix3fSetRotationFromQuat4f(quaternion);
-            thisRotationMatrix = thisRotationMatrix * lastRotationMatrix;
-            transformMatrix = Matrix4fSetRotationFromMatrix3f(thisRotationMatrix);
+                Matrix rotLast = Matrix3FromEuler(view.param.CAMERA_ANGLE);
 
-            view.scene.UpdateModelviewMatrix();
+                // Set Our Final Transform's Rotation From This One
+                Matrix rotThis = Matrix3fSetRotationFromQuat4f(quaternion);
+                rotThis = rotThis * rotLast;
 
-            thisFrameChanged = true;
+                view.param.CAMERA_ANGLE = EulerFromMatrix3(rotThis);
+
+                view.scene.UpdateModelviewMatrix();
+
+                thisFrameChanged = true;
+            }
+
+            lastRotVec = curRotVec;
         }
 
         public void Translate(float x, float y)
         {
-            float aw = (float)view.ActualWidth;
-            float ah = (float)view.ActualHeight;
-            float z = -view.param.CAMERA_POS.z;
+            if (lastTrnPt != null)
+            {
+                Point delta = new Point(x - lastTrnPt.Value.X, y - lastTrnPt.Value.Y);
+                //Console.WriteLine("{0:0.00} {1:0.00}", delta.X, delta.Y);
 
-            view.param.CAMERA_POS.x += x * (1.0f / aw * z);
-            view.param.CAMERA_POS.y -= y * (1.0f / ah * z);
+                float aw = (float)view.ActualWidth;
+                float ah = (float)view.ActualHeight;
+                float z = -view.param.CAMERA_POS.z;
 
-            view.scene.UpdateModelviewMatrix();
+                view.param.CAMERA_POS.x += (float)delta.X * (1.0f / aw * z);
+                view.param.CAMERA_POS.y -= (float)delta.Y * (1.0f / ah * z);
 
-            thisFrameChanged = true;
+                view.scene.UpdateModelviewMatrix();
+
+                thisFrameChanged = true;
+            }
+
+            lastTrnPt = new Point(x, y);
         }
 
         public void Control_MouseMove(object sender, MouseEventArgs e)
@@ -222,12 +286,10 @@ namespace IVM.Studio.I3D
             {
                 Rotate((float)pt.X, (float)pt.Y);
             }
-            else
+            
+            if (e.MiddleButton == MouseButtonState.Pressed)
             {
-                Point delta = new Point(pt.X - lastbtnPt.X, pt.Y - lastbtnPt.Y);
-                lastbtnPt = pt;
-
-                Translate((float)delta.X, (float)delta.Y);
+                Translate((float)pt.X, (float)pt.Y);
             }
         }
 

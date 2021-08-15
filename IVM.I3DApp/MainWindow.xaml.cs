@@ -75,7 +75,7 @@ namespace IVM.Studio.I3D
             wcfclient.channel.OnUpdateCamera(
                 viewtype,
                 vw.param.CAMERA_POS.x, vw.param.CAMERA_POS.y, vw.param.CAMERA_POS.z,
-                vw.param.CAMERA_ANGLE.x, vw.param.CAMERA_ANGLE.y,
+                vw.param.CAMERA_ANGLE.x, vw.param.CAMERA_ANGLE.y, vw.param.CAMERA_ANGLE.z,
                 vw.param.CAMERA_SCALE_FACTOR);
         }
     }

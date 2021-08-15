@@ -13,10 +13,10 @@ namespace IVM.Studio.I3D
             w.vw.Open(path);
         }
 
-        public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float s)
+        public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)
         {
             w.vw.param.CAMERA_POS = new vec3(px, py, pz);
-            w.vw.param.CAMERA_ANGLE = new vec2(ax, ay);
+            w.vw.param.CAMERA_ANGLE = new vec3(ax, ay, az);
             w.vw.param.CAMERA_SCALE_FACTOR = s;
             w.vw.scene.UpdateModelviewMatrix();
         }

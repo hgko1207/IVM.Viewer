@@ -40,7 +40,7 @@ namespace IVM.Studio.I3D
         // camera
         public float CAMERA_SCALE_FACTOR = 0.8f;
         public vec3 CAMERA_POS = new vec3(0, 0, -5.0f);
-        public vec2 CAMERA_ANGLE = new vec2(0, 0);
+        public vec3 CAMERA_ANGLE = new vec3(0, 0, 0);
         public vec2 CAMERA_VELOCITY = new vec2(0, 0);
     }
 }
