@@ -179,18 +179,18 @@ namespace IVM.Studio.I3D
 
         public void Rotate(float x, float y)
         {
-            view.param.CAMERA_ANGLE.x += x * 1.0f;
-            view.param.CAMERA_ANGLE.y += y * 1.0f;
+            currentVector = MapToSphere(x, y);
 
-            if (view.param.CAMERA_ANGLE.x < -360.0f)
-                view.param.CAMERA_ANGLE.x += 360.0f;
-            if (view.param.CAMERA_ANGLE.x > 360.0f)
-                view.param.CAMERA_ANGLE.x -= 360.0f;
+            // todo need solid tuple types.
+            // Calculate the quaternion.
+            float[] quaternion = CalculateQuaternion(startVector, currentVector);
+            Console.WriteLine("q: {0:0.00} {1:0.00} {2:0.00} {3:0.00}",
+                quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
 
-            if (view.param.CAMERA_ANGLE.y < -360.0f)
-                view.param.CAMERA_ANGLE.y += 360.0f;
-            if (view.param.CAMERA_ANGLE.y > 360.0f)
-                view.param.CAMERA_ANGLE.y -= 360.0f;
+            // Set Our Final Transform's Rotation From This One
+            thisRotationMatrix = Matrix3fSetRotationFromQuat4f(quaternion);
+            thisRotationMatrix = thisRotationMatrix * lastRotationMatrix;
+            transformMatrix = Matrix4fSetRotationFromMatrix3f(thisRotationMatrix);
 
             view.scene.UpdateModelviewMatrix();
 
@@ -220,22 +220,7 @@ namespace IVM.Studio.I3D
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                currentVector = MapToSphere((float)pt.X, (float)pt.Y);
-
-                // todo need solid tuple types.
-                // Calculate the quaternion.
-                float[] quaternion = CalculateQuaternion(startVector, currentVector);
-                Console.WriteLine("q: {0:0.00} {1:0.00} {2:0.00} {3:0.00}", 
-                    quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
-
-                // Set Our Final Transform's Rotation From This One
-                thisRotationMatrix = Matrix3fSetRotationFromQuat4f(quaternion);
-                thisRotationMatrix = thisRotationMatrix * lastRotationMatrix;
-                transformMatrix = Matrix4fSetRotationFromMatrix3f(thisRotationMatrix);
-
-                view.scene.UpdateModelviewMatrix();
-
-                //Rotate((float)delta.X, (float)delta.Y);
+                Rotate((float)pt.X, (float)pt.Y);
             }
             else
             {
