@@ -6,8 +6,11 @@ in vec4 pPosition;
 
 uniform sampler3D inTex3D;
 uniform vec3 BG_COLOR;
-uniform vec3 THRESHOLD_INTENSITY;
-uniform vec3 ALPHA_WEIGHT;
+uniform vec4 THRESHOLD_INTENSITY_MIN;
+uniform vec4 THRESHOLD_INTENSITY_MAX;
+uniform vec4 ALPHA_WEIGHT;
+uniform vec4 BAND_ORDER;
+uniform vec4 BAND_VISIBLE;
 uniform float PER_PIXEl_ITERATION;
 uniform float BOX_HEIGHT;
 uniform float RENDER_MODE;
@@ -39,20 +42,16 @@ void main()
     float iter = PER_PIXEl_ITERATION;
     dir = dir / (iter - 1);
     vec4 bcol = vec4(BG_COLOR.x, BG_COLOR.y, BG_COLOR.z, 0.0f);
-    vec4 acc = vec4(0, 0, 0, 0);
-
-    if (RENDER_MODE == 0)
-        acc = bcol;
+    
+    vec4 acc = vec4(-1, -1, -1, -1);
+    if (RENDER_MODE == 1)
+        acc = vec4(0, 0, 0, 0);
 
     if (BOX_HEIGHT > 1)
         iter *= BOX_HEIGHT;
 
-    float wcr = 0;
-    float wcg = 0;
-    float wcb = 0;
-    float war = 1.0 / iter * ALPHA_WEIGHT.x;
-    float wag = 1.0 / iter * ALPHA_WEIGHT.y;
-    float wab = 1.0 / iter * ALPHA_WEIGHT.z;
+    vec4 wa = vec4(1.0 / iter * ALPHA_WEIGHT);
+
     bool mark = false;
 
     for (int i = 0; i < iter; ++i)
@@ -64,85 +63,98 @@ void main()
         if (tx < 0 || tx > 1 || ty < 0 || ty > 1 || tz < 0 || tz > 1)
             continue;
         
-        vec4 col = texture(inTex3D, vec3(tx, ty, tz));
+        vec4 col = texture(inTex3D, vec3(tx, ty, tz));        
+        col *= 255.0;
+
+        // if one band is exist at least, show voxel
+        if (IS_COLOCALIZATION == 0)
+        {
+            if(!((THRESHOLD_INTENSITY_MIN.x <= col.x && col.x <= THRESHOLD_INTENSITY_MAX.x) || 
+                (THRESHOLD_INTENSITY_MIN.y <= col.y && col.y <= THRESHOLD_INTENSITY_MAX.y) ||
+                (THRESHOLD_INTENSITY_MIN.z <= col.z && col.z <= THRESHOLD_INTENSITY_MAX.z) ||
+                (THRESHOLD_INTENSITY_MIN.w <= col.w && col.w <= THRESHOLD_INTENSITY_MAX.w)))
+                continue;
+        }
+        else
+        {
+            if(!((THRESHOLD_INTENSITY_MIN.x <= col.x && col.x <= THRESHOLD_INTENSITY_MAX.x) &&
+                (THRESHOLD_INTENSITY_MIN.y <= col.y && col.y <= THRESHOLD_INTENSITY_MAX.y) &&
+                (THRESHOLD_INTENSITY_MIN.z <= col.z && col.z <= THRESHOLD_INTENSITY_MAX.z) &&
+                (THRESHOLD_INTENSITY_MIN.w <= col.w && col.w <= THRESHOLD_INTENSITY_MAX.w)))
+                continue;
+        }
 
         if (RENDER_MODE == 0)
         {
-            // if one band is exist at least, show voxel
-            if (IS_COLOCALIZATION == 0)
-            {
-                if (col.x < THRESHOLD_INTENSITY.x && col.y < THRESHOLD_INTENSITY.y && col.z < THRESHOLD_INTENSITY.z)
-                    continue;
-            }
-            else
-            {
-                if (col.x < THRESHOLD_INTENSITY.x || col.y < THRESHOLD_INTENSITY.y || col.z < THRESHOLD_INTENSITY.z)
-                    continue;
-            }
-
-            acc = (acc * 0.5f + col * 0.5f);
-            mark = true;
+            acc = col / 255.0;
         }
         else if (RENDER_MODE == 1)
         {
-            vec4 col2 = col;
-
             // if below intensity, that band will be hide
-            if (col.x <= THRESHOLD_INTENSITY.x)
-                col2.x = 0;
+            if (THRESHOLD_INTENSITY_MIN.x <= col.x && col.x <= THRESHOLD_INTENSITY_MAX.x)
+                acc.x += col.x / 255.0 * wa.x;
 
-            if (col.y <= THRESHOLD_INTENSITY.y)
-                col2.y = 0;
+            if (THRESHOLD_INTENSITY_MIN.y <= col.y && col.y <= THRESHOLD_INTENSITY_MAX.y)
+                acc.y += col.y / 255.0 * wa.y;
 
-            if (col.z <= THRESHOLD_INTENSITY.z)
-                col2.z = 0;
+            if (THRESHOLD_INTENSITY_MIN.z <= col.z && col.z <= THRESHOLD_INTENSITY_MAX.z)
+                acc.z += col.z / 255.0 * wa.z;
 
-            // if one band is exist at least, show voxel
-            if (IS_COLOCALIZATION == 0)
-            {
-                if (col.x < THRESHOLD_INTENSITY.x && col.y < THRESHOLD_INTENSITY.y && col.z < THRESHOLD_INTENSITY.z)
-                    continue;
-            }
-            else
-            {
-                if (col.x < THRESHOLD_INTENSITY.x || col.y < THRESHOLD_INTENSITY.y || col.z < THRESHOLD_INTENSITY.z)
-                    continue;
-            }
-
-            wcr += war;
-            wcg += wag;
-            wcb += wab;
-            acc.x = acc.x + col2.x * war;
-            acc.y = acc.y + col2.y * wag;
-            acc.z = acc.z + col2.z * wab;
-
-            mark = true;
+            if (THRESHOLD_INTENSITY_MIN.w <= col.w && col.w <= THRESHOLD_INTENSITY_MAX.w)
+                acc.w += col.w / 255.0 * wa.z;
         }
+
+        mark = true;
     }
 
-    vec4 ocol = vec4(0, 0, 0, 0);
+    vec4 ocol = acc;
 
-    if (RENDER_MODE == 0)
-    {
-        ocol = acc;
-    }
-    else if (RENDER_MODE == 1)
-    {
-        if (wcr > 1) wcr = 1;
-        if (wcg > 1) wcg = 1;
-        if (wcb > 1) wcb = 1;
-
-        ocol.x = bcol.x * (1 - wcr) + acc.x * wcr;
-        ocol.y = bcol.y * (1 - wcg) + acc.y * wcg;
-        ocol.z = bcol.z * (1 - wcb) + acc.z * wcb;
-    }
+    if (!mark) discard;
 
     if (ocol.x > 1) ocol.x = 1;
     if (ocol.y > 1) ocol.y = 1;
     if (ocol.z > 1) ocol.z = 1;
-    ocol.w = 0;
+    if (ocol.w > 1) ocol.w = 1;
 
-    if (!mark) discard;
+    if (BAND_VISIBLE.x == 1)
+    {
+        if (BAND_ORDER.x == 0)
+            gl_FragColor.x = ocol.x;
+        else if (BAND_ORDER.x == 1)
+            gl_FragColor.y = ocol.x;
+        else if (BAND_ORDER.x == 2)
+            gl_FragColor.z = ocol.x;
+    }
 
-    gl_FragColor = ocol;
+    if (BAND_VISIBLE.y == 1)
+    {
+        if (BAND_ORDER.y == 0)
+            gl_FragColor.x = ocol.y;
+        else if (BAND_ORDER.y == 1)
+            gl_FragColor.y = ocol.y;
+        else if (BAND_ORDER.y == 2)
+            gl_FragColor.z = ocol.y;
+    }
+
+    if (BAND_VISIBLE.z == 1)
+    {
+        if (BAND_ORDER.z == 0)
+            gl_FragColor.x = ocol.z;
+        else if (BAND_ORDER.z == 1)
+            gl_FragColor.y = ocol.z;
+        else if (BAND_ORDER.z == 2)
+            gl_FragColor.z = ocol.z;
+    }
+
+    if (BAND_VISIBLE.w == 1)
+    {
+        if (BAND_ORDER.w == 0)
+            gl_FragColor.x = ocol.w;
+        else if (BAND_ORDER.w == 1)
+            gl_FragColor.y = ocol.w;
+        else if (BAND_ORDER.w == 2)
+            gl_FragColor.z = ocol.w;
+    }
+
+    gl_FragColor.w = 1.0;
 }

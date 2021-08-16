@@ -525,9 +525,19 @@ namespace IVM.Studio.I3D
             shader.SetUniformMatrix4(gl, "invProj", invProj.to_array());
             shader.SetUniformMatrix4(gl, "invModelView", invModelView.to_array());
 
+            vec4 tmin = view.param.THRESHOLD_INTENSITY_MIN;
+            vec4 tmax = view.param.THRESHOLD_INTENSITY_MAX;
+            if (view.param.BAND_VISIBLE.x == 0) { tmin.x = 0; tmax.x = 0; }
+            if (view.param.BAND_VISIBLE.y == 0) { tmin.y = 0; tmax.y = 0; }
+            if (view.param.BAND_VISIBLE.z == 0) { tmin.z = 0; tmax.z = 0; }
+            if (view.param.BAND_VISIBLE.w == 0) { tmin.w = 0; tmax.w = 0; }
+
+            gl.Uniform4(shader.GetUniformLocation(gl, "THRESHOLD_INTENSITY_MIN"), tmin.x, tmin.y, tmin.z, tmin.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "THRESHOLD_INTENSITY_MAX"), tmax.x, tmax.y, tmax.z, tmax.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "ALPHA_WEIGHT"), view.param.ALPHA_WEIGHT.x, view.param.ALPHA_WEIGHT.y, view.param.ALPHA_WEIGHT.z, view.param.ALPHA_WEIGHT.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "BAND_ORDER"), view.param.BAND_ORDER.x, view.param.BAND_ORDER.y, view.param.BAND_ORDER.z, view.param.BAND_ORDER.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "BAND_VISIBLE"), view.param.BAND_VISIBLE.x, view.param.BAND_VISIBLE.y, view.param.BAND_VISIBLE.z, view.param.BAND_VISIBLE.w); // uniform4
             shader.SetUniform3(gl, "BG_COLOR", view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z);
-            shader.SetUniform3(gl, "THRESHOLD_INTENSITY", view.param.THRESHOLD_INTENSITY.x, view.param.THRESHOLD_INTENSITY.y, view.param.THRESHOLD_INTENSITY.z);
-            shader.SetUniform3(gl, "ALPHA_WEIGHT", view.param.ALPHA_WEIGHT.x, view.param.ALPHA_WEIGHT.y, view.param.ALPHA_WEIGHT.z);
             shader.SetUniform1(gl, "PER_PIXEl_ITERATION", view.param.PER_PIXEl_ITERATION);
             shader.SetUniform1(gl, "BOX_HEIGHT", view.param.BOX_HEIGHT);
             shader.SetUniform1(gl, "RENDER_MODE", view.param.RENDER_MODE);

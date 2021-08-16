@@ -142,6 +142,7 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("I3DImportPanel", typeof(I3DImportPanel));
             RegionManager.RegisterViewWithRegion("I3DDataParamPanel", typeof(I3DDataParamPanel));
             RegionManager.RegisterViewWithRegion("I3D3DViewPanel", typeof(I3D3DViewPanel));
+            RegionManager.RegisterViewWithRegion("I3D3DViewPanel", typeof(I3DSliceViewPanel));
             RegionManager.RegisterViewWithRegion("I3DMainViewer", typeof(I3DMainViewer));
             RegionManager.RegisterViewWithRegion("I3DSliceViewer", typeof(I3DSliceViewer));
 

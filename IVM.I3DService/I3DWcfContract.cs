@@ -37,6 +37,18 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeObliqueDepth(float d);
+
+        [OperationContract]
+        void OnChangeBandOrder(int r, int g, int b, int a);
+
+        [OperationContract]
+        void OnChangeBandVisible(bool r, bool g, bool b, bool a);
+
+        [OperationContract]
+        void OnChangeIntensityThreshold(float rmin, float rmax, float gmin, float gmax, float bmin, float bmax, float amin, float amax);
+
+        [OperationContract]
+        void OnChangeAlphaWeight(float r, float g, float b, float a);
     }
 
     [ServiceContract]

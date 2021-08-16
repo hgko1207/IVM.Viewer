@@ -183,6 +183,7 @@
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\I3DSliceViewPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3DDataParamPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3D3DViewPanel.cs" />
     <Compile Include="ViewModels\UserControls\I3DSliceViewerViewModel.cs" />
@@ -203,6 +204,9 @@
     </Compile>
     <Compile Include="Views\ChannelHistogramWindow.xaml.cs">
       <DependentUpon>ChannelHistogramWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3DSliceViewPanel.xaml.cs">
+      <DependentUpon>I3DSliceViewPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\I3DDataParamPanel.xaml.cs">
       <DependentUpon>I3DDataParamPanel.xaml</DependentUpon>
@@ -263,6 +267,10 @@
     <Page Include="Views\MainViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\I3DSliceViewPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserControls\I3DDataParamPanel.xaml">
       <Generator>MSBuild:Compile</Generator>

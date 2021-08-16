@@ -41,6 +41,42 @@ namespace IVM.Studio.I3D
             w.vw.param.OBLIQUE_DEPTH = d;
         }
 
+        public void OnChangeBandOrder(int r, int g, int b, int a)
+        {
+            w.vw.param.BAND_ORDER.x = (float)r;
+            w.vw.param.BAND_ORDER.y = (float)g;
+            w.vw.param.BAND_ORDER.z = (float)b;
+            w.vw.param.BAND_ORDER.w = (float)a;
+        }
+
+        public void OnChangeBandVisible(bool r, bool g, bool b, bool a)
+        {
+            w.vw.param.BAND_VISIBLE.x = (float)(r ? 1 : 0);
+            w.vw.param.BAND_VISIBLE.y = (float)(g ? 1 : 0);
+            w.vw.param.BAND_VISIBLE.z = (float)(b ? 1 : 0);
+            w.vw.param.BAND_VISIBLE.w = (float)(a ? 1 : 0);
+        }
+
+        public void OnChangeIntensityThreshold(float rmin, float rmax, float gmin, float gmax, float bmin, float bmax, float amin, float amax)
+        {
+            w.vw.param.THRESHOLD_INTENSITY_MIN.x = rmin;
+            w.vw.param.THRESHOLD_INTENSITY_MIN.y = gmin;
+            w.vw.param.THRESHOLD_INTENSITY_MIN.z = bmin;
+            w.vw.param.THRESHOLD_INTENSITY_MIN.w = amin;
+
+            w.vw.param.THRESHOLD_INTENSITY_MAX.x = rmax;
+            w.vw.param.THRESHOLD_INTENSITY_MAX.y = gmax;
+            w.vw.param.THRESHOLD_INTENSITY_MAX.z = bmax;
+            w.vw.param.THRESHOLD_INTENSITY_MAX.w = amax;
+        }
+
+        public void OnChangeAlphaWeight(float r, float g, float b, float a)
+        {
+            w.vw.param.ALPHA_WEIGHT.x = r;
+            w.vw.param.ALPHA_WEIGHT.y = g;
+            w.vw.param.ALPHA_WEIGHT.z = b;
+            w.vw.param.ALPHA_WEIGHT.w = a;
+        }
     }
 }
 
