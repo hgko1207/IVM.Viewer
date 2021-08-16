@@ -3,10 +3,13 @@ using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views.UserControls;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Windows.Input;
 using static IVM.Studio.Models.Common;
 
 namespace IVM.Studio.ViewModels.UserControls
@@ -57,6 +60,31 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        public ICommand CameraCoronalCommand { get; private set; }
+        public ICommand CameraSagittalCommand { get; private set; }
+        public ICommand CameraAxialCommand { get; private set; }
+
+        public enum SliceModeType
+        {
+            [Display(Name = "OBLIQUE", Order = 2)]
+            OBLIQUE = 2,
+            [Display(Name = "SLICE", Order = 3)]
+            SLICE = 3,
+        }
+
+        private SliceModeType sliceMode = SliceModeType.OBLIQUE;
+        public SliceModeType SliceMode
+        {
+            get => sliceMode;
+            set
+            {
+                if (SetProperty(ref sliceMode, value))
+                {
+                    wcfserver.channel2.OnChangeRenderMode((int)sliceMode);
+                }
+            }
+        }
+
         bool subscribing = false;
 
         /// <summary>
@@ -68,6 +96,31 @@ namespace IVM.Studio.ViewModels.UserControls
             wcfserver = container.Resolve<I3DWcfServer>();
 
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Subscribe(UpdateCamera);
+
+            CameraCoronalCommand = new DelegateCommand(CameraCoronal);
+            CameraSagittalCommand = new DelegateCommand(CameraSagittal);
+            CameraAxialCommand = new DelegateCommand(CameraAxial);
+        }
+
+        private void CameraAxial()
+        {
+            RotXValue = 90;
+            RotYValue = 0;
+            RotZValue = 0;
+        }
+
+        private void CameraSagittal()
+        {
+            RotXValue = 0;
+            RotYValue = 90;
+            RotZValue = 0;
+        }
+
+        private void CameraCoronal()
+        {
+            RotXValue = 0;
+            RotYValue = 0;
+            RotZValue = 0;
         }
 
         private void UpdateCamera(I3DCameraUpdateParam p)

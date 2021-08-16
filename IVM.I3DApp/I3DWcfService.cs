@@ -20,6 +20,10 @@ namespace IVM.Studio.I3D
             w.vw.param.CAMERA_SCALE_FACTOR = s;
             w.vw.scene.UpdateModelviewMatrix();
         }
+        public void OnChangeRenderMode(int m)
+        {
+            w.vw.param.RENDER_MODE = m;
+        }
     }
 }
 

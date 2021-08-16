@@ -15,6 +15,14 @@ namespace IVM.Studio.Services
         SLICE_VIEW = 1,
     }
 
+    public enum I3DRenderMode
+    {
+        BLEND = 0,
+        ADDED = 1,
+        OBLIQUE = 2,
+        SLICE = 3,
+    }
+
     [ServiceContract]
     public interface I3DClientContract
     {
@@ -23,6 +31,9 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
+
+        [OperationContract]
+        void OnChangeRenderMode(int m);
     }
 
     [ServiceContract]
