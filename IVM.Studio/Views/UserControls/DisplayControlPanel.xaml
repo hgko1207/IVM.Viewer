@@ -90,7 +90,7 @@
             </Border>
 
             <!-- Multi-Spot(Multi Position) -->
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Multi-Spot" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Multi-Position" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <dx:SimpleButton Grid.Row="4" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" 
                              Command="{Binding PlaySlideShowCommand}" CommandParameter="MultiPosition" IsEnabled="{Binding MPSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
@@ -160,27 +160,31 @@
 
             <StackPanel Grid.Column="2">
                 <DockPanel>
-                    <TextBlock Text="Slideshow" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                    <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Record" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Image Sequence – Video Export" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
                 </DockPanel>
 
-                <DockPanel Margin="0 8 0 0">
+                <DockPanel Margin="0 25 0 0">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock TextAlignment="Center" Text="Speed"/>
-                            <TextBlock TextAlignment="Center" Text="(FPS)" Margin="0 -4 0 0"/>
                         </StackPanel>
-
-                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowFps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="10 0 0 0"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="Repeat" VerticalAlignment="Center"/>
-                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowRepeat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="10 0 0 0"/>
+                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowFps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Height="28" Margin="14 0 0 0"/>
+                        <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="FPS" Margin="5 0 0 0"/>
                     </StackPanel>
                 </DockPanel>
+                
+                <DockPanel Margin="0 8 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Repeat" VerticalAlignment="Center"/>
+                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowRepeat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Height="28" Margin="10 0 0 0"/>
+                        <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Times" Margin="5 0 0 0"/>
+                    </StackPanel>
+                    <dx:SimpleButton Style="{StaticResource SkyGradientButton}" HorizontalAlignment="Right">
+                        <TextBlock TextAlignment="Center" FontSize="12">Video<LineBreak/>Export</TextBlock>
+                    </dx:SimpleButton>
+                </DockPanel>
 
-                <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 12" />
+                <!--<ContentControl Template="{StaticResource HorizontalLine}" Margin="0 12" />
 
                 <DockPanel>
                     <TextBlock Text="Window Arrange" VerticalAlignment="Center"/>
@@ -189,7 +193,7 @@
                         <dxe:ComboBoxEditItem Content="Horizontal"/>
                         <dxe:ComboBoxEditItem Content="Vertical"/>
                     </dxe:ComboBoxEdit>
-                </DockPanel>
+                </DockPanel>-->
             </StackPanel>
         </Grid>
     </Grid>
