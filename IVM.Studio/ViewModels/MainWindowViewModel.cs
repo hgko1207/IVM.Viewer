@@ -135,6 +135,7 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("DisplayControlPanel", typeof(DisplayControlPanel));
             //RegionManager.RegisterViewWithRegion("ThumbnailPanel", typeof(ThumbnailPanel));
             RegionManager.RegisterViewWithRegion("ChannelProcessingPanel", typeof(ChannelProcessingPanel));
+            RegionManager.RegisterViewWithRegion("MeasurementPanel", typeof(MeasurementPanel));
             RegionManager.RegisterViewWithRegion("PostProcessingPanel", typeof(PostProcessingPanel));
             RegionManager.RegisterViewWithRegion("RotateCropPanel", typeof(RotateCropPanel));
 

@@ -111,12 +111,6 @@
             <Slider Grid.Row="6" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding TLSliderMinimum}" Maximum="{Binding TLSliderMaximum}" Value="{Binding TLSliderValue, Delay=500}" IsEnabled="{Binding TLSliderEnabled}"/>
 
-            <!--<dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Margin="15 0" Minimum="1" Maximum="300" SelectionStart="35" SelectionEnd="285" TickPlacement="None">
-                                    <dxe:TrackBarEdit.StyleSettings>
-                                        <dxe:TrackBarRangeStyleSettings/>
-                                    </dxe:TrackBarEdit.StyleSettings>
-                                </dxe:TrackBarEdit>-->
-
             <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock DataContext="{Binding SliderControlInfo}" Text="{Binding TLSliderText}" Style="{StaticResource GeneralTextBlock}"/>
             </Border>
@@ -159,36 +153,26 @@
             </Grid>
 
             <StackPanel Grid.Column="2">
-                <DockPanel>
-                    <TextBlock Text="Slideshow" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                    <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Record" HorizontalAlignment="Right"/>
-                </DockPanel>
-
-                <DockPanel Margin="0 8 0 0">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock TextAlignment="Center" Text="Speed"/>
-                            <TextBlock TextAlignment="Center" Text="(FPS)" Margin="0 -4 0 0"/>
+                <TextBlock Text="Image Sequence - Video Export" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+               
+                <DockPanel Margin="0 25 0 0">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Speed" Width="60" VerticalAlignment="Center"/>
+                            <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowFps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50"/>
+                            <TextBlock Text="FPS" Margin="8 0 0 0" VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowFps, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="10 0 0 0"/>
+                        <StackPanel Orientation="Horizontal" Margin="0 8 0 0">
+                            <TextBlock Text="Repeat" Width="60" VerticalAlignment="Center"/>
+                            <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowRepeat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50"/>
+                            <TextBlock Text="Times" Margin="8 0 0 0" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="Repeat" VerticalAlignment="Center"/>
-                        <dxe:SpinEdit DataContext="{Binding SliderControlInfo}" Value="{Binding SlideShowRepeat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="10 0 0 0"/>
-                    </StackPanel>
-                </DockPanel>
-
-                <ContentControl Template="{StaticResource HorizontalLine}" Margin="0 12" />
-
-                <DockPanel>
-                    <TextBlock Text="Window Arrange" VerticalAlignment="Center"/>
-
-                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right">
-                        <dxe:ComboBoxEditItem Content="Horizontal"/>
-                        <dxe:ComboBoxEditItem Content="Vertical"/>
-                    </dxe:ComboBoxEdit>
+                   
+                    <dx:SimpleButton Style="{StaticResource SkyGradientButton}" Height="40" Padding="0 0 0 2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="70">
+                        <TextBlock TextAlignment="Center" FontSize="12">Video<LineBreak/>Export</TextBlock>
+                    </dx:SimpleButton>
                 </DockPanel>
             </StackPanel>
         </Grid>

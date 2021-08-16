@@ -129,7 +129,7 @@
 
                                     <dxg:GridControl.Bands>
                                         <dxg:GridControlBand Header="Name" HorizontalHeaderContentAlignment="Center">
-                                            <dxg:GridColumn FieldName="Group" Width="90"/>
+                                            <dxg:GridColumn FieldName="Group" Width="100"/>
                                         </dxg:GridControlBand>
                                         <dxg:GridControlBand Header="Values" HorizontalHeaderContentAlignment="Center">
                                             <dxg:GridColumn FieldName="Name1"/>
@@ -170,13 +170,17 @@
                             <ContentControl prism:RegionManager.RegionName="DisplayControlPanel"/>
                         </dxdo:DocumentPanel>
 
+                        <dxdo:DocumentPanel Caption="Measurement" AllowClose="False" ItemHeight="320">
+                            <ContentControl prism:RegionManager.RegionName="MeasurementPanel"/>
+                        </dxdo:DocumentPanel>
+
                         <dxdo:DocumentPanel Caption="Post Processing" AllowClose="False" ItemHeight="320">
                             <ContentControl prism:RegionManager.RegionName="PostProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Channel Processing" AllowClose="False" ItemHeight="320">
+                        <!--<dxdo:DocumentPanel Caption="Channel Processing" AllowClose="False" ItemHeight="320">
                             <ContentControl prism:RegionManager.RegionName="ChannelProcessingPanel"/>
-                        </dxdo:DocumentPanel>
+                        </dxdo:DocumentPanel>-->
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>
             </dxdo:DockLayoutManager>
