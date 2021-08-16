@@ -34,6 +34,9 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeRenderMode(int m);
+
+        [OperationContract]
+        void OnChangeObliqueDepth(float d);
     }
 
     [ServiceContract]
@@ -41,6 +44,9 @@ namespace IVM.Studio.Services
     {
         [OperationContract]
         void OnWindowLoaded(int viewtype);
+
+        [OperationContract]
+        void OnMetaLoaded(int width, int height, float umWidth, float umHeight);
 
         [OperationContract]
         void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s);

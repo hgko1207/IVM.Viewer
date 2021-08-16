@@ -108,30 +108,23 @@
                     <DockPanel Margin="0 0 0 8">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                             <TextBlock TextAlignment="Center" Text="Slice size" FontSize="14" FontWeight="Bold"/>
-                            <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" />
+                            <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding SlicePosStep, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="100" />
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                             <TextBlock TextAlignment="Center" Text="pixel" FontSize="14" Margin="0 0 4 0" />
                             <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
-                                <TextBlock Style="{StaticResource GeneralTextBlock}" Text="0.4 um" TextAlignment="Left" />
+                                <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding SliceUmPix}" TextAlignment="Left" />
                             </Border>
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                             <dx:SimpleButton Glyph="{dx:DXImage Image=Prev_16x16.png}" Style="{StaticResource GrayGradientButton}" 
-                                     Width="28" Height="28" HorizontalAlignment="Right" Margin="0 0 4 0" />
+                                     Width="28" Height="28" HorizontalAlignment="Right" Margin="0 0 4 0" Command="{Binding SlicePrevStepCommand}" />
                             <dx:SimpleButton Glyph="{dx:DXImage Image=Next_16x16.png}" Style="{StaticResource GrayGradientButton}" 
-                                     Width="28" Height="28" HorizontalAlignment="Right" />
+                                     Width="28" Height="28" HorizontalAlignment="Right" Command="{Binding SliceNextStepCommand}" />
                         </StackPanel>
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>                        
+                        <Slider Margin="5 0" TickFrequency="{Binding SlicePosFreq}" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-1" Value="{Binding SlicePosValue}" Minimum="-1" Maximum="1" />
                     </DockPanel>
                 </StackPanel>
             </Grid>

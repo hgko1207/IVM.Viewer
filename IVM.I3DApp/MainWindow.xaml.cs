@@ -11,8 +11,8 @@ namespace IVM.Studio.I3D
     /// </summary>
     public partial class MainWindow : Window
     {
-        I3DWcfClient wcfclient;
-        int viewtype = -1;
+        public I3DWcfClient wcfclient;
+        public int viewtype = -1;
 
         public String AppTitle;
 

@@ -1,6 +1,7 @@
 ﻿using GlmNet;
 using IVM.Studio.Services;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace IVM.Studio.I3D
 {
@@ -11,6 +12,16 @@ namespace IVM.Studio.I3D
         public void OnOpen(string path)
         {
             w.vw.Open(path);
+
+            if (w.viewtype == (int)I3DViewType.MAIN_VIEW)
+            {
+                int width = (int)w.vw.scene.tex3D.GetWidth();
+                int height = (int)w.vw.scene.tex3D.GetHeight();
+                float umWidth = w.vw.scene.meta.umWidth;
+                float umHeight = w.vw.scene.meta.umHeight;
+
+                Task.Run(() => w.wcfclient.channel.OnMetaLoaded(width, height, umWidth, umHeight));
+            }
         }
 
         public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)
@@ -24,6 +35,12 @@ namespace IVM.Studio.I3D
         {
             w.vw.param.RENDER_MODE = m;
         }
+
+        public void OnChangeObliqueDepth(float d)
+        {
+            w.vw.param.OBLIQUE_DEPTH = d;
+        }
+
     }
 }
 
