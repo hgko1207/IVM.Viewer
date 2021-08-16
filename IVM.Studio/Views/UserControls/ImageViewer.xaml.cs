@@ -28,8 +28,11 @@ namespace IVM.Studio.Views.UserControls
             eventAggregator.GetEvent<DisableCropEvent>().Subscribe(DisableCrop);
             eventAggregator.GetEvent<EnableDrawEvent>().Subscribe(CanvasToTop);
             eventAggregator.GetEvent<DisableDrawEvent>().Subscribe(ImageToTop);
+
             eventAggregator.GetEvent<DrawCropBoxEvent>().Subscribe(DrawCropBox);
             eventAggregator.GetEvent<DrawCropCircleEvent>().Subscribe(DrawCropCircle);
+            eventAggregator.GetEvent<DrawCropTriangleEvent>().Subscribe(DrawCropTriangle);
+
             eventAggregator.GetEvent<GetPositionToCropEvent>().Subscribe(GetPosition);
         }
 
@@ -115,6 +118,15 @@ namespace IVM.Studio.Views.UserControls
             cropCircle.Height = param.Height;
             Canvas.SetTop(cropCircle, param.Top);
             Canvas.SetLeft(cropCircle, param.Left);
+        }
+
+        /// <summary>
+        /// DrawCropTriangle
+        /// </summary>
+        /// <param name="param"></param>
+        private void DrawCropTriangle(DrawParam param)
+        {
+
         }
 
         /// <summary>

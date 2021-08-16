@@ -146,6 +146,7 @@ namespace IVM.Studio.Models.Events
 
     public class DrawCropBoxEvent : PubSubEvent<DrawParam> { }
     public class DrawCropCircleEvent : PubSubEvent<DrawParam> { }
+    public class DrawCropTriangleEvent : PubSubEvent<DrawParam> { }
     public class DrawParam
     {
         public readonly double Left;

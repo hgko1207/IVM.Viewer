@@ -229,6 +229,9 @@
     <Compile Include="Views\UserControls\ChannelProcessingPanel.xaml.cs">
       <DependentUpon>ChannelProcessingPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\MeasurementPanel.xaml.cs">
+      <DependentUpon>MeasurementPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\PostProcessingPanel.xaml.cs">
       <DependentUpon>PostProcessingPanel.xaml</DependentUpon>
     </Compile>
@@ -383,6 +386,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\UserControls\MeasurementPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\PostProcessingPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

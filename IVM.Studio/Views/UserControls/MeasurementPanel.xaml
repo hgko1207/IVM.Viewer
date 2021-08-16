@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="IVM.Studio.Views.UserControls.MeasurementPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Background="#30302E"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <dxg:GridControl ItemsSource="{Binding SlideInfoCollection}" SelectedItem="{Binding SelectedSlideInfo}" SelectionMode="Row" 
+                        ShowBorder="True" RenderOptions.EdgeMode="Aliased" MaxHeight="300">
+            <dxg:GridControl.View>
+                <dxg:TableView AutoWidth="True"/>
+            </dxg:GridControl.View>
+
+            <dxg:GridControl.Bands>
+                <dxg:GridControlBand Header="" VisibleIndex="0" OverlayHeaderByChildren="True">
+                    <dxg:GridColumn FieldName="StartX" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}">
+                        <dxg:GridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Center" Margin="0 -6">Line<LineBreak/>#</TextBlock>
+                            </DataTemplate>
+                        </dxg:GridColumn.HeaderTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="StartX" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}">
+                        <dxg:GridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Center" Margin="0 -6">Seq.<LineBreak/>#</TextBlock>
+                            </DataTemplate>
+                        </dxg:GridColumn.HeaderTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn FieldName="StartX" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}">
+                        <dxg:GridColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock TextAlignment="Center" Margin="0 -6">Length<LineBreak/>(μm)</TextBlock>
+                            </DataTemplate>
+                        </dxg:GridColumn.HeaderTemplate>
+                    </dxg:GridColumn>
+                </dxg:GridControlBand>
+
+                <dxg:GridControlBand Header="Start Position (μm)" VisibleIndex="0" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="StartX" Header="X" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}"/>
+                    <dxg:GridColumn FieldName="StartY" Header="Y" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}"/>
+                </dxg:GridControlBand>
+
+                <dxg:GridControlBand Header="End Position (μm)" VisibleIndex="0" HorizontalHeaderContentAlignment="Center">
+                    <dxg:GridColumn FieldName="StartX" Header="X" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}"/>
+                    <dxg:GridColumn FieldName="StartY" Header="Y" HorizontalHeaderContentAlignment="Center" EditSettings="{dxe:TextSettings HorizontalContentAlignment=Center}"/>
+                </dxg:GridControlBand>
+            </dxg:GridControl.Bands>
+        </dxg:GridControl>
+
+        <Grid Grid.Column="2" VerticalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Stretch" Margin="2 5 2 0">
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Add" Command="{Binding AddCommand}"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Delete" Command="{Binding DeleteCommand}" Margin="0 10 0 0"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Margin="0 10 0 0" Height="42">
+                    <TextBlock TextAlignment="Center" FontSize="11">Save<LineBreak/>Measurement</TextBlock>
+                </dx:SimpleButton>
+            </StackPanel>
+            
+            <StackPanel VerticalAlignment="Bottom">
+                <TextBlock Text="Pixel Size"/>
+
+                <StackPanel Orientation="Horizontal" Height="25" Margin="0 5 0 0">
+                    <Border Style="{StaticResource GeneralBorder}" Width="35">
+                        <TextBlock Text="5" Style="{StaticResource GeneralTextBlock}"/>
+                    </Border>
+                    <TextBlock Text="μm/pixel" VerticalAlignment="Center" Margin="8 0 0 0"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -796,7 +796,7 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
-        /// CreateCroppedImage
+        /// Create CroppedImage
         /// </summary>
         /// <param name="image"></param>
         /// <param name="left"></param>
@@ -832,6 +832,44 @@ namespace IVM.Studio.Services
                     g.DrawImage(image, new Rectangle(-x, -y, result.Width, result.Height), new Rectangle((int)left, (int)top, (int)width, (int)height), GraphicsUnit.Pixel);
                 }
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Create Invert CroppedImage
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="isBox"></param>
+        /// <returns></returns>
+        public Bitmap CreateInvertCroppedImage(Bitmap image, double left, double top, double width, double height, bool isBox)
+        {
+            Bitmap result = new Bitmap(image.Width, image.Height);
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                if (isBox)
+                {
+                    Rectangle excludeRect = new Rectangle((int)left, (int)top, (int)width, (int)height);
+                    g.SetClip(excludeRect, CombineMode.Exclude);
+                }
+                else
+                {
+                    GraphicsPath gp = new GraphicsPath();
+                    gp.AddEllipse((int)left, (int)top, (float)width, (float)height);
+                    Region region = new Region(gp);
+                    g.SetClip(region, CombineMode.Exclude);
+                }
+
+                Rectangle destRect = new Rectangle(0, 0, result.Width, result.Height);
+                Rectangle srcRect = new Rectangle(0, 0, result.Width, result.Height);
+
+                g.DrawImage(image, destRect, srcRect, GraphicsUnit.Pixel);
+            }
+           
 
             return result;
         }
