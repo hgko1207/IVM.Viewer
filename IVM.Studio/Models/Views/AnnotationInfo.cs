@@ -132,6 +132,13 @@ namespace IVM.Studio.Models
             set => SetProperty(ref cropCrosshairEnabled, value);
         }
 
+        private bool cropInvertEnabled;
+        public bool CropInvertEnabled
+        {
+            get => cropInvertEnabled;
+            set => SetProperty(ref cropInvertEnabled, value);
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///// Pen 정보
         //////////////////////////////////////////////////////////////////////////////////////////////////////////

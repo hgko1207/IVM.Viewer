@@ -633,6 +633,8 @@ namespace IVM.Studio.ViewModels.UserControls
                         EventAggregator.GetEvent<DrawCropBoxEvent>().Publish(new DrawParam(x, y, width, height));
                     else if (annotationInfo.CropCircleEnabled)
                         EventAggregator.GetEvent<DrawCropCircleEvent>().Publish(new DrawParam(x, y, width, height));
+                    else if (annotationInfo.CropTriangleEnabled)
+                        EventAggregator.GetEvent<DrawCropTriangleEvent>().Publish(new DrawParam(x, y, width, height));
                 }
                 else if (annotationInfo.DrawRectangleEnabled)
                 {
@@ -865,9 +867,19 @@ namespace IVM.Studio.ViewModels.UserControls
                 };
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
-                    using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                    if (annotationInfo.CropInvertEnabled)
                     {
-                        bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        using (Bitmap bitmap = imageService.CreateInvertCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                        {
+                            bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        }
+                    }
+                    else
+                    {
+                        using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                        {
+                            bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        }
                     }
                 }
             }
