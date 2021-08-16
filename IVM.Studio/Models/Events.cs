@@ -190,7 +190,18 @@ namespace IVM.Studio.Models.Events
     public class I3DOpenEvent : PubSubEvent<string> { }
     public class I3DWindowLoadedEvent : PubSubEvent<int> { }
 
-    public class CameraUpdateParam
+    public class I3DMetaLoadedParam
+    {
+        public int width { get; set; }
+        public int height { get; set; }
+
+        public float umWidth { get; set; }
+        public float umHeight { get; set; }
+    }
+
+    public class I3DMetaLoadedEvent : PubSubEvent<I3DMetaLoadedParam> { }
+
+    public class I3DCameraUpdateParam
     {
         public int viewtype { get; set; }
         public float px { get; set; }
@@ -198,8 +209,9 @@ namespace IVM.Studio.Models.Events
         public float pz { get; set; }
         public float ax { get; set; }
         public float ay { get; set; }
+        public float az { get; set; }
         public float s { get; set; }
     }
 
-    public class I3DCameraUpdateEvent : PubSubEvent<CameraUpdateParam> { }
+    public class I3DCameraUpdateEvent : PubSubEvent<I3DCameraUpdateParam> { }
 }

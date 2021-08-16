@@ -11,16 +11,27 @@ namespace IVM.Studio.Services
         {
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Publish(viewtype);
         }
-
-        public void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float s)
+        public void OnMetaLoaded(int width, int height, float umWidth, float umHeight)
         {
-            CameraUpdateParam p = new CameraUpdateParam();
+            I3DMetaLoadedParam p = new I3DMetaLoadedParam();
+            p.width = width;
+            p.height = height;
+            p.umWidth = umWidth;
+            p.umHeight = umHeight;
+
+            EventAggregator.GetEvent<I3DMetaLoadedEvent>().Publish(p);
+        }
+
+        public void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s)
+        {
+            I3DCameraUpdateParam p = new I3DCameraUpdateParam();
             p.viewtype = viewtype;
             p.px = px;
             p.py = py;
             p.pz = pz;
             p.ax = ax;
             p.ay = ay;
+            p.az = az;
             p.s = s;
 
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Publish(p);

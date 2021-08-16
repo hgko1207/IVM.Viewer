@@ -43,12 +43,12 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             wcfserver.channel2.OnOpen(path);
         }
-        private void UpdateCamera(CameraUpdateParam p)
+        private void UpdateCamera(I3DCameraUpdateParam p)
         {
             if (p.viewtype == (int)I3DViewType.SLICE_VIEW)
                 return;
 
-            wcfserver.channel2.OnUpdateCamera(p.px, p.py, p.pz, p.ax, p.ay, p.s);
+            wcfserver.channel2.OnUpdateCamera(p.px, p.py, p.pz, p.ax, p.ay, p.az, p.s);
         }
     }
 }

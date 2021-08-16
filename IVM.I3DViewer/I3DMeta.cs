@@ -12,8 +12,8 @@ namespace IVM.Studio.I3D
 
         public int pixelWidth;
         public int pixelHeight;
-        public int umWidth;
-        public int umHeight;
+        public float umWidth;
+        public float umHeight;
         public float pixelPerUM_X;
         public float pixelPerUM_Y;
         public float pixelPerUM_Z;
@@ -58,8 +58,8 @@ namespace IVM.Studio.I3D
                     {
                         List<string> vals = l.Split(',').ToList();
                         int vStageZ = I3DCommon.IntParse(vals[iStageZ]);
-                        int vFovX = I3DCommon.IntParse(vals[iFovX]);
-                        int vFovY = I3DCommon.IntParse(vals[iFovY]);
+                        float vFovX = I3DCommon.FloatParse(vals[iFovX]);
+                        float vFovY = I3DCommon.FloatParse(vals[iFovY]);
                         int vXpixel = I3DCommon.IntParse(vals[iXpixel]);
                         int vYpixel = I3DCommon.IntParse(vals[iYpixel]);
 

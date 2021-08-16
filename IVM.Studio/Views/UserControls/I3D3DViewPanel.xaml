@@ -44,9 +44,9 @@
                 <TextBlock Text="Camera" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 0 0 12"/>
 
                 <StackPanel Grid.Row="1">
-                    <dx:SimpleButton Content="Coronal"  Style="{StaticResource GrayGradientButton}" Width="80" Height="28" VerticalAlignment="Center"/>
-                    <dx:SimpleButton Content="Sagittal" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" VerticalAlignment="Center"/>
-                    <dx:SimpleButton Content="Axial"    Style="{StaticResource GrayGradientButton}" Width="80" Height="28" VerticalAlignment="Center"/>
+                    <dx:SimpleButton Content="Coronal"  Style="{StaticResource GrayGradientButton}" Width="80" Height="28" VerticalAlignment="Center" Command="{Binding CameraCoronalCommand}"/>
+                    <dx:SimpleButton Content="Sagittal" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" VerticalAlignment="Center" Command="{Binding CameraSagittalCommand}"/>
+                    <dx:SimpleButton Content="Axial"    Style="{StaticResource GrayGradientButton}" Width="80" Height="28" VerticalAlignment="Center" Command="{Binding CameraAxialCommand}"/>
                 </StackPanel>
             </Grid>
 
@@ -61,45 +61,24 @@
                 <DockPanel Margin="0 0 0 12">
                     <TextBlock DockPanel.Dock="Left" Text="Rotation" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
                     <dx:SimpleButton Content="3D Export" Style="{StaticResource GrayGradientButton}" 
-                                     Width="80" Height="28" HorizontalAlignment="Right" />
+                                     Width="80" Height="28" HorizontalAlignment="Right" Visibility="Hidden" />
                 </DockPanel>
 
                 <StackPanel Grid.Row="1">
-                    <DockPanel Margin="0 0 0 8">
+                    <DockPanel Margin="0 4 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="X-axis" FontSize="14" FontWeight="Bold"/>
-                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" />
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>
+                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding RotXValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="-180" MaxValue="180" />
+                        <Slider Margin="5 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-180" Value="{Binding RotXValue}" Minimum="-180" Maximum="180" />
                     </DockPanel>
                     <DockPanel Margin="0 0 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="Y-axis" FontSize="14" FontWeight="Bold"/>
-                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" />
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>
+                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding RotYValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="-180" MaxValue="180" />
+                        <Slider Margin="5 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-180" Value="{Binding RotYValue}" Minimum="-180" Maximum="180" />
                     </DockPanel>
                     <DockPanel Margin="0 0 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="Z-axis" FontSize="14" FontWeight="Bold"/>
-                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" />
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>
+                        <dxe:SpinEdit DockPanel.Dock="Right" Margin="0 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding RotZValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="-180" MaxValue="180" />
+                        <Slider Margin="5 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-180" Value="{Binding RotZValue}" Minimum="-180" Maximum="180" />
                     </DockPanel>
                 </StackPanel>
             </Grid>
@@ -115,44 +94,37 @@
                 <DockPanel Margin="0 0 0 12">
                     <TextBlock DockPanel.Dock="Left" Text="Slice" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
                     <dx:SimpleButton Content="Slice Export" Style="{StaticResource GrayGradientButton}" 
-                                     Width="90" Height="28" HorizontalAlignment="Right" />
+                                     Width="90" Height="28" HorizontalAlignment="Right" Visibility="Hidden" />
                 </DockPanel>
 
                 <StackPanel Grid.Row="1">
                     <DockPanel Margin="0 0 0 8">
                         <TextBlock DockPanel.Dock="Left" TextAlignment="Center" Text="Slice view mode" FontSize="14" FontWeight="Bold"/>
-                        <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right">
-                            <dxe:ComboBoxEditItem Content="Oblique"/>
-                            <dxe:ComboBoxEditItem Content="Slice"/>
+                        <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" EditValue="{Binding SliceMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"> 
+                            <dxe:ComboBoxEditItem Content="OBLIQUE"/>
+                            <dxe:ComboBoxEditItem Content="SLICE"/>
                         </dxe:ComboBoxEdit>
                     </DockPanel>
                     <DockPanel Margin="0 0 0 8">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                             <TextBlock TextAlignment="Center" Text="Slice size" FontSize="14" FontWeight="Bold"/>
-                            <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" />
+                            <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding SlicePosStep, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="100" />
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                             <TextBlock TextAlignment="Center" Text="pixel" FontSize="14" Margin="0 0 4 0" />
                             <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
-                                <TextBlock Style="{StaticResource GeneralTextBlock}" Text="0.4 um" TextAlignment="Left" />
+                                <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding SliceUmPix}" TextAlignment="Left" />
                             </Border>
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                             <dx:SimpleButton Glyph="{dx:DXImage Image=Prev_16x16.png}" Style="{StaticResource GrayGradientButton}" 
-                                     Width="28" Height="28" HorizontalAlignment="Right" Margin="0 0 4 0" />
+                                     Width="28" Height="28" HorizontalAlignment="Right" Margin="0 0 4 0" Command="{Binding SlicePrevStepCommand}" />
                             <dx:SimpleButton Glyph="{dx:DXImage Image=Next_16x16.png}" Style="{StaticResource GrayGradientButton}" 
-                                     Width="28" Height="28" HorizontalAlignment="Right" />
+                                     Width="28" Height="28" HorizontalAlignment="Right" Command="{Binding SliceNextStepCommand}" />
                         </StackPanel>
-                        <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0">
-                            <dxe:TrackBarEdit.StyleSettings>
-                                <dxe:TrackBarRangeStyleSettings 
-                                    FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                    NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                    SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
-                            </dxe:TrackBarEdit.StyleSettings>
-                        </dxe:TrackBarEdit>                        
+                        <Slider Margin="5 0" TickFrequency="{Binding SlicePosFreq}" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="-1" Value="{Binding SlicePosValue}" Minimum="-1" Maximum="1" />
                     </DockPanel>
                 </StackPanel>
             </Grid>

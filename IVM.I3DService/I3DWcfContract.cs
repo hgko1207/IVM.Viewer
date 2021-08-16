@@ -15,6 +15,14 @@ namespace IVM.Studio.Services
         SLICE_VIEW = 1,
     }
 
+    public enum I3DRenderMode
+    {
+        BLEND = 0,
+        ADDED = 1,
+        OBLIQUE = 2,
+        SLICE = 3,
+    }
+
     [ServiceContract]
     public interface I3DClientContract
     {
@@ -22,7 +30,13 @@ namespace IVM.Studio.Services
         void OnOpen(string path);
 
         [OperationContract]
-        void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float s);
+        void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
+
+        [OperationContract]
+        void OnChangeRenderMode(int m);
+
+        [OperationContract]
+        void OnChangeObliqueDepth(float d);
     }
 
     [ServiceContract]
@@ -32,6 +46,9 @@ namespace IVM.Studio.Services
         void OnWindowLoaded(int viewtype);
 
         [OperationContract]
-        void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float s);
+        void OnMetaLoaded(int width, int height, float umWidth, float umHeight);
+
+        [OperationContract]
+        void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s);
     }
 }
