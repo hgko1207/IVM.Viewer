@@ -172,8 +172,10 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl);
+
             EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop);
-            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
+            EventAggregator.GetEvent<ExportDrawEvent>().Subscribe(ExportDraw);
+            EventAggregator.GetEvent<ExportDrawAllEvent>().Subscribe(ExportDrawAll);
 
             // 디스플레이
             DisplayImage(dataManager.MainWindowId);
@@ -841,9 +843,9 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Export Crop
+        /// Crop 이미지 저장
         /// </summary>
-        private async void ExportCrop()
+        private void ExportCrop()
         {
             if (displayingImageGDI == null)
                 return;
@@ -899,6 +901,12 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        /// <summary>
+        /// Crop 이미지 저장
+        /// </summary>
+        /// <param name="displayingImageGDI"></param>
+        /// <param name="fileName"></param>
+        /// <param name="param"></param>
         private void CropImageSave(Bitmap displayingImageGDI, string fileName, GetPositionToCropParam param)
         {
             if (annotationInfo.CropInvertEnabled)
@@ -918,9 +926,9 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Draw Export
+        /// 현재 도시되고 있는 이미지 저장
         /// </summary>
-        private void DrawExport()
+        private void ExportDraw()
         {
             if (displayingImageGDI == null)
                 return;
@@ -936,6 +944,17 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 현재 도시되고 있는 파일 경로의 모든 이미지 저장
+        /// </summary>
+        private void ExportDrawAll()
+        {
+            if (view != null && view.WindowId == dataManager.MainWindowId)
+            {
+
             }
         }
 
