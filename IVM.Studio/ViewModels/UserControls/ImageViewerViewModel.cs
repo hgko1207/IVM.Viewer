@@ -2,7 +2,6 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
-using IVM.Studio.Utils;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Ookii.Dialogs.Wpf;
@@ -112,6 +111,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private System.Windows.Shapes.Rectangle drawRectangle;
         private System.Windows.Shapes.Ellipse drawEllipse;
         private System.Windows.Shapes.Polygon drawTriangle;
+        private System.Windows.Shapes.Line drawLine;
 
         private List<Bitmap> bitmapList;
         private List<Bitmap> tempBitmapList;
@@ -199,6 +199,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Unsubscribe(ZoomRatioControl);
             EventAggregator.GetEvent<ExportCropEvent>().Unsubscribe(ExportCrop);
+
+            this.view = null;
         }
 
         /// <summary>
@@ -701,6 +703,25 @@ namespace IVM.Studio.ViewModels.UserControls
                     Points.Add(new System.Windows.Point(viewPortPreviousPoint.Value.X, currentPoint.Y));
                     drawTriangle.Points = Points;
                 }
+                else if (annotationInfo.DrawLineEnabled)
+                {
+                    if (drawLine == null)
+                    {
+                        drawLine = new System.Windows.Shapes.Line()
+                        {
+                            Stroke = new SolidColorBrush(annotationInfo.DrawColor),
+                            StrokeThickness = annotationInfo.DrawThickness
+                        };
+
+                        Panel.SetZIndex(drawLine, 1);
+                        view.ImageOverlayCanvas.Children.Add(drawLine);
+                    }
+
+                    drawLine.X1 = viewPortPreviousPoint.Value.X;
+                    drawLine.Y1 = viewPortPreviousPoint.Value.Y;
+                    drawLine.X2 = currentPoint.X;
+                    drawLine.Y2 = currentPoint.Y;
+                }
             }
         }
 
@@ -716,7 +737,8 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     annotationInfo.CropCrosshairEnabled = false;
                 }
-                else if (annotationInfo.DrawRectangleEnabled || annotationInfo.DrawCircleEnabled || annotationInfo.DrawTriangleEnabled)
+                else if (annotationInfo.DrawRectangleEnabled || annotationInfo.DrawCircleEnabled 
+                    || annotationInfo.DrawTriangleEnabled || annotationInfo.DrawLineEnabled)
                 {
                     if (annotationImage == null)
                         annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
@@ -763,6 +785,14 @@ namespace IVM.Studio.ViewModels.UserControls
                             };
 
                             imageService.DrawTriangle(annotationImage, displayingImageGDI, points, annotationInfo.DrawThickness, annotationInfo.DrawColor,
+                                    horizontalReflect, verticalReflect, currentRotate);
+                        }
+                        else if (annotationInfo.DrawLineEnabled)
+                        {
+                            view.ImageOverlayCanvas.Children.Remove(drawLine);
+                            drawLine = null;
+
+                            imageService.DrawLine(annotationImage, displayingImageGDI, x1, y1, x2, y2, annotationInfo.DrawThickness, annotationInfo.DrawColor,
                                     horizontalReflect, verticalReflect, currentRotate);
                         }
 
@@ -873,23 +903,12 @@ namespace IVM.Studio.ViewModels.UserControls
                     VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
                     if (dialog.ShowDialog().GetValueOrDefault())
                     {
-                        //await Task.Run(() => {
-                        //});
-
-                        foreach (FileInfo fileinfo in directoryInfo.GetFiles())
+                        foreach (FileInfo fileinfo in Container.Resolve<FileService>().GetImagesInFolder(directoryInfo, new[] { ".png" }, true))
                         {
-                            if (fileInfo.Extension.ToLower() == ".ivm")
-                            {
-                                string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
-                            }
+                            Bitmap displayingImageGDI = CreateDisplayBitmap(fileinfo);
+                            string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
+                            CropImageSave(displayingImageGDI, filePath, param);
                         }
-
-                        //foreach (FileInfo fileinfo in Container.Resolve<FileService>().GetImagesInFolder(directoryInfo, dataManager.ImageFileExtensions, false))
-                        //{
-                        //    Bitmap displayingImageGDI = CreateDisplayBitmap(fileinfo);
-                        //    string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
-                        //    CropImageSave(displayingImageGDI, filePath, param);
-                        //}
                     }
                 }
                 else
@@ -968,7 +987,12 @@ namespace IVM.Studio.ViewModels.UserControls
                     VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
                     if (dialog.ShowDialog().GetValueOrDefault())
                     {
-
+                        foreach (FileInfo fileinfo in Container.Resolve<FileService>().GetImagesInFolder(directoryInfo, new[] { ".png" }, true))
+                        {
+                            Bitmap displayingImageGDI = CreateDisplayBitmap(fileinfo);
+                            string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
+                            displayingImageGDI.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+                        }
                     }
                 }
             }

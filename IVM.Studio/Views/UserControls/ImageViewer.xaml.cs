@@ -21,6 +21,8 @@ namespace IVM.Studio.Views.UserControls
         private ContentControl cropCircle = null;
         private ContentControl cropTriangle = null;
 
+        private Polygon polygon = null;
+
         /// <summary>
         /// 생성자
         /// </summary>
@@ -77,6 +79,12 @@ namespace IVM.Studio.Views.UserControls
                 ImageOverlayCanvas.Children.Remove(cropCircle);
                 cropCircle = null;
             }
+
+            if (cropTriangle != null)
+            {
+                ImageOverlayCanvas.Children.Remove(cropTriangle);
+                cropTriangle = null;
+            }
         }
 
         /// <summary>
@@ -131,15 +139,13 @@ namespace IVM.Studio.Views.UserControls
         /// <param name="param"></param>
         private void DrawCropTriangle(DrawParam param)
         {
-            Polygon polygon = null;
-
             if (cropTriangle == null)
             {
                 cropTriangle = new ContentControl { Template = (ControlTemplate)FindResource("DesignerItemTemplate") };
                 polygon = new Polygon()
                 {
                     Stroke = Brushes.White,
-                    StrokeThickness = 2
+                    StrokeThickness = 2,
                 };
 
                 cropTriangle.Content = polygon;
@@ -150,17 +156,22 @@ namespace IVM.Studio.Views.UserControls
 
             if (polygon != null)
             {
-                double x1 = param.Left;
-                double y1 = param.Top;
+                double x1 = 0;
+                double y1 = 0;
                 double x2 = x1 + param.Width;
                 double y2 = y1 + param.Height;
 
-                PointCollection Points = new PointCollection();
-                Points.Add(new Point(x1 + (x2 - x1) / 2, y1));
-                Points.Add(new Point(x2, y2));
-                Points.Add(new Point(x1, y2));
-                polygon.Points = Points;
+                PointCollection points = new PointCollection();
+                points.Add(new Point(x1 + (x2 - x1) / 2, y1));
+                points.Add(new Point(x2, y2));
+                points.Add(new Point(x1, y2));
+                polygon.Points = points;
             }
+
+            cropTriangle.Width = param.Width;
+            cropTriangle.Height = param.Height;
+            Canvas.SetTop(cropTriangle, param.Top);
+            Canvas.SetLeft(cropTriangle, param.Left);
         }
 
         /// <summary>
@@ -193,6 +204,13 @@ namespace IVM.Studio.Views.UserControls
                 param.Top = Canvas.GetTop(cropCircle) - topMargin;
                 param.Width = cropCircle.Width;
                 param.Height = cropCircle.Height;
+            }
+            else if (cropTriangle != null)
+            {
+                param.Left = Canvas.GetLeft(cropTriangle) - leftMargin;
+                param.Top = Canvas.GetTop(cropTriangle) - topMargin;
+                param.Width = cropTriangle.Width;
+                param.Height = cropTriangle.Height;
             }
 
             param.Routed = true;

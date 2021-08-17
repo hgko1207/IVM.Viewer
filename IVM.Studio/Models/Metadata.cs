@@ -105,10 +105,10 @@ namespace IVM.Studio.Models
         public int FovY { get; set; }
 
         [CSVSerializable(29, "General")]
-        public int Xpixel { get; set; }
+        public int XPixel { get; set; }
 
         [CSVSerializable(30, "General")]
-        public int Ypixel { get; set; }
+        public int YPixel { get; set; }
 
         [CSVSerializable(31, "General")]
         public string ZaxisAF { get; set; }

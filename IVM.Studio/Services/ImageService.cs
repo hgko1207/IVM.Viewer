@@ -458,6 +458,36 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
+        /// 주어진 비트맵 이미지에 라인을 그립니다.
+        /// </summary>
+        /// <param name="annotationImage"></param>
+        /// <param name="displayImage"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="color"></param>
+        /// <param name="horizontalReflect"></param>
+        /// <param name="verticalReflect"></param>
+        /// <param name="rotate"></param>
+        public void DrawLine(Bitmap annotationImage, Bitmap displayImage, int x1, int y1, int x2, int y2, int thickness, WPFDrawing.Color color,
+                            bool horizontalReflect, bool verticalReflect, int rotate)
+        {
+            using (Graphics g1 = Graphics.FromImage(annotationImage))
+            using (Graphics g2 = Graphics.FromImage(displayImage))
+            {
+                g1.Transform = GetTransformToOriginal(annotationImage.Width, annotationImage.Height, horizontalReflect, verticalReflect, rotate);
+
+                using (Pen pen = new Pen(ConvertWPFColorToGDI(color), thickness))
+                {
+                    g1.DrawLine(pen, (float)x1, (float)y1, (float)x2, (float)y2);
+                    g2.DrawLine(pen, (float)x1, (float)y1, (float)x2, (float)y2);
+                }
+            }
+        }
+
+        /// <summary>
         /// 주어진 비트맵 이미지에 스케일 바를 그립니다.
         /// </summary>
         /// <param name="image"></param>
@@ -818,33 +848,41 @@ namespace IVM.Studio.Services
                         g.DrawImage(image, new Rectangle(0, 0, result.Width, result.Height), srcRect, GraphicsUnit.Pixel);
                         break;
                     case ShapeType.Ellipse:
-                        int x = (int)width / 2;
-                        int y = (int)height / 2;
+                        {
+                            int x = (int)width / 2;
+                            int y = (int)height / 2;
 
-                        g.SmoothingMode = SmoothingMode.AntiAlias;
-                        g.TranslateTransform(result.Width / 2, result.Height / 2);
-                        GraphicsPath gp = new GraphicsPath();
-                        gp.AddEllipse(0 - x, 0 - y, result.Width, result.Height);
-                        Region rg = new Region(gp);
-                        g.SetClip(rg, CombineMode.Replace);
+                            g.SmoothingMode = SmoothingMode.AntiAlias;
+                            g.TranslateTransform(result.Width / 2, result.Height / 2);
+                            GraphicsPath gp = new GraphicsPath();
+                            gp.AddEllipse(0 - x, 0 - y, result.Width, result.Height);
+                            Region rg = new Region(gp);
+                            g.SetClip(rg, CombineMode.Replace);
 
-                        g.DrawImage(image, new Rectangle(-x, -y, result.Width, result.Height), srcRect, GraphicsUnit.Pixel);
+                            g.DrawImage(image, new Rectangle(-x, -y, result.Width, result.Height), srcRect, GraphicsUnit.Pixel);
+                        }
                         break;
                     case ShapeType.Triangle:
-                        float x1 = (float)left;
-                        float y1 = (float)top;
-                        float x2 = (float)(x1 + width);
-                        float y2 = (float)(y1 + height);
-
-                        PointF[] destPoints =
                         {
-                            new PointF(x1 + (x2 - x1) / 2,  y1),
-                            new PointF(x2,  y2),
-                            new PointF(x1,  y2),
-                        };
+                            float x1 = 0;
+                            float y1 = 0;
+                            float x2 = (float)(x1 + width);
+                            float y2 = (float)(y1 + height);
 
-                        g.DrawImage(image, destPoints, srcRect, GraphicsUnit.Pixel);
+                            PointF[] destPoints =
+                                {
+                                new PointF(x1 + (x2 - x1) / 2,  y1),
+                                new PointF(x2,  y2),
+                                new PointF(x1,  y2),
+                            };
 
+                            GraphicsPath gp = new GraphicsPath();
+                            gp.AddPolygon(destPoints);
+                            Region region = new Region(gp);
+                            g.SetClip(region, CombineMode.Replace);
+
+                            g.DrawImage(image, new Rectangle(0, 0, result.Width, result.Height), srcRect, GraphicsUnit.Pixel);
+                        }
                         break;
                 }
             }
@@ -883,8 +921,8 @@ namespace IVM.Studio.Services
                         break;
                     case ShapeType.Triangle:
                         {
-                            float x1 = (float)left;
-                            float y1 = (float)top;
+                            float x1 = 0;
+                            float y1 = 0;
                             float x2 = (float)(x1 + width);
                             float y2 = (float)(y1 + height);
 

@@ -72,6 +72,8 @@
                                      Glyph="../../Resources/Images/circle.png"/>
                     <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding DrawTriangleEnabled}" Style="{StaticResource IconToggleButton}" 
                                      Glyph="../../Resources/Images/triangle.png"/>
+                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding DrawLineEnabled}" Style="{StaticResource IconToggleButton}" 
+                                     Glyph="../../Resources/Images/line.png"/>
 
                     <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding DrawThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="50" Margin="12 0 0 0"/>
                     <TextBlock Text="pt" VerticalAlignment="Center" Margin="5 0 0 0"/>

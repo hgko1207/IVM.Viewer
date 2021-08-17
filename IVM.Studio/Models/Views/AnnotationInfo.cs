@@ -4,7 +4,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
-using System;
 using System.Windows.Input;
 using WPFDrawing = System.Windows.Media;
 
@@ -163,6 +162,7 @@ namespace IVM.Studio.Models
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    DrawLineEnabled = false;
                     CropEnabled = false;
                 }
             }
@@ -212,6 +212,7 @@ namespace IVM.Studio.Models
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    DrawLineEnabled = false;
                     CropEnabled = false;
                 }
             }
@@ -240,6 +241,7 @@ namespace IVM.Studio.Models
                     DrawRectangleEnabled = false;
                     DrawCircleEnabled = false;
                     DrawTriangleEnabled = false;
+                    DrawLineEnabled = false;
                     CropEnabled = false;
                 }
             }
@@ -270,6 +272,7 @@ namespace IVM.Studio.Models
                         EraserEnabled = false;
                         DrawCircleEnabled = false;
                         DrawTriangleEnabled = false;
+                        DrawLineEnabled = false;
                         CropEnabled = false;
                         eventAggregator.GetEvent<EnableDrawEvent>().Publish();
                     }
@@ -296,6 +299,7 @@ namespace IVM.Studio.Models
                         EraserEnabled = false;
                         DrawRectangleEnabled = false;
                         DrawTriangleEnabled = false;
+                        DrawLineEnabled = false;
                         CropEnabled = false;
                         eventAggregator.GetEvent<EnableDrawEvent>().Publish();
                     }
@@ -322,6 +326,34 @@ namespace IVM.Studio.Models
                         EraserEnabled = false;
                         DrawRectangleEnabled = false;
                         DrawCircleEnabled = false;
+                        DrawLineEnabled = false;
+                        CropEnabled = false;
+                        eventAggregator.GetEvent<EnableDrawEvent>().Publish();
+                    }
+                    else
+                    {
+                        eventAggregator.GetEvent<DisableDrawEvent>().Publish();
+                    }
+                }
+            }
+        }
+
+        private bool drawLineEnabled;
+        public bool DrawLineEnabled
+        {
+            get => drawLineEnabled;
+            set
+            {
+                if (SetProperty(ref drawLineEnabled, value))
+                {
+                    if (value)
+                    {
+                        PenEnabled = false;
+                        TextEnabled = false;
+                        EraserEnabled = false;
+                        DrawRectangleEnabled = false;
+                        DrawCircleEnabled = false;
+                        DrawTriangleEnabled = false;
                         CropEnabled = false;
                         eventAggregator.GetEvent<EnableDrawEvent>().Publish();
                     }

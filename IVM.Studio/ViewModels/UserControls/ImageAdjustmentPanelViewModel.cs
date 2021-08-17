@@ -433,7 +433,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void ColorReset()
         {
-            RefreshMetadata(new DisplayParam(null, dataManager.Metadata, true, null));
+            RefreshMetadata(new DisplayParam(null, dataManager.Metadata, true));
             EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 

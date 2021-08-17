@@ -161,6 +161,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\I3DPathInfo.cs" />
+    <Compile Include="Models\MeasurementInfo.cs" />
     <Compile Include="Models\Thumb.cs" />
     <Compile Include="Models\Views\AnnotationInfo.cs" />
     <Compile Include="Models\Views\PostProcessingInfo.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="ViewModels\UserControls\I3DImportPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\BrightnessPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ChannelProcessingPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\MeasurementPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\PostProcessingPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\RotateCropPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ThumbnailPanelViewModel.cs" />
@@ -533,6 +535,7 @@
     <Content Include="ffmpeg\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Images\line.png" />
     <Resource Include="Resources\Images\icon_2d.png" />
     <Resource Include="Resources\Images\icon_3d.png" />
     <Resource Include="Studio.ico" />
