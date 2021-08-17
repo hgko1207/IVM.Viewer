@@ -201,15 +201,16 @@
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="360">
+                        <dxdo:DocumentPanel Caption="3D/4D Display" AllowClose="False">
+                            <ContentControl prism:RegionManager.RegionName="I3D3DDisplayPanel"/>
+                        </dxdo:DocumentPanel>
+                        
                         <dxdo:DocumentPanel Caption="3D View" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="I3D3DViewPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Slice Viewer" AllowClose="False">
                             <ContentControl prism:RegionManager.RegionName="I3DSliceViewPanel"/>
-                        </dxdo:DocumentPanel>
-
-                        <dxdo:DocumentPanel Caption="3D/4D Display" AllowClose="False">
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 

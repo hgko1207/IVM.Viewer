@@ -19,4 +19,188 @@
     <UserControl.Resources>
         <util:ButtonStyleConverter x:Key="ButtonStyleConverter"/>
     </UserControl.Resources>
+
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Channel" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 0 0 4"/>
+
+                <Grid Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="Color" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="Display" HorizontalAlignment="Center"/>
+
+                    <!-- DAPI -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock TextAlignment="Center" Text="DAPI" FontSize="14" FontWeight="Bold"/>
+                        <TextBlock TextAlignment="Center" Text="(425-465)" Margin="0 -4 0 0"/>
+                    </StackPanel>
+
+                    <dx:SimpleButton Grid.Row="1" Grid.Column="1" Style="{Binding DAPIColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding DAPIColor}" Width="56" Height="30" Margin="4 0 0 0">
+                        <dxb:BarManager.DXContextMenu>
+                            <dxb:PopupMenu>
+                                <dxb:PopupMenu.Items>
+                                    <dxb:BarButtonItem Content="Red" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Red"/>
+                                    <dxb:BarButtonItem Content="Green" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Green"/>
+                                    <dxb:BarButtonItem Content="Blue" Command="{Binding DAPIColorChangedCommand}" CommandParameter="Blue"/>
+                                    <dxb:BarButtonItem Content="None" Command="{Binding DAPIColorChangedCommand}" CommandParameter="None"/>
+                                </dxb:PopupMenu.Items>
+                            </dxb:PopupMenu>
+                        </dxb:BarManager.DXContextMenu>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Grid.Row="1" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding DAPIVisible}"/>
+
+                    <!-- GFP -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock TextAlignment="Center" Text="GFP" FontSize="14" FontWeight="Bold"/>
+                        <TextBlock TextAlignment="Center" Text="(500-550)" Margin="0 -4 0 0"/>
+                    </StackPanel>
+
+                    <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{Binding GFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding GFPColor}" Width="56" Height="30" Margin="4 0 0 0">
+                        <dxb:BarManager.DXContextMenu>
+                            <dxb:PopupMenu>
+                                <dxb:PopupMenu.Items>
+                                    <dxb:BarButtonItem Content="Red" Command="{Binding GFPColorChangedCommand}" CommandParameter="Red"/>
+                                    <dxb:BarButtonItem Content="Green" Command="{Binding GFPColorChangedCommand}" CommandParameter="Green"/>
+                                    <dxb:BarButtonItem Content="Blue" Command="{Binding GFPColorChangedCommand}" CommandParameter="Blue"/>
+                                    <dxb:BarButtonItem Content="None" Command="{Binding GFPColorChangedCommand}" CommandParameter="None"/>
+                                </dxb:PopupMenu.Items>
+                            </dxb:PopupMenu>
+                        </dxb:BarManager.DXContextMenu>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding GFPVisible}"/>
+
+                    <!-- RFP -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock TextAlignment="Center" Text="RFP" FontSize="14" FontWeight="Bold"/>
+                        <TextBlock TextAlignment="Center" Text="(582-618)" Margin="0 -4 0 0"/>
+                    </StackPanel>
+
+                    <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{Binding RFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding RFPColor}" Width="56" Height="30" Margin="4 0 0 0">
+                        <dxb:BarManager.DXContextMenu>
+                            <dxb:PopupMenu>
+                                <dxb:PopupMenu.Items>
+                                    <dxb:BarButtonItem Content="Red" Command="{Binding RFPColorChangedCommand}" CommandParameter="Red"/>
+                                    <dxb:BarButtonItem Content="Green" Command="{Binding RFPColorChangedCommand}" CommandParameter="Green"/>
+                                    <dxb:BarButtonItem Content="Blue" Command="{Binding RFPColorChangedCommand}" CommandParameter="Blue"/>
+                                    <dxb:BarButtonItem Content="None" Command="{Binding RFPColorChangedCommand}" CommandParameter="None"/>
+                                </dxb:PopupMenu.Items>
+                            </dxb:PopupMenu>
+                        </dxb:BarManager.DXContextMenu>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Grid.Row="3" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding RFPVisible}"/>
+
+                    <!-- NIR -->
+                    <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock TextAlignment="Center" Text="NIR" FontSize="14" FontWeight="Bold"/>
+                        <TextBlock TextAlignment="Center" Text="(663-733)" Margin="0 -4 0 0"/>
+                    </StackPanel>
+
+                    <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{Binding NIRColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding NIRColor}" Width="56" Height="30" Margin="4 0 0 0">
+                        <dxb:BarManager.DXContextMenu>
+                            <dxb:PopupMenu>
+                                <dxb:PopupMenu.Items>
+                                    <dxb:BarButtonItem Content="Red" Command="{Binding NIRColorChangedCommand}" CommandParameter="Red"/>
+                                    <dxb:BarButtonItem Content="Green" Command="{Binding NIRColorChangedCommand}" CommandParameter="Green"/>
+                                    <dxb:BarButtonItem Content="Blue" Command="{Binding NIRColorChangedCommand}" CommandParameter="Blue"/>
+                                    <dxb:BarButtonItem Content="None" Command="{Binding NIRColorChangedCommand}" CommandParameter="None"/>
+                                </dxb:PopupMenu.Items>
+                            </dxb:PopupMenu>
+                        </dxb:BarManager.DXContextMenu>
+                    </dx:SimpleButton>
+                    <dx:SimpleButton Grid.Row="4" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding NIRVisible}"/>
+                </Grid>
+            </StackPanel>
+
+            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
+
+            <StackPanel Grid.Column="2" Margin="0 0 8 0">
+                <TextBlock Text="Position" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 0 0 4"/>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" Text="Position (Slice)"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" Text="XY"/>
+                    <Slider Grid.Row="2" Grid.Column="1" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="100" />
+                    <dxe:SpinEdit Grid.Row="2" Grid.Column="2" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" />
+                    <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="4 0 0 0">
+                        <TextBlock Style="{StaticResource GeneralTextBlock}" MinWidth="120" Text="" TextAlignment="Left" />
+                    </Border>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" TextAlignment="Center" Text="YZ"/>
+                    <Slider Grid.Row="4" Grid.Column="1" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="100" />
+                    <dxe:SpinEdit Grid.Row="4" Grid.Column="2" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" />
+                    <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="4 0 0 0">
+                        <TextBlock Style="{StaticResource GeneralTextBlock}" MinWidth="120" Text="" TextAlignment="Left" />
+                    </Border>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" TextAlignment="Center" Text="XZ"/>
+                    <Slider Grid.Row="6" Grid.Column="1" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="100" />
+                    <dxe:SpinEdit Grid.Row="6" Grid.Column="2" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" />
+                    <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="4 0 0 0">
+                        <TextBlock Style="{StaticResource GeneralTextBlock}" MinWidth="120" Text="" TextAlignment="Left" />
+                    </Border>
+                </Grid>
+
+                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Width="90" Height="28" HorizontalAlignment="Right" Margin="0 8 0 0" />
+            </StackPanel>
+        </Grid>
+
+        <ContentControl Grid.Row="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
+
+        <StackPanel Grid.Row="2" Margin="8">
+            <DockPanel Margin="0 0 0 8">
+                <TextBlock DockPanel.Dock="Left" Text="Scale Bar" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                <dx:SimpleButton Content="Display" Style="{StaticResource GrayGradientButton}" 
+                                     Width="90" Height="28" HorizontalAlignment="Right" />
+            </DockPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Font Size" FontSize="14" />
+                <dxe:SpinEdit VerticalAlignment="Center" Margin="4 0 0 0" Style="{StaticResource HistogramEdit}" Value="12" MinValue="10" MaxValue="14" />
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
 </UserControl>
