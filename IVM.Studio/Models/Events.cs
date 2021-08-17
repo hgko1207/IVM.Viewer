@@ -56,14 +56,12 @@ namespace IVM.Studio.Models.Events
         public readonly FileInfo FileInfo;
         public readonly Metadata Metadata;
         public readonly bool SlideChanged;
-        public readonly DirectoryInfo DirectoryInfo;
 
-        public DisplayParam(FileInfo fileInfo, Metadata metadata, bool slideChanged, DirectoryInfo directoryInfo)
+        public DisplayParam(FileInfo fileInfo, Metadata metadata, bool slideChanged)
         {
             FileInfo = fileInfo;
             Metadata = metadata;
             SlideChanged = slideChanged;
-            DirectoryInfo = directoryInfo;
         }
     }
 

@@ -69,7 +69,7 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Subscribe(MainWindowDeactivated);
 
             videoPage = new VideoViewer() { WindowId = view.WindowId };
-            imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId };
+            imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId, WindowInfo = view.WindowInfo };
 
             InitViewerChanged();
         }

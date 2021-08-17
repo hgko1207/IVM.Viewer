@@ -98,7 +98,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private FileInfo fileInfo;
         private FileInfo fileToDisplay;
-        private DirectoryInfo directoryInfo;
+        //private DirectoryInfo directoryInfo;
 
         private ImageService imageService { get; set; }
 
@@ -249,8 +249,6 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (view.WindowId == dataManager.MainWindowId)
                     fileInfo = param.FileInfo;
             }
-
-            directoryInfo = param.DirectoryInfo;
 
             // 레지스트레이션 체크
             FileInfo registrationFile = new FileInfo(Path.Combine(fileInfo.DirectoryName, Path.GetFileNameWithoutExtension(fileInfo.Name) + "_Reg" + fileInfo.Extension));
@@ -869,21 +867,29 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (displayingImageGDI.Height < param.Height)
                     param.Height = displayingImageGDI.Height;
 
+                DirectoryInfo directoryInfo = view.WindowInfo.DirectoryInfo;
                 if (annotationInfo.AllCropEnabled && directoryInfo != null)
                 {
                     VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
                     if (dialog.ShowDialog().GetValueOrDefault())
                     {
                         //await Task.Run(() => {
-                           
                         //});
 
-                        foreach (FileInfo fileinfo in Container.Resolve<FileService>().GetImagesInFolder(directoryInfo, dataManager.ApprovedExtensions, false))
+                        foreach (FileInfo fileinfo in directoryInfo.GetFiles())
                         {
-                            Bitmap displayingImageGDI = CreateDisplayBitmap(fileinfo);
-                            string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
-                            CropImageSave(displayingImageGDI, filePath, param);
+                            if (fileInfo.Extension.ToLower() == ".ivm")
+                            {
+                                string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
+                            }
                         }
+
+                        //foreach (FileInfo fileinfo in Container.Resolve<FileService>().GetImagesInFolder(directoryInfo, dataManager.ImageFileExtensions, false))
+                        //{
+                        //    Bitmap displayingImageGDI = CreateDisplayBitmap(fileinfo);
+                        //    string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
+                        //    CropImageSave(displayingImageGDI, filePath, param);
+                        //}
                     }
                 }
                 else
@@ -909,16 +915,18 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="param"></param>
         private void CropImageSave(Bitmap displayingImageGDI, string fileName, GetPositionToCropParam param)
         {
+            ShapeType shapeType = annotationInfo.CropRectangleEnabled ? ShapeType.Rectangle : annotationInfo.CropCircleEnabled ? ShapeType.Ellipse : ShapeType.Triangle;
+
             if (annotationInfo.CropInvertEnabled)
             {
-                using (Bitmap bitmap = imageService.CreateInvertCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                using (Bitmap bitmap = imageService.CreateInvertCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, shapeType))
                 {
                     bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
             }
             else
             {
-                using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, shapeType))
                 {
                     bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
@@ -954,7 +962,15 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (view != null && view.WindowId == dataManager.MainWindowId)
             {
+                DirectoryInfo directoryInfo = view.WindowInfo.DirectoryInfo;
+                if (directoryInfo != null)
+                {
+                    VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+                    if (dialog.ShowDialog().GetValueOrDefault())
+                    {
 
+                    }
+                }
             }
         }
 

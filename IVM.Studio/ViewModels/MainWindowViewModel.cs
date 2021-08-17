@@ -343,7 +343,7 @@ namespace IVM.Studio.ViewModels
             // 메타 데이터 로드
             Metadata metadata = Container.Resolve<FileService>().ReadMetadataOfImage(currentSlidesPath, currentFile);
 
-            DisplayParam displayParam = new DisplayParam(currentFile, metadata, slideChanged, currentDirectory);
+            DisplayParam displayParam = new DisplayParam(currentFile, metadata, slideChanged);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Publish(displayParam);
 
             // 디스플레이
@@ -371,7 +371,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void WindowOpen()
         {
-            WindowInfo windowInfo = new WindowInfo() { Name = SelectedSlideInfo.Name, Seq = ++dataManager.MainWindowSeq };
+            WindowInfo windowInfo = new WindowInfo() { Name = SelectedSlideInfo.Name, Seq = ++dataManager.MainWindowSeq, DirectoryInfo = currentDirectory };
 
             MainViewerWindow mainViewerWindow = new MainViewerWindow(windowInfo) { Owner = Application.Current.MainWindow };
             mainViewerWindow.Show();
@@ -380,9 +380,9 @@ namespace IVM.Studio.ViewModels
             {
                 Metadata metadata = dataManager.Metadata;
                 if (dataManager.ViewerName == nameof(ImageViewer))
-                    EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true, currentDirectory));
+                    EventAggregator.GetEvent<DisplayImageEvent>().Publish(new DisplayParam(currentFile, metadata, true));
                 else
-                    EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true, currentDirectory));
+                    EventAggregator.GetEvent<DisplayVideoEvent>().Publish(new DisplayParam(currentFile, metadata, true));
             }
         }
 

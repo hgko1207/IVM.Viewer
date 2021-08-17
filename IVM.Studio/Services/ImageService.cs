@@ -803,33 +803,49 @@ namespace IVM.Studio.Services
         /// <param name="top"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="isBox"></param>
+        /// <param name="shapeType"></param>
         /// <returns></returns>
-        public Bitmap CreateCroppedImage(Bitmap image, double left, double top, double width, double height, bool isBox)
+        public Bitmap CreateCroppedImage(Bitmap image, double left, double top, double width, double height, ShapeType shapeType)
         {
             Bitmap result = MakeEmptyImage((int)width, (int)height);
-            if (isBox)
+            using (Graphics g = Graphics.FromImage(result))
             {
-                using (Graphics g = Graphics.FromImage(result))
-                {
-                    g.DrawImage(image, new Rectangle(0, 0, result.Width, result.Height), new Rectangle((int)left, (int)top, (int)width, (int)height), GraphicsUnit.Pixel);
-                }
-            }
-            else
-            {
-                int x = (int)width / 2;
-                int y = (int)height / 2;
+                RectangleF srcRect = new Rectangle((int)left, (int)top, (int)width, (int)height);
 
-                using (Graphics g = Graphics.FromImage(result))
+                switch (shapeType)
                 {
-                    g.SmoothingMode = SmoothingMode.AntiAlias;
-                    g.TranslateTransform(result.Width / 2, result.Height / 2);
-                    GraphicsPath gp = new GraphicsPath();
-                    gp.AddEllipse(0 - x, 0 - y, result.Width, result.Height);
-                    Region rg = new Region(gp);
-                    g.SetClip(rg, CombineMode.Replace);
+                    case ShapeType.Rectangle:
+                        g.DrawImage(image, new Rectangle(0, 0, result.Width, result.Height), srcRect, GraphicsUnit.Pixel);
+                        break;
+                    case ShapeType.Ellipse:
+                        int x = (int)width / 2;
+                        int y = (int)height / 2;
 
-                    g.DrawImage(image, new Rectangle(-x, -y, result.Width, result.Height), new Rectangle((int)left, (int)top, (int)width, (int)height), GraphicsUnit.Pixel);
+                        g.SmoothingMode = SmoothingMode.AntiAlias;
+                        g.TranslateTransform(result.Width / 2, result.Height / 2);
+                        GraphicsPath gp = new GraphicsPath();
+                        gp.AddEllipse(0 - x, 0 - y, result.Width, result.Height);
+                        Region rg = new Region(gp);
+                        g.SetClip(rg, CombineMode.Replace);
+
+                        g.DrawImage(image, new Rectangle(-x, -y, result.Width, result.Height), srcRect, GraphicsUnit.Pixel);
+                        break;
+                    case ShapeType.Triangle:
+                        float x1 = (float)left;
+                        float y1 = (float)top;
+                        float x2 = (float)(x1 + width);
+                        float y2 = (float)(y1 + height);
+
+                        PointF[] destPoints =
+                        {
+                            new PointF(x1 + (x2 - x1) / 2,  y1),
+                            new PointF(x2,  y2),
+                            new PointF(x1,  y2),
+                        };
+
+                        g.DrawImage(image, destPoints, srcRect, GraphicsUnit.Pixel);
+
+                        break;
                 }
             }
 
@@ -844,24 +860,47 @@ namespace IVM.Studio.Services
         /// <param name="top"></param>
         /// <param name="width"></param>
         /// <param name="height"></param>
-        /// <param name="isBox"></param>
+        /// <param name="shapeType"></param>
         /// <returns></returns>
-        public Bitmap CreateInvertCroppedImage(Bitmap image, double left, double top, double width, double height, bool isBox)
+        public Bitmap CreateInvertCroppedImage(Bitmap image, double left, double top, double width, double height, ShapeType shapeType)
         {
             Bitmap result = new Bitmap(image.Width, image.Height);
             using (Graphics g = Graphics.FromImage(result))
             {
-                if (isBox)
+                switch (shapeType)
                 {
-                    Rectangle excludeRect = new Rectangle((int)left, (int)top, (int)width, (int)height);
-                    g.SetClip(excludeRect, CombineMode.Exclude);
-                }
-                else
-                {
-                    GraphicsPath gp = new GraphicsPath();
-                    gp.AddEllipse((int)left, (int)top, (float)width, (float)height);
-                    Region region = new Region(gp);
-                    g.SetClip(region, CombineMode.Exclude);
+                    case ShapeType.Rectangle:
+                        Rectangle rect = new Rectangle((int)left, (int)top, (int)width, (int)height);
+                        g.SetClip(rect, CombineMode.Exclude);
+                        break;
+                    case ShapeType.Ellipse:
+                        {
+                            GraphicsPath gp = new GraphicsPath();
+                            gp.AddEllipse((int)left, (int)top, (float)width, (float)height);
+                            Region region = new Region(gp);
+                            g.SetClip(region, CombineMode.Exclude);
+                        }
+                        break;
+                    case ShapeType.Triangle:
+                        {
+                            float x1 = (float)left;
+                            float y1 = (float)top;
+                            float x2 = (float)(x1 + width);
+                            float y2 = (float)(y1 + height);
+
+                            PointF[] destPoints =
+                                {
+                                new PointF(x1 + (x2 - x1) / 2,  y1),
+                                new PointF(x2,  y2),
+                                new PointF(x1,  y2),
+                            };
+
+                            GraphicsPath gp = new GraphicsPath();
+                            gp.AddPolygon(destPoints);
+                            Region region = new Region(gp);
+                            g.SetClip(region, CombineMode.Exclude);
+                        }
+                        break;
                 }
 
                 Rectangle destRect = new Rectangle(0, 0, result.Width, result.Height);
