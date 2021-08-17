@@ -54,8 +54,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.THRESHOLD_INTENSITY.x = (float)e.NewValue / (float)IntensityRSlider.Maximum;
-            IntensityR.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY.x);
+            vw.param.THRESHOLD_INTENSITY_MIN.x = (float)e.NewValue;
+            IntensityR.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY_MIN.x);
         }
 
         private void IntensityGSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -63,8 +63,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.THRESHOLD_INTENSITY.y = (float)e.NewValue / (float)IntensityGSlider.Maximum;
-            IntensityG.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY.y);
+            vw.param.THRESHOLD_INTENSITY_MIN.y = (float)e.NewValue;
+            IntensityG.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY_MIN.y);
         }
 
         private void IntensityBSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -72,8 +72,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.THRESHOLD_INTENSITY.z = (float)e.NewValue / (float)IntensityBSlider.Maximum;
-            IntensityB.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY.z);
+            vw.param.THRESHOLD_INTENSITY_MIN.z = (float)e.NewValue;
+            IntensityB.Text = string.Format("{0:0.00} ", vw.param.THRESHOLD_INTENSITY_MIN.z);
         }
 
         private void AxisChkBtn_Checked(object sender, RoutedEventArgs e)

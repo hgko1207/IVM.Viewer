@@ -7,6 +7,8 @@ using Prism.Commands;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using static IVM.Studio.Models.Common;
 
@@ -61,10 +63,15 @@ namespace IVM.Studio.ViewModels.UserControls
 
             if (CurrentImgPath != null)
             {
-                I3DPathInfo pathInfo = new I3DPathInfo() { Path = CurrentImgPath };
-                ImgPathCollection.Add(pathInfo);
+                string[] dirs = Directory.GetDirectories(CurrentImgPath).OrderBy(f => f).ToArray();
 
-                EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
+                foreach (string dir in dirs)
+                {
+                    I3DPathInfo pathInfo = new I3DPathInfo() { Path = dir };
+                    ImgPathCollection.Add(pathInfo);
+                }
+
+                //EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
             }
         }
 

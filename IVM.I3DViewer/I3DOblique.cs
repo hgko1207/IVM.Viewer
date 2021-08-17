@@ -115,6 +115,8 @@ namespace IVM.Studio.I3D
             shader.SetUniformMatrix4(gl, "matProj", mproj.to_array());
             shader.SetUniformMatrix4(gl, "matModelView", mview.to_array());
             shader.SetUniform3(gl, "BG_COLOR", view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z);
+            gl.Uniform4(shader.GetUniformLocation(gl, "BAND_ORDER"), view.param.BAND_ORDER.x, view.param.BAND_ORDER.y, view.param.BAND_ORDER.z, view.param.BAND_ORDER.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "BAND_VISIBLE"), view.param.BAND_VISIBLE.x, view.param.BAND_VISIBLE.y, view.param.BAND_VISIBLE.z, view.param.BAND_VISIBLE.w); // uniform4
 
             view.scene.tex3D.Bind(gl);
 

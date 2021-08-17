@@ -115,6 +115,246 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref sliceUmPix, value);
         }
 
+        private string _DAPIColor = "Red";
+        public string DAPIColor
+        {
+            get => _DAPIColor;
+            set => SetProperty(ref _DAPIColor, value);
+        }
+
+        private string _GFPColor = "Green";
+        public string GFPColor
+        {
+            get => _GFPColor;
+            set => SetProperty(ref _GFPColor, value);
+        }
+
+        private string _RFPColor = "Blue";
+        public string RFPColor
+        {
+            get => _RFPColor;
+            set => SetProperty(ref _RFPColor, value);
+        }
+
+        private string _NIRColor = "None";
+        public string NIRColor
+        {
+            get => _NIRColor;
+            set => SetProperty(ref _NIRColor, value);
+        }
+
+        private bool _DAPIVisible = true;
+        public bool DAPIVisible
+        {
+            get => _DAPIVisible;
+            set
+            {
+                if (SetProperty(ref _DAPIVisible, value))
+                {
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                }
+            }
+        }
+
+        private bool _GFPVisible = true;
+        public bool GFPVisible
+        {
+            get => _GFPVisible;
+            set
+            {
+                if (SetProperty(ref _GFPVisible, value))
+                {
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                }
+            }
+        }
+
+        private bool _RFPVisible = true;
+        public bool RFPVisible
+        {
+            get => _RFPVisible;
+            set
+            {
+                if (SetProperty(ref _RFPVisible, value))
+                {
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                }
+            }
+        }
+
+        private bool _NIRVisible = false;
+        public bool NIRVisible
+        {
+            get => _NIRVisible;
+            set
+            {
+                if (SetProperty(ref _NIRVisible, value))
+                {
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                }
+            }
+        }
+
+        private int _DAPILevelLower = 0;
+        public int DAPILevelLower
+        {
+            get => _DAPILevelLower;
+            set
+            {
+                if (SetProperty(ref _DAPILevelLower, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _DAPILevelUpper = 255;
+        public int DAPILevelUpper
+        {
+            get => _DAPILevelUpper;
+            set
+            {
+                if (SetProperty(ref _DAPILevelUpper, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _GFPLevelLower = 0;
+        public int GFPLevelLower
+        {
+            get => _GFPLevelLower;
+            set
+            {
+                if (SetProperty(ref _GFPLevelLower, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _GFPLevelUpper = 255;
+        public int GFPLevelUpper
+        {
+            get => _GFPLevelUpper;
+            set
+            {
+                if (SetProperty(ref _GFPLevelUpper, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _RFPLevelLower = 0;
+        public int RFPLevelLower
+        {
+            get => _RFPLevelLower;
+            set
+            {
+                if (SetProperty(ref _RFPLevelLower, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _RFPLevelUpper = 255;
+        public int RFPLevelUpper
+        {
+            get => _RFPLevelUpper;
+            set
+            {
+                if (SetProperty(ref _RFPLevelUpper, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _NIRLevelLower = 0;
+        public int NIRLevelLower
+        {
+            get => _NIRLevelLower;
+            set
+            {
+                if (SetProperty(ref _NIRLevelLower, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private int _NIRLevelUpper = 255;
+        public int NIRLevelUpper
+        {
+            get => _NIRLevelUpper;
+            set
+            {
+                if (SetProperty(ref _NIRLevelUpper, value))
+                {
+                    wcfserver.channel1.OnChangeIntensityThreshold(_DAPILevelLower, _DAPILevelUpper, _GFPLevelLower, _GFPLevelUpper, _RFPLevelLower, _RFPLevelUpper, _NIRLevelLower, _NIRLevelUpper);
+                }
+            }
+        }
+
+        private float _DAPIAlphaValue = 10.0f;
+        public float DAPIAlphaValue
+        {
+            get => _DAPIAlphaValue;
+            set
+            {
+                if (SetProperty(ref _DAPIAlphaValue, value))
+                {
+                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                }
+            }
+        }
+
+        private float _GFPAlphaValue = 10.0f;
+        public float GFPAlphaValue
+        {
+            get => _GFPAlphaValue;
+            set
+            {
+                if (SetProperty(ref _GFPAlphaValue, value))
+                {
+                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                }
+            }
+        }
+
+        private float _RFPAlphaValue = 10.0f;
+        public float RFPAlphaValue
+        {
+            get => _RFPAlphaValue;
+            set
+            {
+                if (SetProperty(ref _RFPAlphaValue, value))
+                {
+                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                }
+            }
+        }
+
+        private float _NIRAlphaValue = 10.0f;
+        public float NIRAlphaValue
+        {
+            get => _NIRAlphaValue;
+            set
+            {
+                if (SetProperty(ref _NIRAlphaValue, value))
+                {
+                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                }
+            }
+        }
+
         public ICommand CameraCoronalCommand { get; private set; }
         public ICommand CameraSagittalCommand { get; private set; }
         public ICommand CameraAxialCommand { get; private set; }
@@ -122,12 +362,31 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand SlicePrevStepCommand { get; private set; }
         public ICommand SliceNextStepCommand { get; private set; }
 
+        public ICommand DAPIColorChangedCommand { get; private set; }
+        public ICommand GFPColorChangedCommand { get; private set; }
+        public ICommand RFPColorChangedCommand { get; private set; }
+        public ICommand NIRColorChangedCommand { get; private set; }
+
         bool subscribing = false;
 
         int width = 0;
         int height = 0;
         float umWidth = 0;
         float umHeight = 0;
+
+        int StrToBandIdx(string col)
+        {
+            switch (col)
+            {
+                case "Red":
+                    return 0;
+                case "Green":
+                    return 1;
+                case "Blue":
+                    return 2;
+            }
+            return 3;
+        }
 
         /// <summary>
         /// 생성자
@@ -146,6 +405,41 @@ namespace IVM.Studio.ViewModels.UserControls
 
             SlicePrevStepCommand = new DelegateCommand(SlicePrevStep);
             SliceNextStepCommand = new DelegateCommand(SliceNextStep);
+
+            DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
+            GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
+            RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
+            NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
+        }
+
+        private void DAPIColorChanged(string col)
+        {
+            DAPIColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+        }
+        private void GFPColorChanged(string col)
+        {
+            GFPColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+        }
+
+        private void RFPColorChanged(string col)
+        {
+            RFPColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+        }
+        private void NIRColorChanged(string col)
+        {
+            NIRColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
         }
 
         private void SliceNextStep()

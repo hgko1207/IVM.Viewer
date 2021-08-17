@@ -55,13 +55,13 @@
                 <TextBlock x:Name="IntensityB" Text="" />
             </StackPanel>
             <Slider Margin="200,0,0,5" Width="90" HorizontalAlignment="Left"
-                    Minimum="0" Maximum="100" Interval="1" 
+                    Minimum="0" Maximum="255" Interval="1" 
                     x:Name="IntensityRSlider" ValueChanged="IntensityRSlider_ValueChanged" />
             <Slider Margin="290,0,0,5" Width="90" HorizontalAlignment="Left"
-                    Minimum="0" Maximum="100" Interval="1" 
+                    Minimum="0" Maximum="255" Interval="1" 
                     x:Name="IntensityGSlider" ValueChanged="IntensityGSlider_ValueChanged" />
             <Slider Margin="380,0,0,5" Width="90" HorizontalAlignment="Left"
-                    Minimum="0" Maximum="100" Interval="1" 
+                    Minimum="0" Maximum="255" Interval="1" 
                     x:Name="IntensityBSlider" ValueChanged="IntensityBSlider_ValueChanged" />
             <StackPanel
 				Margin="500,0,0,0"
