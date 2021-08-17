@@ -98,6 +98,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private FileInfo fileInfo;
         private FileInfo fileToDisplay;
+        //private DirectoryInfo directoryInfo;
 
         private ImageService imageService { get; set; }
 
@@ -136,7 +137,7 @@ namespace IVM.Studio.ViewModels.UserControls
             ScrollViewerScrollChangedCommand = new DelegateCommand(SizeChanged);
 
             EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
-            EventAggregator.GetEvent<MainViewerUnloadEvent>().Subscribe(MainViewwerUnload);
+            EventAggregator.GetEvent<MainViewerUnloadEvent>().Subscribe(MainViewerUnload);
 
             currentZoomRatio = 100;
             DisplayingImageWidth = double.NaN;
@@ -171,8 +172,10 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<RotationResetEvent>().Subscribe(RotationReset);
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl);
+
             EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop);
-            EventAggregator.GetEvent<DrawExportEvent>().Subscribe(DrawExport);
+            EventAggregator.GetEvent<ExportDrawEvent>().Subscribe(ExportDraw);
+            EventAggregator.GetEvent<ExportDrawAllEvent>().Subscribe(ExportDrawAll);
 
             // 디스플레이
             DisplayImage(dataManager.MainWindowId);
@@ -198,12 +201,16 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ExportCropEvent>().Unsubscribe(ExportCrop);
         }
 
-        private void MainViewwerUnload(int windowId)
+        /// <summary>
+        /// MainViewer Unload
+        /// </summary>
+        /// <param name="windowId"></param>
+        private void MainViewerUnload(int windowId)
         {
             if (windowId == dataManager.MainWindowId)
             {
                 EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImageWithMetadata);
-                EventAggregator.GetEvent<MainViewerUnloadEvent>().Unsubscribe(MainViewwerUnload);
+                EventAggregator.GetEvent<MainViewerUnloadEvent>().Unsubscribe(MainViewerUnload);
             }
         }
 
@@ -834,7 +841,7 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Export Crop
+        /// Crop 이미지 저장
         /// </summary>
         private void ExportCrop()
         {
@@ -860,35 +867,76 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (displayingImageGDI.Height < param.Height)
                     param.Height = displayingImageGDI.Height;
 
-                VistaSaveFileDialog dlg = new VistaSaveFileDialog
+                DirectoryInfo directoryInfo = view.WindowInfo.DirectoryInfo;
+                if (annotationInfo.AllCropEnabled && directoryInfo != null)
                 {
-                    DefaultExt = ".png",
-                    Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
-                };
-                if (dlg.ShowDialog().GetValueOrDefault())
-                {
-                    if (annotationInfo.CropInvertEnabled)
+                    VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+                    if (dialog.ShowDialog().GetValueOrDefault())
                     {
-                        using (Bitmap bitmap = imageService.CreateInvertCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
+                        //await Task.Run(() => {
+                        //});
+
+                        foreach (FileInfo fileinfo in directoryInfo.GetFiles())
                         {
-                            bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                            if (fileInfo.Extension.ToLower() == ".ivm")
+                            {
+                                string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
+                            }
                         }
+
+                        //foreach (FileInfo fileinfo in Container.Resolve<FileService>().GetImagesInFolder(directoryInfo, dataManager.ImageFileExtensions, false))
+                        //{
+                        //    Bitmap displayingImageGDI = CreateDisplayBitmap(fileinfo);
+                        //    string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
+                        //    CropImageSave(displayingImageGDI, filePath, param);
+                        //}
                     }
-                    else
+                }
+                else
+                {
+                    VistaSaveFileDialog dialog = new VistaSaveFileDialog
                     {
-                        using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, annotationInfo.CropRectangleEnabled))
-                        {
-                            bitmap.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
-                        }
+                        DefaultExt = ".png",
+                        Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
+                    };
+                    if (dialog.ShowDialog().GetValueOrDefault())
+                    {
+                        CropImageSave(displayingImageGDI, dialog.FileName, param);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Draw Export
+        /// Crop 이미지 저장
         /// </summary>
-        private void DrawExport()
+        /// <param name="displayingImageGDI"></param>
+        /// <param name="fileName"></param>
+        /// <param name="param"></param>
+        private void CropImageSave(Bitmap displayingImageGDI, string fileName, GetPositionToCropParam param)
+        {
+            ShapeType shapeType = annotationInfo.CropRectangleEnabled ? ShapeType.Rectangle : annotationInfo.CropCircleEnabled ? ShapeType.Ellipse : ShapeType.Triangle;
+
+            if (annotationInfo.CropInvertEnabled)
+            {
+                using (Bitmap bitmap = imageService.CreateInvertCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, shapeType))
+                {
+                    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
+                }
+            }
+            else
+            {
+                using (Bitmap bitmap = imageService.CreateCroppedImage(displayingImageGDI, param.Left, param.Top, param.Width, param.Height, shapeType))
+                {
+                    bitmap.Save(fileName, System.Drawing.Imaging.ImageFormat.Png);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 현재 도시되고 있는 이미지 저장
+        /// </summary>
+        private void ExportDraw()
         {
             if (displayingImageGDI == null)
                 return;
@@ -903,6 +951,25 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 현재 도시되고 있는 파일 경로의 모든 이미지 저장
+        /// </summary>
+        private void ExportDrawAll()
+        {
+            if (view != null && view.WindowId == dataManager.MainWindowId)
+            {
+                DirectoryInfo directoryInfo = view.WindowInfo.DirectoryInfo;
+                if (directoryInfo != null)
+                {
+                    VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+                    if (dialog.ShowDialog().GetValueOrDefault())
+                    {
+
+                    }
                 }
             }
         }
@@ -1023,6 +1090,68 @@ namespace IVM.Studio.ViewModels.UserControls
                     ImageHeight = displayingImageGDI.Height,
                     ZoomRatio = currentZoomRatio
                 });
+            }
+        }
+
+        private Bitmap CreateDisplayBitmap(FileInfo fileInfo)
+        {
+            // 레지스트레이션 체크
+            FileInfo registrationFile = new FileInfo(Path.Combine(fileInfo.DirectoryName, Path.GetFileNameWithoutExtension(fileInfo.Name) + "_Reg" + fileInfo.Extension));
+
+            FileInfo fileToDisplay;
+            if (registrationFile.Exists)
+                fileToDisplay = registrationFile;
+            else
+                fileToDisplay = fileInfo;
+
+            using (Bitmap originalImage = new Bitmap(fileToDisplay.FullName))
+            {
+                List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
+                {
+                    if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
+                    else return null;
+                }).ToList();
+
+                using (Bitmap img1 = imageService.TranslateColor(originalImage, currentColorMatrix))
+                using (Bitmap img2 = imageService.ApplyColorMaps(img1, colormaps))
+                using (Bitmap workingImage = new Bitmap(img2))
+                {
+                    // 반전 및 회전
+                    imageService.ReflectAndRotate(workingImage, horizontalReflect, verticalReflect, currentRotate);
+
+                    // 한번 뒤집기 후에는 반드시 비트맵을 다시 생성해줘야 함.
+                    // 90도, 270도 플립시 이미지의 가로 길이보다 Y좌표가 큰 영역에 쓰지 못하는 문제가 있음. (원인불명)
+                    using (Bitmap bitmap = new Bitmap(workingImage))
+                    {
+                        // 어노테이션
+                        if (annotationImage != null)
+                        {
+                            using (Bitmap annotationImg = new Bitmap(annotationImage))
+                            {
+                                imageService.ReflectAndRotate(annotationImg, horizontalReflect, verticalReflect, currentRotate);
+                                imageService.DrawImageOnImage(bitmap, annotationImg);
+                            }
+                        }
+
+                        int scaleBarSize = annotationInfo.ScaleBarSize;
+
+                        // 스케일 바
+                        if (annotationInfo.ScaleBarEnabled && fovSizeX > 0 && fovSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fovSizeX && scaleBarSize < fovSizeY)
+                            imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 9,
+                                annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel);
+
+                        // TimeStack
+                        if (annotationInfo.TimeStampEnabled)
+                            imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
+
+                        // ZStackLabel
+                        if (annotationInfo.ZStackLabelEnabled)
+                            imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
+
+                        Bitmap displayingImageGDI = new Bitmap(bitmap);
+                        return displayingImageGDI;
+                    }
+                }
             }
         }
     }

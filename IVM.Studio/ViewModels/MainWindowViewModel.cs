@@ -52,9 +52,13 @@ namespace IVM.Studio.ViewModels
                     EventAggregator.GetEvent<EnableImageSlidersEvent>().Publish(new SlidersParam() { CurrentSlidesPath = currentSlidesPath, SlideName = value.Name });
                     DisplaySlide(true);
                     dataManager.SelectedSlideInfo = value;
+
+                    RaisePropertyChanged(nameof(WindowOpenEnabled));
                 }
             }
         }
+
+        public bool WindowOpenEnabled => SelectedSlideInfo != null;
 
         private ObservableCollection<MetadataModel> metadataCollection = new ObservableCollection<MetadataModel>();
         public ObservableCollection<MetadataModel> MetadataCollection
@@ -117,6 +121,7 @@ namespace IVM.Studio.ViewModels
 
         private string currentSlidesPath;
         private FileInfo currentFile;
+        private DirectoryInfo currentDirectory;
 
         private DataManager dataManager;
 
@@ -276,6 +281,11 @@ namespace IVM.Studio.ViewModels
             }
         }
 
+        /// <summary>
+        /// 폴더 명을 통해 포맷 찾기
+        /// </summary>
+        /// <param name="forderName"></param>
+        /// <returns></returns>
         private string FolderNameToFormat(string forderName)
         {
             string format = "";
@@ -306,10 +316,16 @@ namespace IVM.Studio.ViewModels
 
             FileInfo file;
             if (SelectedSlideInfo.Category == "Folder")
-                file = Container.Resolve<FileService>().FindImageInSlide(new DirectoryInfo(slidePath), approvedExtensions,
-                    SliderControlInfo.TLSliderValue, SliderControlInfo.MPSliderValue, SliderControlInfo.MSSliderValue, SliderControlInfo.ZSSliderValue);
+            {
+                currentDirectory = new DirectoryInfo(slidePath);
+                file = Container.Resolve<FileService>().FindImageInSlide(currentDirectory, approvedExtensions,
+                   SliderControlInfo.TLSliderValue, SliderControlInfo.MPSliderValue, SliderControlInfo.MSSliderValue, SliderControlInfo.ZSSliderValue);
+            }
             else
+            {
+                currentDirectory = null;
                 file = new FileInfo(slidePath);
+            }
 
             // 파일 실존하는지 확인
             if (file == null || !file.Exists)
@@ -356,7 +372,7 @@ namespace IVM.Studio.ViewModels
         /// </summary>
         private void WindowOpen()
         {
-            WindowInfo windowInfo = new WindowInfo() { Name = SelectedSlideInfo.Name, Seq = ++dataManager.MainWindowSeq };
+            WindowInfo windowInfo = new WindowInfo() { Name = SelectedSlideInfo.Name, Seq = ++dataManager.MainWindowSeq, DirectoryInfo = currentDirectory };
 
             MainViewerWindow mainViewerWindow = new MainViewerWindow(windowInfo) { Owner = Application.Current.MainWindow };
             mainViewerWindow.Show();

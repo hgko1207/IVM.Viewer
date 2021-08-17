@@ -139,6 +139,14 @@ namespace IVM.Studio.Models
             set => SetProperty(ref cropInvertEnabled, value);
         }
 
+
+        private bool allCropEnabled;
+        public bool AllCropEnabled
+        {
+            get => allCropEnabled;
+            set => SetProperty(ref allCropEnabled, value);
+        }
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///// Pen 정보
         //////////////////////////////////////////////////////////////////////////////////////////////////////////

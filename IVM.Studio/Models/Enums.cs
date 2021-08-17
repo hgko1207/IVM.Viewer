@@ -19,6 +19,13 @@ namespace IVM.Studio.Models
     {
     }
 
+    public enum ShapeType
+    {
+        Rectangle,
+        Ellipse,
+        Triangle,
+    }
+
     public enum PositionType
     {
         [Display(Name = "Left", Description = "Left", Order = 1)]

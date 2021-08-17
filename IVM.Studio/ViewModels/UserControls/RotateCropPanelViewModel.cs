@@ -53,20 +53,6 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref isLockRotate, value);
         }
 
-        private bool invertEnabled;
-        public bool InvertEnabled
-        {
-            get => invertEnabled;
-            set => SetProperty(ref invertEnabled, value);
-        }
-
-        private bool allCropEnabled;
-        public bool AllCropEnabled
-        {
-            get => allCropEnabled;
-            set => SetProperty(ref allCropEnabled, value);
-        }
-
         public ICommand RotationCommand { get; private set; }
         public ICommand RotationResetCommand { get; private set; }
         

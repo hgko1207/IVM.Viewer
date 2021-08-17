@@ -75,7 +75,7 @@
             <StackPanel Grid.Column="4">
                 <TextBlock Text="Sub-Window" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
                 
-                <dx:SimpleButton Style="{StaticResource SkyGradientButton}" Margin="0 5 0 0" Content="Close All" Height="40" Padding="10 0" Command="{Binding SaveImageCommand}"/>
+                <dx:SimpleButton Style="{StaticResource SkyGradientButton}" Margin="0 5 0 0" Content="Close All" Height="40" Padding="10 0" Command="{Binding SubWindowAllCloseCommand}"/>
             </StackPanel>
         </Grid>
 

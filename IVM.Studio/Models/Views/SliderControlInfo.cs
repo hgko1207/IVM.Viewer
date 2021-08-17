@@ -236,10 +236,6 @@ namespace IVM.Studio.Models.Views
 
         private DataManager dataManager;
 
-        private readonly IEnumerable<string> imageFileExtensions;
-        private readonly IEnumerable<string> videoFileExtensions;
-        private IEnumerable<string> approvedExtensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
-
         /// <summary>
         /// 생성자
         /// </summary>
@@ -263,9 +259,6 @@ namespace IVM.Studio.Models.Views
             CurrentPlayingSlider = -1;
             SlideShowFps = 5;
             SlideShowRepeat = 2;
-
-            imageFileExtensions = new[] { ".ivm" };
-            videoFileExtensions = new[] { ".avi" };
         }
 
         /// <summary>
@@ -279,7 +272,7 @@ namespace IVM.Studio.Models.Views
 
             DisableSlidersEvent = true;
 
-            if (approvedExtensions.Any(s => slideName.EndsWith(s)))
+            if (dataManager.ApprovedExtensions.Any(s => slideName.EndsWith(s)))
             {
                 ZSSliderValue = 0;
                 ZSSliderMaximum = 0;
@@ -296,7 +289,7 @@ namespace IVM.Studio.Models.Views
             else
             {
                 DirectoryInfo di = new DirectoryInfo(Path.Combine(currentSlidesPath, slideName));
-                var (tlCount, mpCount, msCount, zsCount) = container.Resolve<FileService>().GetImagesModeStatus(di, approvedExtensions);
+                var (tlCount, mpCount, msCount, zsCount) = container.Resolve<FileService>().GetImagesModeStatus(di, dataManager.ApprovedExtensions);
 
                 ZSSliderMinimum = 1;
                 ZSSliderMaximum = zsCount;

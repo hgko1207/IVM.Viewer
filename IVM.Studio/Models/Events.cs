@@ -59,16 +59,17 @@ namespace IVM.Studio.Models.Events
 
         public DisplayParam(FileInfo fileInfo, Metadata metadata, bool slideChanged)
         {
-            this.FileInfo = fileInfo;
-            this.Metadata = metadata;
-            this.SlideChanged = slideChanged;
+            FileInfo = fileInfo;
+            Metadata = metadata;
+            SlideChanged = slideChanged;
         }
     }
 
     public class DrawClearEvent : PubSubEvent { }
     public class DrawUndoEvent : PubSubEvent { }
     public class DrawRedoEvent : PubSubEvent { }
-    public class DrawExportEvent : PubSubEvent { }
+    public class ExportDrawEvent : PubSubEvent { }
+    public class ExportDrawAllEvent : PubSubEvent { }
 
     public class RotationEvent : PubSubEvent<string> { }
     public class ReflectEvent : PubSubEvent<string> { }

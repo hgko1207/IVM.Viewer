@@ -1,5 +1,7 @@
-﻿using IVM.Studio.Models.Events;
+﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
 using Prism.Events;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -11,10 +13,13 @@ namespace IVM.Studio.Views.UserControls
     /// </summary>
     public partial class ImageViewer : UserControl
     {
+        public WindowInfo WindowInfo { get; set; }
+
         public int WindowId { get; set; }
 
         private ContentControl cropBox = null;
         private ContentControl cropCircle = null;
+        private ContentControl cropTriangle = null;
 
         /// <summary>
         /// 생성자
@@ -126,7 +131,36 @@ namespace IVM.Studio.Views.UserControls
         /// <param name="param"></param>
         private void DrawCropTriangle(DrawParam param)
         {
+            Polygon polygon = null;
 
+            if (cropTriangle == null)
+            {
+                cropTriangle = new ContentControl { Template = (ControlTemplate)FindResource("DesignerItemTemplate") };
+                polygon = new Polygon()
+                {
+                    Stroke = Brushes.White,
+                    StrokeThickness = 2
+                };
+
+                cropTriangle.Content = polygon;
+
+                Panel.SetZIndex(cropTriangle, 1);
+                ImageOverlayCanvas.Children.Add(cropTriangle);
+            }
+
+            if (polygon != null)
+            {
+                double x1 = param.Left;
+                double y1 = param.Top;
+                double x2 = x1 + param.Width;
+                double y2 = y1 + param.Height;
+
+                PointCollection Points = new PointCollection();
+                Points.Add(new Point(x1 + (x2 - x1) / 2, y1));
+                Points.Add(new Point(x2, y2));
+                Points.Add(new Point(x1, y2));
+                polygon.Points = Points;
+            }
         }
 
         /// <summary>

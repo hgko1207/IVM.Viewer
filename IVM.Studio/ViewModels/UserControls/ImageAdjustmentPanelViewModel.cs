@@ -250,6 +250,9 @@ namespace IVM.Studio.ViewModels.UserControls
         public ColorChannelModel NIRColorChannel { get; set; }
 
         public ICommand SaveImageCommand { get; private set; }
+        public ICommand SaveSequenceCommand { get; private set; }
+        public ICommand SubWindowAllCloseCommand { get; private set; }
+
         public ICommand DAPIColorChangedCommand { get; private set; }
         public ICommand GFPColorChangedCommand { get; private set; }
         public ICommand RFPColorChangedCommand { get; private set; }
@@ -272,6 +275,9 @@ namespace IVM.Studio.ViewModels.UserControls
         public ImageAdjustmentPanelViewModel(IContainerExtension container) : base(container)
         {
             SaveImageCommand = new DelegateCommand(SaveImage);
+            SaveSequenceCommand = new DelegateCommand(SaveSequence);
+            SubWindowAllCloseCommand = new DelegateCommand(SubWindowAllClose);
+
             DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
             GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
             RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
@@ -329,11 +335,35 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// Save Image
+        /// 이미지 저장
         /// </summary>
         private void SaveImage()
         {
-            EventAggregator.GetEvent<DrawExportEvent>().Publish();
+            EventAggregator.GetEvent<ExportDrawEvent>().Publish();
+        }
+
+        /// <summary>
+        /// 시퀀스별 저장
+        /// </summary>
+        private void SaveSequence()
+        {
+            EventAggregator.GetEvent<ExportDrawAllEvent>().Publish();
+        }
+
+        /// <summary>
+        /// 메인 윈도우를 제외한 윈도우 모두 종료 이벤트
+        /// </summary>
+        private void SubWindowAllClose()
+        {
+            DAPIWindowOpend = false;
+            GFPWindowOpend = false;
+            RFPWindowOpend = false;
+            NIRWindowOpend = false;
+            AllHistogramOpend = false;
+            DAPIHistogramOpend = false;
+            GFPHistogramOpend = false;
+            RFPHistogramOpend = false;
+            NIRHistogramOpend = false;
         }
 
         /// <summary>
@@ -403,7 +433,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void ColorReset()
         {
-            RefreshMetadata(new DisplayParam(null, dataManager.Metadata, true));
+            RefreshMetadata(new DisplayParam(null, dataManager.Metadata, true, null));
             EventAggregator.GetEvent<RefreshImageEvent>().Publish(dataManager.MainWindowId);
         }
 
