@@ -96,7 +96,8 @@
                                         </StackPanel>
                                     </StackPanel>
                                     
-                                    <dx:SimpleButton  Content="Open" Width="80" HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Command="{Binding WindowOpenCommand}"/>
+                                    <dx:SimpleButton  Content="Open" Width="80" HorizontalAlignment="Right" Style="{StaticResource GrayGradientButton}" Command="{Binding WindowOpenCommand}"
+                                                      IsEnabled="{Binding WindowOpenEnabled}"/>
                                 </DockPanel>
                             </Grid>
                         </dxdo:DocumentPanel>

@@ -4,6 +4,7 @@ using Prism.Events;
 using Prism.Ioc;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using static IVM.Studio.Models.Common;
 using WPFDrawing = System.Windows.Media;
 
@@ -45,6 +46,10 @@ namespace IVM.Studio.Services
 
         public int MainWindowId { get; set; }
 
+        private IEnumerable<string> imageFileExtensions;
+        private IEnumerable<string> videoFileExtensions;
+        public IEnumerable<string> ApprovedExtensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
+
         public void Init(IContainerExtension container, IEventAggregator eventAggregator)
         {
             ColorChannelInfoMap = new Dictionary<ChannelType, ColorChannelModel>();
@@ -66,6 +71,9 @@ namespace IVM.Studio.Services
             SliderControlInfo = new SliderControlInfo(container, eventAggregator);
 
             MainWindowSeq = 0;
+
+            imageFileExtensions = new[] { ".ivm" };
+            videoFileExtensions = new[] { ".avi" };
         }
     }
 }
