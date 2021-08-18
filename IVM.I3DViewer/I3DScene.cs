@@ -57,12 +57,12 @@ namespace IVM.Studio.I3D
             view.RenderTarget.DoRender();
         }
 
-        public bool Open(OpenGL gl, string imgPath)
+        public bool Open(string imgPath)
         {
             loadedMeta = meta.Load(imgPath);
-            loadedTexture = tex3D.Load(gl, imgPath);
+            loadedTexture = tex3D.Load(view.gl, imgPath);
 
-            UpdateHeight(gl);
+            UpdateHeight();
 
             return loadedTexture;
         }
@@ -76,15 +76,15 @@ namespace IVM.Studio.I3D
         {
             if (m == I3DRenderMode.SLICE)
             {
-                UpdateHeight(view.gl, 0.25f);
+                UpdateHeight(0.25f);
             }
             else
             {
-                UpdateHeight(view.gl);
+                UpdateHeight();
             }
         }
 
-        public void UpdateHeight(OpenGL gl, float h = -1.0f)
+        public void UpdateHeight(float h = -1.0f)
         {
             // calculate box-height
             if (h == -1.0f)
@@ -97,7 +97,7 @@ namespace IVM.Studio.I3D
                 view.param.BOX_HEIGHT = h;
             }
             
-            view.scene.UpdateMesh(gl);
+            view.scene.UpdateMesh();
         }
 
         public void UpdateProjectionMatrix()
@@ -170,29 +170,31 @@ namespace IVM.Studio.I3D
             matAxisView = axisTrn * rot;
         }
 
-        public void Init(OpenGL gl)
+        public void Init()
         {
-            gl.Enable(OpenGL.GL_TEXTURE_3D);
+            view.gl.Enable(OpenGL.GL_TEXTURE_3D);
 
-            box.InitShader(gl);
-            oblique.InitShader(gl);
+            box.InitShader(view.gl);
+            oblique.InitShader(view.gl);
 
-            box.CreateMesh(gl);
-            box.CreateGrid(gl);
-            axis.CreateMesh(gl);
+            box.CreateMesh(view.gl);
+            box.CreateGrid(view.gl);
+            axis.CreateMesh(view.gl);
         }
 
-        public void UpdateMesh(OpenGL gl)
+        public void UpdateMesh()
         {
-            box.CreateMesh(gl);
-            box.CreateGrid(gl);
-            axis.CreateMesh(gl);
+            box.CreateMesh(view.gl);
+            box.CreateGrid(view.gl);
+            axis.CreateMesh(view.gl);
         }
 
-        public void Render(OpenGL gl)
+        public void Render()
         {
             if (!loadedTexture)
                 return;
+
+            OpenGL gl = view.gl;
 
             // Clear the color and depth buffers.
             gl.ClearColor(view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z, 1.0f);
@@ -217,7 +219,7 @@ namespace IVM.Studio.I3D
                 }
 
                 // grid-text
-                if (view.param.SHOW_GRID && view.param.SHOW_GRID_TEXT)
+                if (view.param.SHOW_GRID_TEXT)
                     box.RenderGridText(gl, matProjOrtho, matSliceZView);
             }
             else
@@ -236,7 +238,7 @@ namespace IVM.Studio.I3D
                     oblique.RenderOblique(gl, matProj, matModelView, matModelRot, view.param.OBLIQUE_DEPTH);
                 
                 // grid-text
-                if (view.param.SHOW_GRID && view.param.SHOW_GRID_TEXT)
+                if (view.param.SHOW_GRID_TEXT)
                     box.RenderGridText(gl, matProj, matGridView);
 
                 // draw axis

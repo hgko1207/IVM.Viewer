@@ -58,7 +58,7 @@ namespace IVM.Studio.I3D
             gl.Disable(OpenGL.GL_LIGHTING);
             gl.Disable(OpenGL.GL_TEXTURE_2D);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
-            gl.LineWidth(2.0f);
+            gl.LineWidth(view.param.AXIS_THICKNESS);
 
             gl.PolygonMode(FaceMode.FrontAndBack, PolygonMode.Lines);
             gl.Begin(BeginMode.Lines);
@@ -86,7 +86,7 @@ namespace IVM.Studio.I3D
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = view.param.TEXT_SIZE;
+            int fs = view.param.AXIS_TEXT_SIZE;
 
             vec4 px = mview * new vec4(vertices[1].x, vertices[1].y, vertices[1].z, 1);
             px.x = (px.x + 1.0f) / 2.0f * aw;

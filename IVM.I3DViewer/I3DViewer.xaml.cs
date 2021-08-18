@@ -47,7 +47,7 @@ namespace IVM.Studio.I3D
             // init Scene
             gl = args.OpenGL;
             scene = new I3DScene(this);
-            scene.Init(gl);
+            scene.Init();
             scene.UpdateModelviewMatrix();
         }
 
@@ -58,17 +58,17 @@ namespace IVM.Studio.I3D
 
         private void OpenGLControl_Draw(object sender, OpenGLRoutedEventArgs args)
         {
-            scene.Render(gl); // scene render
+            scene.Render(); // scene render
         }
 
         public bool Open(string imgPath)
         {
-            return scene.Open(gl, imgPath);
+            return scene.Open(imgPath);
         }
 
         public void UpdateBoxHeight()
         {
-            scene.UpdateMesh(gl);
+            scene.UpdateMesh();
         }
     }
 }

@@ -77,6 +77,52 @@ namespace IVM.Studio.I3D
             w.vw.param.ALPHA_WEIGHT.z = b;
             w.vw.param.ALPHA_WEIGHT.w = a;
         }
+
+        public void OnChangeAxisParam(bool visible, int textsize, float height, float thickness, float px, float py)
+        {
+            w.vw.param.SHOW_AXIS = visible;
+            w.vw.param.AXIS_TEXT_SIZE = textsize;
+            w.vw.param.AXIS_HEIGHT = height;
+            w.vw.param.AXIS_THICKNESS = thickness;
+            w.vw.param.AXIS_POS = new vec3(px, py, 0);
+
+            w.vw.scene.UpdateModelviewMatrix();
+            w.vw.scene.UpdateMesh();
+        }
+
+        public void OnChangeBoxParam(float r, float g, float b, float a, float thickness)
+        {
+            w.vw.param.BOX_THICKNESS = thickness;
+            w.vw.param.BOX_COLOR = new vec4(r, g, b, a);
+            w.vw.param.GRID_COLOR = new vec4(r, g, b, a);
+
+            if (a <= 0.0f)
+            {
+                w.vw.param.SHOW_BOX = false;
+                w.vw.param.SHOW_GRID = false;
+            }
+            else
+            {
+                w.vw.param.SHOW_BOX = true;
+                w.vw.param.SHOW_GRID = true;
+            }
+        }
+
+        public void OnChangeGridLabelParam(float r, float g, float b, float a, int fontsize)
+        {
+            w.vw.param.GRID_TEXT_COLOR = new vec4(r, g, b, a);
+            w.vw.param.GRID_TEXT_SIZE = fontsize;
+
+            if (a <= 0.0f)
+                w.vw.param.SHOW_GRID_TEXT = false;
+            else
+                w.vw.param.SHOW_GRID_TEXT = true;
+        }
+
+        public void OnChangeBackgroundParam(float r, float g, float b, float a)
+        {
+            w.vw.param.BG_COLOR = new vec3(r, g, b);
+        }
     }
 }
 

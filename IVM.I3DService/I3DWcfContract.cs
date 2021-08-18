@@ -49,6 +49,18 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeAlphaWeight(float r, float g, float b, float a);
+
+        [OperationContract]
+        void OnChangeAxisParam(bool visible, int textsize, float height, float thickness, float px, float py);
+
+        [OperationContract]
+        void OnChangeBoxParam(float r, float g, float b, float a, float thickness);
+
+        [OperationContract]
+        void OnChangeGridLabelParam(float r, float g, float b, float a, int fontsize);
+
+        [OperationContract]
+        void OnChangeBackgroundParam(float r, float g, float b, float a);
     }
 
     [ServiceContract]

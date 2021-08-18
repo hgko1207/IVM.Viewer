@@ -77,7 +77,13 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void OpenSelected()
         {
+            if (SelectedImgInfo == null)
+                return;
+
             CurrentImgPath = SelectedImgInfo.Path;
+
+            if (!Directory.Exists(CurrentImgPath))
+                return;
 
             EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
         }

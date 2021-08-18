@@ -430,7 +430,7 @@ namespace IVM.Studio.I3D
                 OpenGL.GL_LINE_BIT | OpenGL.GL_POLYGON_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             gl.Disable(OpenGL.GL_LIGHTING);
             gl.Disable(OpenGL.GL_TEXTURE_2D);
-            gl.LineWidth(1.0f);
+            gl.LineWidth(view.param.BOX_THICKNESS);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
             gl.Color(lcol.x, lcol.y, lcol.z, lcol.w);
 
@@ -458,7 +458,7 @@ namespace IVM.Studio.I3D
                 OpenGL.GL_LINE_BIT | OpenGL.GL_POLYGON_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             gl.Disable(OpenGL.GL_LIGHTING);
             gl.Disable(OpenGL.GL_TEXTURE_2D);
-            gl.LineWidth(1.0f);
+            gl.LineWidth(view.param.GRID_THICKNESS);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
             gl.Color(view.param.GRID_COLOR.x, view.param.GRID_COLOR.y, view.param.GRID_COLOR.z, view.param.GRID_COLOR.w);
 
@@ -490,25 +490,26 @@ namespace IVM.Studio.I3D
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = view.param.TEXT_SIZE;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
 
             vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);
             pw = new vec4(pw.x / pw.w, pw.y / pw.w, pw.z / pw.w, 1);
             pw.x = (pw.x + 1.0f) / 2.0f * aw;
             pw.y = (pw.y + 1.0f) / 2.0f * ah;
-            gl.DrawText((int)pw.x, (int)pw.y - mg - fs, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
+            gl.DrawText((int)pw.x, (int)pw.y - mg - fs, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
 
             vec4 ph = mproj * mview * new vec4(1, 0, -view.param.BOX_HEIGHT, 1);
             ph = new vec4(ph.x / ph.w, ph.y / ph.w, ph.z / ph.w, 1);
             ph.x = (ph.x + 1.0f) / 2.0f * aw;
             ph.y = (ph.y + 1.0f) / 2.0f * ah;
-            gl.DrawText((int)ph.x + mg, (int)ph.y, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("h: {0} µm", view.scene.meta.umHeight));
+            gl.DrawText((int)ph.x + mg, (int)ph.y, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("h: {0} µm", view.scene.meta.umHeight));
 
             vec4 pz = mproj * mview * new vec4(1, -1, 0, 1);
             pz = new vec4(pz.x / pz.w, pz.y / pz.w, pz.z / pz.w, 1);
             pz.x = (pz.x + 1.0f) / 2.0f * aw;
             pz.y = (pz.y + 1.0f) / 2.0f * ah;
-            gl.DrawText((int)pz.x + mg, (int)pz.y - fs / 2, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
+            gl.DrawText((int)pz.x + mg, (int)pz.y - fs / 2, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
         }
 
         public void RenderVolume3D(OpenGL gl, mat4 matProj, mat4 matModelView)
