@@ -196,9 +196,11 @@ namespace IVM.Studio.Models.Events
     {
         public int width { get; set; }
         public int height { get; set; }
+        public int depth { get; set; }
 
         public float umWidth { get; set; }
         public float umHeight { get; set; }
+        public float umPerPixelZ { get; set; }
     }
 
     public class I3DMetaLoadedEvent : PubSubEvent<I3DMetaLoadedParam> { }
@@ -216,4 +218,14 @@ namespace IVM.Studio.Models.Events
     }
 
     public class I3DCameraUpdateEvent : PubSubEvent<I3DCameraUpdateParam> { }
+
+    public class I3DChangedChannelVisibleParam
+    {
+        public bool DAPI { get; set; }
+        public bool GFP { get; set; }
+        public bool RFP { get; set; }
+        public bool NIR { get; set; }
+    }
+
+    public class I3DChangedChannelVisibleEvent : PubSubEvent<I3DChangedChannelVisibleParam> { }
 }

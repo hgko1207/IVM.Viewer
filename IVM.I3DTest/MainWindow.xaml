@@ -14,6 +14,7 @@
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
             <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
         <view:I3DViewer Grid.Row="0" x:Name="vw" />
         <Grid Grid.Row="1" VerticalAlignment="Center" Background="White" >
@@ -224,5 +225,10 @@
                     Minimum="-100" Maximum="100" Interval="1" Value="0"
                     x:Name="SliceZSlider" ValueChanged="SliceZSlider_ValueChanged" />
         </Grid>
+        <StackPanel Grid.Row="6">
+            <Button Click="Test_Click">
+                TEST
+            </Button>
+        </StackPanel>
     </Grid>
 </Window>

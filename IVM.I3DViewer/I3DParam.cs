@@ -22,6 +22,8 @@ namespace IVM.Studio.I3D
         public vec4 SLICE_LINE_COLOR_X = new vec4(1.0f, 0.0f, 0.0f, 0.5f);
         public vec4 SLICE_LINE_COLOR_Y = new vec4(0.0f, 1.0f, 0.0f, 0.5f);
         public vec4 SLICE_LINE_COLOR_Z = new vec4(0.0f, 0.0f, 1.0f, 0.5f);
+        public bool SHOW_SLICE_TEXT = false;
+        public int SLICE_TEXT_SIZE = 0;
 
         // box
         public bool SHOW_BOX = true;

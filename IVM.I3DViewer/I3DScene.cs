@@ -52,6 +52,11 @@ namespace IVM.Studio.I3D
             timer.Start();
         }
 
+        ~I3DScene()
+        {
+            timer.Stop();
+        }
+
         private void UpdateTick(object sender, EventArgs e)
         {
             view.RenderTarget.DoRender();
@@ -219,7 +224,7 @@ namespace IVM.Studio.I3D
                 }
 
                 // grid-text
-                if (view.param.SHOW_GRID_TEXT)
+                if (view.param.SHOW_SLICE_TEXT)
                     box.RenderGridText(gl, matProjOrtho, matSliceZView);
             }
             else

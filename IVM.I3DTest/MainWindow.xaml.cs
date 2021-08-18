@@ -295,5 +295,10 @@ namespace IVM.Studio.I3D
             vw.param.SLICE_DEPTH.z = (float)e.NewValue / 100.0f;
             SliceZ.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.z);
         }
+
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            vw.Open(@"..\..\..\..\data\t");
+        }
     }
 }

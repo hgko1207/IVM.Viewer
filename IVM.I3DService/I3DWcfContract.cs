@@ -61,6 +61,12 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeBackgroundParam(float r, float g, float b, float a);
+
+        [OperationContract]
+        void OnChangeSliceDepth(float x, float y, float z);
+
+        [OperationContract]
+        void OnChangeSliceScaleParam(bool visible, int fontsize);
     }
 
     [ServiceContract]
@@ -70,7 +76,7 @@ namespace IVM.Studio.Services
         void OnWindowLoaded(int viewtype);
 
         [OperationContract]
-        void OnMetaLoaded(int width, int height, float umWidth, float umHeight);
+        void OnMetaLoaded(int width, int height, int depth, float umWidth, float umHeight, float umPerPixelZ);
 
         [OperationContract]
         void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s);

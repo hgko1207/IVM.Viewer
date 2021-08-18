@@ -1,5 +1,6 @@
 ﻿using GlmNet;
 using IVM.Studio.Services;
+using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -17,10 +18,12 @@ namespace IVM.Studio.I3D
             {
                 int width = (int)w.vw.scene.tex3D.GetWidth();
                 int height = (int)w.vw.scene.tex3D.GetHeight();
+                int depth = (int)w.vw.scene.tex3D.GetDepth();
                 float umWidth = w.vw.scene.meta.umWidth;
                 float umHeight = w.vw.scene.meta.umHeight;
+                float umPerPixelZ = w.vw.scene.meta.pixelPerUM_Z;
 
-                Task.Run(() => w.wcfclient.channel.OnMetaLoaded(width, height, umWidth, umHeight));
+                Task.Run(() => w.wcfclient.channel.OnMetaLoaded(width, height, depth, umWidth, umHeight, umPerPixelZ));
             }
         }
 
@@ -93,6 +96,8 @@ namespace IVM.Studio.I3D
         public void OnChangeBoxParam(float r, float g, float b, float a, float thickness)
         {
             w.vw.param.BOX_THICKNESS = thickness;
+            w.vw.param.GRID_THICKNESS = Math.Max(thickness - 1, 1);
+
             w.vw.param.BOX_COLOR = new vec4(r, g, b, a);
             w.vw.param.GRID_COLOR = new vec4(r, g, b, a);
 
@@ -122,6 +127,17 @@ namespace IVM.Studio.I3D
         public void OnChangeBackgroundParam(float r, float g, float b, float a)
         {
             w.vw.param.BG_COLOR = new vec3(r, g, b);
+        }
+
+        public void OnChangeSliceDepth(float x, float y, float z)
+        {
+            w.vw.param.SLICE_DEPTH = new vec3(x, y, z);
+        }
+
+        public void OnChangeSliceScaleParam(bool visible, int fontsize)
+        {
+            w.vw.param.SHOW_SLICE_TEXT = visible;
+            w.vw.param.SLICE_TEXT_SIZE = fontsize;
         }
     }
 }

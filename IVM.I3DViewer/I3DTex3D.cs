@@ -55,6 +55,8 @@ namespace IVM.Studio.I3D
 
         private void Init()
         {
+            currentTexIdx = 0;
+
             foreach (Texture3D tex in textures)
                 tex.Delete(view.gl);
 

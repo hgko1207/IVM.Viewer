@@ -490,7 +490,11 @@ namespace IVM.Studio.I3D
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = view.param.GRID_TEXT_SIZE;
+            int fs = 0;
+            if (view.param.RENDER_MODE == I3DRenderMode.SLICE)
+                fs = view.param.SLICE_TEXT_SIZE;
+            else
+                fs = view.param.GRID_TEXT_SIZE;
             vec4 fc = view.param.GRID_TEXT_COLOR;
 
             vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);

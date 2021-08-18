@@ -18,6 +18,10 @@ namespace IVM.Studio.ViewModels.UserControls
     {
         I3DWcfServer wcfserver;
 
+        DataManager datamanager;
+
+        public I3DChannelInfo I3DChannelInfo { get; set; }
+
         private float rotXValue = 0;
         public float RotXValue
         {
@@ -113,90 +117,6 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             get => sliceUmPix;
             set => SetProperty(ref sliceUmPix, value);
-        }
-
-        private string _DAPIColor = "Red";
-        public string DAPIColor
-        {
-            get => _DAPIColor;
-            set => SetProperty(ref _DAPIColor, value);
-        }
-
-        private string _GFPColor = "Green";
-        public string GFPColor
-        {
-            get => _GFPColor;
-            set => SetProperty(ref _GFPColor, value);
-        }
-
-        private string _RFPColor = "Blue";
-        public string RFPColor
-        {
-            get => _RFPColor;
-            set => SetProperty(ref _RFPColor, value);
-        }
-
-        private string _NIRColor = "None";
-        public string NIRColor
-        {
-            get => _NIRColor;
-            set => SetProperty(ref _NIRColor, value);
-        }
-
-        private bool _DAPIVisible = true;
-        public bool DAPIVisible
-        {
-            get => _DAPIVisible;
-            set
-            {
-                if (SetProperty(ref _DAPIVisible, value))
-                {
-                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                }
-            }
-        }
-
-        private bool _GFPVisible = true;
-        public bool GFPVisible
-        {
-            get => _GFPVisible;
-            set
-            {
-                if (SetProperty(ref _GFPVisible, value))
-                {
-                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                }
-            }
-        }
-
-        private bool _RFPVisible = true;
-        public bool RFPVisible
-        {
-            get => _RFPVisible;
-            set
-            {
-                if (SetProperty(ref _RFPVisible, value))
-                {
-                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                }
-            }
-        }
-
-        private bool _NIRVisible = false;
-        public bool NIRVisible
-        {
-            get => _NIRVisible;
-            set
-            {
-                if (SetProperty(ref _NIRVisible, value))
-                {
-                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
-                }
-            }
         }
 
         private int _DAPILevelLower = 0;
@@ -395,9 +315,14 @@ namespace IVM.Studio.ViewModels.UserControls
         public I3D3DViewPanelViewModel(IContainerExtension container) : base(container)
         {
             wcfserver = container.Resolve<I3DWcfServer>();
+            datamanager = container.Resolve<DataManager>();
+
+            I3DChannelInfo = datamanager.I3DChannelInfo;
 
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Subscribe(UpdateCamera);
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Subscribe(OnMetaLoaded);
+
+            EventAggregator.GetEvent<I3DChangedChannelVisibleEvent>().Subscribe(OnChangedChannelVisible);
 
             CameraCoronalCommand = new DelegateCommand(CameraCoronal);
             CameraSagittalCommand = new DelegateCommand(CameraSagittal);
@@ -412,34 +337,46 @@ namespace IVM.Studio.ViewModels.UserControls
             NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
         }
 
+        private void OnChangedChannelVisible(I3DChangedChannelVisibleParam p)
+        {
+            wcfserver.channel1.OnChangeBandVisible(p.DAPI, p.GFP, p.RFP, p.NIR);
+            wcfserver.channel2.OnChangeBandVisible(p.DAPI, p.GFP, p.RFP, p.NIR);
+        }
+
         private void DAPIColorChanged(string col)
         {
-            DAPIColor = col;
+            I3DChannelInfo c = datamanager.I3DChannelInfo;
+            c.DAPIColor = col;
 
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
         }
+
         private void GFPColorChanged(string col)
         {
-            GFPColor = col;
+            I3DChannelInfo c = datamanager.I3DChannelInfo;
+            c.GFPColor = col;
 
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
         }
 
         private void RFPColorChanged(string col)
         {
-            RFPColor = col;
+            I3DChannelInfo c = datamanager.I3DChannelInfo;
+            c.RFPColor = col;
 
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
         }
+
         private void NIRColorChanged(string col)
         {
-            NIRColor = col;
+            I3DChannelInfo c = datamanager.I3DChannelInfo;
+            c.NIRColor = col;
 
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
         }
 
         private void SliceNextStep()
