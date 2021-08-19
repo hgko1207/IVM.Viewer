@@ -214,27 +214,34 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             wcfserver = container.Resolve<I3DWcfServer>();
 
-            EventAggregator.GetEvent<I3DMetaLoadedEvent>().Subscribe(OnMetaLoaded);
+            EventAggregator.GetEvent<I3DFirstRenderEvent>().Subscribe(OnFirstRender);
         }
 
-        private void OnMetaLoaded(I3DMetaLoadedParam obj)
+        private void OnFirstRender(int viewtype)
         {
             // 로딩후 업데이트 해주어야 폰트가 보임
             float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
-            Task.Run(() => {
-                wcfserver.channel1.OnChangeBoxParam(boxColor.R, boxColor.G, boxColor.B, boxColor.A, boxThickness);
-                wcfserver.channel2.OnChangeBoxParam(boxColor.R, boxColor.G, boxColor.B, boxColor.A, boxThickness);
 
-                wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-
-                wcfserver.channel1.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
-                wcfserver.channel2.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
-
-                // 마지막에 업데이트 해야 함
-                wcfserver.channel1.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
-                wcfserver.channel2.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
-            });
+            if (viewtype == (int)I3DViewType.MAIN_VIEW)
+            {
+                Task.Run(() =>
+                {
+                    wcfserver.channel1.OnChangeBoxParam(boxColor.R, boxColor.G, boxColor.B, boxColor.A, boxThickness);
+                    wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
+                    wcfserver.channel1.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
+                    wcfserver.channel1.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py); // 마지막에 업데이트 해야 함
+                });
+            }
+            else
+            {
+                Task.Run(() =>
+                {
+                    wcfserver.channel2.OnChangeBoxParam(boxColor.R, boxColor.G, boxColor.B, boxColor.A, boxThickness);
+                    wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
+                    wcfserver.channel2.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
+                    wcfserver.channel2.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py); // 마지막에 업데이트 해야 함
+                });
+            }
         }
     }
 }

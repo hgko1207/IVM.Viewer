@@ -228,4 +228,6 @@ namespace IVM.Studio.Models.Events
     }
 
     public class I3DChangedChannelVisibleEvent : PubSubEvent<I3DChangedChannelVisibleParam> { }
+
+    public class I3DFirstRenderEvent : PubSubEvent<int> { }
 }

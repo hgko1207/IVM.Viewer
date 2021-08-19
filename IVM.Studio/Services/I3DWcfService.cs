@@ -38,6 +38,11 @@ namespace IVM.Studio.Services
 
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Publish(p);
         }
+
+        public void OnFirstRender(int viewtype)
+        {
+            EventAggregator.GetEvent<I3DFirstRenderEvent>().Publish(viewtype);
+        }
     }
 }
 

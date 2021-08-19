@@ -38,6 +38,10 @@ namespace IVM.Studio.I3D
         mat4 matSliceXView = mat4.identity();
         mat4 matSliceXRot = mat4.identity();
 
+        public delegate void FirstRenderDelegate();
+        public FirstRenderDelegate firstRenderFunc = null;
+        bool firstRenderd = false;
+
         public I3DScene(I3DViewer v)
         {
             view = v;
@@ -251,6 +255,12 @@ namespace IVM.Studio.I3D
                 // draw axis
                 if (view.param.SHOW_AXIS)
                     axis.Render(gl, matAxisView);
+            }
+
+            if (!firstRenderd && firstRenderFunc != null)
+            {
+                firstRenderFunc();
+                firstRenderd = true;
             }
         }
     }

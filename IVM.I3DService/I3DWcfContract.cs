@@ -78,6 +78,11 @@ namespace IVM.Studio.Services
         [OperationContract]
         void OnMetaLoaded(int width, int height, int depth, float umWidth, float umHeight, float umPerPixelZ);
 
+
+        [OperationContract]
+        void OnFirstRender(int viewtype);
+
+
         [OperationContract]
         void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s);
     }
