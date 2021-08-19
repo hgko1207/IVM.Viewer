@@ -61,9 +61,19 @@ namespace IVM.Studio.I3D
             scene.Render(); // scene render
         }
 
-        public bool Open(string imgPath)
+        public async void Open(string imgPath)
         {
-            return scene.Open(imgPath);
+            if (scene.tex3D.Loading)
+                return;
+
+            Invalid.Visibility = Visibility.Hidden;
+
+            Loading.Visibility = Visibility.Visible;
+            bool res = await scene.Open(imgPath);
+            Loading.Visibility = Visibility.Hidden;
+
+            if (res == false)
+                Invalid.Visibility = Visibility.Visible;
         }
 
         public void UpdateBoxHeight()

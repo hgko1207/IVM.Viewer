@@ -296,9 +296,24 @@ namespace IVM.Studio.I3D
             SliceZ.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.z);
         }
 
+        int testFidx = 0;
+
         private void Test_Click(object sender, RoutedEventArgs e)
         {
-            vw.Open(@"..\..\..\..\data\t");
+            List<string> flst = new List<string>();
+            flst.Add(@"..\..\..\..\data\01");
+            flst.Add(@"..\..\..\..\data\02");
+            flst.Add(@"..\..\..\..\data\03");
+            flst.Add(@"..\..\..\..\data\04");
+            flst.Add(@"..\..\..\..\data\t");
+            flst.Add(@"..\..\..\..\data\v");
+            flst.Add(@"..\..\..\..\data\4d");
+
+            vw.Open(flst[testFidx]);
+
+            testFidx += 1;
+            if (testFidx >= flst.Count)
+                testFidx = 0;
         }
     }
 }

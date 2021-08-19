@@ -5,9 +5,18 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SharpGL.Textures
 {
+    public class Bitmap3D
+    {
+        public int width;
+        public int height;
+        public int depth;
+        public Bitmap bitmap;
+    }
+
     /// <summary>
     /// TODO: Move into the core in version 3.0 when we reference Drawing.
     /// </summary>
@@ -23,7 +32,7 @@ namespace SharpGL.Textures
 
         public void Delete(OpenGL gl)
         {
-            gl.DeleteTextures(1, new [] {textureObject});
+            gl.DeleteTextures(1, new[] { textureObject });
             textureObject = 0;
         }
 
@@ -42,33 +51,15 @@ namespace SharpGL.Textures
             gl.TexParameter(OpenGL.GL_TEXTURE_3D, parameterName, parameterValue);
         }
 
-        /// <summary>
-        /// This function creates the texture from an image.
-        /// </summary>
-        /// <param name="gl">The OpenGL object.</param>
-        /// <param name="image">The image.</param>
-        /// <returns>True if the texture was successfully loaded.</returns>
-        public void SetImage(OpenGL gl, string imgPath)
+        public async Task<Bitmap3D> LoadBitmapFromDisk(string imgPath) // read all images into memory
         {
-            //	Get the maximum texture size supported by OpenGL.
-            int[] textureMaxSize = { 0 };
-            gl.GetInteger(OpenGL.GL_MAX_TEXTURE_SIZE, textureMaxSize);
-
-            //	Find the target width and height sizes, which is just the highest
-            //	posible power of two that'll fit into the image.
-            int targetWidth = textureMaxSize[0];
-            int targetHeight = textureMaxSize[0];
-
             string[] files = Directory.GetFiles(imgPath).OrderBy(f => f).ToArray();
             Array.Sort(files);
             Array.Reverse(files);
 
-            // read all images into memory
             List<Bitmap> images = new List<Bitmap>();
 
-            int width = 0;
-            int height = 0;
-            int depth = files.Length;
+            Bitmap3D r = new Bitmap3D();
 
             foreach (string imgpath in files)
             {
@@ -80,19 +71,19 @@ namespace SharpGL.Textures
                 Bitmap bitmap = new Bitmap(imgpath);
 
                 // update the size of the final bitmap
-                width = bitmap.Width;
-                height = bitmap.Height;
+                r.width = bitmap.Width;
+                r.height = bitmap.Height;
 
                 images.Add(bitmap);
             }
 
-            depth = images.Count;
+            r.depth = images.Count;
 
             // create a bitmap to hold the combined image
-            Bitmap finalImage = new Bitmap(width, height * depth);
+            r.bitmap = new Bitmap(r.width, r.height * r.depth);
 
             // get a graphics object from the image so we can draw on it
-            using (Graphics g = Graphics.FromImage(finalImage))
+            using (Graphics g = Graphics.FromImage(r.bitmap))
             {
                 // set background color
                 g.Clear(Color.Black);
@@ -106,21 +97,43 @@ namespace SharpGL.Textures
                 }
             }
 
+            return r;
+        }
+
+        /// <summary>
+        /// This function creates the texture from an image.
+        /// </summary>
+        /// <param name="gl">The OpenGL object.</param>
+        /// <param name="image">The image.</param>
+        /// <returns>True if the texture was successfully loaded.</returns>
+        async public void SetImage(OpenGL gl, Bitmap3D r)
+        {
+            //	Get the maximum texture size supported by OpenGL.
+            int[] textureMaxSize = { 0 };
+            gl.GetInteger(OpenGL.GL_MAX_TEXTURE_SIZE, textureMaxSize);
+
+            //	Find the target width and height sizes, which is just the highest
+            //	posible power of two that'll fit into the image.
+            int targetWidth = textureMaxSize[0];
+            int targetHeight = textureMaxSize[0];
+            
+            Bitmap finalImage = r.bitmap;
+
             //  Lock the image bits (so that we can pass them to OGL).
             BitmapData bitmapData = finalImage.LockBits(new Rectangle(0, 0, finalImage.Width, finalImage.Height),
                 ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
             //	Set the width and height.
-            Width = (uint)width;
-            Height = (uint)height;
-            Depth = (uint)depth;
+            Width = (uint)r.width;
+            Height = (uint)r.height;
+            Depth = (uint)r.depth;
 
             //	Bind our texture object (make it the current texture).
             gl.BindTexture(OpenGL.GL_TEXTURE_3D, textureObject);
 
             //  Set the image data.
             gl.TexImage3D(OpenGL.GL_TEXTURE_3D, 0, (int)OpenGL.GL_RGBA,
-                (int)Width, (int)Height, depth, 0, OpenGL.GL_BGRA, OpenGL.GL_UNSIGNED_BYTE,
+                (int)Width, (int)Height, r.depth, 0, OpenGL.GL_BGRA, OpenGL.GL_UNSIGNED_BYTE,
                 bitmapData.Scan0);
 
             //  Unlock the image.

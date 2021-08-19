@@ -3,6 +3,7 @@ using GlmNet;
 using System.Windows.Threading;
 using System;
 using SharpGL.SceneGraph;
+using System.Threading.Tasks;
 
 namespace IVM.Studio.I3D
 {
@@ -62,10 +63,11 @@ namespace IVM.Studio.I3D
             view.RenderTarget.DoRender();
         }
 
-        public bool Open(string imgPath)
+        public async Task<bool> Open(string imgPath)
         {
+            loadedTexture = await tex3D.Load(view.gl, imgPath);
+
             loadedMeta = meta.Load(imgPath);
-            loadedTexture = tex3D.Load(view.gl, imgPath);
 
             UpdateHeight();
 
@@ -196,14 +198,14 @@ namespace IVM.Studio.I3D
 
         public void Render()
         {
-            if (!loadedTexture)
-                return;
-
             OpenGL gl = view.gl;
 
             // Clear the color and depth buffers.
             gl.ClearColor(view.param.BG_COLOR.x, view.param.BG_COLOR.y, view.param.BG_COLOR.z, 1.0f);
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_STENCIL_BUFFER_BIT);
+
+            if (!loadedTexture)
+                return;
 
             if (view.param.RENDER_MODE == I3DRenderMode.SLICE)
             {
