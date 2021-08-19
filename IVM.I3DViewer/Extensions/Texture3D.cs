@@ -106,7 +106,7 @@ namespace SharpGL.Textures
         /// <param name="gl">The OpenGL object.</param>
         /// <param name="image">The image.</param>
         /// <returns>True if the texture was successfully loaded.</returns>
-        async public void SetImage(OpenGL gl, Bitmap3D r)
+        public void SetImage(OpenGL gl, Bitmap3D r)
         {
             //	Get the maximum texture size supported by OpenGL.
             int[] textureMaxSize = { 0 };

@@ -282,31 +282,12 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand SlicePrevStepCommand { get; private set; }
         public ICommand SliceNextStepCommand { get; private set; }
 
-        public ICommand DAPIColorChangedCommand { get; private set; }
-        public ICommand GFPColorChangedCommand { get; private set; }
-        public ICommand RFPColorChangedCommand { get; private set; }
-        public ICommand NIRColorChangedCommand { get; private set; }
-
         bool subscribing = false;
 
         int width = 0;
         int height = 0;
         float umWidth = 0;
         float umHeight = 0;
-
-        int StrToBandIdx(string col)
-        {
-            switch (col)
-            {
-                case "Red":
-                    return 0;
-                case "Green":
-                    return 1;
-                case "Blue":
-                    return 2;
-            }
-            return 3;
-        }
 
         /// <summary>
         /// 생성자
@@ -322,61 +303,12 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Subscribe(UpdateCamera);
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Subscribe(OnMetaLoaded);
 
-            EventAggregator.GetEvent<I3DChangedChannelVisibleEvent>().Subscribe(OnChangedChannelVisible);
-
             CameraCoronalCommand = new DelegateCommand(CameraCoronal);
             CameraSagittalCommand = new DelegateCommand(CameraSagittal);
             CameraAxialCommand = new DelegateCommand(CameraAxial);
 
             SlicePrevStepCommand = new DelegateCommand(SlicePrevStep);
             SliceNextStepCommand = new DelegateCommand(SliceNextStep);
-
-            DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
-            GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
-            RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
-            NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
-        }
-
-        private void OnChangedChannelVisible(I3DChangedChannelVisibleParam p)
-        {
-            wcfserver.channel1.OnChangeBandVisible(p.DAPI, p.GFP, p.RFP, p.NIR);
-            wcfserver.channel2.OnChangeBandVisible(p.DAPI, p.GFP, p.RFP, p.NIR);
-        }
-
-        private void DAPIColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.DAPIColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-        }
-
-        private void GFPColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.GFPColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-        }
-
-        private void RFPColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.RFPColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-        }
-
-        private void NIRColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.NIRColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
         }
 
         private void SliceNextStep()

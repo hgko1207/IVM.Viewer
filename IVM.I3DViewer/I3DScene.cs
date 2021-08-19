@@ -230,8 +230,12 @@ namespace IVM.Studio.I3D
                 }
 
                 // grid-text
-                if (view.param.SHOW_SLICE_TEXT)
-                    box.RenderGridText(gl, matProjOrtho, matSliceZView);
+                if (view.param.SHOW_GRID_TEXT)
+                {
+                    box.RenderSliceTextX(gl, matProjOrtho, matSliceXView);
+                    box.RenderSliceTextY(gl, matProjOrtho, matSliceYView);
+                    box.RenderSliceTextZ(gl, matProjOrtho, matSliceYView);
+                }
             }
             else
             {

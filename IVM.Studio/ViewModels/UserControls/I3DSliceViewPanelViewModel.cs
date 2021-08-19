@@ -21,6 +21,7 @@ namespace IVM.Studio.ViewModels.UserControls
         DataManager datamanager;
 
         public I3DChannelInfo I3DChannelInfo { get; set; }
+        public I3DBackgroundInfo I3DBackgroundInfo { get; set; }
 
         private float sliceDepthX = 0;
         public float SliceDepthX
@@ -88,36 +89,6 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref sliceDepthValZ, value);
         }
 
-        private bool scaleVisible = true;
-        public bool ScaleVisible
-        {
-            get => scaleVisible;
-            set
-            {
-                if (SetProperty(ref scaleVisible, value))
-                {
-                    wcfserver.channel2.OnChangeSliceScaleParam(scaleVisible, scaleFontSize);
-                }
-            }
-        }
-
-        private int scaleFontSize = 12;
-        public int ScaleFontSize
-        {
-            get => scaleFontSize;
-            set
-            {
-                if (SetProperty(ref scaleFontSize, value))
-                {
-                    wcfserver.channel2.OnChangeSliceScaleParam(scaleVisible, scaleFontSize);
-                }
-            }
-        }
-
-        public ICommand DAPIColorChangedCommand { get; private set; }
-        public ICommand GFPColorChangedCommand { get; private set; }
-        public ICommand RFPColorChangedCommand { get; private set; }
-        public ICommand NIRColorChangedCommand { get; private set; }
         public ICommand SliceDepthResetCommand { get; private set; }
 
         int width = 0;
@@ -126,20 +97,6 @@ namespace IVM.Studio.ViewModels.UserControls
         float umWidth = 0;
         float umHeight = 0;
         float umPerPixelZ = 0;
-
-        int StrToBandIdx(string col)
-        {
-            switch (col)
-            {
-                case "Red":
-                    return 0;
-                case "Green":
-                    return 1;
-                case "Blue":
-                    return 2;
-            }
-            return 3;
-        }
 
         /// <summary>
         /// 생성자
@@ -151,13 +108,10 @@ namespace IVM.Studio.ViewModels.UserControls
             datamanager = container.Resolve<DataManager>();
 
             I3DChannelInfo = datamanager.I3DChannelInfo;
+            I3DBackgroundInfo = datamanager.I3DBackgroundInfo;
 
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Subscribe(OnMetaLoaded);
 
-            DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
-            GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
-            RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
-            NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
             SliceDepthResetCommand = new DelegateCommand(ResetSliceDepth);
         }
 
@@ -166,42 +120,6 @@ namespace IVM.Studio.ViewModels.UserControls
             SliceDepthX = 0;
             SliceDepthY = 0;
             SliceDepthZ = 0;
-        }
-
-        private void DAPIColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.DAPIColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-        }
-
-        private void GFPColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.GFPColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-        }
-
-        private void RFPColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.RFPColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-        }
-
-        private void NIRColorChanged(string col)
-        {
-            I3DChannelInfo c = datamanager.I3DChannelInfo;
-            c.NIRColor = col;
-
-            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
-            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(c.DAPIColor), StrToBandIdx(c.GFPColor), StrToBandIdx(c.RFPColor), StrToBandIdx(c.NIRColor));
         }
 
         private void OnMetaLoaded(I3DMetaLoadedParam p)

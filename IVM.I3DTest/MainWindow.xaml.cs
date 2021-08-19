@@ -37,6 +37,9 @@ namespace IVM.Studio.I3D
             BoxChkBtn.IsChecked = true;
             GridChkBtn.IsChecked = true;
             ColocalChkBtn.IsChecked = false;
+
+            vw.param.AXIS_TEXT_SIZE = 12;
+            vw.param.GRID_TEXT_SIZE = 12;
         }
 
         private void Control_MouseMove(object sender, MouseEventArgs e)

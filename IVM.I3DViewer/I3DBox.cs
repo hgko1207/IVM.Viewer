@@ -490,11 +490,7 @@ namespace IVM.Studio.I3D
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = 0;
-            if (view.param.RENDER_MODE == I3DRenderMode.SLICE)
-                fs = view.param.SLICE_TEXT_SIZE;
-            else
-                fs = view.param.GRID_TEXT_SIZE;
+            int fs = view.param.GRID_TEXT_SIZE;
             vec4 fc = view.param.GRID_TEXT_COLOR;
 
             vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);
@@ -514,6 +510,51 @@ namespace IVM.Studio.I3D
             pz.x = (pz.x + 1.0f) / 2.0f * aw;
             pz.y = (pz.y + 1.0f) / 2.0f * ah;
             gl.DrawText((int)pz.x + mg, (int)pz.y - fs / 2, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
+        }
+
+        public void RenderSliceTextX(OpenGL gl, mat4 mproj, mat4 mview)
+        {
+            float aw = (float)view.ActualWidth;
+            float ah = (float)view.ActualHeight;
+            int mg = 4;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
+
+            vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);
+            pw = new vec4(pw.x / pw.w, pw.y / pw.w, pw.z / pw.w, 1);
+            pw.x = (pw.x + 1.0f) / 2.0f * aw;
+            pw.y = (pw.y + 1.0f) / 2.0f * ah;
+            gl.DrawText((int)pw.x, (int)pw.y - mg - fs, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
+        }
+
+        public void RenderSliceTextY(OpenGL gl, mat4 mproj, mat4 mview)
+        {
+            float aw = (float)view.ActualWidth;
+            float ah = (float)view.ActualHeight;
+            int mg = 4;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
+
+            vec4 ph = mproj * mview * new vec4(1, 0, -view.param.BOX_HEIGHT, 1);
+            ph = new vec4(ph.x / ph.w, ph.y / ph.w, ph.z / ph.w, 1);
+            ph.x = (ph.x + 1.0f) / 2.0f * aw;
+            ph.y = (ph.y + 1.0f) / 2.0f * ah;
+            gl.DrawText((int)ph.x + mg, (int)ph.y, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("h: {0} µm", view.scene.meta.umHeight));
+        }
+
+        public void RenderSliceTextZ(OpenGL gl, mat4 mproj, mat4 mview)
+        {
+            float aw = (float)view.ActualWidth;
+            float ah = (float)view.ActualHeight;
+            int mg = 4;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
+
+            vec4 pz = mproj * mview * new vec4(1, -1, 0, 1);
+            pz = new vec4(pz.x / pz.w, pz.y / pz.w, pz.z / pz.w, 1);
+            pz.x = (pz.x + 1.0f) / 2.0f * aw;
+            pz.y = (pz.y + 1.0f) / 2.0f * ah;
+            gl.DrawText((int)pz.x, (int)pz.y - fs, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
         }
 
         public void RenderVolume3D(OpenGL gl, mat4 matProj, mat4 matModelView)

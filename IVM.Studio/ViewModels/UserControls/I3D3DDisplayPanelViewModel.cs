@@ -20,6 +20,10 @@ namespace IVM.Studio.ViewModels.UserControls
     {
         I3DWcfServer wcfserver;
 
+        DataManager datamanager;
+
+        public I3DBackgroundInfo I3DBackgroundInfo { get; set; }
+
         private bool axisVisible = true;
         public bool AxisVisible
         {
@@ -136,76 +140,6 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        private Color boxColor = Color.FromScRgb(1, 1, 1, 1);
-        public Color BoxColor
-        {
-            get => boxColor;
-            set
-            {
-                if (SetProperty(ref boxColor, value))
-                {
-                    wcfserver.channel1.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
-                    wcfserver.channel2.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
-                }
-            }
-        }
-
-        private float boxThickness = 2;
-        public float BoxThickness
-        {
-            get => boxThickness;
-            set
-            {
-                if (SetProperty(ref boxThickness, value))
-                {
-                    wcfserver.channel1.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
-                    wcfserver.channel2.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
-                }
-            }
-        }
-
-        private Color gridLabelColor = Color.FromScRgb(1, 1, 1, 1);
-        public Color GridLabelColor
-        {
-            get => gridLabelColor;
-            set
-            {
-                if (SetProperty(ref gridLabelColor, value))
-                {
-                    wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                    wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                }
-            }
-        }
-
-        private int gridFontSize = 12;
-        public int GridFontSize
-        {
-            get => gridFontSize;
-            set
-            {
-                if (SetProperty(ref gridFontSize, value))
-                {
-                    wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                    wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                }
-            }
-        }
-
-        private Color backgroundColor = Color.FromScRgb(1, 0, 0, 0);
-        public Color BackgroundColor
-        {
-            get => backgroundColor;
-            set
-            {
-                if (SetProperty(ref backgroundColor, value))
-                {
-                    wcfserver.channel1.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
-                    wcfserver.channel2.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
-                }
-            }
-        }
-
         /// <summary>
         /// 생성자
         /// </summary>
@@ -213,6 +147,9 @@ namespace IVM.Studio.ViewModels.UserControls
         public I3D3DDisplayPanelViewModel(IContainerExtension container) : base(container)
         {
             wcfserver = container.Resolve<I3DWcfServer>();
+            datamanager = container.Resolve<DataManager>();
+
+            I3DBackgroundInfo = datamanager.I3DBackgroundInfo;
 
             EventAggregator.GetEvent<I3DFirstRenderEvent>().Subscribe(OnFirstRender);
         }
@@ -221,14 +158,15 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             // 로딩후 업데이트 해주어야 폰트가 보임
             float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
+            I3DBackgroundInfo b = I3DBackgroundInfo;
 
             if (viewtype == (int)I3DViewType.MAIN_VIEW)
             {
                 Task.Run(() =>
                 {
-                    wcfserver.channel1.OnChangeBoxParam(boxColor.R, boxColor.G, boxColor.B, boxColor.A, boxThickness);
-                    wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                    wcfserver.channel1.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
+                    wcfserver.channel1.OnChangeBoxParam(b.BoxColor.R, b.BoxColor.G, b.BoxColor.B, b.BoxColor.A, b.BoxThickness);
+                    wcfserver.channel1.OnChangeGridLabelParam(b.GridLabelColor.ScR, b.GridLabelColor.ScG, b.GridLabelColor.ScB, b.GridLabelColor.ScA, b.GridFontSize);
+                    wcfserver.channel1.OnChangeBackgroundParam(b.BackgroundColor.ScR, b.BackgroundColor.ScG, b.BackgroundColor.ScB, b.BackgroundColor.ScA);
                     wcfserver.channel1.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py); // 마지막에 업데이트 해야 함
                 });
             }
@@ -236,9 +174,9 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 Task.Run(() =>
                 {
-                    wcfserver.channel2.OnChangeBoxParam(boxColor.R, boxColor.G, boxColor.B, boxColor.A, boxThickness);
-                    wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                    wcfserver.channel2.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
+                    wcfserver.channel2.OnChangeBoxParam(b.BoxColor.R, b.BoxColor.G, b.BoxColor.B, b.BoxColor.A, b.BoxThickness);
+                    wcfserver.channel2.OnChangeGridLabelParam(b.GridLabelColor.ScR, b.GridLabelColor.ScG, b.GridLabelColor.ScB, b.GridLabelColor.ScA, b.GridFontSize);
+                    wcfserver.channel2.OnChangeBackgroundParam(b.BackgroundColor.ScR, b.BackgroundColor.ScG, b.BackgroundColor.ScB, b.BackgroundColor.ScA);
                     wcfserver.channel2.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py); // 마지막에 업데이트 해야 함
                 });
             }

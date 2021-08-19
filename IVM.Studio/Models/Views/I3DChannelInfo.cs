@@ -11,6 +11,7 @@ namespace IVM.Studio.Models
 {
     public class I3DChannelInfo : BindableBase
     {
+        I3DWcfServer wcfserver;
 
         private string _DAPIColor = "Red";
         public string DAPIColor
@@ -48,9 +49,8 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref _DAPIVisible, value))
                 {
-                    I3DChangedChannelVisibleParam p = new I3DChangedChannelVisibleParam();
-                    p.DAPI = _DAPIVisible; p.GFP = _GFPVisible; p.RFP = _RFPVisible; p.NIR = _NIRVisible;
-                    eventAggregator.GetEvent<I3DChangedChannelVisibleEvent>().Publish(p);
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
                 }
             }
         }
@@ -63,9 +63,8 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref _GFPVisible, value))
                 {
-                    I3DChangedChannelVisibleParam p = new I3DChangedChannelVisibleParam();
-                    p.DAPI = _DAPIVisible; p.GFP = _GFPVisible; p.RFP = _RFPVisible; p.NIR = _NIRVisible;
-                    eventAggregator.GetEvent<I3DChangedChannelVisibleEvent>().Publish(p);
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
                 }
             }
         }
@@ -78,9 +77,8 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref _RFPVisible, value))
                 {
-                    I3DChangedChannelVisibleParam p = new I3DChangedChannelVisibleParam();
-                    p.DAPI = _DAPIVisible; p.GFP = _GFPVisible; p.RFP = _RFPVisible; p.NIR = _NIRVisible;
-                    eventAggregator.GetEvent<I3DChangedChannelVisibleEvent>().Publish(p);
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
                 }
             }
         }
@@ -93,18 +91,71 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref _NIRVisible, value))
                 {
-                    I3DChangedChannelVisibleParam p = new I3DChangedChannelVisibleParam();
-                    p.DAPI = _DAPIVisible; p.GFP = _GFPVisible; p.RFP = _RFPVisible; p.NIR = _NIRVisible;
-                    eventAggregator.GetEvent<I3DChangedChannelVisibleEvent>().Publish(p);
+                    wcfserver.channel1.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
+                    wcfserver.channel2.OnChangeBandVisible(_DAPIVisible, _GFPVisible, _RFPVisible, _NIRVisible);
                 }
             }
         }
 
-        private IEventAggregator eventAggregator;
+        public ICommand DAPIColorChangedCommand { get; private set; }
+        public ICommand GFPColorChangedCommand { get; private set; }
+        public ICommand RFPColorChangedCommand { get; private set; }
+        public ICommand NIRColorChangedCommand { get; private set; }
+
+        int StrToBandIdx(string col)
+        {
+            switch (col)
+            {
+                case "Red":
+                    return 0;
+                case "Green":
+                    return 1;
+                case "Blue":
+                    return 2;
+            }
+            return 3;
+        }
 
         public I3DChannelInfo(IContainerExtension container, IEventAggregator eventAggregator)
         {
-            this.eventAggregator = eventAggregator;
+            wcfserver = container.Resolve<I3DWcfServer>();
+
+            DAPIColorChangedCommand = new DelegateCommand<string>(DAPIColorChanged);
+            GFPColorChangedCommand = new DelegateCommand<string>(GFPColorChanged);
+            RFPColorChangedCommand = new DelegateCommand<string>(RFPColorChanged);
+            NIRColorChangedCommand = new DelegateCommand<string>(NIRColorChanged);
+        }
+
+        private void DAPIColorChanged(string col)
+        {
+            DAPIColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+        }
+
+        private void GFPColorChanged(string col)
+        {
+            GFPColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+        }
+
+        private void RFPColorChanged(string col)
+        {
+            RFPColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+        }
+
+        private void NIRColorChanged(string col)
+        {
+            NIRColor = col;
+
+            wcfserver.channel1.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
+            wcfserver.channel2.OnChangeBandOrder(StrToBandIdx(DAPIColor), StrToBandIdx(GFPColor), StrToBandIdx(RFPColor), StrToBandIdx(NIRColor));
         }
     }
 }

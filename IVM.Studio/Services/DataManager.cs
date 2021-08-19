@@ -41,6 +41,8 @@ namespace IVM.Studio.Services
         public AnnotationInfo AnnotationInfo { get; set; }
         
         public I3DChannelInfo I3DChannelInfo { get; set; }
+        
+        public I3DBackgroundInfo I3DBackgroundInfo { get; set; }
 
         public SliderControlInfo SliderControlInfo { get; set; }
 
@@ -72,6 +74,7 @@ namespace IVM.Studio.Services
             AnnotationInfo = new AnnotationInfo(container, eventAggregator);
             SliderControlInfo = new SliderControlInfo(container, eventAggregator);
             I3DChannelInfo = new I3DChannelInfo(container, eventAggregator);
+            I3DBackgroundInfo = new I3DBackgroundInfo(container, eventAggregator);
 
             MainWindowSeq = 0;
 

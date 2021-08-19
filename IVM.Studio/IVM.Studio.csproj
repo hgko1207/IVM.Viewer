@@ -163,6 +163,7 @@
     <Compile Include="Models\I3DPathInfo.cs" />
     <Compile Include="Models\MeasurementInfo.cs" />
     <Compile Include="Models\Thumb.cs" />
+    <Compile Include="Models\Views\I3DBackgroundInfo.cs" />
     <Compile Include="Models\Views\I3DChannelInfo.cs" />
     <Compile Include="Models\Views\AnnotationInfo.cs" />
     <Compile Include="Models\Views\PostProcessingInfo.cs" />

@@ -64,9 +64,6 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeSliceDepth(float x, float y, float z);
-
-        [OperationContract]
-        void OnChangeSliceScaleParam(bool visible, int fontsize);
     }
 
     [ServiceContract]

@@ -133,12 +133,6 @@ namespace IVM.Studio.I3D
         {
             w.vw.param.SLICE_DEPTH = new vec3(x, y, z);
         }
-
-        public void OnChangeSliceScaleParam(bool visible, int fontsize)
-        {
-            w.vw.param.SHOW_SLICE_TEXT = visible;
-            w.vw.param.SLICE_TEXT_SIZE = fontsize;
-        }
     }
 }
 

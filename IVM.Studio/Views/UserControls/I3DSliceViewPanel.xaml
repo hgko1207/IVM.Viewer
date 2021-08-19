@@ -189,16 +189,61 @@
         <ContentControl Grid.Row="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
 
         <StackPanel Grid.Row="2" Margin="8">
-            <DockPanel Margin="0 0 0 8">
-                <TextBlock DockPanel.Dock="Left" Text="Scale Bar" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="Display" HorizontalAlignment="Right" Width="90" ButtonKind="Toggle" IsChecked="{Binding ScaleVisible}"/>
-            </DockPanel>
+            <TextBlock Margin="0 0 0 8" Text="Background" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <StackPanel Orientation="Horizontal">
-                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Font Size" FontSize="14" />
-                <dxe:SpinEdit VerticalAlignment="Center" Margin="4 0 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding ScaleFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="8" MaxValue="18" />
-                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
-            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Box" FontSize="14" FontWeight="Bold"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Text="Color" FontSize="14" Margin="12 0 0 0"/>
+                <dxe:PopupColorEdit Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" ColumnCount="10" ShowMoreColorsButton="True" 
+                                    DataContext="{Binding I3DBackgroundInfo}"
+                                    Color="{Binding BoxColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    AllowDefaultButton="False" Width="30" Padding="4 0"
+                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="3" TextAlignment="Center" VerticalAlignment="Center" Text="Thickness" FontSize="14" Margin="12 0 0 0"/>
+                <dxe:SpinEdit Grid.Row="0" Grid.Column="4" VerticalAlignment="Center" Margin="4 0 0 0" 
+                              DataContext="{Binding I3DBackgroundInfo}" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding BoxThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="4" />
+                <TextBlock Grid.Row="0" Grid.Column="5" TextAlignment="Center" VerticalAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Label" FontSize="14" FontWeight="Bold"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Text="Color" FontSize="14" Margin="12 0 0 0"/>
+                <dxe:PopupColorEdit Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" ColumnCount="10" ShowMoreColorsButton="True" 
+                                    DataContext="{Binding I3DBackgroundInfo}"
+                                    Color="{Binding GridLabelColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    AllowDefaultButton="False" Width="30" Padding="4 0"
+                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="3" TextAlignment="Center" VerticalAlignment="Center" Text="Font Size" FontSize="14" Margin="12 0 0 0"/>
+                <dxe:SpinEdit Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Margin="4 0 0 0" 
+                              DataContext="{Binding I3DBackgroundInfo}" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding GridFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="8" MaxValue="18" />
+                <TextBlock Grid.Row="2" Grid.Column="5" TextAlignment="Center" VerticalAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
+                <StackPanel Grid.Row="2" Grid.Column="6" Orientation="Horizontal" Margin="32 0 0 0">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Background" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Color" FontSize="14" Margin="12 0 0 0"/>
+                    <dxe:PopupColorEdit VerticalAlignment="Center" ColumnCount="10" ShowMoreColorsButton="True" 
+                                        DataContext="{Binding I3DBackgroundInfo}"
+                                        Color="{Binding BackgroundColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                        AllowDefaultButton="False" Width="30" Padding="4 0"
+                                        MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
+                </StackPanel>
+            </Grid>
         </StackPanel>
 
     </Grid>
