@@ -188,8 +188,6 @@ namespace IVM.Studio.Models.Events
         public int ZoomRatio { get; set; }
     }
 
-    // 3DView Events
-    public class I3DOpenEvent : PubSubEvent<string> { }
     public class I3DWindowLoadedEvent : PubSubEvent<int> { }
 
     public class I3DMetaLoadedParam

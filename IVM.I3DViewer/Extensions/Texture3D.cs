@@ -51,7 +51,7 @@ namespace SharpGL.Textures
             gl.TexParameter(OpenGL.GL_TEXTURE_3D, parameterName, parameterValue);
         }
 
-        public async Task<Bitmap3D> LoadBitmapFromDisk(string imgPath) // read all images into memory
+        public async Task<Bitmap3D> LoadBitmapFromDisk(string imgPath, int lower, int upper) // read all images into memory
         {
             string[] files = Directory.GetFiles(imgPath).OrderBy(f => f).ToArray();
             Array.Sort(files);
@@ -61,11 +61,25 @@ namespace SharpGL.Textures
 
             Bitmap3D r = new Bitmap3D();
 
+            int idx = 0;
+
             foreach (string imgpath in files)
             {
                 string ext = Path.GetExtension(imgpath).ToLower();
                 if (!(new string[] { ".tif", ".png" }).Contains(ext))
                     continue;
+
+                if (lower >= 0 && idx < lower)
+                {
+                    idx++;
+                    continue;
+                }
+
+                if (upper >= 0 && idx > upper)
+                {
+                    idx++;
+                    continue;
+                }
 
                 // create a Bitmap from the file and add it to the list
                 Bitmap bitmap = new Bitmap(imgpath);
@@ -75,7 +89,12 @@ namespace SharpGL.Textures
                 r.height = bitmap.Height;
 
                 images.Add(bitmap);
+
+                idx++;
             }
+
+            if (images.Count <= 0)
+                return null;
 
             r.depth = images.Count;
 

@@ -27,7 +27,7 @@ namespace IVM.Studio.Services
     public interface I3DClientContract
     {
         [OperationContract]
-        void OnOpen(string path);
+        void OnOpen(string path, int lower, int upper);
 
         [OperationContract]
         void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);

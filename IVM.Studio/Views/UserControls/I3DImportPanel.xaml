@@ -6,6 +6,7 @@
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:models="clr-namespace:IVM.Studio.Models"
              xmlns:util="clr-namespace:IVM.Studio.Utils"
@@ -42,6 +43,29 @@
                     </Border>
                 </DockPanel>
             </DockPanel>
+
+            <DockPanel Margin="5 8 0 0">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock Text="Z-stack Slice #" VerticalAlignment="Center" Width="70"/>
+                    <dxe:SpinEdit Margin="4 -4 4 0" Width="55" MinValue="0" MaxValue="{Binding OpenSliceLimit}"
+                                  Style="{StaticResource HistogramEdit}" Value="{Binding OpenSliceLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <dxe:SpinEdit Margin="4 -4 4 0" Width="55" MinValue="0" MaxValue="{Binding OpenSliceLimit}"
+                                  Style="{StaticResource HistogramEdit}" Value="{Binding OpenSliceUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="15 0 0 0">
+                        <TextBlock Style="{StaticResource GeneralTextBlock}" MinWidth="80" Text="{Binding OpenSliceText}" TextAlignment="Center" />
+                    </Border>
+                </StackPanel>
+                <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Maximum="{Binding OpenSliceLimit}" Margin="5 0"
+                                  SelectionStart="{Binding OpenSliceLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}" 
+                                  SelectionEnd="{Binding OpenSliceUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}">
+                    <dxe:TrackBarEdit.StyleSettings>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                    </dxe:TrackBarEdit.StyleSettings>
+                </dxe:TrackBarEdit>
+            </DockPanel>
         </StackPanel>
 
         <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 8" />
@@ -56,8 +80,12 @@
                 </StackPanel>
             </DockPanel>
 
-            <dxg:GridControl Height="145" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 8 0 8"
+            <dxg:GridControl Height="110" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 8 0 8"
                              ItemsSource="{Binding ImgPathCollection}" CurrentItem="{Binding SelectedImgInfo}" SelectedItem="{Binding SelectedImgInfo}">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="SelectionChanged" Command="{Binding ChangedSelectedCommand}"/>
+                    <dxmvvm:EventToCommand EventName="CurrentItemChanged" Command="{Binding ChangedSelectedCommand}"/>
+                </dxmvvm:Interaction.Behaviors>
                 <dxg:GridControl.View>
                     <dxg:TableView />
                 </dxg:GridControl.View>
@@ -70,7 +98,9 @@
                             </DataTemplate>
                         </dxg:GridColumn.CellTemplate>
                     </dxg:GridColumn>
-                    <dxg:GridColumn Header="Path" Width="2*" FieldName="Path"/>
+                    <dxg:GridColumn Header="Path" Width="*" FieldName="Path"/>
+                    <dxg:GridColumn Header="Dim" Width="50" FieldName="Dim"/>
+                    <dxg:GridColumn Header="Count" Width="50" FieldName="Count"/>
                 </dxg:GridControl.Columns>
             </dxg:GridControl>
         </StackPanel>

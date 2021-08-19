@@ -31,10 +31,13 @@ namespace IVM.Studio.I3D
             textures = new List<Texture3D>();
         }
 
-        private async Task<Texture3D> LoadTexture(OpenGL gl, string imgPath)
+        private async Task<Texture3D> LoadTexture(OpenGL gl, string imgPath, int lower, int upper)
         {
             Texture3D tex = new Texture3D();
-            Bitmap3D b = await Task.Run(() => tex.LoadBitmapFromDisk(imgPath));
+            Bitmap3D b = await Task.Run(() => tex.LoadBitmapFromDisk(imgPath, lower, upper));
+
+            if (b == null)
+                return null;
 
             tex.Create(gl);
             tex.Bind(gl);
@@ -74,7 +77,7 @@ namespace IVM.Studio.I3D
             textures.Clear();
         }
 
-        public async Task<bool> Load(OpenGL gl, string imgPath)
+        public async Task<bool> Load(OpenGL gl, string imgPath, int lower, int upper)
         {
             if (!Directory.Exists(imgPath))
                 return false;
@@ -93,8 +96,9 @@ namespace IVM.Studio.I3D
                     {
                         imagePath = imgPath;
 
-                        Texture3D tex = await LoadTexture(gl, dir);
-                        textures.Add(tex);
+                        Texture3D tex = await LoadTexture(gl, dir, lower, upper);
+                        if (tex != null)
+                            textures.Add(tex);
                     }
                 }
             }
@@ -102,8 +106,9 @@ namespace IVM.Studio.I3D
             {
                 imagePath = imgPath;
 
-                Texture3D tex = await LoadTexture(gl, imgPath);
-                textures.Add(tex);
+                Texture3D tex = await LoadTexture(gl, imgPath, lower, upper);
+                if (tex != null)
+                    textures.Add(tex);
             }
 
             loading = false;

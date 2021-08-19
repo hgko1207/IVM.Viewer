@@ -61,7 +61,7 @@ namespace IVM.Studio.I3D
             scene.Render(); // scene render
         }
 
-        public async void Open(string imgPath)
+        public async void Open(string imgPath, int lower = -1, int upper = -1)
         {
             if (scene.tex3D.Loading)
                 return;
@@ -69,7 +69,7 @@ namespace IVM.Studio.I3D
             Invalid.Visibility = Visibility.Hidden;
 
             Loading.Visibility = Visibility.Visible;
-            bool res = await scene.Open(imgPath);
+            bool res = await scene.Open(imgPath, lower, upper);
             Loading.Visibility = Visibility.Hidden;
 
             if (res == false)

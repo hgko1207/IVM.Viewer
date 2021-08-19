@@ -5,6 +5,7 @@ using IVM.Studio.Services;
 using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -16,7 +17,7 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class I3DImportPanelViewModel : ViewModelBase
     {
-        public ICommand OpenFolderCommand { get; private set; }
+        I3DWcfServer wcfserver;
 
         private string currentImgPath;
 
@@ -40,7 +41,49 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref selectedImgInfo, value);
         }
 
+        private int openSliceLower = 0;
+        public int OpenSliceLower
+        {
+            get => openSliceLower;
+            set
+            {
+                if (SetProperty(ref openSliceLower, value))
+                {
+                    OpenSliceText = string.Format("{0} / {1}", openSliceLimit - openSliceLower - (openSliceLimit - openSliceUpper), openSliceLimit);
+                }
+            }
+        }
+
+        private int openSliceUpper = 1000;
+        public int OpenSliceUpper
+        {
+            get => openSliceUpper;
+            set
+            {
+                if (SetProperty(ref openSliceUpper, value))
+                {
+                    OpenSliceText = string.Format("{0} / {1}", openSliceLimit - openSliceLower - (openSliceLimit - openSliceUpper), openSliceLimit);
+                }
+            }
+        }
+
+        private int openSliceLimit = 1000;
+        public int OpenSliceLimit
+        {
+            get => openSliceLimit;
+            set => SetProperty(ref openSliceLimit, value);
+        }
+
+        private string openSliceText = "";
+        public string OpenSliceText
+        {
+            get => openSliceText;
+            set => SetProperty(ref openSliceText, value);
+        }
+
+        public ICommand OpenFolderCommand { get; private set; }
         public ICommand OpenSelectedCommand { get; private set; }
+        public ICommand ChangedSelectedCommand { get; private set; }
 
         /// <summary>
         /// 생성자
@@ -48,8 +91,60 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public I3DImportPanelViewModel(IContainerExtension container) : base(container)
         {
+            wcfserver = container.Resolve<I3DWcfServer>();
+
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             OpenSelectedCommand = new DelegateCommand(OpenSelected);
+            ChangedSelectedCommand = new DelegateCommand(ChangedSelected);
+        }
+
+        private void ChangedSelected()
+        {
+            OpenSliceLimit = SelectedImgInfo.Count;
+
+            OpenSliceLower = 0;
+            OpenSliceUpper = OpenSliceLimit;
+        }
+
+        private int CalcTextureCountInDirectory(string imgPath)
+        {
+            string[] files = Directory.GetFiles(imgPath).OrderBy(f => f).ToArray();
+
+            int cnt = 0;
+
+            foreach (string imgpath in files)
+            {
+                string ext = Path.GetExtension(imgpath).ToLower();
+                if (!(new string[] { ".tif", ".png" }).Contains(ext))
+                    continue;
+
+                cnt++;
+            }
+
+            return cnt;
+        }
+
+        private int CalcTextureCount(string imgPath, ref bool is4D)
+        {
+            int cnt = CalcTextureCountInDirectory(imgPath);
+
+            if (cnt <= 0)
+            {
+                string[] dirs = Directory.GetDirectories(imgPath).OrderBy(f => f).ToArray();
+
+                foreach (string d in dirs)
+                {
+                    int cnt2 = CalcTextureCountInDirectory(d);
+                    if (cnt2 > 0)
+                    {
+                        is4D = true;
+                        return cnt2;
+                    }
+                }
+            }
+            
+            is4D = false;
+            return cnt;
         }
 
         private void OpenFolder()
@@ -67,11 +162,12 @@ namespace IVM.Studio.ViewModels.UserControls
 
                 foreach (string dir in dirs)
                 {
-                    I3DPathInfo pathInfo = new I3DPathInfo() { Path = dir };
+                    bool is4D = false;
+                    int cnt = CalcTextureCount(dir, ref is4D);
+
+                    I3DPathInfo pathInfo = new I3DPathInfo() { Path = dir, Count = cnt, Dim = (is4D ? "4D" : "3D") };
                     ImgPathCollection.Add(pathInfo);
                 }
-
-                //EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
             }
         }
 
@@ -85,7 +181,8 @@ namespace IVM.Studio.ViewModels.UserControls
             if (!Directory.Exists(CurrentImgPath))
                 return;
 
-            EventAggregator.GetEvent<I3DOpenEvent>().Publish(CurrentImgPath);
+            wcfserver.channel1.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper);
+            wcfserver.channel2.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper);
         }
     }
 }
