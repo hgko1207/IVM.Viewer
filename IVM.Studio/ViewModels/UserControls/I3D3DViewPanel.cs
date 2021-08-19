@@ -298,7 +298,7 @@ namespace IVM.Studio.ViewModels.UserControls
             wcfserver = container.Resolve<I3DWcfServer>();
             datamanager = container.Resolve<DataManager>();
 
-            I3DChannelInfo = datamanager.I3DChannelInfo;
+            I3DChannelInfo = datamanager.I3DChannelInfo1;
 
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Subscribe(UpdateCamera);
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Subscribe(OnMetaLoaded);

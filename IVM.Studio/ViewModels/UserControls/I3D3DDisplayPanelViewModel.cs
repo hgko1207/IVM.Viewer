@@ -149,7 +149,7 @@ namespace IVM.Studio.ViewModels.UserControls
             wcfserver = container.Resolve<I3DWcfServer>();
             datamanager = container.Resolve<DataManager>();
 
-            I3DBackgroundInfo = datamanager.I3DBackgroundInfo;
+            I3DBackgroundInfo = datamanager.I3DBackgroundInfo1;
 
             EventAggregator.GetEvent<I3DFirstRenderEvent>().Subscribe(OnFirstRender);
         }

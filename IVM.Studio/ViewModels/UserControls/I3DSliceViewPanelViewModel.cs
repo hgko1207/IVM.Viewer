@@ -107,8 +107,8 @@ namespace IVM.Studio.ViewModels.UserControls
             wcfserver = container.Resolve<I3DWcfServer>();
             datamanager = container.Resolve<DataManager>();
 
-            I3DChannelInfo = datamanager.I3DChannelInfo;
-            I3DBackgroundInfo = datamanager.I3DBackgroundInfo;
+            I3DChannelInfo = datamanager.I3DChannelInfo2;
+            I3DBackgroundInfo = datamanager.I3DBackgroundInfo2;
 
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Subscribe(OnMetaLoaded);
 

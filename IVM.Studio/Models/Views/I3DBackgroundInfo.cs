@@ -14,6 +14,8 @@ namespace IVM.Studio.Models
     {
         I3DWcfServer wcfserver;
 
+        int channelId = -1;
+
         private Color boxColor = Color.FromScRgb(1, 1, 1, 1);
         public Color BoxColor
         {
@@ -22,8 +24,7 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref boxColor, value))
                 {
-                    wcfserver.channel1.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
-                    wcfserver.channel2.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
+                    wcfserver.Channel(channelId).OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
                 }
             }
         }
@@ -36,8 +37,7 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref boxThickness, value))
                 {
-                    wcfserver.channel1.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
-                    wcfserver.channel2.OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
+                    wcfserver.Channel(channelId).OnChangeBoxParam(boxColor.ScR, boxColor.ScG, boxColor.ScB, boxColor.ScA, boxThickness);
                 }
             }
         }
@@ -50,8 +50,7 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref gridLabelColor, value))
                 {
-                    wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                    wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
+                    wcfserver.Channel(channelId).OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
                 }
             }
         }
@@ -64,8 +63,7 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref gridFontSize, value))
                 {
-                    wcfserver.channel1.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
-                    wcfserver.channel2.OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
+                    wcfserver.Channel(channelId).OnChangeGridLabelParam(gridLabelColor.ScR, gridLabelColor.ScG, gridLabelColor.ScB, gridLabelColor.ScA, gridFontSize);
                 }
             }
         }
@@ -78,15 +76,16 @@ namespace IVM.Studio.Models
             {
                 if (SetProperty(ref backgroundColor, value))
                 {
-                    wcfserver.channel1.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
-                    wcfserver.channel2.OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
+                    wcfserver.Channel(channelId).OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
                 }
             }
         }
 
-        public I3DBackgroundInfo(IContainerExtension container, IEventAggregator eventAggregator)
+        public I3DBackgroundInfo(IContainerExtension container, IEventAggregator eventAggregator, int channelId)
         {
             wcfserver = container.Resolve<I3DWcfServer>();
+
+            this.channelId = channelId;
         }
     }
 }
