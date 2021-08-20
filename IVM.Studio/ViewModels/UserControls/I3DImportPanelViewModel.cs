@@ -11,7 +11,12 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using ImageRegistration;
 using static IVM.Studio.Models.Common;
+using MathWorks.MATLAB.NET.Arrays;
+using System.Windows;
+using System.Threading.Tasks;
+using IVM.Studio.Views;
 
 namespace IVM.Studio.ViewModels.UserControls
 {
@@ -88,9 +93,41 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref openReverse, value);
         }
 
+        private bool openAlignment = false;
+        public bool OpenAlignment
+        {
+            get => openAlignment;
+            set => SetProperty(ref openAlignment, value);
+        }
+
+        private string openAlignmentRef = "DAPI";
+        public string OpenAlignmentRef
+        {
+            get => openAlignmentRef;
+            set => SetProperty(ref openAlignmentRef, value);
+        }
+
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand OpenSelectedCommand { get; private set; }
         public ICommand ChangedSelectedCommand { get; private set; }
+        public ICommand RunAlignmentCommand { get; private set; }
+        
+
+        int StrToBandIdx(string b)
+        {
+            switch (b)
+            {
+                case "DAPI":
+                    return 1;
+                case "GFP":
+                    return 2;
+                case "RFP":
+                    return 3;
+                case "NIR":
+                    return 4;
+            }
+            return -1;
+        }
 
         /// <summary>
         /// 생성자
@@ -103,6 +140,43 @@ namespace IVM.Studio.ViewModels.UserControls
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             OpenSelectedCommand = new DelegateCommand(OpenSelected);
             ChangedSelectedCommand = new DelegateCommand(ChangedSelected);
+            RunAlignmentCommand = new DelegateCommand(RunAlignment);
+        }
+
+        private void RunAlignment()
+        {            
+            if (SelectedImgInfo == null)
+                return;
+
+            CurrentImgPath = SelectedImgInfo.Path;
+
+            if (!Directory.Exists(CurrentImgPath))
+                return;
+
+            string atag = "_ALIGN";
+
+            MWArray reg_dir = CurrentImgPath;
+            MWArray refCh = StrToBandIdx(OpenAlignmentRef);
+            MWArray GPU = 0;
+            MWArray save_dir = (CurrentImgPath + atag);
+
+            LoadingWindow loading = new LoadingWindow();
+            
+            Task.Run(() =>
+            {
+                try
+                {
+                    reg.ZS_ShiftCorrected_array_IVIM(1, reg_dir, refCh, GPU, save_dir);
+                    loading.loading = false;
+                }
+                catch (Exception e)
+                {
+                    loading.loading = false;
+                    MessageBox.Show("[ERROR] ZS_ShiftCorrected_array_IVIM failed\r\n" + e.Message);
+                }
+            });
+
+            loading.ShowDialog();
         }
 
         private void ChangedSelected()
@@ -172,11 +246,17 @@ namespace IVM.Studio.ViewModels.UserControls
                     bool is4D = false;
                     int cnt = CalcTextureCount(dir, ref is4D);
 
+                    string atag = "_ALIGN";
+                    if (dir.IndexOf(atag) == (dir.Length - atag.Length))
+                        continue;
+
                     I3DPathInfo pathInfo = new I3DPathInfo() { Path = dir, Count = cnt, Dim = (is4D ? "4D" : "3D") };
                     ImgPathCollection.Add(pathInfo);
                 }
             }
         }
+
+        ImageRegistration.ImageRegistration reg = new ImageRegistration.ImageRegistration();
 
         private void OpenSelected()
         {
@@ -188,8 +268,18 @@ namespace IVM.Studio.ViewModels.UserControls
             if (!Directory.Exists(CurrentImgPath))
                 return;
 
-            wcfserver.channel1.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper, OpenReverse);
-            wcfserver.channel2.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper, OpenReverse);
+            string atag = "";
+
+            if (OpenAlignment)
+            {
+                atag = "_ALIGN";
+
+                if (!Directory.Exists(CurrentImgPath + atag))
+                    RunAlignment();
+            }
+
+            wcfserver.channel1.OnOpen(CurrentImgPath + atag, OpenSliceLower, OpenSliceUpper, OpenReverse);
+            wcfserver.channel2.OnOpen(CurrentImgPath + atag, OpenSliceLower, OpenSliceUpper, OpenReverse);
         }
     }
 }

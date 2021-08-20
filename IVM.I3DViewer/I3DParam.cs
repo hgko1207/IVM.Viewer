@@ -27,7 +27,7 @@ namespace IVM.Studio.I3D
         public bool SHOW_BOX = true;
         public vec4 BOX_COLOR = new vec4(1.0f, 1.0f, 1.0f, 1.0f);
         public float BOX_HEIGHT = 1.0f;
-        public float BOX_THICKNESS = 1.0f;
+        public float BOX_THICKNESS = 2.0f;
 
         // grid
         public bool SHOW_GRID = false;

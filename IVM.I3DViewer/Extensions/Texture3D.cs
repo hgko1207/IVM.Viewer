@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SharpGL.Textures
@@ -22,6 +23,14 @@ namespace SharpGL.Textures
     /// </summary>
     public class Texture3D
     {
+        Mutex openLock;
+
+        public uint Width { get; private set; }
+        public uint Height { get; private set; }
+        public uint Depth { get; private set; }
+
+        private uint textureObject;
+
         public void Create(OpenGL gl)
         {
             //  Generate the texture object array.
@@ -83,8 +92,17 @@ namespace SharpGL.Textures
                     continue;
                 }
 
+                bool createNew = false;
+                openLock = new Mutex(true, "IVM.Studio.Viewer.Open", out createNew);
+
+                if (!createNew)
+                    createNew = openLock.WaitOne();
+
                 // create a Bitmap from the file and add it to the list
                 Bitmap bitmap = new Bitmap(imgpath);
+
+                openLock.ReleaseMutex();
+                openLock = null;
 
                 // update the size of the final bitmap
                 r.width = bitmap.Width;
@@ -160,11 +178,5 @@ namespace SharpGL.Textures
             //  Unlock the image.
             finalImage.UnlockBits(bitmapData);
         }
-
-        public uint Width { get; private set; }
-        public uint Height { get; private set; }
-        public uint Depth { get; private set; }
-
-        private uint textureObject;
     }
 }

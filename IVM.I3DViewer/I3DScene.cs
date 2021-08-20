@@ -101,7 +101,9 @@ namespace IVM.Studio.I3D
             if (h == -1.0f)
             {
                 view.param.BOX_HEIGHT = (float)tex3D.GetDepth() / (float)tex3D.GetWidth();
-                view.param.BOX_HEIGHT *= view.scene.meta.pixelPerUM_Z / view.scene.meta.pixelPerUM_X;
+
+                if (view.scene.meta.pixelPerUM_Z > 0)
+                    view.param.BOX_HEIGHT *= view.scene.meta.pixelPerUM_Z / view.scene.meta.pixelPerUM_X;
             }
             else
             {

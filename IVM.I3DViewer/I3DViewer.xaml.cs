@@ -11,6 +11,7 @@ using SharpGL.WPF;
 using SharpGL.SceneGraph;
 using SharpGL.SceneGraph.Cameras;
 using SharpGL.SceneGraph.Core;
+using System.Threading;
 
 namespace IVM.Studio.I3D
 {

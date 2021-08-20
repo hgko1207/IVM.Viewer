@@ -22,6 +22,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public I3DChannelInfo I3DChannelInfo { get; set; }
 
+        float cameraScale = 0.8f;
+
         private float rotXValue = 0;
         public float RotXValue
         {
@@ -30,8 +32,8 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref rotXValue, value) && !subscribing)
                 {
-                    wcfserver.channel1.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), 0.8f);
-                    wcfserver.channel2.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), 0.8f);
+                    wcfserver.channel1.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), cameraScale);
+                    wcfserver.channel2.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), cameraScale);
                 }
             }
         }
@@ -44,8 +46,8 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref rotYValue, value) && !subscribing)
                 {
-                    wcfserver.channel1.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), 0.8f);
-                    wcfserver.channel2.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), 0.8f);
+                    wcfserver.channel1.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), cameraScale);
+                    wcfserver.channel2.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), cameraScale);
                 }
             }
         }
@@ -58,8 +60,8 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref rotZValue, value) && !subscribing)
                 {
-                    wcfserver.channel1.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), 0.8f);
-                    wcfserver.channel2.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), 0.8f);
+                    wcfserver.channel1.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), cameraScale);
+                    wcfserver.channel2.OnUpdateCamera(0, 0, -5.0f, rotXValue * (float)(Math.PI / 180.0), rotYValue * (float)(Math.PI / 180.0), rotZValue * (float)(Math.PI / 180.0), cameraScale);
                 }
             }
         }
@@ -368,6 +370,7 @@ namespace IVM.Studio.ViewModels.UserControls
             RotXValue = p.ax / (float)(Math.PI / 180.0);
             RotYValue = p.ay / (float)(Math.PI / 180.0);
             RotZValue = p.az / (float)(Math.PI / 180.0);
+            cameraScale = p.s;
 
             subscribing = false;
         }

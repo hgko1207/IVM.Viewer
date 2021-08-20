@@ -90,7 +90,17 @@ namespace IVM.Studio.I3D
             string metaPath = imgPath + ".csv";
 
             if (!File.Exists(metaPath))
-                return false;
+            {
+                string atag = "_ALIGN";
+                if (imgPath.IndexOf(atag) == (imgPath.Length - atag.Length))
+                {
+                    imgPath = imgPath.Substring(0, imgPath.Length - atag.Length);
+                    metaPath = imgPath + ".csv";
+                }
+
+                if (!File.Exists(metaPath))
+                    return false;
+            }
 
             Init();
 
