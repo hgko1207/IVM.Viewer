@@ -493,8 +493,8 @@ namespace IVM.Studio.I3D
             float t1 = view.param.GRID_THICKNESS;
             float t2 = 0.01f;
 
-            vec4 gc1 = view.param.GRID_COLOR * 0.6f;
-            vec4 gc2 = view.param.GRID_COLOR * 0.2f;
+            vec4 gc1 = view.param.GRID_COLOR * 0.8f;
+            vec4 gc2 = view.param.GRID_COLOR * 0.4f;
 
             Math.Max(gc1.x, 0); Math.Max(gc1.y, 0); Math.Max(gc1.z, 0); Math.Max(gc1.w, 0);
             Math.Max(gc2.x, 0); Math.Max(gc2.y, 0); Math.Max(gc2.z, 0); Math.Max(gc2.w, 0);
