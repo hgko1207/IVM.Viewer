@@ -20,8 +20,10 @@ namespace IVM.Studio.I3D
         const int vertCount = 24;
 
         // grid
-        vec3[] vertgrid = null;
-        vec3[] normgrid = null;
+        vec3[] vertgrid1 = null;
+        vec3[] vertgrid2 = null;
+        vec3[] normgrid1 = null;
+        vec3[] normgrid2 = null;
 
         // volume shader
         ShaderProgram shader;
@@ -317,11 +319,18 @@ namespace IVM.Studio.I3D
 
         public void CreateGrid(OpenGL gl)
         {
+            float um = view.scene.meta.pixelPerUM_X;
+
+            CreateGridInternal(gl, view.param.GRID_MAJOR_DIST / um, ref vertgrid1, ref normgrid1);
+            CreateGridInternal(gl, view.param.GRID_MINOR_DIST / um, ref vertgrid2, ref normgrid2);
+        }
+        private void CreateGridInternal(OpenGL gl, float dist, ref vec3[] vertgrid, ref vec3[] normgrid)
+        {
             if (!view.scene.IsLoaded())
                 return;
 
-            float dw = (float)view.param.GRID_DIST / (float)view.scene.tex3D.GetWidth();
-            float dh = (float)view.param.GRID_DIST / (float)view.scene.tex3D.GetDepth();
+            float dw = (float)dist / (float)view.scene.tex3D.GetWidth();
+            float dh = (float)dist / (float)view.scene.tex3D.GetDepth();
             List<vec3> vertlst = new List<vec3>();
             List<vec3> normlst = new List<vec3>();
 
@@ -444,27 +453,8 @@ namespace IVM.Studio.I3D
             gl.PopAttrib();
         }
 
-        public void RenderGrid(OpenGL gl, mat4 mproj, mat4 mview, mat4 mobj)
+        private void RenderGridInternal(OpenGL gl, mat4 mobj, ref vec3[] vertgrid, ref vec3[] normgrid)
         {
-            gl.MatrixMode(OpenGL.GL_PROJECTION);
-            gl.LoadIdentity();
-            gl.MultMatrix(mproj.to_array());
-
-            gl.MatrixMode(OpenGL.GL_MODELVIEW);
-            gl.LoadIdentity();
-            gl.MultMatrix(mview.to_array());
-
-            gl.PushAttrib(OpenGL.GL_CURRENT_BIT | OpenGL.GL_ENABLE_BIT |
-                OpenGL.GL_LINE_BIT | OpenGL.GL_POLYGON_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-            gl.Disable(OpenGL.GL_LIGHTING);
-            gl.Disable(OpenGL.GL_TEXTURE_2D);
-            gl.LineWidth(view.param.GRID_THICKNESS);
-            gl.DepthFunc(OpenGL.GL_ALWAYS);
-            gl.Color(view.param.GRID_COLOR.x, view.param.GRID_COLOR.y, view.param.GRID_COLOR.z, view.param.GRID_COLOR.w);
-
-            gl.PolygonMode(FaceMode.FrontAndBack, PolygonMode.Lines);
-
-            gl.Begin(BeginMode.Lines);
             for (int i = 0; i < vertgrid.Length / 2; ++i)
             {
                 // 랜더링 전에 normal과 view vector cross 를 통한 culling 수행
@@ -480,6 +470,47 @@ namespace IVM.Studio.I3D
                 gl.Vertex(vertgrid[i * 2 + 0].x, vertgrid[i * 2 + 0].y, vertgrid[i * 2 + 0].z);
                 gl.Vertex(vertgrid[i * 2 + 1].x, vertgrid[i * 2 + 1].y, vertgrid[i * 2 + 1].z);
             }
+        }
+
+        public void RenderGrid(OpenGL gl, mat4 mproj, mat4 mview, mat4 mobj)
+        {
+            gl.MatrixMode(OpenGL.GL_PROJECTION);
+            gl.LoadIdentity();
+            gl.MultMatrix(mproj.to_array());
+
+            gl.MatrixMode(OpenGL.GL_MODELVIEW);
+            gl.LoadIdentity();
+            gl.MultMatrix(mview.to_array());
+
+            gl.PushAttrib(OpenGL.GL_CURRENT_BIT | OpenGL.GL_ENABLE_BIT |
+                OpenGL.GL_LINE_BIT | OpenGL.GL_POLYGON_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+            gl.Disable(OpenGL.GL_LIGHTING);
+            gl.Disable(OpenGL.GL_TEXTURE_2D);
+            gl.DepthFunc(OpenGL.GL_ALWAYS);
+
+            gl.PolygonMode(FaceMode.FrontAndBack, PolygonMode.Lines);
+
+            float t1 = view.param.GRID_THICKNESS;
+            float t2 = 0.01f;
+
+            vec4 gc1 = view.param.GRID_COLOR * 0.6f;
+            vec4 gc2 = view.param.GRID_COLOR * 0.2f;
+
+            Math.Max(gc1.x, 0); Math.Max(gc1.y, 0); Math.Max(gc1.z, 0); Math.Max(gc1.w, 0);
+            Math.Max(gc2.x, 0); Math.Max(gc2.y, 0); Math.Max(gc2.z, 0); Math.Max(gc2.w, 0);
+
+            // Minor-gridline
+            gl.LineWidth(t2);
+            gl.Color(gc2.x, gc2.y, gc2.z, gc2.w);
+            gl.Begin(BeginMode.Lines);
+            RenderGridInternal(gl, mobj, ref vertgrid2, ref normgrid2);
+            gl.End();
+
+            // Major-gridline
+            gl.LineWidth(t1);
+            gl.Color(gc1.x, gc1.y, gc1.z, gc1.w);
+            gl.Begin(BeginMode.Lines);
+            RenderGridInternal(gl, mobj, ref vertgrid1, ref normgrid1);
             gl.End();
 
             gl.PopAttrib();

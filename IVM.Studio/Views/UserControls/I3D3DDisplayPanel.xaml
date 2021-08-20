@@ -91,6 +91,17 @@
                               DataContext="{Binding I3DBackgroundInfo}" Style="{StaticResource HistogramEdit}" 
                               Value="{Binding BoxThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="4" />
                 <TextBlock Grid.Row="0" Grid.Column="5" TextAlignment="Center" VerticalAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
+                <StackPanel Grid.Row="0" Grid.Column="6" Orientation="Horizontal" Margin="32 0 0 0">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Grid (um)" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Major" FontSize="14" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit VerticalAlignment="Center" Margin="4 0 0 0" 
+                              DataContext="{Binding I3DBackgroundInfo}" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding GridMajor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="1000" />
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Minor" FontSize="14" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit VerticalAlignment="Center" Margin="4 0 0 0" 
+                              DataContext="{Binding I3DBackgroundInfo}" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding GridMinor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="1000" />
+                </StackPanel>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Label" FontSize="14" FontWeight="Bold"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Text="Color" FontSize="14" Margin="12 0 0 0"/>

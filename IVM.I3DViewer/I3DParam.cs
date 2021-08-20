@@ -27,16 +27,17 @@ namespace IVM.Studio.I3D
         public bool SHOW_BOX = true;
         public vec4 BOX_COLOR = new vec4(1.0f, 1.0f, 1.0f, 1.0f);
         public float BOX_HEIGHT = 1.0f;
-        public float BOX_THICKNESS = 2.0f;
+        public float BOX_THICKNESS = 3.0f;
 
         // grid
         public bool SHOW_GRID = false;
         public bool SHOW_GRID_TEXT = true;
-        public vec4 GRID_COLOR = new vec4(0.5f, 0.5f, 0.5f, 0.2f);
-        public float GRID_DIST = 16.0f; // pixels
+        public vec4 GRID_COLOR = new vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        public float GRID_MAJOR_DIST = 40.0f; // um
+        public float GRID_MINOR_DIST = 10.0f; // um
         public int GRID_TEXT_SIZE = 0;
         public vec4 GRID_TEXT_COLOR = new vec4(1.0f, 1.0f, 1.0f, 1.0f);
-        public float GRID_THICKNESS = 1.0f;
+        public float GRID_THICKNESS = 3.0f;
 
         // axis
         public bool SHOW_AXIS = true;
@@ -46,7 +47,7 @@ namespace IVM.Studio.I3D
         public float AXIS_THICKNESS = 2.0f;
 
         // camera
-        public float CAMERA_SCALE_FACTOR = 0.8f;
+        public float CAMERA_SCALE_FACTOR = 1.8f;
         public vec3 CAMERA_POS = new vec3(0, 0, -5.0f);
         public vec3 CAMERA_ANGLE = new vec3(0, 0, 0);
         public vec2 CAMERA_VELOCITY = new vec2(0, 0);

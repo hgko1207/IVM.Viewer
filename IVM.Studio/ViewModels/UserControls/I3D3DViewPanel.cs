@@ -22,7 +22,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public I3DChannelInfo I3DChannelInfo { get; set; }
 
-        float cameraScale = 0.8f;
+        float cameraScale = 1.8f;
 
         private float rotXValue = 0;
         public float RotXValue

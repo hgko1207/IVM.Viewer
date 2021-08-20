@@ -164,7 +164,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 Task.Run(() =>
                 {
-                    wcfserver.channel1.OnChangeBoxParam(b.BoxColor.R, b.BoxColor.G, b.BoxColor.B, b.BoxColor.A, b.BoxThickness);
+                    wcfserver.channel1.OnChangeBoxParam(b.BoxColor.ScR, b.BoxColor.ScG, b.BoxColor.ScB, b.BoxColor.ScA, b.BoxThickness);
                     wcfserver.channel1.OnChangeGridLabelParam(b.GridLabelColor.ScR, b.GridLabelColor.ScG, b.GridLabelColor.ScB, b.GridLabelColor.ScA, b.GridFontSize);
                     wcfserver.channel1.OnChangeBackgroundParam(b.BackgroundColor.ScR, b.BackgroundColor.ScG, b.BackgroundColor.ScB, b.BackgroundColor.ScA);
                     wcfserver.channel1.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py); // 마지막에 업데이트 해야 함
@@ -174,7 +174,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 Task.Run(() =>
                 {
-                    wcfserver.channel2.OnChangeBoxParam(b.BoxColor.R, b.BoxColor.G, b.BoxColor.B, b.BoxColor.A, b.BoxThickness);
+                    wcfserver.channel2.OnChangeBoxParam(b.BoxColor.ScR, b.BoxColor.ScG, b.BoxColor.ScB, b.BoxColor.ScA, b.BoxThickness);
                     wcfserver.channel2.OnChangeGridLabelParam(b.GridLabelColor.ScR, b.GridLabelColor.ScG, b.GridLabelColor.ScB, b.GridLabelColor.ScA, b.GridFontSize);
                     wcfserver.channel2.OnChangeBackgroundParam(b.BackgroundColor.ScR, b.BackgroundColor.ScG, b.BackgroundColor.ScB, b.BackgroundColor.ScA);
                     wcfserver.channel2.OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py); // 마지막에 업데이트 해야 함

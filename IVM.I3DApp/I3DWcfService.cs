@@ -96,7 +96,7 @@ namespace IVM.Studio.I3D
         public void OnChangeBoxParam(float r, float g, float b, float a, float thickness)
         {
             w.vw.param.BOX_THICKNESS = thickness;
-            w.vw.param.GRID_THICKNESS = Math.Max(thickness - 1, 1);
+            w.vw.param.GRID_THICKNESS = thickness;
 
             w.vw.param.BOX_COLOR = new vec4(r, g, b, a);
             w.vw.param.GRID_COLOR = new vec4(r, g, b, a);
@@ -132,6 +132,15 @@ namespace IVM.Studio.I3D
         public void OnChangeSliceDepth(float x, float y, float z)
         {
             w.vw.param.SLICE_DEPTH = new vec3(x, y, z);
+        }
+
+        public void OnChangeGridSizeParam(float major, float minor)
+        {
+            w.vw.param.GRID_MAJOR_DIST = major;
+            w.vw.param.GRID_MINOR_DIST = minor;
+
+            w.vw.scene.UpdateModelviewMatrix();
+            w.vw.scene.UpdateMesh();
         }
     }
 }

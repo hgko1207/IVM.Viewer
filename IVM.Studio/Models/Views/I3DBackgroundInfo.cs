@@ -42,6 +42,32 @@ namespace IVM.Studio.Models
             }
         }
 
+        private float gridMajor = 40;
+        public float GridMajor
+        {
+            get => gridMajor;
+            set
+            {
+                if (SetProperty(ref gridMajor, value))
+                {
+                    wcfserver.Channel(channelId).OnChangeGridSizeParam(gridMajor, gridMinor);
+                }
+            }
+        }
+
+        private float gridMinor = 10;
+        public float GridMinor
+        {
+            get => gridMinor;
+            set
+            {
+                if (SetProperty(ref gridMinor, value))
+                {
+                    wcfserver.Channel(channelId).OnChangeGridSizeParam(gridMajor, gridMinor);
+                }
+            }
+        }
+
         private Color gridLabelColor = Color.FromScRgb(1, 1, 1, 1);
         public Color GridLabelColor
         {

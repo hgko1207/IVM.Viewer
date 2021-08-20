@@ -60,6 +60,9 @@ namespace IVM.Studio.Services
         void OnChangeGridLabelParam(float r, float g, float b, float a, int fontsize);
 
         [OperationContract]
+        void OnChangeGridSizeParam(float major, float minor);
+
+        [OperationContract]
         void OnChangeBackgroundParam(float r, float g, float b, float a);
 
         [OperationContract]
