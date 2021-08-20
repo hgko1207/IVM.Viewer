@@ -81,6 +81,13 @@ namespace IVM.Studio.ViewModels.UserControls
             set => SetProperty(ref openSliceText, value);
         }
 
+        private bool openReverse = false;
+        public bool OpenReverse
+        {
+            get => openReverse;
+            set => SetProperty(ref openReverse, value);
+        }
+
         public ICommand OpenFolderCommand { get; private set; }
         public ICommand OpenSelectedCommand { get; private set; }
         public ICommand ChangedSelectedCommand { get; private set; }
@@ -181,8 +188,8 @@ namespace IVM.Studio.ViewModels.UserControls
             if (!Directory.Exists(CurrentImgPath))
                 return;
 
-            wcfserver.channel1.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper);
-            wcfserver.channel2.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper);
+            wcfserver.channel1.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper, OpenReverse);
+            wcfserver.channel2.OnOpen(CurrentImgPath, OpenSliceLower, OpenSliceUpper, OpenReverse);
         }
     }
 }

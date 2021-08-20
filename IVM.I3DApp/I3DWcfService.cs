@@ -10,9 +10,9 @@ namespace IVM.Studio.I3D
     {
         public static MainWindow w;
 
-        public void OnOpen(string path, int lower, int upper)
+        public void OnOpen(string path, int lower, int upper, bool reverse)
         {
-            w.vw.Open(path, lower, upper);
+            w.vw.Open(path, lower, upper, reverse);
 
             if (w.viewtype == (int)I3DViewType.MAIN_VIEW)
             {

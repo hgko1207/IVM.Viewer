@@ -53,9 +53,11 @@
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                     <dxe:SpinEdit Margin="4 -4 4 0" Width="55" MinValue="0" MaxValue="{Binding OpenSliceLimit}"
                                   Style="{StaticResource HistogramEdit}" Value="{Binding OpenSliceUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                    <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="15 0 0 0">
+                    <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="4 0 0 0">
                         <TextBlock Style="{StaticResource GeneralTextBlock}" MinWidth="80" Text="{Binding OpenSliceText}" TextAlignment="Center" />
                     </Border>
+                    <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" Margin="15 0 0 0" IsChecked="{Binding OpenReverse}"
+                                     Content="Reverse" HorizontalAlignment="Right" Width="80" ButtonKind="Toggle" />
                 </StackPanel>
                 <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Maximum="{Binding OpenSliceLimit}" Margin="5 0"
                                   SelectionStart="{Binding OpenSliceLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}" 

@@ -36,7 +36,7 @@ namespace IVM.Studio.I3D
 
         bool ParseCSV(string csvPath)
         {
-            using (FileStream fs = new FileStream(csvPath, FileMode.Open))
+            using (FileStream fs = new FileStream(csvPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 using (StreamReader sr = new StreamReader(fs, Encoding.UTF8, false))
                 {

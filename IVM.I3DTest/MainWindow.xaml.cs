@@ -304,15 +304,16 @@ namespace IVM.Studio.I3D
         private void Test_Click(object sender, RoutedEventArgs e)
         {
             List<string> flst = new List<string>();
-            flst.Add(@"..\..\..\..\data\01");
-            flst.Add(@"..\..\..\..\data\02");
-            flst.Add(@"..\..\..\..\data\03");
-            flst.Add(@"..\..\..\..\data\04");
+            //flst.Add(@"..\..\..\..\data\01");
+            //flst.Add(@"..\..\..\..\data\02");
+            //flst.Add(@"..\..\..\..\data\03");
+            //flst.Add(@"..\..\..\..\data\04");
+            //flst.Add(@"..\..\..\..\data\t");
+            //flst.Add(@"..\..\..\..\data\v");
+            //flst.Add(@"..\..\..\..\data\4d");
             flst.Add(@"..\..\..\..\data\t");
-            flst.Add(@"..\..\..\..\data\v");
-            flst.Add(@"..\..\..\..\data\4d");
 
-            vw.Open(flst[testFidx]);
+            vw.Open(flst[testFidx], -1, -1, true);
 
             testFidx += 1;
             if (testFidx >= flst.Count)

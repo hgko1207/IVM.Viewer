@@ -51,11 +51,13 @@ namespace SharpGL.Textures
             gl.TexParameter(OpenGL.GL_TEXTURE_3D, parameterName, parameterValue);
         }
 
-        public async Task<Bitmap3D> LoadBitmapFromDisk(string imgPath, int lower, int upper) // read all images into memory
+        public async Task<Bitmap3D> LoadBitmapFromDisk(string imgPath, int lower, int upper, bool reverse) // read all images into memory
         {
             string[] files = Directory.GetFiles(imgPath).OrderBy(f => f).ToArray();
             Array.Sort(files);
-            Array.Reverse(files);
+
+            if (reverse)
+                Array.Reverse(files);
 
             List<Bitmap> images = new List<Bitmap>();
 

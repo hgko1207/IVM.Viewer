@@ -67,9 +67,9 @@ namespace IVM.Studio.I3D
             view.RenderTarget.DoRender();
         }
 
-        public async Task<bool> Open(string imgPath, int lower, int upper)
+        public async Task<bool> Open(string imgPath, int lower, int upper, bool reverse)
         {
-            loadedTexture = await tex3D.Load(view.gl, imgPath, lower, upper);
+            loadedTexture = await tex3D.Load(view.gl, imgPath, lower, upper, reverse);
 
             loadedMeta = meta.Load(imgPath);
 
