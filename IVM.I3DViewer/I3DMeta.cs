@@ -16,6 +16,8 @@ namespace IVM.Studio.I3D
         public float pixelPerUM_Y;
         public float pixelPerUM_Z;
 
+        public List<DateTime> timePerFrame;
+
         public I3DMeta(I3DViewer v)
         {
             view = v;
@@ -28,6 +30,32 @@ namespace IVM.Studio.I3D
             pixelPerUM_X = 1.0f;
             pixelPerUM_Y = 1.0f;
             pixelPerUM_Z = 1.0f;
+
+            timePerFrame = new List<DateTime>();
+        }
+
+        int StrToFrame(string s)
+        {
+            string[] pairs = s.Split('&');
+            foreach (string p in pairs)
+            {
+                string[] kv = p.Split('=');
+                if (kv.Length <= 1)
+                    continue;
+
+                if (kv[0] == "TL")
+                {
+                    int frame = I3DCommon.IntParse(kv[1]);
+                    return frame - 1;
+                }
+            }
+
+            return -1;
+        }
+
+        DateTime StrToTime(string s)
+        {
+            return DateTime.Parse(s);
         }
 
         bool ParseCSV(string csvPath)
@@ -46,6 +74,8 @@ namespace IVM.Studio.I3D
                     var iFovY = keys.FindIndex(k => k.Contains("FovY"));
                     var iXpixel = keys.FindIndex(k => k.Contains("Xpixel"));
                     var iYpixel = keys.FindIndex(k => k.Contains("Ypixel"));
+                    var iSequence = keys.FindIndex(k => k.Contains("Sequence"));
+                    var iTime = keys.FindIndex(k => k.Contains("Time"));
 
                     int[] vStageZs = { 0, 0 };
 
@@ -58,20 +88,29 @@ namespace IVM.Studio.I3D
                         float vFovY = I3DCommon.FloatParse(vals[iFovY]);
                         int vXpixel = I3DCommon.IntParse(vals[iXpixel]);
                         int vYpixel = I3DCommon.IntParse(vals[iYpixel]);
+                        string vSequence = vals[iSequence];
+                        string vTime = vals[iTime];
 
-                        //Console.WriteLine("{0} {1} {2} {3} {4}", vStageZ, vFovX, vFovY, vXpixel, vYpixel);
+                        int frame = StrToFrame(vSequence);
+                        if (timePerFrame.Count == frame)
+                        {
+                            DateTime t = StrToTime(vTime);
+                            timePerFrame.Add(t);
+                        }
 
-                        pixelPerUM_X = (float)vFovX / (float)vXpixel;
-                        pixelPerUM_Y = (float)vFovY / (float)vYpixel;
+                        if (lcnt <= 1)
+                        {
+                            //Console.WriteLine("{0} {1} {2} {3} {4}", vStageZ, vFovX, vFovY, vXpixel, vYpixel);
 
-                        umWidth = vFovX;
-                        umHeight = vFovY;
+                            pixelPerUM_X = (float)vFovX / (float)vXpixel;
+                            pixelPerUM_Y = (float)vFovY / (float)vYpixel;
 
-                        vStageZs[lcnt] = vStageZ;
+                            umWidth = vFovX;
+                            umHeight = vFovY;
 
+                            vStageZs[lcnt] = vStageZ;
+                        }
                         lcnt++;
-                        if (lcnt >= 2)
-                            break;
                     }
 
                     pixelPerUM_Z = Math.Abs((float)vStageZs[1] - (float)vStageZs[0]);

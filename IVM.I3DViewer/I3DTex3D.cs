@@ -15,7 +15,7 @@ namespace IVM.Studio.I3D
         List<Texture3D> textures;
         string imagePath = "";
 
-        int currentTexIdx = 0;
+        public int currentTexIdx = 0;
         bool loading = false;
         public bool Loading
         {

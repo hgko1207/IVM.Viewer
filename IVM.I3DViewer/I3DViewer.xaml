@@ -14,9 +14,9 @@
             Resized="OpenGLControl_Resized"
             RenderContextType="FBO"
             RenderTrigger="Manual"/>
-        <TextBlock x:Name="Loading" Text="LOADING" Foreground="White" Background="Black" FontSize="48" 
+        <TextBlock x:Name="Loading" Text="LOADING" Foreground="White" FontSize="48" 
                    VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
-        <TextBlock x:Name="Invalid" Text="INVALID DATA" Foreground="Red" Background="Black" FontSize="48" 
+        <TextBlock x:Name="Invalid" Text="INVALID DATA" Foreground="Red" FontSize="48" 
                    VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
     </Grid>    
 </UserControl>

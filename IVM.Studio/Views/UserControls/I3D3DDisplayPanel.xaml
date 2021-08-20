@@ -47,7 +47,8 @@
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock TextAlignment="Center" Text="Position" FontSize="14" FontWeight="Bold"/>
-                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="4 -4 0 0" EditValue="{Binding AxisPosMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="4 -4 0 0" 
+                                      EditValue="{Binding AxisPosMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                         <dxe:ComboBoxEditItem Content="RightTop"/>
                         <dxe:ComboBoxEditItem Content="LeftTop"/>
                         <dxe:ComboBoxEditItem Content="RightBottom"/>
@@ -133,8 +134,50 @@
         <StackPanel Grid.Row="4" Margin="8 8 8 0">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Left" Text="4D Time Stamp" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 12 0 0"/>
-                <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" Content="Display" HorizontalAlignment="Right" Width="80" ButtonKind="Toggle" />
+                <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" IsChecked="{Binding TimelapseVisible}"
+                                 Content="Display" HorizontalAlignment="Right" Width="80" ButtonKind="Toggle" />
             </DockPanel>
+
+            <DockPanel Margin="0 8 0 0">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock TextAlignment="Left" VerticalAlignment="Center" Text="Label" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock TextAlignment="Left" VerticalAlignment="Center" Text="Color" FontSize="14" Margin="12 0 0 0"/>
+                    <dxe:PopupColorEdit VerticalAlignment="Center" ColumnCount="10" ShowMoreColorsButton="True" 
+                                    Color="{Binding TimelapseLabelColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                    AllowDefaultButton="False" Width="30" Padding="4 0"
+                                    MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
+
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Font Size" FontSize="14" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit VerticalAlignment="Center" Margin="4 0 0 0"  Style="{StaticResource HistogramEdit}" 
+                                  Value="{Binding TimelapseFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="8" MaxValue="18" />
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock TextAlignment="Center" Text="Position" FontSize="14" FontWeight="Bold"/>
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" Height="26" HorizontalAlignment="Right" Margin="4 -4 0 0" 
+                                      EditValue="{Binding TimelapsePosMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                        <dxe:ComboBoxEditItem Content="RightTop"/>
+                        <dxe:ComboBoxEditItem Content="LeftTop"/>
+                        <dxe:ComboBoxEditItem Content="Top"/>
+                        <dxe:ComboBoxEditItem Content="RightBottom"/>
+                        <dxe:ComboBoxEditItem Content="LeftBottom"/>
+                        <dxe:ComboBoxEditItem Content="Bottom"/>
+                    </dxe:ComboBoxEdit>
+                </StackPanel>
+            </DockPanel>
+
+            <StackPanel Margin="0 8 0 0" Orientation="Horizontal">
+                <TextBlock TextAlignment="Left" Text="Format" FontSize="14" FontWeight="Bold"/>
+                <dxe:ComboBoxEdit SelectedIndex="0" Width="150" Height="26" HorizontalAlignment="Right" Margin="8 -4 0 0" 
+                                  EditValue="{Binding TimelapseFormat, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <dxe:ComboBoxEditItem Content="yy-MM-dd HH:mm:ss"/>
+                    <dxe:ComboBoxEditItem Content="MM-dd HH:mm:ss"/>
+                    <dxe:ComboBoxEditItem Content="HH:mm:ss"/>
+                </dxe:ComboBoxEdit>
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Interval" FontSize="14" Margin="12 0 0 0"/>
+                <dxe:SpinEdit VerticalAlignment="Center" Margin="4 0 0 0" Width="60" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding TimelapseInterval, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="2000" />
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="msec" FontSize="14" Margin="4 0 0 0"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

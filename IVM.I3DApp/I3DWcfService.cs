@@ -151,6 +151,20 @@ namespace IVM.Studio.I3D
             w.vw.scene.UpdateModelviewMatrix();
             w.vw.scene.UpdateMesh();
         }
+
+        public void OnChangeTimelapseLabelParam(bool visible, float r, float g, float b, float a, int fontsize, string format, float px, float py, int msec)
+        {
+            w.vw.param.SHOW_TIMELAPSE = visible;
+            w.vw.param.TIMELAPSE_FORMAT = format;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.x = r;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.y = g;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.z = b;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.w = a;
+            w.vw.param.TIMELAPSE_TEXT_SIZE = fontsize;
+            w.vw.param.TIMELAPSE_POS.x = px;
+            w.vw.param.TIMELAPSE_POS.y = py;
+            w.vw.param.TIMELAPSE_TEXTURE_DELAY = msec;
+        }
     }
 }
 

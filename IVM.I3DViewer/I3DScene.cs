@@ -69,9 +69,9 @@ namespace IVM.Studio.I3D
 
         public async Task<bool> Open(string imgPath, int lower, int upper, bool reverse)
         {
-            loadedTexture = await tex3D.Load(view.gl, imgPath, lower, upper, reverse);
-
             loadedMeta = meta.Load(imgPath);
+
+            loadedTexture = await tex3D.Load(view.gl, imgPath, lower, upper, reverse);
 
             UpdateHeight();
             UpdateModelviewMatrix();
@@ -257,6 +257,11 @@ namespace IVM.Studio.I3D
                 // draw axis
                 if (view.param.SHOW_AXIS)
                     axis.Render(gl, matAxisView, matProjOrtho);
+            }
+
+            if (view.param.SHOW_TIMELAPSE)
+            {
+                axis.RenderTimelapse(gl);
             }
 
             if (!firstRenderd && firstRenderFunc != null)

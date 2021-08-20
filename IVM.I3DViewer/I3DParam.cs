@@ -15,7 +15,6 @@ namespace IVM.Studio.I3D
         public vec4 BAND_VISIBLE = new vec4(1, 1, 1, 0);
         public float RENDER_MODE = 1; // 0: blending 1: added-color
         public float IS_COLOCALIZATION = 0; // 0: disable, 1: enable
-        public float TIMELAPSE_TEXTURE_DELAY = 1000.0f / 30.0f;
 
         // slice
         public float OBLIQUE_DEPTH = 0;
@@ -46,6 +45,14 @@ namespace IVM.Studio.I3D
         public vec3 AXIS_POS = new vec3(0.75f, 0.75f, 0);
         public int AXIS_TEXT_SIZE = 0;
         public float AXIS_THICKNESS = 2.0f;
+
+        // timelapse info
+        public bool SHOW_TIMELAPSE = true;
+        public vec3 TIMELAPSE_POS = new vec3(0.05f, 0.95f, 0);
+        public int TIMELAPSE_TEXT_SIZE = 12;
+        public vec4 TIMELAPSE_TEXT_COLOR = new vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        public string TIMELAPSE_FORMAT = "yy-MM-dd HH:mm:ss";
+        public float TIMELAPSE_TEXTURE_DELAY = 100.0f; // mili-sec
 
         // camera
         public float CAMERA_SCALE_FACTOR = 3.0f;

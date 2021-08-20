@@ -1,6 +1,8 @@
 ﻿using SharpGL;
 using SharpGL.Enumerations;
 using GlmNet;
+using System;
+using System.Collections.Generic;
 
 namespace IVM.Studio.I3D
 {
@@ -104,6 +106,36 @@ namespace IVM.Studio.I3D
             pz.x = (pz.x + 1.0f) / 2.0f * aw;
             pz.y = (pz.y + 1.0f) / 2.0f * ah;
             gl.DrawText((int)pz.x + mg, (int)pz.y, 0.0f, 0.0f, 1.0f, "Courier New", fs, "Z");
+        }
+
+        public void RenderTimelapse(OpenGL gl)
+        {
+            gl.MatrixMode(OpenGL.GL_PROJECTION);
+            gl.LoadIdentity();
+            //gl.MultMatrix(mproj.to_array());
+
+            gl.MatrixMode(OpenGL.GL_MODELVIEW);
+            gl.LoadIdentity();
+            //gl.MultMatrix(mview.to_array());
+
+            // render text
+            float px = (float)view.ActualWidth * view.param.TIMELAPSE_POS.x;
+            float py = (float)view.ActualHeight * view.param.TIMELAPSE_POS.y;
+            int fs = view.param.TIMELAPSE_TEXT_SIZE;
+            vec4 fc = view.param.TIMELAPSE_TEXT_COLOR;
+
+            int tidx = view.scene.tex3D.currentTexIdx;
+            List<DateTime> times = view.scene.meta.timePerFrame;
+
+            DateTime? dt = null;
+            if (times.Count > tidx)
+                dt = times[tidx];
+
+            if (dt != null)
+            {
+                string timestr = dt.Value.ToString(view.param.TIMELAPSE_FORMAT);
+                gl.DrawText((int)px, (int)py, fc.x, fc.y, fc.z, "Courier New", fs, timestr);
+            }
         }
     }
 }

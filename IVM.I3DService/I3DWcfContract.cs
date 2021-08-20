@@ -67,6 +67,9 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeSliceDepth(float x, float y, float z);
+
+        [OperationContract]
+        void OnChangeTimelapseLabelParam(bool visible, float r, float g, float b, float a, int fontsize, string format, float px, float py, int msec);
     }
 
     [ServiceContract]

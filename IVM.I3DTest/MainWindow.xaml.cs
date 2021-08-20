@@ -31,7 +31,7 @@ namespace IVM.Studio.I3D
 
         private void Control_loaded(object sender, RoutedEventArgs e)
         {
-            vw.Open(@"..\..\..\..\data\t");
+            vw.Open(@"..\..\..\..\data\4d");
 
             AxisChkBtn.IsChecked = true;
             BoxChkBtn.IsChecked = true;
