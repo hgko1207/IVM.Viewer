@@ -113,7 +113,9 @@ namespace IVM.Studio.I3D
 
             loading = false;
 
-            return (textures.Count > 0);
+            bool loaded = (textures.Count > 0);
+
+            return loaded;
         }
 
         public void Bind(OpenGL gl)

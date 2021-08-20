@@ -33,7 +33,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     wcfserver.channel2.OnChangeSliceDepth(sliceDepthX / 100.0f, sliceDepthY / 100.0f, sliceDepthZ / 100.0f);
 
-                    SliceDepthValX = string.Format("{0} / {1}", (sliceDepthX / 100.0f / 2.0f + 0.5f) * umHeight, umHeight);
+                    SliceDepthValX = string.Format("{0:0.0} / {1:0.0}", (sliceDepthX / 100.0f / 2.0f + 0.5f) * umHeight, umHeight);
                 }
             }
         }
@@ -48,7 +48,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     wcfserver.channel2.OnChangeSliceDepth(sliceDepthX / 100.0f, sliceDepthY / 100.0f, sliceDepthZ / 100.0f);
 
-                    SliceDepthValY = string.Format("{0} / {1}", (sliceDepthY / 100.0f / 2.0f + 0.5f) * umWidth, umWidth);
+                    SliceDepthValY = string.Format("{0:0.0} / {1:0.0}", (sliceDepthY / 100.0f / 2.0f + 0.5f) * umWidth, umWidth);
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     wcfserver.channel2.OnChangeSliceDepth(sliceDepthX / 100.0f, sliceDepthY / 100.0f, sliceDepthZ / 100.0f);
 
-                    SliceDepthValZ = string.Format("{0} / {1}", (sliceDepthZ / 100.0f / 2.0f + 0.5f) * depth * umPerPixelZ, depth * umPerPixelZ);
+                    SliceDepthValZ = string.Format("{0:0.0} / {1:0.0}", (sliceDepthZ / 100.0f / 2.0f + 0.5f) * depth * umPerPixelZ, depth * umPerPixelZ);
                 }
             }
         }
@@ -124,12 +124,19 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void OnMetaLoaded(I3DMetaLoadedParam p)
         {
-            width = p.width;
-            height = p.height;
-            depth = p.depth;
-            umWidth = p.umWidth;
-            umHeight = p.umHeight;
-            umPerPixelZ = p.umPerPixelZ;
+            if (p.width > 0 && p.height > 0 && p.depth > 0)
+            {
+                width = p.width;
+                height = p.height;
+                depth = p.depth;
+            }
+
+            if (p.umWidth > 0 && p.umHeight > 0 && p.umPerPixelZ > 0)
+            {
+                umWidth = p.umWidth;
+                umHeight = p.umHeight;
+                umPerPixelZ = p.umPerPixelZ;
+            }
 
             SliceDepthX = -1;
             SliceDepthY = -1;

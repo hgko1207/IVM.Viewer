@@ -311,7 +311,7 @@ namespace IVM.Studio.I3D
             //flst.Add(@"..\..\..\..\data\t");
             //flst.Add(@"..\..\..\..\data\v");
             //flst.Add(@"..\..\..\..\data\4d");
-            flst.Add(@"..\..\..\..\data\t");
+            flst.Add(@"..\..\..\..\data\01");
 
             vw.Open(flst[testFidx], -1, -1, true);
 

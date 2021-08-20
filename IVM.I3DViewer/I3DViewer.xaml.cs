@@ -25,6 +25,9 @@ namespace IVM.Studio.I3D
         public I3DParam param = null;
         public OpenGL gl = null;
 
+        public delegate void LoadedDelegate();
+        public LoadedDelegate LoadedFunc = null;
+
         public I3DViewer()
         {
             InitializeComponent();
@@ -75,6 +78,9 @@ namespace IVM.Studio.I3D
 
             if (res == false)
                 Invalid.Visibility = Visibility.Visible;
+
+            if (LoadedFunc != null)
+                LoadedFunc();
         }
 
         public void UpdateBoxHeight()

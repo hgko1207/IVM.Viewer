@@ -45,10 +45,12 @@ namespace IVM.Studio.I3D
             vertices[5].z = view.param.AXIS_HEIGHT;
         }
 
-        public void Render(OpenGL gl, mat4 mview)
+        public void Render(OpenGL gl, mat4 mview, mat4 mproj)
         {
             gl.MatrixMode(OpenGL.GL_PROJECTION);
             gl.LoadIdentity();
+            //gl.MultMatrix(mproj.to_array());
+
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
             gl.LoadIdentity();
             gl.MultMatrix(mview.to_array());

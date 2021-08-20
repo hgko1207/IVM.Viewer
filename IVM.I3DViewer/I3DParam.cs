@@ -47,8 +47,9 @@ namespace IVM.Studio.I3D
         public float AXIS_THICKNESS = 2.0f;
 
         // camera
-        public float CAMERA_SCALE_FACTOR = 1.8f;
-        public vec3 CAMERA_POS = new vec3(0, 0, -5.0f);
+        public float CAMERA_SCALE_FACTOR = 3.0f;
+        static public float CAMERA_DIST = -10.0f;
+        public vec3 CAMERA_POS = new vec3(0, 0, CAMERA_DIST);
         public vec3 CAMERA_ANGLE = new vec3(0, 0, 0);
         public vec2 CAMERA_VELOCITY = new vec2(0, 0);
     }

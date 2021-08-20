@@ -10,21 +10,24 @@ namespace IVM.Studio.I3D
     {
         public static MainWindow w;
 
+        private void LoadedTexture()
+        {
+            int width = (int)w.vw.scene.tex3D.GetWidth();
+            int height = (int)w.vw.scene.tex3D.GetHeight();
+            int depth = (int)w.vw.scene.tex3D.GetDepth();
+            float umWidth = w.vw.scene.meta.umWidth;
+            float umHeight = w.vw.scene.meta.umHeight;
+            float umPerPixelZ = w.vw.scene.meta.pixelPerUM_Z;
+
+            w.wcfclient.channel.OnMetaLoaded(width, height, depth, umWidth, umHeight, umPerPixelZ);
+        }
+
         public void OnOpen(string path, int lower, int upper, bool reverse)
         {
-            w.vw.Open(path, lower, upper, reverse);
-
             if (w.viewtype == (int)I3DViewType.MAIN_VIEW)
-            {
-                int width = (int)w.vw.scene.tex3D.GetWidth();
-                int height = (int)w.vw.scene.tex3D.GetHeight();
-                int depth = (int)w.vw.scene.tex3D.GetDepth();
-                float umWidth = w.vw.scene.meta.umWidth;
-                float umHeight = w.vw.scene.meta.umHeight;
-                float umPerPixelZ = w.vw.scene.meta.pixelPerUM_Z;
+                w.vw.LoadedFunc = LoadedTexture;
 
-                Task.Run(() => w.wcfclient.channel.OnMetaLoaded(width, height, depth, umWidth, umHeight, umPerPixelZ));
-            }
+            w.vw.Open(path, lower, upper, reverse);
         }
 
         public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)

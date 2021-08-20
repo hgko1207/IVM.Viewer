@@ -10,8 +10,6 @@ namespace IVM.Studio.I3D
     {
         I3DViewer view;
 
-        public int pixelWidth;
-        public int pixelHeight;
         public float umWidth;
         public float umHeight;
         public float pixelPerUM_X;
@@ -25,8 +23,6 @@ namespace IVM.Studio.I3D
 
         void Init()
         {
-            pixelWidth = 0;
-            pixelHeight = 0;
             umWidth = 0;
             umHeight = 0;
             pixelPerUM_X = 1.0f;
