@@ -82,6 +82,12 @@ namespace IVM.Studio.I3D
             w.vw.param.ALPHA_WEIGHT.y = g;
             w.vw.param.ALPHA_WEIGHT.z = b;
             w.vw.param.ALPHA_WEIGHT.w = a;
+
+            // 0 ~ 100 -> 0 ~ 1
+            w.vw.param.ALPHA_BLEND.x = w.vw.param.ALPHA_WEIGHT.x * 0.01f;
+            w.vw.param.ALPHA_BLEND.y = w.vw.param.ALPHA_WEIGHT.y * 0.01f;
+            w.vw.param.ALPHA_BLEND.z = w.vw.param.ALPHA_WEIGHT.z * 0.01f;
+            w.vw.param.ALPHA_BLEND.w = w.vw.param.ALPHA_WEIGHT.w * 0.01f;
         }
 
         public void OnChangeAxisParam(bool visible, int textsize, float height, float thickness, float px, float py)

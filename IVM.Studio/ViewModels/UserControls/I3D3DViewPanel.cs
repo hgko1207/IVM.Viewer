@@ -225,7 +225,7 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        private float _DAPIAlphaValue = 10.0f;
+        private float _DAPIAlphaValue = 90.0f;
         public float DAPIAlphaValue
         {
             get => _DAPIAlphaValue;
@@ -233,12 +233,12 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref _DAPIAlphaValue, value))
                 {
-                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                    wcfserver.channel1.OnChangeAlphaWeight(100.0f - _DAPIAlphaValue, 100.0f - _GFPAlphaValue, 100.0f - _RFPAlphaValue, 100.0f - _NIRAlphaValue);
                 }
             }
         }
 
-        private float _GFPAlphaValue = 10.0f;
+        private float _GFPAlphaValue = 90.0f;
         public float GFPAlphaValue
         {
             get => _GFPAlphaValue;
@@ -246,12 +246,12 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref _GFPAlphaValue, value))
                 {
-                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                    wcfserver.channel1.OnChangeAlphaWeight(100.0f - _DAPIAlphaValue, 100.0f - _GFPAlphaValue, 100.0f - _RFPAlphaValue, 100.0f - _NIRAlphaValue);
                 }
             }
         }
 
-        private float _RFPAlphaValue = 10.0f;
+        private float _RFPAlphaValue = 90.0f;
         public float RFPAlphaValue
         {
             get => _RFPAlphaValue;
@@ -259,12 +259,12 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref _RFPAlphaValue, value))
                 {
-                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                    wcfserver.channel1.OnChangeAlphaWeight(100.0f - _DAPIAlphaValue, 100.0f - _GFPAlphaValue, 100.0f - _RFPAlphaValue, 100.0f - _NIRAlphaValue);
                 }
             }
         }
 
-        private float _NIRAlphaValue = 10.0f;
+        private float _NIRAlphaValue = 90.0f;
         public float NIRAlphaValue
         {
             get => _NIRAlphaValue;
@@ -272,7 +272,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (SetProperty(ref _NIRAlphaValue, value))
                 {
-                    wcfserver.channel1.OnChangeAlphaWeight(_DAPIAlphaValue, _GFPAlphaValue, _RFPAlphaValue, _NIRAlphaValue);
+                    wcfserver.channel1.OnChangeAlphaWeight(100.0f - _DAPIAlphaValue, 100.0f - _GFPAlphaValue, 100.0f - _RFPAlphaValue, 100.0f - _NIRAlphaValue);
                 }
             }
         }

@@ -152,7 +152,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.ALPHA_WEIGHT.x = (float)e.NewValue / 10.0f;
+            vw.param.ALPHA_WEIGHT.x = (float)e.NewValue;
+            vw.param.ALPHA_BLEND.x = vw.param.ALPHA_WEIGHT.x * 0.01f;
             AlphaWeightR.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.x);
         }
 
@@ -161,7 +162,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.ALPHA_WEIGHT.y = (float)e.NewValue / 10.0f;
+            vw.param.ALPHA_WEIGHT.y = (float)e.NewValue;
+            vw.param.ALPHA_BLEND.y = vw.param.ALPHA_WEIGHT.y * 0.01f;
             AlphaWeightG.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.y);
         }
 
@@ -170,7 +172,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.ALPHA_WEIGHT.z = (float)e.NewValue / 10.0f;
+            vw.param.ALPHA_WEIGHT.z = (float)e.NewValue;
+            vw.param.ALPHA_BLEND.z = vw.param.ALPHA_WEIGHT.z * 0.01f;
             AlphaWeightB.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.z);
         }
 

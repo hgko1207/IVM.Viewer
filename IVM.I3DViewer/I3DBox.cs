@@ -608,6 +608,7 @@ namespace IVM.Studio.I3D
 
             gl.Uniform4(shader.GetUniformLocation(gl, "THRESHOLD_INTENSITY_MIN"), tmin.x, tmin.y, tmin.z, tmin.w); // uniform4
             gl.Uniform4(shader.GetUniformLocation(gl, "THRESHOLD_INTENSITY_MAX"), tmax.x, tmax.y, tmax.z, tmax.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "ALPHA_BLEND"), view.param.ALPHA_BLEND.x, view.param.ALPHA_BLEND.y, view.param.ALPHA_BLEND.z, view.param.ALPHA_BLEND.w);
             gl.Uniform4(shader.GetUniformLocation(gl, "ALPHA_WEIGHT"), view.param.ALPHA_WEIGHT.x, view.param.ALPHA_WEIGHT.y, view.param.ALPHA_WEIGHT.z, view.param.ALPHA_WEIGHT.w); // uniform4
             gl.Uniform4(shader.GetUniformLocation(gl, "BAND_ORDER"), view.param.BAND_ORDER.x, view.param.BAND_ORDER.y, view.param.BAND_ORDER.z, view.param.BAND_ORDER.w); // uniform4
             gl.Uniform4(shader.GetUniformLocation(gl, "BAND_VISIBLE"), view.param.BAND_VISIBLE.x, view.param.BAND_VISIBLE.y, view.param.BAND_VISIBLE.z, view.param.BAND_VISIBLE.w); // uniform4

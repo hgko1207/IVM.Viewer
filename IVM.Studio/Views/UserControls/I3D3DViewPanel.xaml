@@ -190,7 +190,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="1" Grid.Column="5" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding DAPILevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="1" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="1" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="1" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding DAPIAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- GFP -->
@@ -223,7 +223,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="5" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding GFPLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="2" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding GFPAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="2" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding GFPAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding GFPAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- RFP -->
@@ -256,7 +256,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="3" Grid.Column="5" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding RFPLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="3" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding RFPAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="3" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding RFPAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="3" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding RFPAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- NIR -->
@@ -289,7 +289,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="5" Margin="5 0" Style="{StaticResource HistogramEdit}" Value="{Binding NIRLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="4" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding NIRAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="4" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding NIRAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding NIRAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
         </StackPanel>

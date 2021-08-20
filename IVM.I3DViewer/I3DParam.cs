@@ -9,7 +9,8 @@ namespace IVM.Studio.I3D
         public vec4 THRESHOLD_INTENSITY_MIN = new vec4(0, 0, 0, 0);
         public vec4 THRESHOLD_INTENSITY_MAX = new vec4(255, 255, 255, 255);
         public float PER_PIXEl_ITERATION = 800;
-        public vec4 ALPHA_WEIGHT = new vec4(20.0f, 20.0f, 20.0f, 20.0f);
+        public vec4 ALPHA_WEIGHT = new vec4(10.0f, 10.0f, 10.0f, 10.0f);
+        public vec4 ALPHA_BLEND = new vec4(0.1f, 0.1f, 0.1f, 0.1f);
         public vec4 BAND_ORDER = new vec4(0, 1, 2, 3);
         public vec4 BAND_VISIBLE = new vec4(1, 1, 1, 0);
         public float RENDER_MODE = 1; // 0: blending 1: added-color
