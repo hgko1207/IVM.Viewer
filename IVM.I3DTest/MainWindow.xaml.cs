@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace IVM.Studio.I3D
 
         private void Control_loaded(object sender, RoutedEventArgs e)
         {
-            vw.Open(@"..\..\..\..\data\4d");
+            vw.Open(@"..\..\..\..\data\t");
 
             AxisChkBtn.IsChecked = true;
             BoxChkBtn.IsChecked = true;
@@ -302,10 +303,12 @@ namespace IVM.Studio.I3D
             SliceZ.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.z);
         }
 
-        int testFidx = 0;
+        //int testFidx = 0;
+        bool record = false;
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
+            /*
             List<string> flst = new List<string>();
             //flst.Add(@"..\..\..\..\data\01");
             //flst.Add(@"..\..\..\..\data\02");
@@ -321,6 +324,42 @@ namespace IVM.Studio.I3D
             testFidx += 1;
             if (testFidx >= flst.Count)
                 testFidx = 0;
+            */
+
+            /*
+            vw.Measure(new Size(300, 300));
+            vw.Arrange(new Rect(new Size(300, 300)));
+            RenderTargetBitmap bmp = new RenderTargetBitmap(300, 300, 96, 96, PixelFormats.Pbgra32);
+
+            //RenderTargetBitmap bmp = new RenderTargetBitmap((int)vw.ActualWidth, (int)vw.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+
+            bmp.Render(vw);
+
+            var enc = new PngBitmapEncoder();
+            //var enc = new JpegBitmapEncoder();
+
+            enc.Frames.Add(BitmapFrame.Create(bmp));
+            using (Stream s = File.Create("test.png"))
+                enc.Save(s);
+            */
+
+            //vw.CaptureScreen("test.png");
+
+            if (!record)
+            {
+                string curdir = Directory.GetCurrentDirectory();
+
+                vw.StartRecordVideo(curdir + @"\test.mp4");
+                record = true;
+                this.TestBtn.Content = "TEST (STOP)";
+            }
+            else
+            {
+                vw.StopRecordVideo();
+                record = false;
+                this.TestBtn.Content = "TEST";
+            }
+
         }
     }
 }

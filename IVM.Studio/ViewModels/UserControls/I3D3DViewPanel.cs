@@ -3,6 +3,7 @@ using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views.UserControls;
+using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -283,6 +284,9 @@ namespace IVM.Studio.ViewModels.UserControls
         
         public ICommand SlicePrevStepCommand { get; private set; }
         public ICommand SliceNextStepCommand { get; private set; }
+        public ICommand Export3DCommand { get; private set; }
+        public ICommand ExportSliceCommand { get; private set; }
+        
 
         bool subscribing = false;
 
@@ -311,6 +315,37 @@ namespace IVM.Studio.ViewModels.UserControls
 
             SlicePrevStepCommand = new DelegateCommand(SlicePrevStep);
             SliceNextStepCommand = new DelegateCommand(SliceNextStep);
+
+            Export3DCommand = new DelegateCommand(Export3D);
+            ExportSliceCommand = new DelegateCommand(ExportSlice);
+        }
+
+        private void Export3D()
+        {
+            VistaSaveFileDialog dlg = new VistaSaveFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "PNG image file(*.png)|*.png|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg|BMP image file(*.bmp)|*.bmp",
+            };
+            if (dlg.ShowDialog().GetValueOrDefault())
+            {
+                wcfserver.channel1.OnCaptureScreen(dlg.FileName);
+                //displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+        }
+
+        private void ExportSlice()
+        {
+            VistaSaveFileDialog dlg = new VistaSaveFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "PNG image file(*.png)|*.png|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg|BMP image file(*.bmp)|*.bmp",
+            };
+            if (dlg.ShowDialog().GetValueOrDefault())
+            {
+                wcfserver.channel2.OnCaptureScreen(dlg.FileName);
+                //displayingImageGDI.Save(dlg.FileName, System.Drawing.Imaging.ImageFormat.Png);
+            }
         }
 
         private void SliceNextStep()

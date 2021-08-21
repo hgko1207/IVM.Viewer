@@ -226,9 +226,7 @@
                     x:Name="SliceZSlider" ValueChanged="SliceZSlider_ValueChanged" />
         </Grid>
         <StackPanel Grid.Row="6">
-            <Button Click="Test_Click">
-                TEST
-            </Button>
+            <Button x:Name="TestBtn" Click="Test_Click" Content="TEST"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -61,7 +61,7 @@
 
                 <DockPanel Margin="0 0 0 12">
                     <TextBlock DockPanel.Dock="Left" Text="Rotation" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                    <dx:SimpleButton Content="3D Export" Style="{StaticResource GrayGradientButton}" 
+                    <dx:SimpleButton Content="3D Export" Style="{StaticResource GrayGradientButton}" Command="{Binding Export3DCommand}"
                                      Width="80" Height="28" HorizontalAlignment="Right" />
                 </DockPanel>
 
@@ -94,7 +94,7 @@
 
                 <DockPanel Margin="0 0 0 12">
                     <TextBlock DockPanel.Dock="Left" Text="Slice" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                    <dx:SimpleButton Content="Slice Export" Style="{StaticResource GrayGradientButton}" 
+                    <dx:SimpleButton Content="Slice Export" Style="{StaticResource GrayGradientButton}" Command="{Binding ExportSliceCommand}"
                                      Width="90" Height="28" HorizontalAlignment="Right" />
                 </DockPanel>
 

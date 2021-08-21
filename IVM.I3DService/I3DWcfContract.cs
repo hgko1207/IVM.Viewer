@@ -30,6 +30,9 @@ namespace IVM.Studio.Services
         void OnOpen(string path, int lower, int upper, bool reverse);
 
         [OperationContract]
+        void OnCaptureScreen(string path);
+
+        [OperationContract]
         void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
 
         [OperationContract]

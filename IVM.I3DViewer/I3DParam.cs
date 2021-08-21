@@ -5,7 +5,7 @@ namespace IVM.Studio.I3D
     public class I3DParam
     {
         // render
-        public vec3 BG_COLOR = new vec3(0.075f, 0.075f, 0.075f);
+        public vec3 BG_COLOR = new vec3(0.0f, 0.0f, 0.0f);
         public vec4 THRESHOLD_INTENSITY_MIN = new vec4(0, 0, 0, 0);
         public vec4 THRESHOLD_INTENSITY_MAX = new vec4(255, 255, 255, 255);
         public float PER_PIXEl_ITERATION = 800;

@@ -6,7 +6,7 @@
              xmlns:sharpGL="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="512" d:DesignWidth="512">
-    <Grid Background="Gray">
+    <Grid Background="Black">
         <sharpGL:OpenGLControl
             x:Name="RenderTarget"
             OpenGLDraw="OpenGLControl_Draw" 

@@ -3,6 +3,7 @@ using IVM.Studio.Services;
 using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace IVM.Studio.I3D
 {
@@ -28,6 +29,11 @@ namespace IVM.Studio.I3D
                 w.vw.LoadedFunc = LoadedTexture;
 
             w.vw.Open(path, lower, upper, reverse);
+        }
+
+        public void OnCaptureScreen(string path)
+        {
+            w.vw.CaptureScreen(path);
         }
 
         public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)
@@ -136,6 +142,7 @@ namespace IVM.Studio.I3D
         public void OnChangeBackgroundParam(float r, float g, float b, float a)
         {
             w.vw.param.BG_COLOR = new vec3(r, g, b);
+            w.vw.Background = new SolidColorBrush(Color.FromScRgb(r, g, b, 1));
         }
 
         public void OnChangeSliceDepth(float x, float y, float z)
