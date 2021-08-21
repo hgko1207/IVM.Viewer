@@ -506,14 +506,14 @@ namespace IVM.Studio.Models
             CropRectangleEnabled = true;
 
             PenThickness = 2;
-            PenColor = WPFDrawing.Colors.Blue;
+            PenColor = WPFDrawing.Colors.White;
 
             TextFontSize = 12;
-            TextColor = WPFDrawing.Colors.Blue;
+            TextColor = WPFDrawing.Colors.White;
 
             EraserThickness = 20;
 
-            DrawColor = WPFDrawing.Colors.Blue;
+            DrawColor = WPFDrawing.Colors.White;
             DrawThickness = 2;
 
             ScaleBarSize = 100;

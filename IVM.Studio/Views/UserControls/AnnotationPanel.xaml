@@ -39,21 +39,16 @@
                                         AllowDefaultButton="False" Width="30" Padding="4 0"
                                         MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
                     <dx:SimpleButton DataContext="{Binding AnnotationInfo}" Style="{StaticResource ToggleButton}" Margin="12 0 0 0" IsChecked="{Binding PenEnabled}"/>
-                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding PenThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="55" Margin="16 0 0 0"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding PenThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" IsFloatValue="False" Width="55" Margin="16 0 0 0"/>
                     <TextBlock Text="pt" VerticalAlignment="Center" Margin="5 0 0 0"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                    <TextBlock Text="Text" Width="45" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                    <dxe:PopupColorEdit DataContext="{Binding AnnotationInfo}" Color="{Binding TextColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ColumnCount="10" ShowMoreColorsButton="True" AllowDefaultButton="False" Width="30" Padding="4 0"
-                                        MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
-                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" Style="{StaticResource ToggleButton}" Margin="12 0 0 0" IsChecked="{Binding TextEnabled}"/>
-                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding TextFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="55" Margin="16 0 0 0"/>
+                    <TextBlock Text="Eraser" Width="40" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" Style="{StaticResource ToggleButton}" Margin="57 0 0 0" IsChecked="{Binding EraserEnabled}"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding EraserThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" IsFloatValue="False" Width="55" Margin="16 0 0 0"/>
                     <TextBlock Text="pt" VerticalAlignment="Center" Margin="5 0 0 0"/>
                 </StackPanel>
-
-                <dxe:ComboBoxEdit ItemsSource="{Binding FontItemList}" EditValue="{Binding SelectedFontItem}" ShowSizeGrip="True" IsTextEditable="False" 
-                                  HorizontalAlignment="Right" Margin="0 8 0 0" Width="120"/>
             </StackPanel>
 
             <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="15 0" />
@@ -75,14 +70,19 @@
                     <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding DrawLineEnabled}" Style="{StaticResource IconToggleButton}" 
                                      Glyph="../../Resources/Images/line.png"/>
 
-                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding DrawThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="50" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding DrawThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" IsFloatValue="False" Width="55" Margin="12 0 0 0"/>
                     <TextBlock Text="pt" VerticalAlignment="Center" Margin="5 0 0 0"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                    <TextBlock Text="Eraser" Width="40" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" Style="{StaticResource ToggleButton}" Margin="12 0 0 0" IsChecked="{Binding EraserEnabled}"/>
-                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding EraserThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="50" Margin="12 0 0 0"/>
+
+                    <TextBlock Text="Text" Width="45" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+                    <dxe:PopupColorEdit DataContext="{Binding AnnotationInfo}" Color="{Binding TextColor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ColumnCount="10" ShowMoreColorsButton="True" AllowDefaultButton="False" Width="30" Padding="4 0"
+                                        MoreColorsButtonContent="Color picker" ChipSize="Medium" DisplayMode="Color" Margin="10 0 0 0"/>
+                    <dxe:ComboBoxEdit ItemsSource="{Binding FontItemList}" EditValue="{Binding SelectedFontItem}" ShowSizeGrip="True" IsTextEditable="False" 
+                                  HorizontalAlignment="Right" Margin="10 0 0 0" Width="70"/>
+                    <dx:SimpleButton DataContext="{Binding AnnotationInfo}" Style="{StaticResource ToggleButton}" Margin="4 0 0 0" IsChecked="{Binding TextEnabled}"/>
+                    <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding TextFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" IsFloatValue="False" Width="55" Margin="12 0 0 0"/>
                     <TextBlock Text="pt" VerticalAlignment="Center" Margin="5 0 0 0"/>
                 </StackPanel>
 
@@ -113,21 +113,21 @@
                 <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="60" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
                 <TextBlock Text="μm" VerticalAlignment="Center" Margin="4 0 0 0"/>
 
-                <TextBlock Text="Thickness" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
+                <TextBlock Text="Thickness" VerticalAlignment="Center" FontSize="13" Margin="15 0 0 0"/>
                 <dxe:SpinEdit DataContext="{Binding AnnotationInfo}" Value="{Binding ScaleBarThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" IsFloatValue="False" Width="45" Margin="5 0 0 0" HorizontalContentAlignment="Left"/>
                 <TextBlock Text="Pixel" VerticalAlignment="Center" Margin="4 0 0 0"/>
+
+                <TextBlock Text="Label" VerticalAlignment="Center" FontSize="13" Margin="15 0 0 0"/>
+                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ScaleBarLabel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="5 0 0 0">
+                    <dxmvvm:Interaction.Behaviors>
+                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ScaleBarLabelType}" SortMode="DisplayName"/>
+                    </dxmvvm:Interaction.Behaviors>
+                </dxe:ComboBoxEdit>
 
                 <TextBlock Text="Position" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
                 <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ScaleBarPosition, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="70" Margin="5 0 0 0">
                     <dxmvvm:Interaction.Behaviors>
                         <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:PositionType}" SortMode="DisplayName"/>
-                    </dxmvvm:Interaction.Behaviors>
-                </dxe:ComboBoxEdit>
-
-                <TextBlock Text="Label" VerticalAlignment="Center" FontSize="13" Margin="25 0 0 0"/>
-                <dxe:ComboBoxEdit DataContext="{Binding AnnotationInfo}" EditValue="{Binding ScaleBarLabel, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="60" Margin="5 0 0 0">
-                    <dxmvvm:Interaction.Behaviors>
-                        <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:ScaleBarLabelType}" SortMode="DisplayName"/>
                     </dxmvvm:Interaction.Behaviors>
                 </dxe:ComboBoxEdit>
             </StackPanel>

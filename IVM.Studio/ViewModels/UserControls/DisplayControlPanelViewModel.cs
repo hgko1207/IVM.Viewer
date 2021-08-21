@@ -1,4 +1,5 @@
-﻿using IVM.Studio.Models.Events;
+﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
 using IVM.Studio.Models.Views;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
@@ -50,6 +51,13 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
+        private VidioModeType selectedVidioMode;
+        public VidioModeType SelectedVidioMode
+        {
+            get => selectedVidioMode;
+            set => SetProperty(ref selectedVidioMode, value);
+        }
+
         public ICommand ResetZoomRatioCommand { get; private set; }
 
         private DisplayControlPanel view;
@@ -72,6 +80,8 @@ namespace IVM.Studio.ViewModels.UserControls
             SliderControlInfo = container.Resolve<DataManager>().SliderControlInfo;
 
             ZoomRatioValue = 100;
+
+            SelectedVidioMode = VidioModeType.ZS;
         }
 
         /// <summary>
