@@ -119,4 +119,15 @@ namespace IVM.Studio.Models
         [Description("0.75X")]
         Product_75
     }
+    public enum VidioModeType
+    {
+        [Description("ZS")]
+        ZS,
+        [Description("MS_ZS")]
+        MS_ZS,
+        [Description("MP_MS_ZS")]
+        MP_MS_ZS,
+        [Description("TL_MP_MS_ZS")]
+        TL_MP_MS_ZS
+    }
 }

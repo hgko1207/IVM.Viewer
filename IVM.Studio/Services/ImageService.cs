@@ -531,7 +531,7 @@ namespace IVM.Studio.Services
         /// <param name="xAxis"></param>
         /// <param name="yAxis"></param>
         public void DrawScaleBar(Bitmap image, int fOVSizeX, int fOVSizeY, int length, int thickness, int margin,
-            bool xAxis, bool yAxis, PositionType positionType, ScaleBarLabelType labelType)
+            bool xAxis, bool yAxis, PositionType positionType, ScaleBarLabelType labelType, int fontSize, WPFDrawing.Color color)
         {
             using (Graphics graphics = Graphics.FromImage(image))
             using (Pen pen = new Pen(Brushes.White, thickness))
@@ -550,13 +550,13 @@ namespace IVM.Studio.Services
                 if (labelType != ScaleBarLabelType.None)
                 {
                     string text = (labelType == ScaleBarLabelType.μm ? length : length / 1000) + " " + labelType.ToString();
-                    using (Font font = new Font("돋움", 14))
+                    using (Font font = new Font("돋움", fontSize))
                     {
                         SizeF size = graphics.MeasureString(text, font);
                         float left = (positionType == PositionType.RIGHT ? startPoint.X - (scaleBarX.Width / 2) : startPoint.X + (scaleBarX.Width / 2)) - size.Width / 2f;
                         float top = canvasHeight - (margin * 2) - thickness - size.Height / 2f;
 
-                        using (Brush brush = new SolidBrush(Color.White))
+                        using (Brush brush = new SolidBrush(ConvertWPFColorToGDI(color)))
                         {
                             graphics.DrawString(text, font, brush, new PointF(left, top));
                         }
@@ -582,7 +582,7 @@ namespace IVM.Studio.Services
                 int canvasWidth = image.Width;
 
                 SizeF size = graphics.MeasureString(text, font);
-                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) - margin : margin, margin);
                 
                 float left = startPoint.X - size.Width / 2f;
                 float top = startPoint.Y - size.Height / 2f;
@@ -611,7 +611,7 @@ namespace IVM.Studio.Services
                 int canvasWidth = image.Width;
 
                 SizeF size = graphics.MeasureString(text, font);
-                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) - margin : margin, margin);
 
                 float left = startPoint.X - size.Width / 2f;
                 float top = startPoint.Y - size.Height / 2f;

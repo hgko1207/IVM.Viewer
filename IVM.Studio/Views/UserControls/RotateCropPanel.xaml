@@ -38,12 +38,13 @@
             <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding CropTriangleEnabled}" Style="{StaticResource IconToggleButton}" 
                              Glyph="../../Resources/Images/triangle.png" ToolTip="Crop Triangle" Margin="5 0 0 0"/>
 
+            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding CropEnabled}" Content="Crop" Style="{StaticResource ToggleButton}" Width="60" Margin="10 0 0 0"/>
             <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding CropInvertEnabled}" Content="Invert" Style="{StaticResource ToggleButton}" Width="60" Margin="10 0 0 0"/>
-            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding AllCropEnabled}" Content="All" Style="{StaticResource ToggleButton}" Width="60" Margin="5 0 0 0" />
+
+            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="Save Image" Style="{StaticResource SkyGradientButton}" 
+                             Width="90" Margin="10 0 0 0" Command="{Binding ExportCropCommand}"/>
             
-            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding CropEnabled}" Content="Crop" Style="{StaticResource ToggleButton}" Width="60" Margin="15 0 0 0"/>
-            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="Export" Style="{StaticResource GrayGradientButton}" 
-                             Width="60" Margin="10 0 0 0" Command="{Binding ExportCropCommand}"/>
+            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding AllCropEnabled}" Content="Save Sequence" Style="{StaticResource ToggleButton}" Width="110" Margin="5 0 0 0" />
         </StackPanel>
     </StackPanel>
 </UserControl>

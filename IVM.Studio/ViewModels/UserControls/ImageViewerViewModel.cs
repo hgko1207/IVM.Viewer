@@ -398,16 +398,16 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     // 스케일 바
                     if (annotationInfo.ScaleBarEnabled && fovSizeX > 0 && fovSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fovSizeX && scaleBarSize < fovSizeY)
-                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 9, 
-                            annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel);
+                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 30, 
+                            annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel, annotationInfo.TextFontSize, annotationInfo.TextColor);
 
                     // TimeStack
                     if (annotationInfo.TimeStampEnabled)
-                        imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
+                        imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 30);
 
                     // ZStackLabel
                     if (annotationInfo.ZStackLabelEnabled)
-                        imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
+                        imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 30);
 
                     displayingImageGDI?.Dispose();
                     displayingImageGDI = new Bitmap(bitmap);
@@ -1161,16 +1161,16 @@ namespace IVM.Studio.ViewModels.UserControls
 
                         // 스케일 바
                         if (annotationInfo.ScaleBarEnabled && fovSizeX > 0 && fovSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fovSizeX && scaleBarSize < fovSizeY)
-                            imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 9,
-                                annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel);
+                            imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 30,
+                                annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel, annotationInfo.TextFontSize, annotationInfo.TextColor);
 
                         // TimeStack
                         if (annotationInfo.TimeStampEnabled)
-                            imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
+                            imageService.DrawTimeStampLabel(bitmap, annotationInfo.TimeStampText, annotationInfo.TimeStampPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 30);
 
                         // ZStackLabel
                         if (annotationInfo.ZStackLabelEnabled)
-                            imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 9);
+                            imageService.DrawZStackLabel(bitmap, annotationInfo.ZStackLabelText, annotationInfo.ZStackLabelPosition, annotationInfo.TextFontSize, annotationInfo.TextColor, 30);
 
                         Bitmap displayingImageGDI = new Bitmap(bitmap);
                         return displayingImageGDI;

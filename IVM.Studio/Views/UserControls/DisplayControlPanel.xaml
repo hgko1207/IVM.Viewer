@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
+             xmlns:model="clr-namespace:IVM.Studio.Models"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
@@ -174,10 +176,20 @@
                             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Times" Margin="5 0 0 0"/>
                         </StackPanel>
                     </StackPanel>
-
-                    <dx:SimpleButton Style="{StaticResource SkyGradientButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="80">
-                        <TextBlock TextAlignment="Center" FontSize="12">Video<LineBreak/>Export</TextBlock>
-                    </dx:SimpleButton>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 25 0 0" HorizontalAlignment="Right">
+                            <dxe:ComboBoxEdit EditValue="{Binding SelectedVidioMode}" ShowSizeGrip="True" IsTextEditable="False" Width="100" Height="28">
+                                <dxmvvm:Interaction.Behaviors>
+                                    <dxmvvm:EnumItemsSourceBehavior EnumType="{x:Type model:VidioModeType}"/>
+                                </dxmvvm:Interaction.Behaviors>
+                            </dxe:ComboBoxEdit>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0 10 0 0" HorizontalAlignment="Right">
+                            <dx:SimpleButton Style="{StaticResource SkyGradientButton}" VerticalAlignment="Bottom" Width="80">
+                                <TextBlock TextAlignment="Center" FontSize="12">Video<LineBreak/>Export</TextBlock>
+                            </dx:SimpleButton>
+                        </StackPanel>
+                    </StackPanel>
                 </DockPanel>
             </StackPanel>
         </Grid>
