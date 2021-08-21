@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IVM.Studio.I3D
 {
@@ -13,8 +14,14 @@ namespace IVM.Studio.I3D
 
         List<Texture3D> textures;
         string imagePath = "";
-        
-        int currentTexIdx = 0;
+
+        public int currentTexIdx = 0;
+        bool loading = false;
+        public bool Loading
+        {
+            get => loading;
+        }
+
         DateTime lastTick = DateTime.Now;
 
         public I3DTex3D(I3DViewer v)
@@ -24,9 +31,14 @@ namespace IVM.Studio.I3D
             textures = new List<Texture3D>();
         }
 
-        private Texture3D LoadTexture(OpenGL gl, string imgPath)
+        private async Task<Texture3D> LoadTexture(OpenGL gl, string imgPath, int lower, int upper, bool reverse)
         {
             Texture3D tex = new Texture3D();
+            Bitmap3D b = await Task.Run(() => tex.LoadBitmapFromDisk(imgPath, lower, upper, reverse));
+
+            if (b == null)
+                return null;
+
             tex.Create(gl);
             tex.Bind(gl);
             tex.SetParameter(gl, OpenGL.GL_TEXTURE_MIN_FILTER, OpenGL.GL_LINEAR);
@@ -34,7 +46,7 @@ namespace IVM.Studio.I3D
             tex.SetParameter(gl, OpenGL.GL_TEXTURE_WRAP_S, OpenGL.GL_CLAMP_TO_EDGE);
             tex.SetParameter(gl, OpenGL.GL_TEXTURE_WRAP_T, OpenGL.GL_CLAMP_TO_EDGE);
             tex.SetParameter(gl, OpenGL.GL_TEXTURE_WRAP_R, OpenGL.GL_CLAMP_TO_EDGE);
-            tex.SetImage(gl, imgPath);
+            tex.SetImage(gl, b);
             tex.Unbind(gl);
 
             return tex;
@@ -55,16 +67,22 @@ namespace IVM.Studio.I3D
 
         private void Init()
         {
+            imagePath = "";
+
+            currentTexIdx = 0;
+
             foreach (Texture3D tex in textures)
                 tex.Delete(view.gl);
 
             textures.Clear();
         }
 
-        public bool Load(OpenGL gl, string imgPath)
+        public async Task<bool> Load(OpenGL gl, string imgPath, int lower, int upper, bool reverse)
         {
             if (!Directory.Exists(imgPath))
                 return false;
+
+            loading = true;
 
             Init();
 
@@ -78,8 +96,9 @@ namespace IVM.Studio.I3D
                     {
                         imagePath = imgPath;
 
-                        Texture3D tex = LoadTexture(gl, dir);
-                        textures.Add(tex);
+                        Texture3D tex = await LoadTexture(gl, dir, lower, upper, reverse);
+                        if (tex != null)
+                            textures.Add(tex);
                     }
                 }
             }
@@ -87,20 +106,37 @@ namespace IVM.Studio.I3D
             {
                 imagePath = imgPath;
 
-                Texture3D tex = LoadTexture(gl, imgPath);
-                textures.Add(tex);
+                Texture3D tex = await LoadTexture(gl, imgPath, lower, upper, reverse);
+                if (tex != null)
+                    textures.Add(tex);
             }
 
-            return true;
+            loading = false;
+
+            bool loaded = (textures.Count > 0);
+
+            return loaded;
         }
 
         public void Bind(OpenGL gl)
         {
+            if (loading)
+                return;
+
+            if (textures.Count <= 0)
+                return;
+
             textures[currentTexIdx].Bind(gl);
         }
 
         public void Unbind(OpenGL gl)
         {
+            if (loading)
+                return;
+
+            if (textures.Count <= 0)
+                return;
+
             textures[currentTexIdx].Unbind(gl);
 
             if ((DateTime.Now - lastTick).TotalMilliseconds > view.param.TIMELAPSE_TEXTURE_DELAY)
@@ -115,21 +151,42 @@ namespace IVM.Studio.I3D
 
         public uint GetWidth()
         {
+            if (loading)
+                return 0;
+
+            if (textures.Count <= 0)
+                return 0;
+
             return textures[0].Width;
         }
 
         public uint GetHeight()
         {
+            if (loading)
+                return 0;
+
+            if (textures.Count <= 0)
+                return 0;
+
             return textures[0].Height;
         }
 
         public uint GetDepth()
         {
+            if (loading)
+                return 0;
+
+            if (textures.Count <= 0)
+                return 0;
+
             return textures[0].Depth;
         }
 
         public string GetImagePath()
         {
+            if (loading)
+                return "";
+
             return imagePath;
         }
 

@@ -6,6 +6,7 @@ using System.Windows;
 using DevExpress.Xpf.Core;
 using Prism.Mvvm;
 using IVM.Studio.Mvvm;
+using System.Threading;
 
 namespace IVM.Studio
 {
@@ -14,6 +15,8 @@ namespace IVM.Studio
     /// </summary>
     public partial class App : PrismApplication
     {
+        Mutex mutex;
+
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
@@ -21,6 +24,16 @@ namespace IVM.Studio
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            // 중복실행 방지
+            bool createNew = false;
+            mutex = new Mutex(true, "IVM.Studio", out createNew);
+
+            if (!createNew)
+            {
+                Shutdown();
+                return;
+            }
+
             var theme = new Theme("IVM_Theme");
             theme.AssemblyName = "DevExpress.Xpf.Themes.IVM_Theme.v21.1";
             Theme.RegisterTheme(theme);

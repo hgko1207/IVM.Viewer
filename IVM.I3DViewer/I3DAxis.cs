@@ -1,6 +1,8 @@
 ﻿using SharpGL;
 using SharpGL.Enumerations;
 using GlmNet;
+using System;
+using System.Collections.Generic;
 
 namespace IVM.Studio.I3D
 {
@@ -45,10 +47,12 @@ namespace IVM.Studio.I3D
             vertices[5].z = view.param.AXIS_HEIGHT;
         }
 
-        public void Render(OpenGL gl, mat4 mview)
+        public void Render(OpenGL gl, mat4 mview, mat4 mproj)
         {
             gl.MatrixMode(OpenGL.GL_PROJECTION);
             gl.LoadIdentity();
+            //gl.MultMatrix(mproj.to_array());
+
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
             gl.LoadIdentity();
             gl.MultMatrix(mview.to_array());
@@ -58,7 +62,7 @@ namespace IVM.Studio.I3D
             gl.Disable(OpenGL.GL_LIGHTING);
             gl.Disable(OpenGL.GL_TEXTURE_2D);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
-            gl.LineWidth(2.0f);
+            gl.LineWidth(view.param.AXIS_THICKNESS);
 
             gl.PolygonMode(FaceMode.FrontAndBack, PolygonMode.Lines);
             gl.Begin(BeginMode.Lines);
@@ -86,7 +90,7 @@ namespace IVM.Studio.I3D
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = view.param.TEXT_SIZE;
+            int fs = view.param.AXIS_TEXT_SIZE;
 
             vec4 px = mview * new vec4(vertices[1].x, vertices[1].y, vertices[1].z, 1);
             px.x = (px.x + 1.0f) / 2.0f * aw;
@@ -102,6 +106,36 @@ namespace IVM.Studio.I3D
             pz.x = (pz.x + 1.0f) / 2.0f * aw;
             pz.y = (pz.y + 1.0f) / 2.0f * ah;
             gl.DrawText((int)pz.x + mg, (int)pz.y, 0.0f, 0.0f, 1.0f, "Courier New", fs, "Z");
+        }
+
+        public void RenderTimelapse(OpenGL gl)
+        {
+            gl.MatrixMode(OpenGL.GL_PROJECTION);
+            gl.LoadIdentity();
+            //gl.MultMatrix(mproj.to_array());
+
+            gl.MatrixMode(OpenGL.GL_MODELVIEW);
+            gl.LoadIdentity();
+            //gl.MultMatrix(mview.to_array());
+
+            // render text
+            float px = (float)view.ActualWidth * view.param.TIMELAPSE_POS.x;
+            float py = (float)view.ActualHeight * view.param.TIMELAPSE_POS.y;
+            int fs = view.param.TIMELAPSE_TEXT_SIZE;
+            vec4 fc = view.param.TIMELAPSE_TEXT_COLOR;
+
+            int tidx = view.scene.tex3D.currentTexIdx;
+            List<DateTime> times = view.scene.meta.timePerFrame;
+
+            DateTime? dt = null;
+            if (times.Count > tidx)
+                dt = times[tidx];
+
+            if (dt != null)
+            {
+                string timestr = dt.Value.ToString(view.param.TIMELAPSE_FORMAT);
+                gl.DrawText((int)px, (int)py, fc.x, fc.y, fc.z, "Courier New", fs, timestr);
+            }
         }
     }
 }

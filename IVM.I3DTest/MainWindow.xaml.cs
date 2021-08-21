@@ -31,12 +31,15 @@ namespace IVM.Studio.I3D
 
         private void Control_loaded(object sender, RoutedEventArgs e)
         {
-            vw.Open(@"..\..\..\..\data\t");
+            vw.Open(@"..\..\..\..\data\4d");
 
             AxisChkBtn.IsChecked = true;
             BoxChkBtn.IsChecked = true;
             GridChkBtn.IsChecked = true;
             ColocalChkBtn.IsChecked = false;
+
+            vw.param.AXIS_TEXT_SIZE = 12;
+            vw.param.GRID_TEXT_SIZE = 12;
         }
 
         private void Control_MouseMove(object sender, MouseEventArgs e)
@@ -149,7 +152,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.ALPHA_WEIGHT.x = (float)e.NewValue / 10.0f;
+            vw.param.ALPHA_WEIGHT.x = (float)e.NewValue;
+            vw.param.ALPHA_BLEND.x = vw.param.ALPHA_WEIGHT.x * 0.01f;
             AlphaWeightR.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.x);
         }
 
@@ -158,7 +162,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.ALPHA_WEIGHT.y = (float)e.NewValue / 10.0f;
+            vw.param.ALPHA_WEIGHT.y = (float)e.NewValue;
+            vw.param.ALPHA_BLEND.y = vw.param.ALPHA_WEIGHT.y * 0.01f;
             AlphaWeightG.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.y);
         }
 
@@ -167,7 +172,8 @@ namespace IVM.Studio.I3D
             if (vw.scene == null)
                 return;
 
-            vw.param.ALPHA_WEIGHT.z = (float)e.NewValue / 10.0f;
+            vw.param.ALPHA_WEIGHT.z = (float)e.NewValue;
+            vw.param.ALPHA_BLEND.z = vw.param.ALPHA_WEIGHT.z * 0.01f;
             AlphaWeightB.Text = string.Format("{0:0.00 }", vw.param.ALPHA_WEIGHT.z);
         }
 
@@ -294,6 +300,27 @@ namespace IVM.Studio.I3D
 
             vw.param.SLICE_DEPTH.z = (float)e.NewValue / 100.0f;
             SliceZ.Text = string.Format("{0:0.00 }", vw.param.SLICE_DEPTH.z);
+        }
+
+        int testFidx = 0;
+
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> flst = new List<string>();
+            //flst.Add(@"..\..\..\..\data\01");
+            //flst.Add(@"..\..\..\..\data\02");
+            //flst.Add(@"..\..\..\..\data\03");
+            //flst.Add(@"..\..\..\..\data\04");
+            //flst.Add(@"..\..\..\..\data\t");
+            //flst.Add(@"..\..\..\..\data\v");
+            //flst.Add(@"..\..\..\..\data\4d");
+            flst.Add(@"..\..\..\..\data\01");
+
+            vw.Open(flst[testFidx], -1, -1, true);
+
+            testFidx += 1;
+            if (testFidx >= flst.Count)
+                testFidx = 0;
         }
     }
 }

@@ -166,7 +166,7 @@
                     <TextBlock TextAlignment="Center" Text="(425-465)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="1" Grid.Column="1" Style="{Binding DAPIColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding DAPIColor}" Width="56" Height="30" Margin="4 0 0 0">
+                <dx:SimpleButton Grid.Row="1" Grid.Column="1" DataContext="{Binding I3DChannelInfo}" Style="{Binding DAPIColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding DAPIColor}" Width="56" Height="30" Margin="4 0 0 0">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -178,7 +178,7 @@
                         </dxb:PopupMenu>
                     </dxb:BarManager.DXContextMenu>
                 </dx:SimpleButton>
-                <dx:SimpleButton Grid.Row="1" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding DAPIVisible}"/>
+                <dx:SimpleButton Grid.Row="1" Grid.Column="2" DataContext="{Binding I3DChannelInfo}" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding DAPIVisible}"/>
 
                 <dxe:SpinEdit Grid.Row="1" Grid.Column="3" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding DAPILevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <dxe:TrackBarEdit Grid.Row="1" Grid.Column="4" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
@@ -190,7 +190,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="1" Grid.Column="5" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding DAPILevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="1" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="1" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding DAPIAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="1" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding DAPIAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- GFP -->
@@ -199,7 +199,7 @@
                     <TextBlock TextAlignment="Center" Text="(500-550)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{Binding GFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding GFPColor}" Width="56" Height="30" Margin="4 0 0 0">
+                <dx:SimpleButton Grid.Row="2" Grid.Column="1" DataContext="{Binding I3DChannelInfo}" Style="{Binding GFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding GFPColor}" Width="56" Height="30" Margin="4 0 0 0">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -211,7 +211,7 @@
                         </dxb:PopupMenu>
                     </dxb:BarManager.DXContextMenu>
                 </dx:SimpleButton>
-                <dx:SimpleButton Grid.Row="2" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding GFPVisible}"/>
+                <dx:SimpleButton Grid.Row="2" Grid.Column="2" DataContext="{Binding I3DChannelInfo}" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding GFPVisible}"/>
 
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="3" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding GFPLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <dxe:TrackBarEdit Grid.Row="2" Grid.Column="4" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
@@ -223,7 +223,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="5" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding GFPLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="2" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding GFPAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="2" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding GFPAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding GFPAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- RFP -->
@@ -232,7 +232,7 @@
                     <TextBlock TextAlignment="Center" Text="(582-618)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="3" Grid.Column="1" Style="{Binding RFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding RFPColor}" Width="56" Height="30" Margin="4 0 0 0">
+                <dx:SimpleButton Grid.Row="3" Grid.Column="1" DataContext="{Binding I3DChannelInfo}" Style="{Binding RFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding RFPColor}" Width="56" Height="30" Margin="4 0 0 0">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -244,7 +244,7 @@
                         </dxb:PopupMenu>
                     </dxb:BarManager.DXContextMenu>
                 </dx:SimpleButton>
-                <dx:SimpleButton Grid.Row="3" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding RFPVisible}"/>
+                <dx:SimpleButton Grid.Row="3" Grid.Column="2" DataContext="{Binding I3DChannelInfo}" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding RFPVisible}"/>
 
                 <dxe:SpinEdit Grid.Row="3" Grid.Column="3" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding RFPLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <dxe:TrackBarEdit Grid.Row="3" Grid.Column="4" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
@@ -256,7 +256,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="3" Grid.Column="5" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding RFPLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="3" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding RFPAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="3" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding RFPAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="3" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding RFPAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
                 <!-- NIR -->
@@ -265,7 +265,7 @@
                     <TextBlock TextAlignment="Center" Text="(663-733)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{Binding NIRColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding NIRColor}" Width="56" Height="30" Margin="4 0 0 0">
+                <dx:SimpleButton Grid.Row="4" Grid.Column="1" DataContext="{Binding I3DChannelInfo}" Style="{Binding NIRColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding NIRColor}" Width="56" Height="30" Margin="4 0 0 0">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -277,7 +277,7 @@
                         </dxb:PopupMenu>
                     </dxb:BarManager.DXContextMenu>
                 </dx:SimpleButton>
-                <dx:SimpleButton Grid.Row="4" Grid.Column="2" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding NIRVisible}"/>
+                <dx:SimpleButton Grid.Row="4" Grid.Column="2" DataContext="{Binding I3DChannelInfo}" Style="{StaticResource ToggleButton}" Width="48" ButtonKind="Toggle" Margin="4 0 0 0" IsChecked="{Binding NIRVisible}"/>
 
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="3" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding NIRLevelLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <dxe:TrackBarEdit Grid.Row="4" Grid.Column="4" Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
@@ -289,7 +289,7 @@
                     </dxe:TrackBarEdit.StyleSettings>
                 </dxe:TrackBarEdit>
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="5" Margin="5 0" Style="{StaticResource HistogramEdit}" Value="{Binding NIRLevelUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <Slider Grid.Row="4" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding NIRAlphaValue}" Minimum="0" Maximum="20" />
+                <Slider Grid.Row="4" Grid.Column="6" Margin="5 0" TickFrequency="0.1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" SelectionStart="0" Value="{Binding NIRAlphaValue}" Minimum="0" Maximum="100" />
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="7" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" Value="{Binding NIRAlphaValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </Grid>
         </StackPanel>

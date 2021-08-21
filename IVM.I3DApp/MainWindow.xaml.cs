@@ -68,6 +68,7 @@ namespace IVM.Studio.I3D
                 vw.param.RENDER_MODE = I3DRenderMode.OBLIQUE;
 
             vw.camera.updateFunc = UpdateCamera;
+            vw.scene.firstRenderFunc = FirstRender;
         }
 
         private void UpdateCamera()
@@ -80,6 +81,11 @@ namespace IVM.Studio.I3D
                 vw.param.CAMERA_POS.x, vw.param.CAMERA_POS.y, vw.param.CAMERA_POS.z,
                 vw.param.CAMERA_ANGLE.x, vw.param.CAMERA_ANGLE.y, vw.param.CAMERA_ANGLE.z,
                 vw.param.CAMERA_SCALE_FACTOR);
+        }
+
+        private void FirstRender()
+        {
+            Task.Run(() => wcfclient.channel.OnFirstRender(viewtype));
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

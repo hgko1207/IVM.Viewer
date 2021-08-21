@@ -129,6 +129,10 @@
     <Reference Include="ImageRegistration">
       <HintPath>..\DLL\ImageRegistration.dll</HintPath>
     </Reference>
+    <Reference Include="MWArray, Version=2.20.0.0, Culture=neutral, PublicKeyToken=e1d84a0da19db86f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\MWArray.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -163,6 +167,8 @@
     <Compile Include="Models\I3DPathInfo.cs" />
     <Compile Include="Models\MeasurementInfo.cs" />
     <Compile Include="Models\Thumb.cs" />
+    <Compile Include="Models\Views\I3DBackgroundInfo.cs" />
+    <Compile Include="Models\Views\I3DChannelInfo.cs" />
     <Compile Include="Models\Views\AnnotationInfo.cs" />
     <Compile Include="Models\Views\PostProcessingInfo.cs" />
     <Compile Include="Models\Views\SliderControlInfo.cs" />
@@ -207,6 +213,9 @@
     </Compile>
     <Compile Include="Views\ChannelHistogramWindow.xaml.cs">
       <DependentUpon>ChannelHistogramWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\I3D3DDisplayPanel.xaml.cs">
       <DependentUpon>I3D3DDisplayPanel.xaml</DependentUpon>
@@ -276,6 +285,10 @@
     <Page Include="Views\MainViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoadingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserControls\I3D3DDisplayPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -500,6 +513,9 @@
     <PackageReference Include="Vlc.DotNet.Wpf">
       <Version>3.0.0</Version>
     </PackageReference>
+    <PackageReference Include="WpfAnimatedGif">
+      <Version>2.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\reflect_horizontal_left.png" />
@@ -543,6 +559,8 @@
     <Content Include="ffmpeg\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="MWArray.dll" />
+    <Resource Include="Resources\Images\loading.gif" />
     <Resource Include="Resources\Images\line.png" />
     <Resource Include="Resources\Images\icon_2d.png" />
     <Resource Include="Resources\Images\icon_3d.png" />

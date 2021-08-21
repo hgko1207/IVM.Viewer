@@ -9,6 +9,7 @@ uniform vec3 BG_COLOR;
 uniform vec4 THRESHOLD_INTENSITY_MIN;
 uniform vec4 THRESHOLD_INTENSITY_MAX;
 uniform vec4 ALPHA_WEIGHT;
+uniform vec4 ALPHA_BLEND;
 uniform vec4 BAND_ORDER;
 uniform vec4 BAND_VISIBLE;
 uniform float PER_PIXEl_ITERATION;
@@ -43,9 +44,8 @@ void main()
     dir = dir / (iter - 1);
     vec4 bcol = vec4(BG_COLOR.x, BG_COLOR.y, BG_COLOR.z, 0.0f);
     
-    vec4 acc = vec4(-1, -1, -1, -1);
-    if (RENDER_MODE == 1)
-        acc = vec4(0, 0, 0, 0);
+    vec4 acc1 = vec4(-1, -1, -1, -1);
+    vec4 acc2 = vec4(0, 0, 0, 0);
 
     if (BOX_HEIGHT > 1)
         iter *= BOX_HEIGHT;
@@ -84,30 +84,28 @@ void main()
                 continue;
         }
 
-        if (RENDER_MODE == 0)
+        if (RENDER_MODE == 0 || RENDER_MODE == 1)
         {
-            acc = col / 255.0;
-        }
-        else if (RENDER_MODE == 1)
-        {
+            acc1 = col / 255.0;
+
             // if below intensity, that band will be hide
             if (THRESHOLD_INTENSITY_MIN.x <= col.x && col.x <= THRESHOLD_INTENSITY_MAX.x)
-                acc.x += col.x / 255.0 * wa.x;
+                acc2.x += col.x / 255.0 * wa.x;
 
             if (THRESHOLD_INTENSITY_MIN.y <= col.y && col.y <= THRESHOLD_INTENSITY_MAX.y)
-                acc.y += col.y / 255.0 * wa.y;
+                acc2.y += col.y / 255.0 * wa.y;
 
             if (THRESHOLD_INTENSITY_MIN.z <= col.z && col.z <= THRESHOLD_INTENSITY_MAX.z)
-                acc.z += col.z / 255.0 * wa.z;
+                acc2.z += col.z / 255.0 * wa.z;
 
             if (THRESHOLD_INTENSITY_MIN.w <= col.w && col.w <= THRESHOLD_INTENSITY_MAX.w)
-                acc.w += col.w / 255.0 * wa.z;
+                acc2.w += col.w / 255.0 * wa.z;
         }
 
         mark = true;
     }
 
-    vec4 ocol = acc;
+    vec4 ocol = acc1 * (ALPHA_BLEND) + acc2 * (1.0f - ALPHA_BLEND);
 
     if (!mark) discard;
 

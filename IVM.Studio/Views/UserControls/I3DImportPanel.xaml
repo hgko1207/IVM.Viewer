@@ -6,6 +6,7 @@
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
              xmlns:models="clr-namespace:IVM.Studio.Models"
              xmlns:util="clr-namespace:IVM.Studio.Utils"
@@ -20,44 +21,94 @@
         <dx:Format x:Key="valueFormat" Foreground="Gray" />
     </UserControl.Resources>
 
-    <Grid Margin="10">
+    <Grid Margin="8 2 8 2">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <StackPanel VerticalAlignment="Top">
             <TextBlock Text="Import Parameter Control" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
-            <DockPanel Margin="5 8 0 0">
-                <TextBlock DockPanel.Dock="Left" Text="File Path" VerticalAlignment="Center" Width="70"/>
+            <DockPanel Margin="5 2 0 0">
+                <TextBlock DockPanel.Dock="Left" Text="File Path" VerticalAlignment="Center" Width="80"/>
                 <DockPanel>
                     <dx:SimpleButton DockPanel.Dock="Right"
                                      Style="{StaticResource GrayGradientButton}"
                                      Command="{Binding OpenFolderCommand}"
                                      Width="80" Height="28" Content="Select" Margin="15 0 0 0"/>
-                    <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                    <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="4 0 0 0">
                         <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding CurrentImgPath}" TextAlignment="Left" />
                     </Border>
                 </DockPanel>
             </DockPanel>
-        </StackPanel>
 
-        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 8" />
-
-        <StackPanel Grid.Row="2" VerticalAlignment="Center">
-            <DockPanel>
-                <TextBlock DockPanel.Dock="Left" Text="3D Data List" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-                <StackPanel HorizontalAlignment="Right">
-                    <dx:SimpleButton Content="Show" Style="{StaticResource GrayGradientButton}" 
-                                     Width="80" Height="28" VerticalAlignment="Center"
-                                     Command="{Binding OpenSelectedCommand}"/>
+            <DockPanel Margin="5 2 0 0">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock Text="Z-stack Slice #" VerticalAlignment="Center" Width="80"/>
+                    <dxe:SpinEdit Margin="4 -4 4 0" Width="55" MinValue="0" MaxValue="{Binding OpenSliceLimit}"
+                                  Style="{StaticResource HistogramEdit}" Value="{Binding OpenSliceLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <dxe:SpinEdit Margin="4 -4 4 0" Width="55" MinValue="0" MaxValue="{Binding OpenSliceLimit}"
+                                  Style="{StaticResource HistogramEdit}" Value="{Binding OpenSliceUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    <Border Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch" Margin="4 0 0 0">
+                        <TextBlock Style="{StaticResource GeneralTextBlock}" MinWidth="80" Text="{Binding OpenSliceText}" TextAlignment="Center" />
+                    </Border>
+                    <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" Margin="15 0 0 0" IsChecked="{Binding OpenReverse}"
+                                     Content="Reverse" HorizontalAlignment="Right" Width="80" ButtonKind="Toggle" />
+                </StackPanel>
+                <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Maximum="{Binding OpenSliceLimit}" Margin="5 0"
+                                  SelectionStart="{Binding OpenSliceLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}" 
+                                  SelectionEnd="{Binding OpenSliceUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}">
+                    <dxe:TrackBarEdit.StyleSettings>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                    </dxe:TrackBarEdit.StyleSettings>
+                </dxe:TrackBarEdit>
             </DockPanel>
 
-            <dxg:GridControl Height="145" ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 8 0 8"
+            <DockPanel Margin="5 2 0 0">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock Text="3D Alignment" VerticalAlignment="Center" Width="80"/>
+                    <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Margin="4 0 0 0" Command="{Binding RunAlignmentCommand}"
+                                    Content="Execute" Width="80" />
+                    <TextBlock Text="Reference Ch." VerticalAlignment="Center" Margin="25 0 0 0"/>
+                </StackPanel>
+
+                <dx:SimpleButton DockPanel.Dock="Right" Content="Activate" Width="80" ButtonKind="Toggle"
+                                 Style="{StaticResource ToggleButton}" Margin="15 0 0 0" IsChecked="{Binding OpenAlignment}"/>
+
+                <dxe:ComboBoxEdit SelectedIndex="0" Height="28" HorizontalAlignment="Stretch" Margin="8 -4 0 0" 
+                                  EditValue="{Binding OpenAlignmentRef, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <dxe:ComboBoxEditItem Content="DAPI"/>
+                    <dxe:ComboBoxEditItem Content="GFP"/>
+                    <dxe:ComboBoxEditItem Content="RFP"/>
+                    <dxe:ComboBoxEditItem Content="NIR"/>
+                </dxe:ComboBoxEdit>
+            </DockPanel>
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 0 0 0" />
+
+        <DockPanel Grid.Row="2">
+            <TextBlock DockPanel.Dock="Left" Text="3D Data List" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <StackPanel HorizontalAlignment="Right">
+                <dx:SimpleButton Content="Show" Style="{StaticResource GrayGradientButton}" 
+                                     Width="80" Height="28" VerticalAlignment="Center"
+                                     Command="{Binding OpenSelectedCommand}"/>
+            </StackPanel>
+        </DockPanel>
+
+        <Grid Grid.Row="3" HorizontalAlignment="Stretch">
+            <dxg:GridControl ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 2 0 0"
                              ItemsSource="{Binding ImgPathCollection}" CurrentItem="{Binding SelectedImgInfo}" SelectedItem="{Binding SelectedImgInfo}">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="SelectionChanged" Command="{Binding ChangedSelectedCommand}"/>
+                    <dxmvvm:EventToCommand EventName="CurrentItemChanged" Command="{Binding ChangedSelectedCommand}"/>
+                </dxmvvm:Interaction.Behaviors>
                 <dxg:GridControl.View>
                     <dxg:TableView />
                 </dxg:GridControl.View>
@@ -66,14 +117,16 @@
                         <dxg:GridColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Text="{Binding RowData.RowHandle.Value, Converter={StaticResource IndexFromOneConverter}}" />
+                                        Text="{Binding RowData.RowHandle.Value, Converter={StaticResource IndexFromOneConverter}}" />
                             </DataTemplate>
                         </dxg:GridColumn.CellTemplate>
                     </dxg:GridColumn>
-                    <dxg:GridColumn Header="Path" Width="2*" FieldName="Path"/>
+                    <dxg:GridColumn Header="Path" Width="*" FieldName="Path"/>
+                    <dxg:GridColumn Header="Dim" Width="50" FieldName="Dim"/>
+                    <dxg:GridColumn Header="Count" Width="50" FieldName="Count"/>
                 </dxg:GridControl.Columns>
             </dxg:GridControl>
-        </StackPanel>
+        </Grid>
     </Grid>
 
 </UserControl>

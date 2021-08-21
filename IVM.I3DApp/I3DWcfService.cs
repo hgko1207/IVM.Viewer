@@ -1,5 +1,6 @@
 ﻿using GlmNet;
 using IVM.Studio.Services;
+using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -9,19 +10,24 @@ namespace IVM.Studio.I3D
     {
         public static MainWindow w;
 
-        public void OnOpen(string path)
+        private void LoadedTexture()
         {
-            w.vw.Open(path);
+            int width = (int)w.vw.scene.tex3D.GetWidth();
+            int height = (int)w.vw.scene.tex3D.GetHeight();
+            int depth = (int)w.vw.scene.tex3D.GetDepth();
+            float umWidth = w.vw.scene.meta.umWidth;
+            float umHeight = w.vw.scene.meta.umHeight;
+            float umPerPixelZ = w.vw.scene.meta.pixelPerUM_Z;
 
+            w.wcfclient.channel.OnMetaLoaded(width, height, depth, umWidth, umHeight, umPerPixelZ);
+        }
+
+        public void OnOpen(string path, int lower, int upper, bool reverse)
+        {
             if (w.viewtype == (int)I3DViewType.MAIN_VIEW)
-            {
-                int width = (int)w.vw.scene.tex3D.GetWidth();
-                int height = (int)w.vw.scene.tex3D.GetHeight();
-                float umWidth = w.vw.scene.meta.umWidth;
-                float umHeight = w.vw.scene.meta.umHeight;
+                w.vw.LoadedFunc = LoadedTexture;
 
-                Task.Run(() => w.wcfclient.channel.OnMetaLoaded(width, height, umWidth, umHeight));
-            }
+            w.vw.Open(path, lower, upper, reverse);
         }
 
         public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)
@@ -76,6 +82,88 @@ namespace IVM.Studio.I3D
             w.vw.param.ALPHA_WEIGHT.y = g;
             w.vw.param.ALPHA_WEIGHT.z = b;
             w.vw.param.ALPHA_WEIGHT.w = a;
+
+            // 0 ~ 100 -> 0 ~ 1
+            w.vw.param.ALPHA_BLEND.x = w.vw.param.ALPHA_WEIGHT.x * 0.01f;
+            w.vw.param.ALPHA_BLEND.y = w.vw.param.ALPHA_WEIGHT.y * 0.01f;
+            w.vw.param.ALPHA_BLEND.z = w.vw.param.ALPHA_WEIGHT.z * 0.01f;
+            w.vw.param.ALPHA_BLEND.w = w.vw.param.ALPHA_WEIGHT.w * 0.01f;
+        }
+
+        public void OnChangeAxisParam(bool visible, int textsize, float height, float thickness, float px, float py)
+        {
+            w.vw.param.SHOW_AXIS = visible;
+            w.vw.param.AXIS_TEXT_SIZE = textsize;
+            w.vw.param.AXIS_HEIGHT = height;
+            w.vw.param.AXIS_THICKNESS = thickness;
+            w.vw.param.AXIS_POS = new vec3(px, py, 0);
+
+            w.vw.scene.UpdateModelviewMatrix();
+            w.vw.scene.UpdateMesh();
+        }
+
+        public void OnChangeBoxParam(float r, float g, float b, float a, float thickness)
+        {
+            w.vw.param.BOX_THICKNESS = thickness;
+            w.vw.param.GRID_THICKNESS = thickness;
+
+            w.vw.param.BOX_COLOR = new vec4(r, g, b, a);
+            w.vw.param.GRID_COLOR = new vec4(r, g, b, a);
+
+            if (a <= 0.0f)
+            {
+                w.vw.param.SHOW_BOX = false;
+                w.vw.param.SHOW_GRID = false;
+            }
+            else
+            {
+                w.vw.param.SHOW_BOX = true;
+                w.vw.param.SHOW_GRID = true;
+            }
+        }
+
+        public void OnChangeGridLabelParam(float r, float g, float b, float a, int fontsize)
+        {
+            w.vw.param.GRID_TEXT_COLOR = new vec4(r, g, b, a);
+            w.vw.param.GRID_TEXT_SIZE = fontsize;
+
+            if (a <= 0.0f)
+                w.vw.param.SHOW_GRID_TEXT = false;
+            else
+                w.vw.param.SHOW_GRID_TEXT = true;
+        }
+
+        public void OnChangeBackgroundParam(float r, float g, float b, float a)
+        {
+            w.vw.param.BG_COLOR = new vec3(r, g, b);
+        }
+
+        public void OnChangeSliceDepth(float x, float y, float z)
+        {
+            w.vw.param.SLICE_DEPTH = new vec3(x, y, z);
+        }
+
+        public void OnChangeGridSizeParam(float major, float minor)
+        {
+            w.vw.param.GRID_MAJOR_DIST = major;
+            w.vw.param.GRID_MINOR_DIST = minor;
+
+            w.vw.scene.UpdateModelviewMatrix();
+            w.vw.scene.UpdateMesh();
+        }
+
+        public void OnChangeTimelapseLabelParam(bool visible, float r, float g, float b, float a, int fontsize, string format, float px, float py, int msec)
+        {
+            w.vw.param.SHOW_TIMELAPSE = visible;
+            w.vw.param.TIMELAPSE_FORMAT = format;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.x = r;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.y = g;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.z = b;
+            w.vw.param.TIMELAPSE_TEXT_COLOR.w = a;
+            w.vw.param.TIMELAPSE_TEXT_SIZE = fontsize;
+            w.vw.param.TIMELAPSE_POS.x = px;
+            w.vw.param.TIMELAPSE_POS.y = py;
+            w.vw.param.TIMELAPSE_TEXTURE_DELAY = msec;
         }
     }
 }

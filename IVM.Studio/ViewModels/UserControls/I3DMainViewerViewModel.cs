@@ -30,19 +30,12 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             this.view = view;
 
-            EventAggregator.GetEvent<I3DOpenEvent>().Subscribe(Open, ThreadOption.UIThread);
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Subscribe(UpdateCamera);
         }
 
         public void OnUnloaded(I3DMainViewer view)
         {
-            EventAggregator.GetEvent<I3DOpenEvent>().Unsubscribe(Open);
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Unsubscribe(UpdateCamera);
-        }
-
-        private void Open(string path)
-        {
-            wcfserver.channel1.OnOpen(path);
         }
 
         private void UpdateCamera(I3DCameraUpdateParam p)

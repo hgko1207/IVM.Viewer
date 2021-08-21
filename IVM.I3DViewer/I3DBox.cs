@@ -20,8 +20,10 @@ namespace IVM.Studio.I3D
         const int vertCount = 24;
 
         // grid
-        vec3[] vertgrid = null;
-        vec3[] normgrid = null;
+        vec3[] vertgrid1 = null;
+        vec3[] vertgrid2 = null;
+        vec3[] normgrid1 = null;
+        vec3[] normgrid2 = null;
 
         // volume shader
         ShaderProgram shader;
@@ -317,11 +319,18 @@ namespace IVM.Studio.I3D
 
         public void CreateGrid(OpenGL gl)
         {
+            float um = view.scene.meta.pixelPerUM_X;
+
+            CreateGridInternal(gl, view.param.GRID_MAJOR_DIST / um, ref vertgrid1, ref normgrid1);
+            CreateGridInternal(gl, view.param.GRID_MINOR_DIST / um, ref vertgrid2, ref normgrid2);
+        }
+        private void CreateGridInternal(OpenGL gl, float dist, ref vec3[] vertgrid, ref vec3[] normgrid)
+        {
             if (!view.scene.IsLoaded())
                 return;
 
-            float dw = (float)view.param.GRID_DIST / (float)view.scene.tex3D.GetWidth();
-            float dh = (float)view.param.GRID_DIST / (float)view.scene.tex3D.GetDepth();
+            float dw = (float)dist / (float)view.scene.tex3D.GetWidth();
+            float dh = (float)dist / (float)view.scene.tex3D.GetDepth();
             List<vec3> vertlst = new List<vec3>();
             List<vec3> normlst = new List<vec3>();
 
@@ -430,7 +439,7 @@ namespace IVM.Studio.I3D
                 OpenGL.GL_LINE_BIT | OpenGL.GL_POLYGON_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             gl.Disable(OpenGL.GL_LIGHTING);
             gl.Disable(OpenGL.GL_TEXTURE_2D);
-            gl.LineWidth(1.0f);
+            gl.LineWidth(view.param.BOX_THICKNESS);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
             gl.Color(lcol.x, lcol.y, lcol.z, lcol.w);
 
@@ -442,6 +451,25 @@ namespace IVM.Studio.I3D
             gl.End();
             
             gl.PopAttrib();
+        }
+
+        private void RenderGridInternal(OpenGL gl, mat4 mobj, ref vec3[] vertgrid, ref vec3[] normgrid)
+        {
+            for (int i = 0; i < vertgrid.Length / 2; ++i)
+            {
+                // 랜더링 전에 normal과 view vector cross 를 통한 culling 수행
+                vec4 v = new vec4(0, 0, 1, 0);
+                vec3 n = normgrid[i * 2];
+                vec4 o = new vec4(n.x, n.y, n.z, 0);
+                o = mobj * o;
+                o = glm.normalize(o);
+
+                if (glm.dot(v, o) > 0)
+                    continue;
+
+                gl.Vertex(vertgrid[i * 2 + 0].x, vertgrid[i * 2 + 0].y, vertgrid[i * 2 + 0].z);
+                gl.Vertex(vertgrid[i * 2 + 1].x, vertgrid[i * 2 + 1].y, vertgrid[i * 2 + 1].z);
+            }
         }
 
         public void RenderGrid(OpenGL gl, mat4 mproj, mat4 mview, mat4 mobj)
@@ -458,28 +486,28 @@ namespace IVM.Studio.I3D
                 OpenGL.GL_LINE_BIT | OpenGL.GL_POLYGON_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
             gl.Disable(OpenGL.GL_LIGHTING);
             gl.Disable(OpenGL.GL_TEXTURE_2D);
-            gl.LineWidth(1.0f);
             gl.DepthFunc(OpenGL.GL_ALWAYS);
-            gl.Color(view.param.GRID_COLOR.x, view.param.GRID_COLOR.y, view.param.GRID_COLOR.z, view.param.GRID_COLOR.w);
 
             gl.PolygonMode(FaceMode.FrontAndBack, PolygonMode.Lines);
 
+            float t1 = view.param.GRID_THICKNESS;
+            float t2 = 0.01f;
+
+            vec4 gc1 = view.param.GRID_COLOR * 0.8f; // more dark
+            vec4 gc2 = view.param.GRID_COLOR * 0.4f; // more more dark
+
+            // Minor-gridline
+            gl.LineWidth(t2);
+            gl.Color(gc2.x, gc2.y, gc2.z, gc2.w);
             gl.Begin(BeginMode.Lines);
-            for (int i = 0; i < vertgrid.Length / 2; ++i)
-            {
-                // 랜더링 전에 normal과 view vector cross 를 통한 culling 수행
-                vec4 v = new vec4(0, 0, 1, 0);
-                vec3 n = normgrid[i * 2];
-                vec4 o = new vec4(n.x, n.y, n.z, 0);
-                o = mobj * o;
-                o = glm.normalize(o);
+            RenderGridInternal(gl, mobj, ref vertgrid2, ref normgrid2);
+            gl.End();
 
-                if (glm.dot(v, o) > 0)
-                    continue;
-
-                gl.Vertex(vertgrid[i * 2 + 0].x, vertgrid[i * 2 + 0].y, vertgrid[i * 2 + 0].z);
-                gl.Vertex(vertgrid[i * 2 + 1].x, vertgrid[i * 2 + 1].y, vertgrid[i * 2 + 1].z);
-            }
+            // Major-gridline
+            gl.LineWidth(t1);
+            gl.Color(gc1.x, gc1.y, gc1.z, gc1.w);
+            gl.Begin(BeginMode.Lines);
+            RenderGridInternal(gl, mobj, ref vertgrid1, ref normgrid1);
             gl.End();
 
             gl.PopAttrib();
@@ -490,25 +518,71 @@ namespace IVM.Studio.I3D
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
             int mg = 4;
-            int fs = view.param.TEXT_SIZE;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
 
             vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);
             pw = new vec4(pw.x / pw.w, pw.y / pw.w, pw.z / pw.w, 1);
             pw.x = (pw.x + 1.0f) / 2.0f * aw;
             pw.y = (pw.y + 1.0f) / 2.0f * ah;
-            gl.DrawText((int)pw.x, (int)pw.y - mg - fs, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
+            gl.DrawText((int)pw.x, (int)pw.y - mg - fs, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
 
             vec4 ph = mproj * mview * new vec4(1, 0, -view.param.BOX_HEIGHT, 1);
             ph = new vec4(ph.x / ph.w, ph.y / ph.w, ph.z / ph.w, 1);
             ph.x = (ph.x + 1.0f) / 2.0f * aw;
             ph.y = (ph.y + 1.0f) / 2.0f * ah;
-            gl.DrawText((int)ph.x + mg, (int)ph.y, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("h: {0} µm", view.scene.meta.umHeight));
+            gl.DrawText((int)ph.x + mg, (int)ph.y, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("h: {0} µm", view.scene.meta.umHeight));
 
             vec4 pz = mproj * mview * new vec4(1, -1, 0, 1);
             pz = new vec4(pz.x / pz.w, pz.y / pz.w, pz.z / pz.w, 1);
             pz.x = (pz.x + 1.0f) / 2.0f * aw;
             pz.y = (pz.y + 1.0f) / 2.0f * ah;
-            gl.DrawText((int)pz.x + mg, (int)pz.y - fs / 2, 1.0f, 1.0f, 1.0f, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
+            gl.DrawText((int)pz.x + mg, (int)pz.y - fs / 2, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
+        }
+
+        public void RenderSliceTextX(OpenGL gl, mat4 mproj, mat4 mview)
+        {
+            float aw = (float)view.ActualWidth;
+            float ah = (float)view.ActualHeight;
+            int mg = 4;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
+
+            vec4 pw = mproj * mview * new vec4(0, -1, -view.param.BOX_HEIGHT, 1);
+            pw = new vec4(pw.x / pw.w, pw.y / pw.w, pw.z / pw.w, 1);
+            pw.x = (pw.x + 1.0f) / 2.0f * aw;
+            pw.y = (pw.y + 1.0f) / 2.0f * ah;
+            gl.DrawText((int)pw.x, (int)pw.y - mg - fs, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("w: {0} µm", view.scene.meta.umWidth));
+        }
+
+        public void RenderSliceTextY(OpenGL gl, mat4 mproj, mat4 mview)
+        {
+            float aw = (float)view.ActualWidth;
+            float ah = (float)view.ActualHeight;
+            int mg = 4;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
+
+            vec4 ph = mproj * mview * new vec4(1, 0, -view.param.BOX_HEIGHT, 1);
+            ph = new vec4(ph.x / ph.w, ph.y / ph.w, ph.z / ph.w, 1);
+            ph.x = (ph.x + 1.0f) / 2.0f * aw;
+            ph.y = (ph.y + 1.0f) / 2.0f * ah;
+            gl.DrawText((int)ph.x + mg, (int)ph.y, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("h: {0} µm", view.scene.meta.umHeight));
+        }
+
+        public void RenderSliceTextZ(OpenGL gl, mat4 mproj, mat4 mview)
+        {
+            float aw = (float)view.ActualWidth;
+            float ah = (float)view.ActualHeight;
+            int mg = 4;
+            int fs = view.param.GRID_TEXT_SIZE;
+            vec4 fc = view.param.GRID_TEXT_COLOR;
+
+            vec4 pz = mproj * mview * new vec4(1, -1, 0, 1);
+            pz = new vec4(pz.x / pz.w, pz.y / pz.w, pz.z / pz.w, 1);
+            pz.x = (pz.x + 1.0f) / 2.0f * aw;
+            pz.y = (pz.y + 1.0f) / 2.0f * ah;
+            gl.DrawText((int)pz.x, (int)pz.y - fs, fc.x, fc.y, fc.z, "Courier New", fs, String.Format("d: {0} µm", (int)(view.scene.tex3D.GetDepth() * view.scene.meta.pixelPerUM_Z)));
         }
 
         public void RenderVolume3D(OpenGL gl, mat4 matProj, mat4 matModelView)
@@ -534,6 +608,7 @@ namespace IVM.Studio.I3D
 
             gl.Uniform4(shader.GetUniformLocation(gl, "THRESHOLD_INTENSITY_MIN"), tmin.x, tmin.y, tmin.z, tmin.w); // uniform4
             gl.Uniform4(shader.GetUniformLocation(gl, "THRESHOLD_INTENSITY_MAX"), tmax.x, tmax.y, tmax.z, tmax.w); // uniform4
+            gl.Uniform4(shader.GetUniformLocation(gl, "ALPHA_BLEND"), view.param.ALPHA_BLEND.x, view.param.ALPHA_BLEND.y, view.param.ALPHA_BLEND.z, view.param.ALPHA_BLEND.w);
             gl.Uniform4(shader.GetUniformLocation(gl, "ALPHA_WEIGHT"), view.param.ALPHA_WEIGHT.x, view.param.ALPHA_WEIGHT.y, view.param.ALPHA_WEIGHT.z, view.param.ALPHA_WEIGHT.w); // uniform4
             gl.Uniform4(shader.GetUniformLocation(gl, "BAND_ORDER"), view.param.BAND_ORDER.x, view.param.BAND_ORDER.y, view.param.BAND_ORDER.z, view.param.BAND_ORDER.w); // uniform4
             gl.Uniform4(shader.GetUniformLocation(gl, "BAND_VISIBLE"), view.param.BAND_VISIBLE.x, view.param.BAND_VISIBLE.y, view.param.BAND_VISIBLE.z, view.param.BAND_VISIBLE.w); // uniform4

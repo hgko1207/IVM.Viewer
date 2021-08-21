@@ -11,6 +11,7 @@ using SharpGL.WPF;
 using SharpGL.SceneGraph;
 using SharpGL.SceneGraph.Cameras;
 using SharpGL.SceneGraph.Core;
+using System.Threading;
 
 namespace IVM.Studio.I3D
 {
@@ -23,6 +24,9 @@ namespace IVM.Studio.I3D
         public I3DCamera camera = null;
         public I3DParam param = null;
         public OpenGL gl = null;
+
+        public delegate void LoadedDelegate();
+        public LoadedDelegate LoadedFunc = null;
 
         public I3DViewer()
         {
@@ -47,7 +51,7 @@ namespace IVM.Studio.I3D
             // init Scene
             gl = args.OpenGL;
             scene = new I3DScene(this);
-            scene.Init(gl);
+            scene.Init();
             scene.UpdateModelviewMatrix();
         }
 
@@ -58,17 +62,30 @@ namespace IVM.Studio.I3D
 
         private void OpenGLControl_Draw(object sender, OpenGLRoutedEventArgs args)
         {
-            scene.Render(gl); // scene render
+            scene.Render(); // scene render
         }
 
-        public bool Open(string imgPath)
+        public async void Open(string imgPath, int lower = -1, int upper = -1, bool reverse = false)
         {
-            return scene.Open(gl, imgPath);
+            if (scene.tex3D.Loading)
+                return;
+
+            Invalid.Visibility = Visibility.Hidden;
+
+            Loading.Visibility = Visibility.Visible;
+            bool res = await scene.Open(imgPath, lower, upper, reverse);
+            Loading.Visibility = Visibility.Hidden;
+
+            if (res == false)
+                Invalid.Visibility = Visibility.Visible;
+
+            if (LoadedFunc != null)
+                LoadedFunc();
         }
 
         public void UpdateBoxHeight()
         {
-            scene.UpdateMesh(gl);
+            scene.UpdateMesh();
         }
     }
 }

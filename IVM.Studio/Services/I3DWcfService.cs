@@ -11,13 +11,15 @@ namespace IVM.Studio.Services
         {
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Publish(viewtype);
         }
-        public void OnMetaLoaded(int width, int height, float umWidth, float umHeight)
+        public void OnMetaLoaded(int width, int height, int depth, float umWidth, float umHeight, float umPerPixelZ)
         {
             I3DMetaLoadedParam p = new I3DMetaLoadedParam();
             p.width = width;
             p.height = height;
+            p.depth = depth;
             p.umWidth = umWidth;
             p.umHeight = umHeight;
+            p.umPerPixelZ = umPerPixelZ;
 
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Publish(p);
         }
@@ -35,6 +37,11 @@ namespace IVM.Studio.Services
             p.s = s;
 
             EventAggregator.GetEvent<I3DCameraUpdateEvent>().Publish(p);
+        }
+
+        public void OnFirstRender(int viewtype)
+        {
+            EventAggregator.GetEvent<I3DFirstRenderEvent>().Publish(viewtype);
         }
     }
 }

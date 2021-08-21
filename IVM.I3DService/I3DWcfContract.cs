@@ -27,7 +27,7 @@ namespace IVM.Studio.Services
     public interface I3DClientContract
     {
         [OperationContract]
-        void OnOpen(string path);
+        void OnOpen(string path, int lower, int upper, bool reverse);
 
         [OperationContract]
         void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
@@ -49,6 +49,27 @@ namespace IVM.Studio.Services
 
         [OperationContract]
         void OnChangeAlphaWeight(float r, float g, float b, float a);
+
+        [OperationContract]
+        void OnChangeAxisParam(bool visible, int textsize, float height, float thickness, float px, float py);
+
+        [OperationContract]
+        void OnChangeBoxParam(float r, float g, float b, float a, float thickness);
+
+        [OperationContract]
+        void OnChangeGridLabelParam(float r, float g, float b, float a, int fontsize);
+
+        [OperationContract]
+        void OnChangeGridSizeParam(float major, float minor);
+
+        [OperationContract]
+        void OnChangeBackgroundParam(float r, float g, float b, float a);
+
+        [OperationContract]
+        void OnChangeSliceDepth(float x, float y, float z);
+
+        [OperationContract]
+        void OnChangeTimelapseLabelParam(bool visible, float r, float g, float b, float a, int fontsize, string format, float px, float py, int msec);
     }
 
     [ServiceContract]
@@ -58,7 +79,12 @@ namespace IVM.Studio.Services
         void OnWindowLoaded(int viewtype);
 
         [OperationContract]
-        void OnMetaLoaded(int width, int height, float umWidth, float umHeight);
+        void OnMetaLoaded(int width, int height, int depth, float umWidth, float umHeight, float umPerPixelZ);
+
+
+        [OperationContract]
+        void OnFirstRender(int viewtype);
+
 
         [OperationContract]
         void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s);

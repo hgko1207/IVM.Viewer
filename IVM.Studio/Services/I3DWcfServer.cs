@@ -41,6 +41,17 @@ namespace IVM.Studio.Services
             else
                 channel2 = factory.CreateChannel();
         }
+
+        public I3DClientContract Channel(int Id)
+        {
+            if (Id == 1)
+                return channel1;
+            else if (Id == 2)
+                return channel2;
+
+            return null;
+        }
+
     }
 }
 
