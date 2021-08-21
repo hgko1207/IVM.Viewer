@@ -24,6 +24,8 @@ namespace IVM.Studio.ViewModels.UserControls
     {
         I3DWcfServer wcfserver;
 
+        ImageRegistration.ImageRegistration imgreg = null;
+
         private string currentImgPath;
 
         public string CurrentImgPath
@@ -140,18 +142,38 @@ namespace IVM.Studio.ViewModels.UserControls
             OpenFolderCommand = new DelegateCommand(OpenFolder);
             OpenSelectedCommand = new DelegateCommand(OpenSelected);
             ChangedSelectedCommand = new DelegateCommand(ChangedSelected);
-            RunAlignmentCommand = new DelegateCommand(RunAlignment);
+            RunAlignmentCommand = new DelegateCommand(InvokeRunAlignment);
         }
 
-        private void RunAlignment()
-        {            
+        private void InvokeRunAlignment()
+        {
+            RunAlignment();
+        }
+
+        private bool RunAlignment()
+        {
+            if (imgreg == null)
+            {
+                try
+                {
+                    imgreg = new ImageRegistration.ImageRegistration();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("[ERROR] ImageRegistration failed\r\n\r\n" +
+                        "Matlab-Runtime 을 설치해야 합니다. " +
+                        "소프트웨어 설치 경로에 있는 MATLAB/ImageRegistration.MatlabRuntime.WebInstaller.exe 설치 파일을 실행해 주세요");
+                    return false;
+                }
+            }
+
             if (SelectedImgInfo == null)
-                return;
+                return false;
 
             CurrentImgPath = SelectedImgInfo.Path;
 
             if (!Directory.Exists(CurrentImgPath))
-                return;
+                return false;
 
             string atag = "_ALIGN";
 
@@ -166,7 +188,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 try
                 {
-                    //reg.ZS_ShiftCorrected_array_IVIM(1, reg_dir, refCh, GPU, save_dir);
+                    imgreg.ZS_ShiftCorrected_array_IVIM(1, reg_dir, refCh, GPU, save_dir);
                     loading.loading = false;
                 }
                 catch (Exception e)
@@ -177,6 +199,8 @@ namespace IVM.Studio.ViewModels.UserControls
             });
 
             loading.ShowDialog();
+
+            return true;
         }
 
         private void ChangedSelected()
@@ -256,8 +280,6 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        //ImageRegistration.ImageRegistration reg = new ImageRegistration.ImageRegistration();
-
         private void OpenSelected()
         {
             if (SelectedImgInfo == null)
@@ -275,7 +297,10 @@ namespace IVM.Studio.ViewModels.UserControls
                 atag = "_ALIGN";
 
                 if (!Directory.Exists(CurrentImgPath + atag))
-                    RunAlignment();
+                {
+                    if (RunAlignment() == false)
+                        return;
+                }
             }
 
             wcfserver.channel1.OnOpen(CurrentImgPath + atag, OpenSliceLower, OpenSliceUpper, OpenReverse);
