@@ -137,6 +137,8 @@ namespace IVM.Studio.ViewModels
             if (view.IsActive)
             {
                 dataManager.MainWindowId = view.WindowId;
+                dataManager.WindowInfo = view.WindowInfo;
+
                 EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Publish(view.WindowId);
                 view.ActivatedBorder.BorderThickness = new Thickness(1);
 

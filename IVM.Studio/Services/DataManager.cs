@@ -30,6 +30,8 @@ namespace IVM.Studio.Services
         /// <summary>메타데이터 정보</summary>
         public Metadata Metadata { get; set; }
 
+        public WindowInfo WindowInfo { get; set; }
+
         public string ViewerName { get; set; }
 
         public Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; set; }

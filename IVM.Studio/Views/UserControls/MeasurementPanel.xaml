@@ -23,7 +23,7 @@
         <dxg:GridControl ItemsSource="{Binding MeasurementInfoCollection}" SelectedItem="{Binding SelectedMeasurementInfo}" SelectionMode="Row"
                         ShowBorder="True" RenderOptions.EdgeMode="Aliased" MaxHeight="300">
             <dxg:GridControl.View>
-                <dxg:TableView AutoWidth="True"/>
+                <dxg:TableView Name="MeasurementTable" AutoWidth="True"/>
             </dxg:GridControl.View>
 
             <dxg:GridControl.Bands>

@@ -4,6 +4,7 @@ using IVM.Studio.Models.Views;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
 using IVM.Studio.Views.UserControls;
+using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
 using System;
@@ -40,6 +41,9 @@ namespace IVM.Studio.ViewModels.UserControls
         public ICommand ClearCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
 
+        private MeasurementPanel view;
+
+        private readonly DataManager dataManager;
         public MeasurementInfo MeasurementInfo { get; set; }
 
         /// <summary>
@@ -52,7 +56,8 @@ namespace IVM.Studio.ViewModels.UserControls
             ClearCommand = new DelegateCommand(Clear);
             SaveCommand = new DelegateCommand(Save);
 
-            MeasurementInfo = Container.Resolve<DataManager>().MeasurementInfo;
+            dataManager = Container.Resolve<DataManager>();
+            MeasurementInfo = dataManager.MeasurementInfo;
 
             EventAggregator.GetEvent<AddMeasurementEvent>().Subscribe(AddMeasurement);
         }
@@ -63,6 +68,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnLoaded(MeasurementPanel view)
         {
+            this.view = view;
         }
 
         /// <summary>
@@ -110,7 +116,19 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Save()
         {
-
+            if (MeasurementInfoCollection.Count > 0)
+            {
+                VistaSaveFileDialog dialog = new VistaSaveFileDialog
+                {
+                    DefaultExt = ".csv",
+                    Filter = "csv|*.csv",
+                    FileName = dataManager.WindowInfo.Name + "_Measurement.csv"
+                };
+                if (dialog.ShowDialog().GetValueOrDefault())
+                {
+                    view.MeasurementTable.ExportToCsv(dialog.FileName);
+                }
+            }
         }
     }
 }
