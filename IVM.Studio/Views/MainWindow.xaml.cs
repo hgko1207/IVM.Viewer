@@ -23,33 +23,20 @@ namespace IVM.Studio.Views
             e.Handled = true;
         }
 
-        private void I3DMainView_SelectedItemChanged(object sender, DevExpress.Xpf.Docking.Base.SelectedItemChangedEventArgs e)
+        private void i3dmv_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (EventAggregator == null)
                 return;
 
-            if (e.Item != null)
-                EventAggregator.GetEvent<I3DViewSelectEvent>().Publish(e.Item.ActualCaption);
-
-            if (e.OldItem != null)
-                EventAggregator.GetEvent<I3DViewDeselectEvent>().Publish(e.OldItem.ActualCaption);
+            EventAggregator.GetEvent<I3DMainViewVisibleChangedEvent>().Publish((bool)e.NewValue);
         }
 
-        private void I3DSliceView_SelectedItemChanged(object sender, DevExpress.Xpf.Docking.Base.SelectedItemChangedEventArgs e)
+        private void i3dsv_IsVisibleChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             if (EventAggregator == null)
                 return;
 
-            if (e.Item != null)
-                EventAggregator.GetEvent<I3DViewSelectEvent>().Publish(e.Item.ActualCaption);
-
-            if (e.OldItem != null)
-                EventAggregator.GetEvent<I3DViewDeselectEvent>().Publish(e.OldItem.ActualCaption);
-        }
-        
-        private void I3DMainView_LayoutChanged(object sender, System.EventArgs e)
-        {
-            int a = 1;
+            EventAggregator.GetEvent<I3DSliceViewVisibleChangedEvent>().Publish((bool)e.NewValue);
         }
     }
 }

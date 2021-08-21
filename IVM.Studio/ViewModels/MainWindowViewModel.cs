@@ -171,8 +171,9 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RefreshFolderEvent>().Subscribe(RefreshFolder);
             
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Subscribe(I3DWindowLoaded);
-            EventAggregator.GetEvent<I3DViewSelectEvent>().Subscribe(I3DViewSelect);
-            EventAggregator.GetEvent<I3DViewDeselectEvent>().Subscribe(I3DViewDeselect);
+            EventAggregator.GetEvent<I3DMainViewVisibleChangedEvent>().Subscribe(I3DMainViewVisibleChanged);
+            EventAggregator.GetEvent<I3DSliceViewVisibleChangedEvent>().Subscribe(I3DSliceViewVisibleChanged);
+
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -185,14 +186,20 @@ namespace IVM.Studio.ViewModels
             wcfserver.Listen();
         }
 
-        private void I3DViewSelect(string c)
+        private void I3DMainViewVisibleChanged(bool v)
         {
-            Console.WriteLine("I3DViewSelect {0}", c);
+            if (v)
+                snapper1.Show();
+            else
+                snapper1.Hide();
         }
 
-        private void I3DViewDeselect(string c)
+        private void I3DSliceViewVisibleChanged(bool v)
         {
-            Console.WriteLine("I3DViewDeselect {0}", c);
+            if (v)
+                snapper2.Show();
+            else
+                snapper2.Hide();
         }
 
         /// <summary>
@@ -224,8 +231,8 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RefreshFolderEvent>().Unsubscribe(RefreshFolder);
 
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Unsubscribe(I3DWindowLoaded);
-            EventAggregator.GetEvent<I3DViewSelectEvent>().Unsubscribe(I3DViewSelect);
-            EventAggregator.GetEvent<I3DViewDeselectEvent>().Unsubscribe(I3DViewDeselect);
+            EventAggregator.GetEvent<I3DMainViewVisibleChangedEvent>().Unsubscribe(I3DMainViewVisibleChanged);
+            EventAggregator.GetEvent<I3DSliceViewVisibleChangedEvent>().Unsubscribe(I3DSliceViewVisibleChanged);
 
             // kill I3D windows
             snapper1.KillProcess();
