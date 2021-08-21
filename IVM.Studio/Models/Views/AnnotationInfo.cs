@@ -40,6 +40,10 @@ namespace IVM.Studio.Models
                         CropCircleEnabled = false;
                         CropTriangleEnabled = false;
                     }
+                    else
+                    {
+                        CropCircleEnabled = true;
+                    }
 
                     if (CropEnabled)
                     {
@@ -63,6 +67,10 @@ namespace IVM.Studio.Models
                         CropRectangleEnabled = false;
                         CropTriangleEnabled = false;
                     }
+                    else
+                    {
+                        CropRectangleEnabled = true;
+                    }
 
                     if (CropEnabled)
                     {
@@ -85,6 +93,10 @@ namespace IVM.Studio.Models
                     {
                         CropRectangleEnabled = false;
                         CropCircleEnabled = false;
+                    }
+                    else
+                    {
+                        CropRectangleEnabled = true;
                     }
 
                     if (CropEnabled)
@@ -136,14 +148,6 @@ namespace IVM.Studio.Models
         {
             get => cropInvertEnabled;
             set => SetProperty(ref cropInvertEnabled, value);
-        }
-
-
-        private bool allCropEnabled;
-        public bool AllCropEnabled
-        {
-            get => allCropEnabled;
-            set => SetProperty(ref allCropEnabled, value);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -484,12 +488,12 @@ namespace IVM.Studio.Models
             }
         }
 
-        public ICommand AllCropCommand { get; private set; }
         public ICommand ExportCropCommand { get; private set; }
+        public ICommand ExportAllCropCommand { get; private set; }
 
-        private IEventAggregator eventAggregator;
+        private readonly IEventAggregator eventAggregator;
 
-        private DataManager dataManager;
+        private readonly DataManager dataManager;
 
         /// <summary>
         /// 생성자
@@ -500,20 +504,20 @@ namespace IVM.Studio.Models
             this.eventAggregator = eventAggregator;
             dataManager = container.Resolve<DataManager>();
 
-            AllCropCommand = new DelegateCommand(AllCrop);
             ExportCropCommand = new DelegateCommand(ExportCrop);
+            ExportAllCropCommand = new DelegateCommand(ExportAllCrop);
 
             CropRectangleEnabled = true;
 
             PenThickness = 2;
-            PenColor = WPFDrawing.Colors.White;
+            PenColor = WPFDrawing.Colors.Blue;
 
             TextFontSize = 12;
-            TextColor = WPFDrawing.Colors.White;
+            TextColor = WPFDrawing.Colors.Blue;
 
             EraserThickness = 20;
 
-            DrawColor = WPFDrawing.Colors.White;
+            DrawColor = WPFDrawing.Colors.Blue;
             DrawThickness = 2;
 
             ScaleBarSize = 100;
@@ -529,20 +533,18 @@ namespace IVM.Studio.Models
         }
 
         /// <summary>
-        /// All Crop
-        /// </summary>
-        private void AllCrop()
-        {
-
-        }
-
-        /// <summary>
         /// Export Crop
         /// </summary>
         private void ExportCrop()
         {
             if (CropEnabled)
                 eventAggregator.GetEvent<ExportCropEvent>().Publish();
+        }
+
+        private void ExportAllCrop()
+        {
+            if (CropEnabled)
+                eventAggregator.GetEvent<ExportAllCropEvent>().Publish();
         }
     }
 }

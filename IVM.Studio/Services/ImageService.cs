@@ -523,13 +523,15 @@ namespace IVM.Studio.Services
         /// 주어진 비트맵 이미지에 스케일 바를 그립니다.
         /// </summary>
         /// <param name="image"></param>
-        /// <param name="fOVSizeX"></param>
-        /// <param name="fOVSizeY"></param>
-        /// <param name="length"></param>
-        /// <param name="thickness"></param>
-        /// <param name="margin"></param>
+        /// <param name="fOVSizeX">이미지의 X축의 길이입니다. 단위는 <paramref name="fOVSizeX"/>, <paramref name="lengthOfScaleBar"/>와 같아야 합니다.</param>
+        /// <param name="fOVSizeY">이미지의 Y축의 길이입니다. 단위는 <paramref name="fOVSizeY"/>, <paramref name="lengthOfScaleBar"/>와 같아야 합니다.</param>
+        /// <param name="length">이미지에 표시될 스케일 바의 길이입니다. 단위는 <paramref name="fOVSizeX"/>, <paramref name="fOVSizeY"/>와 같아야 합니다.</param>
+        /// <param name="thickness">이미지에 표시될 스케일 바의 굵기입니다. 단위는 픽셀입니다.</param>
+        /// <param name="margin">이미지에 표시될 스케일 바와 이미지 경계 사이의 여백 크기입니다. 단위는 픽셀입니다.</param>
         /// <param name="xAxis"></param>
         /// <param name="yAxis"></param>
+        /// <param name="fontSize"></param>
+        /// <param name="color"></param>
         public void DrawScaleBar(Bitmap image, int fOVSizeX, int fOVSizeY, int length, int thickness, int margin,
             bool xAxis, bool yAxis, PositionType positionType, ScaleBarLabelType labelType, int fontSize, WPFDrawing.Color color)
         {
@@ -582,7 +584,7 @@ namespace IVM.Studio.Services
                 int canvasWidth = image.Width;
 
                 SizeF size = graphics.MeasureString(text, font);
-                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) - margin : margin, margin);
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
                 
                 float left = startPoint.X - size.Width / 2f;
                 float top = startPoint.Y - size.Height / 2f;
@@ -611,7 +613,7 @@ namespace IVM.Studio.Services
                 int canvasWidth = image.Width;
 
                 SizeF size = graphics.MeasureString(text, font);
-                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) - margin : margin, margin);
+                Point startPoint = new Point(positionType == PositionType.RIGHT ? (int)(canvasWidth - size.Width) : margin, margin);
 
                 float left = startPoint.X - size.Width / 2f;
                 float top = startPoint.Y - size.Height / 2f;

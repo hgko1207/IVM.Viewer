@@ -154,7 +154,7 @@
                     </DockPanel>
                 </StackPanel>
 
-                <Border Grid.Column="2" BorderBrush="#5A5A5A" BorderThickness="0.5" Height="125">
+                <Border Grid.Column="2" BorderBrush="#5A5A5A" BorderThickness="0.5" Height="125" VerticalAlignment="Top">
                     <Canvas x:Name="NavigatorCanvas" Background="#252525" />
                 </Border>
             </Grid>

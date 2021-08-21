@@ -179,6 +179,7 @@ namespace IVM.Studio.Models.Events
     }
 
     public class ExportCropEvent : PubSubEvent { }
+    public class ExportAllCropEvent : PubSubEvent { }
 
     public class NavigatorChangeEvent : PubSubEvent<NavigatorParam> { }
     public class NavigatorParam

@@ -97,7 +97,6 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private FileInfo fileInfo;
         private FileInfo fileToDisplay;
-        //private DirectoryInfo directoryInfo;
 
         private ImageService imageService { get; set; }
 
@@ -174,6 +173,7 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Subscribe(ZoomRatioControl);
 
             EventAggregator.GetEvent<ExportCropEvent>().Subscribe(ExportCrop);
+            EventAggregator.GetEvent<ExportAllCropEvent>().Subscribe(ExportAllCrop);
             EventAggregator.GetEvent<ExportDrawEvent>().Subscribe(ExportDraw);
             EventAggregator.GetEvent<ExportDrawAllEvent>().Subscribe(ExportDrawAll);
 
@@ -398,7 +398,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     // 스케일 바
                     if (annotationInfo.ScaleBarEnabled && fovSizeX > 0 && fovSizeY > 0 && scaleBarSize > 0 && scaleBarSize < fovSizeX && scaleBarSize < fovSizeY)
-                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 30, 
+                        imageService.DrawScaleBar(bitmap, fovSizeX, fovSizeY, scaleBarSize, annotationInfo.ScaleBarThickness, 30,
                             annotationInfo.XAxisEnabled, annotationInfo.YAxisEnabled, annotationInfo.ScaleBarPosition, annotationInfo.ScaleBarLabel, annotationInfo.TextFontSize, annotationInfo.TextColor);
 
                     // TimeStack
@@ -871,6 +871,32 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
+        /// Get PositionParam
+        /// </summary>
+        /// <returns></returns>
+        private GetPositionToCropParam GetPositionParam()
+        {
+            GetPositionToCropParam param = new GetPositionToCropParam();
+            EventAggregator.GetEvent<GetPositionToCropEvent>().Publish(param);
+
+            if (!param.Routed)
+                return null;
+
+            param.Left = Math.Max(param.Left / currentZoomRatio * 100, 0);
+            param.Top = Math.Max(param.Top / currentZoomRatio * 100, 0);
+
+            param.Width = param.Width / currentZoomRatio * 100;
+            if (displayingImageGDI.Width < param.Width)
+                param.Width = displayingImageGDI.Width;
+
+            param.Height = param.Height / currentZoomRatio * 100;
+            if (displayingImageGDI.Height < param.Height)
+                param.Height = displayingImageGDI.Height;
+
+            return param;
+        }
+
+        /// <summary>
         /// Crop 이미지 저장
         /// </summary>
         private void ExportCrop()
@@ -880,25 +906,32 @@ namespace IVM.Studio.ViewModels.UserControls
 
             if (view != null && view.WindowId == dataManager.MainWindowId)
             {
-                GetPositionToCropParam param = new GetPositionToCropParam();
-                EventAggregator.GetEvent<GetPositionToCropEvent>().Publish(param);
+                GetPositionToCropParam param = GetPositionParam();
+                if (param != null)
+                {
+                    VistaSaveFileDialog dialog = new VistaSaveFileDialog
+                    {
+                        DefaultExt = ".png",
+                        Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
+                    };
+                    if (dialog.ShowDialog().GetValueOrDefault())
+                    {
+                        CropImageSave(displayingImageGDI, dialog.FileName, param);
+                    }
+                }
+            }
+        }
 
-                if (!param.Routed)
-                    return;
-
-                param.Left = Math.Max(param.Left / currentZoomRatio * 100, 0);
-                param.Top = Math.Max(param.Top / currentZoomRatio * 100, 0);
-
-                param.Width = param.Width / currentZoomRatio * 100;
-                if (displayingImageGDI.Width < param.Width)
-                    param.Width = displayingImageGDI.Width;
-
-                param.Height = param.Height / currentZoomRatio * 100;
-                if (displayingImageGDI.Height < param.Height)
-                    param.Height = displayingImageGDI.Height;
-
-                DirectoryInfo directoryInfo = view.WindowInfo.DirectoryInfo;
-                if (annotationInfo.AllCropEnabled && directoryInfo != null)
+        /// <summary>
+        /// Crop 전체 ExPort
+        /// </summary>
+        private void ExportAllCrop()
+        {
+            DirectoryInfo directoryInfo = view.WindowInfo.DirectoryInfo;
+            if (directoryInfo != null)
+            {
+                GetPositionToCropParam param = GetPositionParam();
+                if (param != null)
                 {
                     VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
                     if (dialog.ShowDialog().GetValueOrDefault())
@@ -909,18 +942,6 @@ namespace IVM.Studio.ViewModels.UserControls
                             string filePath = dialog.SelectedPath + "\\" + fileinfo.Name;
                             CropImageSave(displayingImageGDI, filePath, param);
                         }
-                    }
-                }
-                else
-                {
-                    VistaSaveFileDialog dialog = new VistaSaveFileDialog
-                    {
-                        DefaultExt = ".png",
-                        Filter = "PNG image file(*.png)|*.png|IVM image file(*.ivm)|*.ivm|TIF image file(*.tif)|*.tif|JPG image file(*.jpg)|*.jpg",
-                    };
-                    if (dialog.ShowDialog().GetValueOrDefault())
-                    {
-                        CropImageSave(displayingImageGDI, dialog.FileName, param);
                     }
                 }
             }

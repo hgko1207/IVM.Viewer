@@ -123,7 +123,7 @@ namespace IVM.Studio.ViewModels
         private FileInfo currentFile;
         private DirectoryInfo currentDirectory;
 
-        private DataManager dataManager;
+        private readonly DataManager dataManager;
 
         public SliderControlInfo SliderControlInfo { get; set; }
 

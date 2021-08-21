@@ -10,6 +10,7 @@
              Background="#30302E"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <StackPanel Orientation="Horizontal" Margin="15 0" VerticalAlignment="Center">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="Rotate" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -43,8 +44,9 @@
 
             <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="Save Image" Style="{StaticResource SkyGradientButton}" 
                              Width="90" Margin="10 0 0 0" Command="{Binding ExportCropCommand}"/>
-            
-            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsChecked="{Binding AllCropEnabled}" Content="Save Sequence" Style="{StaticResource ToggleButton}" Width="110" Margin="5 0 0 0" />
+
+            <dx:SimpleButton DataContext="{Binding AnnotationInfo}" IsEnabled="{Binding CropEnabled}" Content="Save Sequence" Style="{StaticResource SkyGradientButton}" 
+                             Width="110" Margin="5 0 0 0" Command="{Binding ExportAllCropCommand}"/>
         </StackPanel>
     </StackPanel>
 </UserControl>
