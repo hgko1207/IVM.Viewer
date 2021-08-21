@@ -611,25 +611,30 @@
     <Content Include="I3D\System.Runtime.CompilerServices.Unsafe.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="libMatlabCppSharedLib9_8.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="libvlc\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ffmpeg\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MATLAB\mclcom9_8.dll">
+    <Content Include="mclcom9_8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MATLAB\mclcommain9_8.dll">
+    <Content Include="mclcommain9_8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MATLAB\mclmcrrt9_8.dll">
+    <Content Include="mclmcrrt9_8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MATLAB\mclxlmain9_8.dll">
+    <Content Include="mclxlmain9_8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MWArray.dll" />
+    <Content Include="MWArray.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\Images\loading.gif" />
     <Resource Include="Resources\Images\line.png" />
     <Resource Include="Resources\Images\icon_2d.png" />
