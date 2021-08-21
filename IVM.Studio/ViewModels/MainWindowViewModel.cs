@@ -152,6 +152,8 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("I3D3DDisplayPanel", typeof(I3D3DDisplayPanel));
             RegionManager.RegisterViewWithRegion("I3DMainViewer", typeof(I3DMainViewer));
             RegionManager.RegisterViewWithRegion("I3DSliceViewer", typeof(I3DSliceViewer));
+            RegionManager.RegisterViewWithRegion("I3DFreeRecordingPanel", typeof(I3DFreeRecordingPanel));
+            RegionManager.RegisterViewWithRegion("I3DSceneRecordingPanel", typeof(I3DSceneRecordingPanel));
 
             dataManager = container.Resolve<DataManager>();
             dataManager.Init(container, EventAggregator);
@@ -167,7 +169,10 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<DisplaySlideEvent>().Subscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Subscribe(DisplayImageWithMetadata, ThreadOption.UIThread);
             EventAggregator.GetEvent<RefreshFolderEvent>().Subscribe(RefreshFolder);
+            
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Subscribe(I3DWindowLoaded);
+            EventAggregator.GetEvent<I3DViewSelectEvent>().Subscribe(I3DViewSelect);
+            EventAggregator.GetEvent<I3DViewDeselectEvent>().Subscribe(I3DViewDeselect);
 
             imageFileExtensions = new[] { ".ivm" };
             videoFileExtensions = new[] { ".avi" };
@@ -180,6 +185,16 @@ namespace IVM.Studio.ViewModels
             wcfserver.Listen();
         }
 
+        private void I3DViewSelect(string c)
+        {
+            Console.WriteLine("I3DViewSelect {0}", c);
+        }
+
+        private void I3DViewDeselect(string c)
+        {
+            Console.WriteLine("I3DViewDeselect {0}", c);
+        }
+
         /// <summary>
         /// OnLoaded
         /// </summary>
@@ -187,6 +202,9 @@ namespace IVM.Studio.ViewModels
         public void OnLoaded(MainWindow view)
         {
             mainWindow = view;
+
+            // init mainwindow event-instance
+            mainWindow.EventAggregator = EventAggregator;
 
             // create I3D windows
             snapper1 = new WindowSnapper(mainWindow, mainWindow.i3dmv, "I3D_MAIN_VIEW", @".\I3D\IVM.I3DApp.exe");
@@ -204,7 +222,10 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<DisplaySlideEvent>().Unsubscribe(DisplaySlide);
             EventAggregator.GetEvent<RefreshMetadataEvent>().Unsubscribe(DisplayImageWithMetadata);
             EventAggregator.GetEvent<RefreshFolderEvent>().Unsubscribe(RefreshFolder);
+
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Unsubscribe(I3DWindowLoaded);
+            EventAggregator.GetEvent<I3DViewSelectEvent>().Unsubscribe(I3DViewSelect);
+            EventAggregator.GetEvent<I3DViewDeselectEvent>().Unsubscribe(I3DViewDeselect);
 
             // kill I3D windows
             snapper1.KillProcess();

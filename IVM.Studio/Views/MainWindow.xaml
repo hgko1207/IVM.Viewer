@@ -9,6 +9,7 @@
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         xmlns:util="clr-namespace:IVM.Studio.Utils"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
@@ -216,9 +217,11 @@
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="325">
                         <dxdo:DocumentPanel Caption="Recording" AllowClose="False">
+                            <ContentControl prism:RegionManager.RegionName="I3DSceneRecordingPanel"/>
                         </dxdo:DocumentPanel>
 
                         <dxdo:DocumentPanel Caption="Free-hand Recording" AllowClose="False">
+                            <ContentControl prism:RegionManager.RegionName="I3DFreeRecordingPanel"/>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
                 </dxdo:LayoutGroup>
@@ -242,19 +245,23 @@
         </dxdo:DockLayoutManager>
 
         <dxdo:DockLayoutManager Grid.Row="2" Grid.Column="1" ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop" Visibility="{Binding VisUI3D}">
-            <dxdo:LayoutGroup Caption="RightGroup" Orientation="Horizontal">
-                <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*">
+            <dxdo:LayoutGroup Caption="RightGroup" Orientation="Horizontal" LayoutChanged="I3DMainView_LayoutChanged">
+                <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*" SelectedItemChanged="I3DMainView_SelectedItemChanged">
                     <dxdo:DocumentPanel Caption="3D View" 
-                                        AllowClose="False" AllowSizing="False" AllowDock="False"
-                                        AllowDrag="False" AllowDrop="False" AllowFloat="False" AllowMove="False">
+                                        AllowClose="False" AllowFloat="False" AllowSizing="True" AllowDock="True"
+                                        AllowDrag="True" AllowDrop="True" AllowMove="True" >                        
                         <ContentControl x:Name="i3dmv" prism:RegionManager.RegionName="I3DMainViewer"/>
+                    </dxdo:DocumentPanel>
+                    <dxdo:DocumentPanel Caption="Record Preview" 
+                                        AllowClose="False" AllowSizing="True" AllowDock="False"
+                                        AllowDrag="True" AllowDrop="True" AllowFloat="False" AllowMove="True">
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>
 
-                <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*">
+                <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*" SelectedItemChanged="I3DSliceView_SelectedItemChanged">
                     <dxdo:DocumentPanel Caption="Slice View" 
-                                        AllowClose="False" AllowSizing="False" AllowDock="False"
-                                        AllowDrag="False" AllowDrop="False" AllowFloat="False" AllowMove="False">
+                                        AllowClose="False" AllowFloat="False" AllowSizing="True" AllowDock="True"
+                                        AllowDrag="True" AllowDrop="True"  AllowMove="True">
                         <ContentControl x:Name="i3dsv" prism:RegionManager.RegionName="I3DSliceViewer"/>
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>

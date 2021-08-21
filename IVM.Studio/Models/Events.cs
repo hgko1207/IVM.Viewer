@@ -218,4 +218,7 @@ namespace IVM.Studio.Models.Events
     public class I3DCameraUpdateEvent : PubSubEvent<I3DCameraUpdateParam> { }
 
     public class I3DFirstRenderEvent : PubSubEvent<int> { }
+
+    public class I3DViewSelectEvent : PubSubEvent<string> { }
+    public class I3DViewDeselectEvent : PubSubEvent<string> { }
 }

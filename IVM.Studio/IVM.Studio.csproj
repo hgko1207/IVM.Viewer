@@ -191,6 +191,8 @@
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3D3DDisplayPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\I3DSceneRecordingPanel.cs" />
+    <Compile Include="ViewModels\UserControls\I3DFreeRecordingPanel.cs" />
     <Compile Include="ViewModels\UserControls\I3DSliceViewPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3DDataParamPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3D3DViewPanel.cs" />
@@ -219,6 +221,12 @@
     </Compile>
     <Compile Include="Views\UserControls\I3D3DDisplayPanel.xaml.cs">
       <DependentUpon>I3D3DDisplayPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3DSceneRecordingPanel.xaml.cs">
+      <DependentUpon>I3DSceneRecordingPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3DFreeRecordingPanel.xaml.cs">
+      <DependentUpon>I3DFreeRecordingPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\I3DSliceViewPanel.xaml.cs">
       <DependentUpon>I3DSliceViewPanel.xaml</DependentUpon>
@@ -291,6 +299,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserControls\I3D3DDisplayPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\I3DSceneRecordingPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\I3DFreeRecordingPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -556,6 +572,12 @@
     <Content Include="ffmpeg\swscale-5.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="I3D\FFMediaToolkit.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\FFmpeg.AutoGen.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="I3D\GlmNet.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -577,10 +599,34 @@
     <Content Include="I3D\SharpGL.WPF.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="I3D\System.Buffers.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\System.Memory.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\System.Numerics.Vectors.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="I3D\System.Runtime.CompilerServices.Unsafe.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="libvlc\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ffmpeg\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MATLAB\mclcom9_8.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MATLAB\mclcommain9_8.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MATLAB\mclmcrrt9_8.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MATLAB\mclxlmain9_8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="MWArray.dll" />
