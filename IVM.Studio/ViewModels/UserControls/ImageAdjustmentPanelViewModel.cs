@@ -1,18 +1,15 @@
-﻿using IVM.Studio.Models;
+﻿using DevExpress.Mvvm.Native;
+using IVM.Studio.Models;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
-using IVM.Studio.Utils;
 using IVM.Studio.Views;
 using IVM.Studio.Views.UserControls;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 
 /**
@@ -264,9 +261,9 @@ namespace IVM.Studio.ViewModels.UserControls
 
         public ICommand ResetHistogramCommand { get; private set; }
 
-        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
+        private readonly DataManager dataManager;
 
-        private DataManager dataManager;
+        private readonly Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap;
 
         /// <summary>
         /// 생성자
@@ -420,12 +417,11 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="color"></param>
         private void ChangedNoneColor(string color)
         {
-            ColorChannelModel channelModel = colorChannelInfoMap.Values.SingleOrDefault(item => item.Color == ConvertMetadataToColor(color));
-            if (channelModel != null)
+            colorChannelInfoMap.Values.Where(item => item.Color == ConvertMetadataToColor(color)).ForEach(channelModel =>
             {
                 channelModel.Color = Colors.None;
                 ConvertChannelColor(channelModel.ChannelType);
-            }
+            });
         }
 
         /// <summary>
@@ -497,10 +493,10 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void VisibleFromColor()
         {
-            DAPIColorChannel.SetPropertyVisible(DAPIColor == "Alpha" ? false : true);
-            GFPColorChannel.SetPropertyVisible(GFPColor == "Alpha" ? false : true);
-            RFPColorChannel.SetPropertyVisible(RFPColor == "Alpha" ? false : true);
-            NIRColorChannel.SetPropertyVisible(NIRColor == "Alpha" ? false : true);
+            DAPIColorChannel.SetPropertyVisible(DAPIColor != "Alpha" && DAPIColor != "None");
+            GFPColorChannel.SetPropertyVisible(GFPColor != "Alpha" && GFPColor != "None");
+            RFPColorChannel.SetPropertyVisible(RFPColor != "Alpha" && RFPColor != "None");
+            NIRColorChannel.SetPropertyVisible(NIRColor != "Alpha" && NIRColor != "None");
         }
 
         /// <summary>

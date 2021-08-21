@@ -199,10 +199,12 @@ namespace IVM.Studio.Views.UserControls
                     double x2 = x1 + param.Width;
                     double y2 = y1 + param.Height;
 
-                    PointCollection points = new PointCollection();
-                    points.Add(new Point(x1 + (x2 - x1) / 2, y1));
-                    points.Add(new Point(x2, y2));
-                    points.Add(new Point(x1, y2));
+                    PointCollection points = new PointCollection
+                    {
+                        new Point(x1 + (x2 - x1) / 2, y1),
+                        new Point(x2, y2),
+                        new Point(x1, y2)
+                    };
                     polygon.Points = points;
                 }
 

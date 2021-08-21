@@ -2,15 +2,9 @@
 using IVM.Studio.Models.Events;
 using IVM.Studio.Mvvm;
 using IVM.Studio.Services;
-using IVM.Studio.Views.UserControls;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Ioc;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
-using static IVM.Studio.Models.Common;
 
 namespace IVM.Studio.ViewModels.UserControls
 {
@@ -18,7 +12,7 @@ namespace IVM.Studio.ViewModels.UserControls
     {
         I3DWcfServer wcfserver;
 
-        DataManager datamanager;
+        private readonly DataManager datamanager;
 
         public I3DChannelInfo I3DChannelInfo { get; set; }
         public I3DBackgroundInfo I3DBackgroundInfo { get; set; }
