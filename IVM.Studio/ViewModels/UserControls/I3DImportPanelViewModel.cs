@@ -166,7 +166,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 try
                 {
-                    reg.ZS_ShiftCorrected_array_IVIM(1, reg_dir, refCh, GPU, save_dir);
+                    //reg.ZS_ShiftCorrected_array_IVIM(1, reg_dir, refCh, GPU, save_dir);
                     loading.loading = false;
                 }
                 catch (Exception e)
@@ -256,7 +256,7 @@ namespace IVM.Studio.ViewModels.UserControls
             }
         }
 
-        ImageRegistration.ImageRegistration reg = new ImageRegistration.ImageRegistration();
+        //ImageRegistration.ImageRegistration reg = new ImageRegistration.ImageRegistration();
 
         private void OpenSelected()
         {
