@@ -8,7 +8,7 @@ using System.Windows.Input;
 using WPFDrawing = System.Windows.Media;
 
 /**
- * @Class Name : Annotation.cs
+ * @Class Name : AnnotationInfo.cs
  * @Description : Annotation 모델
  * @
  * @ 수정일         수정자              수정내용
@@ -530,6 +530,53 @@ namespace IVM.Studio.Models
             TimeStampPosition = PositionType.LEFT;
 
             ZStackLabelPosition = PositionType.RIGHT;
+        }
+
+        /// <summary>
+        /// All UnChecked
+        /// </summary>
+        public void AllUnChecked()
+        {
+            PenEnabled = false;
+            EraserEnabled = false;
+            TextEnabled = false;
+            DrawRectangleEnabled = false;
+            DrawCircleEnabled = false;
+            DrawTriangleEnabled = false;
+            DrawLineEnabled = false;
+        }
+
+        /// <summary>
+        /// Reset Draw Checked
+        /// </summary>
+        public void ResetChecked()
+        {
+            if (DrawRectangleEnabled)
+            {
+                DrawRectangleEnabled = false;
+                DrawRectangleEnabled = true;
+            }
+            if (DrawCircleEnabled)
+            {
+                DrawCircleEnabled = false;
+                DrawCircleEnabled = true;
+            }
+            if (DrawTriangleEnabled)
+            {
+                DrawTriangleEnabled = false;
+                DrawTriangleEnabled = true;
+            }
+            if (DrawLineEnabled)
+            {
+                DrawLineEnabled = false;
+                DrawLineEnabled = true;
+            }
+
+            if (CropEnabled)
+            {
+                CropEnabled = false;
+                CropEnabled = true;
+            }
         }
 
         /// <summary>

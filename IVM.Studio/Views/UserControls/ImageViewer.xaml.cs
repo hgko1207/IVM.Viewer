@@ -50,9 +50,16 @@ namespace IVM.Studio.Views.UserControls
 
             eventAggregator.GetEvent<GetPositionToCropEvent>().Subscribe(GetPosition);
 
+            eventAggregator.GetEvent<DrawMeasurementEvent>().Subscribe(DrawMeasurement);
+
             Unloaded += ViewerUnload;
         }
 
+        /// <summary>
+        /// Viewer Unload
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ViewerUnload(object sender, RoutedEventArgs e)
         {
             eventAggregator.GetEvent<EnableCropEvent>().Unsubscribe(CanvasToTop);
@@ -65,6 +72,8 @@ namespace IVM.Studio.Views.UserControls
             eventAggregator.GetEvent<DrawCropTriangleEvent>().Unsubscribe(DrawCropTriangle);
 
             eventAggregator.GetEvent<GetPositionToCropEvent>().Unsubscribe(GetPosition);
+
+            eventAggregator.GetEvent<DrawMeasurementEvent>().Unsubscribe(DrawMeasurement);
         }
 
         /// <summary>
@@ -213,6 +222,18 @@ namespace IVM.Studio.Views.UserControls
                 Canvas.SetTop(cropTriangle, param.Top);
                 Canvas.SetLeft(cropTriangle, param.Left);
             }
+        }
+
+        /// <summary>
+        /// Draw Measurement
+        /// </summary>
+        /// <param name="enabled"></param>
+        private void DrawMeasurement(bool enabled)
+        {
+            if (enabled)
+                CanvasToTop();
+            else
+                ImageToTop();
         }
 
         /// <summary>

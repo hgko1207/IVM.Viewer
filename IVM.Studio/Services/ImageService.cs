@@ -102,22 +102,21 @@ namespace IVM.Studio.Services
         /// <returns></returns>
         public Bitmap TranslateColor(Bitmap image, float[][] colorMatrix)
         {
-            GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
-            GDIDrawing.Imaging.ImageAttributes attr = new GDIDrawing.Imaging.ImageAttributes();
-            attr.SetColorMatrix(cm);
-
             Bitmap bitmap = new Bitmap(image.Width, image.Height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                GDIDrawing.Imaging.ColorMatrix cm = new GDIDrawing.Imaging.ColorMatrix(colorMatrix);
+                GDIDrawing.Imaging.ImageAttributes attr = new GDIDrawing.Imaging.ImageAttributes();
+                attr.SetColorMatrix(cm);
 
-            Point[] destPoints = new Point[] {
+                Point[] destPoints = new Point[] {
                     new Point(0, 0),
                     new Point(bitmap.Width, 0),
                     new Point(0, bitmap.Height)
                 };
 
-            Rectangle srcRect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                Rectangle srcRect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
 
-            using (Graphics graphics = Graphics.FromImage(bitmap))
-            {
                 graphics.DrawImage(image, destPoints, srcRect, GraphicsUnit.Pixel, attr);
             }
 
@@ -235,7 +234,11 @@ namespace IVM.Studio.Services
             image.RotateFlip((RotateFlipType)targetForm);
         }
 
-        /// <summary>주어진 비트맵 이미지 위에 다른 이미지를 그립니다.</summary>
+        /// <summary>
+        /// 주어진 비트맵 이미지 위에 다른 이미지를 그립니다.
+        /// </summary>
+        /// <param name="originalImage"></param>
+        /// <param name="overlayImage"></param>
         public void DrawImageOnImage(Bitmap originalImage, Bitmap overlayImage)
         {
             if (originalImage == null || overlayImage == null) 

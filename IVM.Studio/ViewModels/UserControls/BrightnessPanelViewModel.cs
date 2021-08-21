@@ -148,7 +148,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void ResetContrast()
         {
-            AllContrast = 1;
+            AllContrast = 50;
         }
     }
 }

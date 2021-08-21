@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -80,14 +81,15 @@ namespace IVM.Studio.ViewModels.UserControls
         private float[][] CurrentColorMatrix => imageService.GenerateColorMatrix(
                     startLevelByChannel: OrderByColor().Select(s => s.ColorLevelLowerValue).ToArray(),
                     endLevelByChannel: OrderByColor().Select(s => s.ColorLevelUpperValue).ToArray(),
-                    brightnessByChannel: OrderByColor().Select(s => s.Brightness).ToArray(),
-                    contrastByChannel: OrderByColor().Select(s => s.Contrast).ToArray(),
+                    brightnessByChannel: OrderByColor().Select(s => s.Brightness / 50).ToArray(),
+                    contrastByChannel: OrderByColor().Select(s => s.Contrast / 50).ToArray(),
                     translationByChannel: CurrentTranslationByChannel,
                     visibilityByChannel: CurrentVisibilityByChannel
                 );
 
         private ImageViewer view;
 
+        private int sequense;
         private int fovSizeX;
         private int fovSizeY;
 
@@ -112,8 +114,12 @@ namespace IVM.Studio.ViewModels.UserControls
         private System.Windows.Shapes.Polygon drawTriangle;
         private System.Windows.Shapes.Line drawLine;
 
-        private List<Bitmap> bitmapList;
-        private List<Bitmap> tempBitmapList;
+        private System.Windows.Shapes.Line drawMeasurementLine;
+
+        private List<Bitmap> bitmapList { get; set; }
+        private List<Bitmap> tempBitmapList { get; set; }
+
+        private bool measurementEnabled;
 
         /// <summary>
         /// 생성자
@@ -177,6 +183,8 @@ namespace IVM.Studio.ViewModels.UserControls
             EventAggregator.GetEvent<ExportDrawEvent>().Subscribe(ExportDraw);
             EventAggregator.GetEvent<ExportDrawAllEvent>().Subscribe(ExportDrawAll);
 
+            EventAggregator.GetEvent<DrawMeasurementEvent>().Subscribe(DrawMeasurement);
+
             // 디스플레이
             DisplayImage(dataManager.MainWindowId);
         }
@@ -199,6 +207,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
             EventAggregator.GetEvent<ZoomRatioControlEvent>().Unsubscribe(ZoomRatioControl);
             EventAggregator.GetEvent<ExportCropEvent>().Unsubscribe(ExportCrop);
+
+            EventAggregator.GetEvent<DrawMeasurementEvent>().Unsubscribe(DrawMeasurement);
 
             this.view = null;
         }
@@ -235,6 +245,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 fovSizeX = param.Metadata.FovX;
                 fovSizeY = param.Metadata.FovY;
+                sequense = param.Metadata.Sequence.Sequence;
             }
             else
             {
@@ -327,8 +338,8 @@ namespace IVM.Studio.ViewModels.UserControls
                             float[][] colorMatrix = imageService.GenerateColorMatrix(
                                 startLevelByChannel: OrderByColor().Select(s => s.ColorLevelLowerValue).ToArray(),
                                 endLevelByChannel: OrderByColor().Select(s => s.ColorLevelUpperValue).ToArray(),
-                                brightnessByChannel: OrderByColor().Select(s => s.Brightness).ToArray(),
-                                contrastByChannel: OrderByColor().Select(s => s.Contrast).ToArray(),
+                                brightnessByChannel: OrderByColor().Select(s => s.Brightness / 50).ToArray(),
+                                contrastByChannel: OrderByColor().Select(s => s.Contrast / 50).ToArray(),
                                 translationByChannel: CurrentTranslationByChannel,
                                 visibilityByChannel: visibilityByChannel
                             );
@@ -360,6 +371,8 @@ namespace IVM.Studio.ViewModels.UserControls
                                     }
                                 }
                             }
+
+                            Thread.Sleep(500);
                         }
                     }
                 }
@@ -590,7 +603,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
 
-                    bitmapList.Add(new Bitmap(displayingImageGDI));
+                    if (view != null && view.WindowId == dataManager.MainWindowId)
+                        bitmapList.Add(new Bitmap(displayingImageGDI));
                 }
 
                 imagePreviousPoint = null;
@@ -724,6 +738,25 @@ namespace IVM.Studio.ViewModels.UserControls
                     drawLine.X2 = currentPoint.X;
                     drawLine.Y2 = currentPoint.Y;
                 }
+                else if (measurementEnabled)
+                {
+                    if (drawMeasurementLine == null)
+                    {
+                        drawMeasurementLine = new System.Windows.Shapes.Line()
+                        {
+                            Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 0, 0)),
+                            StrokeThickness = 2
+                        };
+
+                        Panel.SetZIndex(drawMeasurementLine, 1);
+                        view.ImageOverlayCanvas.Children.Add(drawMeasurementLine);
+                    }
+
+                    drawMeasurementLine.X1 = viewPortPreviousPoint.Value.X;
+                    drawMeasurementLine.Y1 = viewPortPreviousPoint.Value.Y;
+                    drawMeasurementLine.X2 = currentPoint.X;
+                    drawMeasurementLine.Y2 = currentPoint.Y;
+                }
             }
         }
 
@@ -800,8 +833,20 @@ namespace IVM.Studio.ViewModels.UserControls
 
                         DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
 
-                        bitmapList.Add(new Bitmap(displayingImageGDI));
+                        if (view != null && view.WindowId == dataManager.MainWindowId)
+                            bitmapList.Add(new Bitmap(displayingImageGDI));
                     }
+                }
+                else if (measurementEnabled && drawMeasurementLine != null)
+                {
+                    EventAggregator.GetEvent<AddMeasurementEvent>().Publish(new MeasurementData()
+                    {
+                        Seq = sequense,
+                        StartX = (int)drawMeasurementLine.X1 * (fovSizeX == 0 ? 500 : fovSizeX),
+                        StartY = (int)drawMeasurementLine.Y1 * (fovSizeY == 0 ? 500 : fovSizeY),
+                        EndX = (int)drawMeasurementLine.X2 * (fovSizeX == 0 ? 500 : fovSizeX),
+                        EndY = (int)drawMeasurementLine.Y2 * (fovSizeY == 0 ? 500 : fovSizeY),
+                    });
                 }
 
                 viewPortPreviousPoint = null;
@@ -1018,6 +1063,20 @@ namespace IVM.Studio.ViewModels.UserControls
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Draw Measurement
+        /// </summary>
+        /// <param name="enabled"></param>
+        private void DrawMeasurement(bool enabled)
+        {
+            measurementEnabled = enabled;
+            if (!enabled)
+            {
+                view.ImageOverlayCanvas.Children.Remove(drawMeasurementLine);
+                drawMeasurementLine = null;
             }
         }
 

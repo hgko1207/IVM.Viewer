@@ -139,6 +139,9 @@ namespace IVM.Studio.ViewModels
                 dataManager.MainWindowId = view.WindowId;
                 EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Publish(view.WindowId);
                 view.ActivatedBorder.BorderThickness = new Thickness(1);
+
+                dataManager.AnnotationInfo.ResetChecked();
+                dataManager.MeasurementInfo.ResetChecked();
             }
         }
 
