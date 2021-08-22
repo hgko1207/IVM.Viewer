@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Prism.Mvvm;
 
 /**
  * @Class Name : MeasurementInfo.cs
@@ -18,13 +14,13 @@ using System.Threading.Tasks;
  */
 namespace IVM.Studio.Models
 {
-    public class MeasurementInfo
+    public class MeasurementData
     {
         public int Line { get; set; }
 
         public int Seq { get; set; }
 
-        public double Length { get; set; }
+        public string Length { get; set; }
 
         public int StartX { get; set; }
 

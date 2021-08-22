@@ -48,6 +48,13 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type dxdo:DocumentPanel}">
+        <Setter Property="AllowClose" Value="False"/>
+        <Setter Property="AllowMinimize" Value="False"/>
+        <Setter Property="AllowMaximize" Value="False"/>
+        <Setter Property="AllowSizing" Value="False"/>
+    </Style>
+    
     <Style TargetType="{x:Type dxg:GridControl}">
         <Setter Property="ShowBorder" Value="False"/>
         <Setter Property="dx:ScrollBarExtensions.ScrollBarMode" Value="TouchOverlap"/>

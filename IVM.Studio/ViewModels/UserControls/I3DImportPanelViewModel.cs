@@ -158,7 +158,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     imgreg = new ImageRegistration.ImageRegistration();
                 }
-                catch (Exception e)
+                catch
                 {
                     MessageBox.Show("[ERROR] ImageRegistration failed\r\n\r\n" +
                         "Matlab-Runtime 을 설치해야 합니다. " +

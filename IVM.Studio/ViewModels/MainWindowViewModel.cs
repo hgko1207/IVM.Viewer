@@ -11,7 +11,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -115,15 +114,11 @@ namespace IVM.Studio.ViewModels
         private WindowSnapper snapper2; // 3d-slice-view
         private I3DWcfServer wcfserver;
 
-        private readonly IEnumerable<string> imageFileExtensions;
-        private readonly IEnumerable<string> videoFileExtensions;
-        private IEnumerable<string> approvedExtensions => Enumerable.Concat(imageFileExtensions, videoFileExtensions);
-
         private string currentSlidesPath;
         private FileInfo currentFile;
         private DirectoryInfo currentDirectory;
 
-        private DataManager dataManager;
+        private readonly DataManager dataManager;
 
         public SliderControlInfo SliderControlInfo { get; set; }
 
@@ -173,10 +168,6 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<I3DWindowLoadedEvent>().Subscribe(I3DWindowLoaded);
             EventAggregator.GetEvent<I3DMainViewVisibleChangedEvent>().Subscribe(I3DMainViewVisibleChanged);
             EventAggregator.GetEvent<I3DSliceViewVisibleChangedEvent>().Subscribe(I3DSliceViewVisibleChanged);
-
-
-            imageFileExtensions = new[] { ".ivm" };
-            videoFileExtensions = new[] { ".avi" };
 
             SliderControlInfo = dataManager.SliderControlInfo;
 
@@ -280,7 +271,7 @@ namespace IVM.Studio.ViewModels
                 bool first = true;
                 foreach (DirectoryInfo imageFolder in directory.EnumerateDirectories())
                 {
-                    if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, approvedExtensions, true).Any())
+                    if (!Container.Resolve<FileService>().GetImagesInFolder(imageFolder, dataManager.ApprovedExtensions, true).Any())
                         continue;
 
                     SlideInfo slideInfo = new SlideInfo() { Category = "Folder", Name = imageFolder.Name, Format = FolderNameToFormat(imageFolder.Name) };
@@ -293,9 +284,9 @@ namespace IVM.Studio.ViewModels
                     }
                 }
 
-                foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, approvedExtensions, false))
+                foreach (FileInfo fileInfo in Container.Resolve<FileService>().GetImagesInFolder(directory, dataManager.ApprovedExtensions, false))
                 {
-                    string format = imageFileExtensions.Any(s => s.Equals(fileInfo.Extension, StringComparison.InvariantCultureIgnoreCase)) ? "PNG" : "AVI";
+                    string format = dataManager.ImageFileExtensions.Any(s => s.Equals(fileInfo.Extension, StringComparison.InvariantCultureIgnoreCase)) ? "PNG" : "AVI";
 
                     SlideInfo slideInfo = new SlideInfo() { Category = "File", Name = fileInfo.Name, Format = format };
                     SlideInfoCollection.Add(slideInfo);
@@ -346,7 +337,7 @@ namespace IVM.Studio.ViewModels
             if (SelectedSlideInfo.Category == "Folder")
             {
                 currentDirectory = new DirectoryInfo(slidePath);
-                file = Container.Resolve<FileService>().FindImageInSlide(currentDirectory, approvedExtensions,
+                file = Container.Resolve<FileService>().FindImageInSlide(currentDirectory, dataManager.ApprovedExtensions,
                    SliderControlInfo.TLSliderValue, SliderControlInfo.MPSliderValue, SliderControlInfo.MSSliderValue, SliderControlInfo.ZSSliderValue);
             }
             else
@@ -376,12 +367,12 @@ namespace IVM.Studio.ViewModels
             EventAggregator.GetEvent<RefreshMetadataEvent>().Publish(displayParam);
 
             // 디스플레이
-            if (imageFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            if (dataManager.ImageFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
                 dataManager.ViewerName = nameof(ImageViewer);
                 EventAggregator.GetEvent<DisplayImageEvent>().Publish(displayParam);
             }
-            else if (videoFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
+            else if (dataManager.VideoFileExtensions.Any(s => s.Equals(currentFile.Extension, StringComparison.InvariantCultureIgnoreCase)))
             {
                 dataManager.ViewerName = nameof(VideoViewer);
                 EventAggregator.GetEvent<DisplayVideoEvent>().Publish(displayParam);

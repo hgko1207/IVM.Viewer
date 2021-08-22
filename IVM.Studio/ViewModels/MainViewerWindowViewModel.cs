@@ -41,7 +41,7 @@ namespace IVM.Studio.ViewModels
         private UserControl imagePage;
         private UserControl videoPage;
 
-        private DataManager dataManager;
+        private readonly DataManager dataManager;
 
         /// <summary>
         /// 생성자
@@ -65,11 +65,12 @@ namespace IVM.Studio.ViewModels
             view.Activated += WindowActivated;
             view.Deactivated += WindowDeactivated;
 
+            EventAggregator.GetEvent<DisplayImageEvent>().Subscribe(DisplayImage);
             EventAggregator.GetEvent<ViewerPageChangeEvent>().Subscribe(ViewerPageChange);
             EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Subscribe(MainWindowDeactivated);
 
             videoPage = new VideoViewer() { WindowId = view.WindowId };
-            imagePage = new ImageViewer(EventAggregator) { WindowId = view.WindowId, WindowInfo = view.WindowInfo };
+            imagePage = new ImageViewer(Container, EventAggregator) { WindowId = view.WindowId, WindowInfo = view.WindowInfo };
 
             InitViewerChanged();
         }
@@ -80,8 +81,27 @@ namespace IVM.Studio.ViewModels
         /// <param name="view"></param>
         public void OnUnloaded(MainViewerWindow view)
         {
-            EventAggregator.GetEvent<MainViewerUnloadEvent>().Publish(view.WindowId);
+            EventAggregator.GetEvent<DisplayImageEvent>().Unsubscribe(DisplayImage);
             EventAggregator.GetEvent<ViewerPageChangeEvent>().Unsubscribe(ViewerPageChange);
+            EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Unsubscribe(MainWindowDeactivated);
+
+            EventAggregator.GetEvent<MainViewerUnloadEvent>().Publish(view.WindowId);
+        }
+
+        /// <summary>
+        /// DisplayImage
+        /// </summary>
+        /// <param name="param"></param>
+        private void DisplayImage(DisplayParam param)
+        {
+            if (param.SlideChanged)
+            {
+                string viewerName = dataManager.ViewerName;
+                if (viewerName == nameof(VideoViewer))
+                    Title = "Video Viewer - " + param.Metadata.FileName;
+                else
+                    Title = "Image Viewer - " + param.Metadata.FileName;
+            }
         }
 
         /// <summary>
@@ -91,15 +111,9 @@ namespace IVM.Studio.ViewModels
         {
             string viewerName = dataManager.ViewerName;
             if (viewerName == nameof(VideoViewer))
-            {
-                Title = "Video Viewer - #" + view.WindowId;
                 ViewerPage = videoPage;
-            }
             else
-            {
-                Title = "Image Viewer - #" + view.WindowId;
                 ViewerPage = imagePage;
-            }
         }
 
         /// <summary>
@@ -123,8 +137,13 @@ namespace IVM.Studio.ViewModels
             if (view.IsActive)
             {
                 dataManager.MainWindowId = view.WindowId;
+                dataManager.WindowInfo = view.WindowInfo;
+
                 EventAggregator.GetEvent<MainWindowDeactivatedEvent>().Publish(view.WindowId);
                 view.ActivatedBorder.BorderThickness = new Thickness(1);
+
+                dataManager.AnnotationInfo.ResetChecked();
+                dataManager.MeasurementInfo.ResetChecked();
             }
         }
 

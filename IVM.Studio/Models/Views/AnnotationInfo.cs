@@ -8,7 +8,7 @@ using System.Windows.Input;
 using WPFDrawing = System.Windows.Media;
 
 /**
- * @Class Name : Annotation.cs
+ * @Class Name : AnnotationInfo.cs
  * @Description : Annotation 모델
  * @
  * @ 수정일         수정자              수정내용
@@ -40,6 +40,10 @@ namespace IVM.Studio.Models
                         CropCircleEnabled = false;
                         CropTriangleEnabled = false;
                     }
+                    else
+                    {
+                        CropCircleEnabled = true;
+                    }
 
                     if (CropEnabled)
                     {
@@ -63,6 +67,10 @@ namespace IVM.Studio.Models
                         CropRectangleEnabled = false;
                         CropTriangleEnabled = false;
                     }
+                    else
+                    {
+                        CropRectangleEnabled = true;
+                    }
 
                     if (CropEnabled)
                     {
@@ -85,6 +93,10 @@ namespace IVM.Studio.Models
                     {
                         CropRectangleEnabled = false;
                         CropCircleEnabled = false;
+                    }
+                    else
+                    {
+                        CropRectangleEnabled = true;
                     }
 
                     if (CropEnabled)
@@ -136,14 +148,6 @@ namespace IVM.Studio.Models
         {
             get => cropInvertEnabled;
             set => SetProperty(ref cropInvertEnabled, value);
-        }
-
-
-        private bool allCropEnabled;
-        public bool AllCropEnabled
-        {
-            get => allCropEnabled;
-            set => SetProperty(ref allCropEnabled, value);
         }
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -484,12 +488,12 @@ namespace IVM.Studio.Models
             }
         }
 
-        public ICommand AllCropCommand { get; private set; }
         public ICommand ExportCropCommand { get; private set; }
+        public ICommand ExportAllCropCommand { get; private set; }
 
-        private IEventAggregator eventAggregator;
+        private readonly IEventAggregator eventAggregator;
 
-        private DataManager dataManager;
+        private readonly DataManager dataManager;
 
         /// <summary>
         /// 생성자
@@ -500,20 +504,20 @@ namespace IVM.Studio.Models
             this.eventAggregator = eventAggregator;
             dataManager = container.Resolve<DataManager>();
 
-            AllCropCommand = new DelegateCommand(AllCrop);
             ExportCropCommand = new DelegateCommand(ExportCrop);
+            ExportAllCropCommand = new DelegateCommand(ExportAllCrop);
 
             CropRectangleEnabled = true;
 
             PenThickness = 2;
-            PenColor = WPFDrawing.Colors.White;
+            PenColor = WPFDrawing.Colors.Blue;
 
             TextFontSize = 12;
-            TextColor = WPFDrawing.Colors.White;
+            TextColor = WPFDrawing.Colors.Blue;
 
             EraserThickness = 20;
 
-            DrawColor = WPFDrawing.Colors.White;
+            DrawColor = WPFDrawing.Colors.Blue;
             DrawThickness = 2;
 
             ScaleBarSize = 100;
@@ -529,11 +533,50 @@ namespace IVM.Studio.Models
         }
 
         /// <summary>
-        /// All Crop
+        /// All UnChecked
         /// </summary>
-        private void AllCrop()
+        public void AllUnChecked()
         {
+            PenEnabled = false;
+            EraserEnabled = false;
+            TextEnabled = false;
+            DrawRectangleEnabled = false;
+            DrawCircleEnabled = false;
+            DrawTriangleEnabled = false;
+            DrawLineEnabled = false;
+        }
 
+        /// <summary>
+        /// Reset Draw Checked
+        /// </summary>
+        public void ResetChecked()
+        {
+            if (DrawRectangleEnabled)
+            {
+                DrawRectangleEnabled = false;
+                DrawRectangleEnabled = true;
+            }
+            if (DrawCircleEnabled)
+            {
+                DrawCircleEnabled = false;
+                DrawCircleEnabled = true;
+            }
+            if (DrawTriangleEnabled)
+            {
+                DrawTriangleEnabled = false;
+                DrawTriangleEnabled = true;
+            }
+            if (DrawLineEnabled)
+            {
+                DrawLineEnabled = false;
+                DrawLineEnabled = true;
+            }
+
+            if (CropEnabled)
+            {
+                CropEnabled = false;
+                CropEnabled = true;
+            }
         }
 
         /// <summary>
@@ -543,6 +586,12 @@ namespace IVM.Studio.Models
         {
             if (CropEnabled)
                 eventAggregator.GetEvent<ExportCropEvent>().Publish();
+        }
+
+        private void ExportAllCrop()
+        {
+            if (CropEnabled)
+                eventAggregator.GetEvent<ExportAllCropEvent>().Publish();
         }
     }
 }

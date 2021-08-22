@@ -75,7 +75,7 @@ namespace IVM.Studio.Services
         /// <param name="channel"></param>
         public void CloseDisplay(int channel)
         {
-            if (channel < 0 || channel >= 4) 
+            if (channel < 0 || channel >= 4)
                 return;
 
             if (channelViewerWindows[channel] != null)

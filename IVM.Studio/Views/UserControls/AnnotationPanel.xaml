@@ -169,7 +169,7 @@
 
         <ContentControl Grid.Row="5" Template="{StaticResource HorizontalLine}" Margin="0 8" />
 
-        <StackPanel Grid.Row="6" Margin="5 0">
+        <StackPanel Grid.Row="6" Margin="5 0 5 5">
             <DockPanel>
                 <TextBlock Text="Z-stack Label" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 

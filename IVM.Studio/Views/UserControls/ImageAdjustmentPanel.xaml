@@ -201,7 +201,8 @@
                     <TextBlock TextAlignment="Center" Text="(425-465)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{Binding DAPIColor, Converter={StaticResource ButtonStyleConverter}}" Width="56" Height="30" Content="{Binding DAPIColor}">
+                <dx:SimpleButton Grid.Row="0" Grid.Column="1" Style="{Binding DAPIColor, Converter={StaticResource ButtonStyleConverter}}" Width="56" Height="30" Content="{Binding DAPIColor}"
+                                 dxb:BarManager.MenuShowMouseButton="LeftButton">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -222,7 +223,8 @@
                     <TextBlock TextAlignment="Center" Text="(500-550)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{Binding GFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding GFPColor}" Width="56" Height="30">
+                <dx:SimpleButton Grid.Row="2" Grid.Column="1" Style="{Binding GFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding GFPColor}" Width="56" Height="30"
+                                 dxb:BarManager.MenuShowMouseButton="LeftButton">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -243,7 +245,8 @@
                     <TextBlock TextAlignment="Center" Text="(582-618)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{Binding RFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding RFPColor}" Width="56" Height="30">
+                <dx:SimpleButton Grid.Row="4" Grid.Column="1" Style="{Binding RFPColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding RFPColor}" Width="56" Height="30"
+                                 dxb:BarManager.MenuShowMouseButton="LeftButton">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>
@@ -264,7 +267,8 @@
                     <TextBlock TextAlignment="Center" Text="(663-733)" Margin="0 -4 0 0"/>
                 </StackPanel>
 
-                <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{Binding NIRColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding NIRColor}" Width="56" Height="30">
+                <dx:SimpleButton Grid.Row="6" Grid.Column="1" Style="{Binding NIRColor, Converter={StaticResource ButtonStyleConverter}}" Content="{Binding NIRColor}" Width="56" Height="30"
+                                 dxb:BarManager.MenuShowMouseButton="LeftButton">
                     <dxb:BarManager.DXContextMenu>
                         <dxb:PopupMenu>
                             <dxb:PopupMenu.Items>

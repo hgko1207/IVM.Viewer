@@ -65,9 +65,12 @@ namespace IVM.Studio.Models.Events
         }
     }
 
+    /// <summary>Draw 이벤트</summary>
     public class DrawClearEvent : PubSubEvent { }
     public class DrawUndoEvent : PubSubEvent { }
     public class DrawRedoEvent : PubSubEvent { }
+
+    /// <summary>Export 이벤트</summary>
     public class ExportDrawEvent : PubSubEvent { }
     public class ExportDrawAllEvent : PubSubEvent { }
 
@@ -75,6 +78,7 @@ namespace IVM.Studio.Models.Events
     public class ReflectEvent : PubSubEvent<string> { }
     public class RotationResetEvent : PubSubEvent { }
 
+    /// <summary>Slide 관련 이벤트</summary>
     public class DisplaySlideEvent : PubSubEvent<bool> { }
 
     public class PlaySlideShowEvent : PubSubEvent { }
@@ -86,6 +90,7 @@ namespace IVM.Studio.Models.Events
         public string SlideName { get; set; }
     }
 
+    /// <summary>Video 관련 이벤트</summary>
     public class PlayVideoEvent : PubSubEvent { }
     public class PauseVideoEvent : PubSubEvent { }
     public class StopVideoEvent : PubSubEvent { }
@@ -105,6 +110,7 @@ namespace IVM.Studio.Models.Events
     }
     public class TrimWindowClosedEvent : PubSubEvent { }
 
+    /// <summary>TextAnnotation 관련 이벤트</summary>
     public class TextAnnotationDialogEvent : PubSubEvent<TextAnnotationDialogParam> { }
     public class TextAnnotationDialogParam
     {
@@ -142,6 +148,7 @@ namespace IVM.Studio.Models.Events
     public class EnableDrawEvent : PubSubEvent { }
     public class DisableDrawEvent : PubSubEvent { }
 
+    /// <summary>Crop 관련 이벤트</summary>
     public class EnableCropEvent : PubSubEvent { }
     public class DisableCropEvent : PubSubEvent { }
 
@@ -179,6 +186,7 @@ namespace IVM.Studio.Models.Events
     }
 
     public class ExportCropEvent : PubSubEvent { }
+    public class ExportAllCropEvent : PubSubEvent { }
 
     public class NavigatorChangeEvent : PubSubEvent<NavigatorParam> { }
     public class NavigatorParam
@@ -187,6 +195,9 @@ namespace IVM.Studio.Models.Events
         public double ImageHeight { get; set; }
         public int ZoomRatio { get; set; }
     }
+
+    public class DrawMeasurementEvent : PubSubEvent<bool> { }
+    public class AddMeasurementEvent : PubSubEvent<MeasurementData> { }
 
     public class I3DWindowLoadedEvent : PubSubEvent<int> { }
 

@@ -187,10 +187,10 @@ namespace IVM.Studio.Models
             }
         }
 
-        private IContainerExtension containerExtension;
-        private IEventAggregator eventAggregator;
+        private readonly IContainerExtension containerExtension;
+        private readonly IEventAggregator eventAggregator;
 
-        private DataManager dataManager;
+        private readonly DataManager dataManager;
 
         public ColorChannelModel(ChannelType type, string channelName, bool visible, Colors color, bool display, float brightness, float contrast, 
                 int lowerLevel, int upperLevel, IContainerExtension containerExtension, IEventAggregator eventAggregator)

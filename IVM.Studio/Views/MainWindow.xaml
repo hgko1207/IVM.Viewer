@@ -9,7 +9,6 @@
         xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
         xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
         xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
-        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         xmlns:util="clr-namespace:IVM.Studio.Utils"
         xmlns:prism="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
@@ -54,7 +53,7 @@
             <dxdo:DockLayoutManager ViewStyle="Default" Background="#1F201D" FloatingMode="Desktop">
                 <dxdo:LayoutGroup Caption="LeftGroup" Orientation="Vertical">
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemHeight="300">
-                        <dxdo:DocumentPanel Caption="Image Data" AllowClose="False">
+                        <dxdo:DocumentPanel Caption="Image Data">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
@@ -103,7 +102,7 @@
                             </Grid>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Imaging Parameter" AllowClose="False">
+                        <dxdo:DocumentPanel Caption="Imaging Parameter">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -150,33 +149,33 @@
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
-                        <dxdo:DocumentPanel Caption="Image Adjustment" AllowClose="False" ItemHeight="360">
+                        <dxdo:DocumentPanel Caption="Image Adjustment" ItemHeight="360">
                             <ContentControl prism:RegionManager.RegionName="ImageAdjustmentPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Brightness/Contrast" AllowClose="False" ItemHeight="350">
+                        <dxdo:DocumentPanel Caption="Brightness/Contrast" ItemHeight="350">
                             <ContentControl prism:RegionManager.RegionName="BrightnessPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Annotation" AllowClose="False" ItemHeight="400">
+                        <dxdo:DocumentPanel Caption="Annotation" ItemHeight="400">
                             <ContentControl prism:RegionManager.RegionName="AnnotationPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Colormap" AllowClose="False" ItemHeight="320">
+                        <dxdo:DocumentPanel Caption="Colormap" ItemHeight="320">
                             <ContentControl prism:RegionManager.RegionName="ColormapPanel"/>
                         </dxdo:DocumentPanel>
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
-                        <dxdo:DocumentPanel Caption="Display Control" AllowClose="False" ItemHeight="320">
+                        <dxdo:DocumentPanel Caption="Display Control" ItemHeight="320">
                             <ContentControl prism:RegionManager.RegionName="DisplayControlPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Post Processing" AllowClose="False" ItemHeight="320">
+                        <dxdo:DocumentPanel Caption="Post Processing" ItemHeight="320">
                             <ContentControl prism:RegionManager.RegionName="PostProcessingPanel"/>
                         </dxdo:DocumentPanel>
 
-                        <dxdo:DocumentPanel Caption="Measurement" AllowClose="False" ItemHeight="320">
+                        <dxdo:DocumentPanel Caption="Measurement" ItemHeight="320">
                             <ContentControl prism:RegionManager.RegionName="MeasurementPanel"/>
                         </dxdo:DocumentPanel>
 

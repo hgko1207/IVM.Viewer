@@ -1,8 +1,13 @@
 ﻿using IVM.Studio.Models;
+using IVM.Studio.Models.Events;
+using IVM.Studio.Models.Views;
 using IVM.Studio.Mvvm;
+using IVM.Studio.Services;
 using IVM.Studio.Views.UserControls;
+using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Ioc;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -22,19 +27,24 @@ namespace IVM.Studio.ViewModels.UserControls
 {
     public class MeasurementPanelViewModel : ViewModelBase, IViewLoadedAndUnloadedAware<MeasurementPanel>
     {
-        private ObservableCollection<MeasurementInfo> measurementInfoCollection;
-        public ObservableCollection<MeasurementInfo> MeasurementInfoCollection => measurementInfoCollection ?? (measurementInfoCollection = new ObservableCollection<MeasurementInfo>());
+        private ObservableCollection<MeasurementData> measurementInfoCollection;
+        public ObservableCollection<MeasurementData> MeasurementInfoCollection => measurementInfoCollection ?? (measurementInfoCollection = new ObservableCollection<MeasurementData>());
 
-        private MeasurementInfo selectedMeasurementInfo;
-        public MeasurementInfo SelectedMeasurementInfo
+        private MeasurementData selectedMeasurementInfo;
+        public MeasurementData SelectedMeasurementInfo
         {
             get => selectedMeasurementInfo;
             set => SetProperty(ref selectedMeasurementInfo, value);
         }
 
-        public ICommand AddCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
+        public ICommand ClearCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
+
+        private MeasurementPanel view;
+
+        private readonly DataManager dataManager;
+        public MeasurementInfo MeasurementInfo { get; set; }
 
         /// <summary>
         /// 생성자
@@ -42,9 +52,14 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="container"></param>
         public MeasurementPanelViewModel(IContainerExtension container) : base(container)
         {
-            AddCommand = new DelegateCommand(Add);
             DeleteCommand = new DelegateCommand(Delete);
+            ClearCommand = new DelegateCommand(Clear);
             SaveCommand = new DelegateCommand(Save);
+
+            dataManager = Container.Resolve<DataManager>();
+            MeasurementInfo = dataManager.MeasurementInfo;
+
+            EventAggregator.GetEvent<AddMeasurementEvent>().Subscribe(AddMeasurement);
         }
 
         /// <summary>
@@ -53,6 +68,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <param name="view"></param>
         public void OnLoaded(MeasurementPanel view)
         {
+            this.view = view;
         }
 
         /// <summary>
@@ -64,11 +80,16 @@ namespace IVM.Studio.ViewModels.UserControls
         }
 
         /// <summary>
-        /// 추가 이벤트
+        /// Add Measurement
         /// </summary>
-        private void Add()
+        /// <param name="measurementInfo"></param>
+        private void AddMeasurement(MeasurementData measurementInfo)
         {
+            double length = Math.Sqrt(Math.Pow(measurementInfo.StartX - measurementInfo.EndX, 2) 
+                + Math.Pow(measurementInfo.StartY - measurementInfo.EndY, 2));
+            measurementInfo.Length = length.ToString("F2");
 
+            MeasurementInfoCollection.Add(measurementInfo);
         }
 
         /// <summary>
@@ -76,7 +97,18 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Delete()
         {
+            if (SelectedMeasurementInfo != null)
+            {
+                MeasurementInfoCollection.Remove(SelectedMeasurementInfo);
+            }
+        }
 
+        /// <summary>
+        /// 초기화
+        /// </summary>
+        private void Clear()
+        {
+            MeasurementInfoCollection.Clear();
         }
 
         /// <summary>
@@ -84,7 +116,19 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void Save()
         {
-
+            if (MeasurementInfoCollection.Count > 0)
+            {
+                VistaSaveFileDialog dialog = new VistaSaveFileDialog
+                {
+                    DefaultExt = ".csv",
+                    Filter = "csv|*.csv",
+                    FileName = dataManager.WindowInfo.Name + "_Measurement.csv"
+                };
+                if (dialog.ShowDialog().GetValueOrDefault())
+                {
+                    view.MeasurementTable.ExportToCsv(dialog.FileName);
+                }
+            }
         }
     }
 }

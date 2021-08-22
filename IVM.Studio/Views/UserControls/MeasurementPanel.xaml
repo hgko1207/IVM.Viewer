@@ -12,6 +12,7 @@
              Background="#30302E"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -19,10 +20,10 @@
             <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
-        <dxg:GridControl ItemsSource="{Binding MeasurementInfoCollection}" SelectedItem="{Binding SelectedMeasurementInfo}" SelectionMode="Row" 
+        <dxg:GridControl ItemsSource="{Binding MeasurementInfoCollection}" SelectedItem="{Binding SelectedMeasurementInfo}" SelectionMode="Row"
                         ShowBorder="True" RenderOptions.EdgeMode="Aliased" MaxHeight="300">
             <dxg:GridControl.View>
-                <dxg:TableView AutoWidth="True"/>
+                <dxg:TableView Name="MeasurementTable" AutoWidth="True"/>
             </dxg:GridControl.View>
 
             <dxg:GridControl.Bands>
@@ -64,25 +65,15 @@
 
         <Grid Grid.Column="2" VerticalAlignment="Stretch">
             <StackPanel HorizontalAlignment="Stretch" Margin="2 5 2 0">
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Add" Command="{Binding AddCommand}"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Delete" Command="{Binding DeleteCommand}" Margin="0 10 0 0"/>
-                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Clear" Command="{Binding DeleteCommand}" Margin="0 10 0 0"/>
+                <dx:SimpleButton DataContext="{Binding MeasurementInfo}" Style="{StaticResource ToggleButton}" Content="Add" IsChecked="{Binding MeasurementEnabled}" Width="auto"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Delete" Command="{Binding DeleteCommand}" Margin="0 5 0 0"/>
+                <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Content="Clear" Command="{Binding ClearCommand}" Margin="0 5 0 0"/>
             </StackPanel>
             <StackPanel VerticalAlignment="Bottom">
                 <dx:SimpleButton Style="{StaticResource SkyGradientButton}" Margin="0 10 0 0" Height="42" Command="{Binding SaveCommand}">
                     <TextBlock TextAlignment="Center" FontSize="11">Save<LineBreak/>Measurement</TextBlock>
                 </dx:SimpleButton>
             </StackPanel>
-            <!--<StackPanel VerticalAlignment="Bottom">
-                <TextBlock Text="Pixel Size"/>
-
-                <StackPanel Orientation="Horizontal" Height="25" Margin="0 5 0 0">
-                    <Border Style="{StaticResource GeneralBorder}" Width="35">
-                        <TextBlock Text="{Binding PixelText}" Style="{StaticResource GeneralTextBlock}"/>
-                    </Border>
-                    <TextBlock Text="μm/pixel" VerticalAlignment="Center" Margin="8 0 0 0"/>
-                </StackPanel>
-            </StackPanel>-->
         </Grid>
     </Grid>
 </UserControl>
