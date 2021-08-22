@@ -38,8 +38,8 @@ namespace IVM.Studio.I3D
         mat4 matSliceXView = mat4.identity();
         mat4 matSliceXRot = mat4.identity();
 
-        public delegate void FirstRenderDelegate();
-        public FirstRenderDelegate firstRenderFunc = null;
+        public delegate void RenderDelegate();
+        public RenderDelegate firstRenderFunc = null;
         bool firstRenderd = false;
 
         public I3DScene(I3DViewer v)
@@ -133,7 +133,7 @@ namespace IVM.Studio.I3D
         {
             float s = view.param.CAMERA_SCALE_FACTOR;
 
-            Console.WriteLine("scale: {0}, trn: {1} {2}", s, view.param.CAMERA_POS.x, view.param.CAMERA_POS.y);
+            //Console.WriteLine("scale: {0}, trn: {1} {2}", s, view.param.CAMERA_POS.x, view.param.CAMERA_POS.y);
 
             // camera transform
             mat4 viewMatrix = glm.translate(mat4.identity(), view.param.CAMERA_POS);

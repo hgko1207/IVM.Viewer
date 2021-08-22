@@ -574,7 +574,6 @@ namespace IVM.Studio.I3D
         {
             float aw = (float)view.ActualWidth;
             float ah = (float)view.ActualHeight;
-            int mg = 4;
             int fs = view.param.GRID_TEXT_SIZE;
             vec4 fc = view.param.GRID_TEXT_COLOR;
 

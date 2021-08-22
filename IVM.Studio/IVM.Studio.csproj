@@ -169,6 +169,7 @@
     <Compile Include="Models\MeasurementData.cs" />
     <Compile Include="Models\Thumb.cs" />
     <Compile Include="Models\Views\I3DBackgroundInfo.cs" />
+    <Compile Include="Models\Views\I3DRecordlInfo.cs" />
     <Compile Include="Models\Views\I3DChannelInfo.cs" />
     <Compile Include="Models\Views\AnnotationInfo.cs" />
     <Compile Include="Models\Views\MeasurementInfo.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\DispatchTimer.cs" />
     <Compile Include="ViewModels\UserControls\I3D3DDisplayPanelViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\I3DRecordPreviewerViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3DSceneRecordingPanel.cs" />
     <Compile Include="ViewModels\UserControls\I3DFreeRecordingPanel.cs" />
     <Compile Include="ViewModels\UserControls\I3DSliceViewPanelViewModel.cs" />
@@ -224,6 +226,9 @@
     </Compile>
     <Compile Include="Views\UserControls\I3D3DDisplayPanel.xaml.cs">
       <DependentUpon>I3D3DDisplayPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\I3DRecordPreviewer.xaml.cs">
+      <DependentUpon>I3DRecordPreviewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\I3DSceneRecordingPanel.xaml.cs">
       <DependentUpon>I3DSceneRecordingPanel.xaml</DependentUpon>
@@ -302,6 +307,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UserControls\I3D3DDisplayPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\I3DRecordPreviewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

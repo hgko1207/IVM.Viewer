@@ -251,10 +251,6 @@
                                         AllowDrag="True" AllowDrop="True" AllowMove="True">
                         <ContentControl x:Name="i3dmv" prism:RegionManager.RegionName="I3DMainViewer" IsVisibleChanged="i3dmv_IsVisibleChanged"/>
                     </dxdo:DocumentPanel>
-                    <dxdo:DocumentPanel Caption="Record Preview" x:Name="i3drvdocp"
-                                        AllowClose="False" AllowFloat="True" AllowSizing="True" AllowDock="True"
-                                        AllowDrag="True" AllowDrop="True"  AllowMove="True">
-                    </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>
 
                 <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere" ItemWidth="5*" >
@@ -262,6 +258,11 @@
                                         AllowClose="False" AllowFloat="False" AllowSizing="True" AllowDock="True"
                                         AllowDrag="True" AllowDrop="True"  AllowMove="True" >
                         <ContentControl x:Name="i3dsv" prism:RegionManager.RegionName="I3DSliceViewer" IsVisibleChanged="i3dsv_IsVisibleChanged"/>
+                    </dxdo:DocumentPanel>
+                    <dxdo:DocumentPanel Caption="Record Preview" x:Name="i3drvdocp"
+                                        AllowClose="False" AllowFloat="True" AllowSizing="True" AllowDock="True"
+                                        AllowDrag="True" AllowDrop="True"  AllowMove="True">
+                        <ContentControl prism:RegionManager.RegionName="I3DRecordPreviewer"/>
                     </dxdo:DocumentPanel>
                 </dxdo:DocumentGroup>
             </dxdo:LayoutGroup>

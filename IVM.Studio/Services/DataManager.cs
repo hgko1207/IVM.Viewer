@@ -52,6 +52,8 @@ namespace IVM.Studio.Services
         public I3DBackgroundInfo I3DBackgroundInfo1 { get; set; }
         public I3DBackgroundInfo I3DBackgroundInfo2 { get; set; }
 
+        public I3DRecordInfo I3DRecordInfo { get; set; }
+
         public int MainWindowSeq { get; set; }
 
         public int MainWindowId { get; set; }
@@ -84,6 +86,7 @@ namespace IVM.Studio.Services
             I3DChannelInfo2 = new I3DChannelInfo(container, eventAggregator, 2);
             I3DBackgroundInfo1 = new I3DBackgroundInfo(container, eventAggregator, 1);
             I3DBackgroundInfo2 = new I3DBackgroundInfo(container, eventAggregator, 2);
+            I3DRecordInfo = new I3DRecordInfo(container, eventAggregator);
 
             MainWindowSeq = 0;
 

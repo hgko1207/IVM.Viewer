@@ -149,7 +149,8 @@ namespace IVM.Studio.ViewModels
             RegionManager.RegisterViewWithRegion("I3DSliceViewer", typeof(I3DSliceViewer));
             RegionManager.RegisterViewWithRegion("I3DFreeRecordingPanel", typeof(I3DFreeRecordingPanel));
             RegionManager.RegisterViewWithRegion("I3DSceneRecordingPanel", typeof(I3DSceneRecordingPanel));
-
+            RegionManager.RegisterViewWithRegion("I3DRecordPreviewer", typeof(I3DRecordPreviewer));
+            
             dataManager = container.Resolve<DataManager>();
             dataManager.Init(container, EventAggregator);
 

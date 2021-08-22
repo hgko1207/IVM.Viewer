@@ -41,7 +41,11 @@ namespace IVM.Studio.I3D
         DispatcherTimer timer; // 업데이트 타이머
 
         public delegate void LoadedDelegate();
-        public LoadedDelegate LoadedFunc = null;
+        public LoadedDelegate LoadedFunc = null; 
+        DateTime lastTick = DateTime.Now;
+
+        List<Bitmap> bmpCache = new List<Bitmap>();
+        Bitmap bmpLast = null;
 
         public I3DViewer()
         {
@@ -49,16 +53,27 @@ namespace IVM.Studio.I3D
 
             Loaded += Control_loaded;
 
-            int sec = 10000000; // 1-second
-
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromTicks(sec / 30);
-            timer.Tick += UpdateTick;
+            timer.Interval = TimeSpan.FromMilliseconds(1.0f);
+            timer.Tick += UpdateRecord;
             timer.Start();
         }
 
-        private void UpdateTick(object sender, EventArgs e)
+        private void UpdateRecord(object sender, EventArgs e)
         {
+            if (mediaFile == null)
+                return;
+
+            double frameGap = (DateTime.Now - lastTick).TotalMilliseconds;
+            double msecPerFrame = 1000.0 / 30.0;
+
+            if (frameGap < msecPerFrame)
+                Thread.Sleep((int)(msecPerFrame - frameGap));
+
+            frameGap = (DateTime.Now - lastTick).TotalMilliseconds;
+            Console.WriteLine("gap {0}", frameGap);
+            lastTick = DateTime.Now;
+
             UpdateRecordVideo();
         }
 
@@ -153,13 +168,33 @@ namespace IVM.Studio.I3D
                 ffmpegInit = true;
             }
 
-            VideoEncoderSettings settings = new VideoEncoderSettings((int)this.ActualWidth, (int)this.ActualHeight, 30, VideoCodec.H264);
-            settings.EncoderPreset = EncoderPreset.Fast;
-            settings.CRF = 17;
+            // H264 must be final codec. cannot navigation per frame
+            //VideoEncoderSettings settings = new VideoEncoderSettings((int)this.ActualWidth, (int)this.ActualHeight, 30, VideoCodec.H264);
+            //settings.EncoderPreset = EncoderPreset.Fast;
+            //settings.CRF = 17;
+
+            VideoEncoderSettings settings = new VideoEncoderSettings((int)this.ActualWidth, (int)this.ActualHeight, 30, VideoCodec.MPEG2);
+            settings.EncoderPreset = EncoderPreset.Medium;
 
             mediaFile = MediaBuilder.CreateContainer(path).WithVideo(settings).Create();
 
+            lastTick = DateTime.Now;
+
             return true;
+        }
+
+        private void AddRecordFrame(Bitmap bmpmem)
+        {
+            if (bmpmem == null)
+                return;
+
+            if (mediaFile == null)
+                return;
+
+            BitmapData bdata = bmpmem.LockBits(new Rectangle(System.Drawing.Point.Empty, bmpmem.Size), ImageLockMode.WriteOnly, bmpmem.PixelFormat);
+            ImageData imgdata = ImageData.FromPointer(bdata.Scan0, ImagePixelFormat.Bgra32, bmpmem.Size);
+            mediaFile.Video.AddFrame(imgdata);
+            bmpmem.UnlockBits(bdata);
         }
 
         public void UpdateRecordVideo()
@@ -167,28 +202,40 @@ namespace IVM.Studio.I3D
             if (mediaFile == null)
                 return;
 
-            RenderTargetBitmap tgtbmp = new RenderTargetBitmap((int)this.ActualWidth, (int)this.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-            tgtbmp.Render(this);
+            // capture current screen
+            RenderTargetBitmap bmptgt = new RenderTargetBitmap((int)this.ActualWidth, (int)this.ActualHeight, 96, 96, PixelFormats.Pbgra32);
+            bmptgt.Render(this);
 
-            var membmp = new Bitmap(tgtbmp.PixelWidth, tgtbmp.PixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-            
             // copy rendertarget to memory buffer
-            var bitLock = membmp.LockBits(new Rectangle(System.Drawing.Point.Empty, membmp.Size), ImageLockMode.WriteOnly, membmp.PixelFormat);
-            tgtbmp.CopyPixels(Int32Rect.Empty, bitLock.Scan0, bitLock.Stride * bitLock.Height, bitLock.Stride);
+            {
+                Bitmap bmpmem = new Bitmap(bmptgt.PixelWidth, bmptgt.PixelHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                BitmapData bdata = bmpmem.LockBits(new Rectangle(System.Drawing.Point.Empty, bmpmem.Size), ImageLockMode.WriteOnly, bmpmem.PixelFormat);
+                bmptgt.CopyPixels(Int32Rect.Empty, bdata.Scan0, bdata.Stride * bdata.Height, bdata.Stride);
+                bmpmem.UnlockBits(bdata);
 
-            var bitmapData = ImageData.FromPointer(bitLock.Scan0, ImagePixelFormat.Bgra32, membmp.Size);
-            mediaFile.Video.AddFrame(bitmapData);
+                bmpCache.Add(bmpmem);
+            }
 
-            membmp.UnlockBits(bitLock);
+            if (bmpCache.Count >= 1)
+            {
+                foreach (Bitmap bmpmem in bmpCache)
+                    AddRecordFrame(bmpmem);
+
+                bmpLast = bmpCache[bmpCache.Count - 1];
+                bmpCache.Clear();
+            }
         }
 
         public void StopRecordVideo()
         {
-            if (mediaFile != null)
-            {
-                mediaFile.Dispose();
-                mediaFile = null;
-            }
+            if (mediaFile == null)
+                return;
+
+            //AddRecordFrame(bmpLast);
+
+            mediaFile.Video.Dispose();
+            mediaFile.Dispose();
+            mediaFile = null;
         }
     }
 }
