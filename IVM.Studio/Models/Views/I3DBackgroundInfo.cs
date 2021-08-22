@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using System.Windows.Media;
 using WPFDrawing = System.Windows.Media;
@@ -104,6 +105,117 @@ namespace IVM.Studio.Models
                 {
                     wcfserver.Channel(channelId).OnChangeBackgroundParam(backgroundColor.ScR, backgroundColor.ScG, backgroundColor.ScB, backgroundColor.ScA);
                 }
+            }
+        }
+
+        private bool axisVisible = true;
+        public bool AxisVisible
+        {
+            get => axisVisible;
+            set
+            {
+                if (SetProperty(ref axisVisible, value))
+                {
+                    float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
+                    wcfserver.Channel(channelId).OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
+                }
+            }
+        }
+
+        private int axisHeight = 100;
+        public int AxisHeight
+        {
+            get => axisHeight;
+            set
+            {
+                if (SetProperty(ref axisHeight, value))
+                {
+                    float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
+                    wcfserver.Channel(channelId).OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
+                }
+            }
+        }
+
+        private float axisThickness = 2;
+        public float AxisThickness
+        {
+            get => axisThickness;
+            set
+            {
+                if (SetProperty(ref axisThickness, value))
+                {
+                    float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
+                    wcfserver.Channel(channelId).OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
+                }
+            }
+        }
+
+        private int axisFontSize = 12;
+        public int AxisFontSize
+        {
+            get => axisFontSize;
+            set
+            {
+                if (SetProperty(ref axisFontSize, value))
+                {
+                    float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
+                    wcfserver.Channel(channelId).OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
+                }
+            }
+        }
+
+        public enum AxisPosType
+        {
+            [Display(Name = "RightTop", Order = 0)]
+            RightTop = 0,
+            [Display(Name = "LeftTop", Order = 1)]
+            LeftTop = 1,
+            [Display(Name = "RightBottom", Order = 2)]
+            RightBottom = 2,
+            [Display(Name = "LeftBottom", Order = 3)]
+            LeftBottom = 3,
+        }
+
+        private AxisPosType axisPosMode = AxisPosType.RightTop;
+        public AxisPosType AxisPosMode
+        {
+            get => axisPosMode;
+            set
+            {
+                if (SetProperty(ref axisPosMode, value))
+                {
+                    float px = 0, py = 0; AxisModeToPos(axisPosMode, ref px, ref py);
+                    wcfserver.Channel(channelId).OnChangeAxisParam(axisVisible, axisFontSize, AxisSizeToHeight(), axisThickness, px, py);
+                }
+            }
+        }
+
+        public float AxisSizeToHeight()
+        {
+            return (float)axisHeight * 2.0f / 100.0f * 0.1f;
+        }
+
+        public void AxisModeToPos(AxisPosType m, ref float px, ref float py)
+        {
+            if (m == AxisPosType.RightTop)
+            {
+                px = 0.75f;
+                py = 0.75f;
+            }
+            else if (m == AxisPosType.LeftTop)
+            {
+                px = -0.75f;
+                py = 0.75f;
+            }
+            else if (m == AxisPosType.RightBottom)
+            {
+                px = 0.75f;
+                py = -0.75f;
+            }
+            else if (m == AxisPosType.LeftBottom)
+            {
+                px = -0.75f;
+                py = -0.75f;
             }
         }
 

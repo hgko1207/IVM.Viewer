@@ -32,22 +32,22 @@
         <StackPanel Margin="8 0 8 0">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Left" Text="Scale Bar" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 12 0 0"/>
-                <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" Content="Display" HorizontalAlignment="Right" Width="80" ButtonKind="Toggle" IsChecked="{Binding AxisVisible}"/>
+                <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" Content="Display" HorizontalAlignment="Right" Width="80" ButtonKind="Toggle" IsChecked="{Binding AxisVisible}" DataContext="{Binding I3DBackgroundInfo}"/>
             </DockPanel>
             <DockPanel Margin="0 12 0 4">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
                     <TextBlock TextAlignment="Center" Text="Size" FontSize="14" FontWeight="Bold"/>
-                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="100" />
+                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="100" DataContext="{Binding I3DBackgroundInfo}" />
                     <TextBlock TextAlignment="Center" Text="Thickness" FontSize="14" FontWeight="Bold" Margin="12 0 0 0"/>
-                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="4" />
+                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="4" DataContext="{Binding I3DBackgroundInfo}" />
                     <TextBlock TextAlignment="Center" Text="Pixel" FontSize="14" Margin="4 0 0 0"/>
                     <TextBlock TextAlignment="Center" Text="Label" FontSize="14" FontWeight="Bold" Margin="12 0 0 0"/>
-                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="8" MaxValue="18" />
+                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="8" MaxValue="18" DataContext="{Binding I3DBackgroundInfo}" />
                     <TextBlock TextAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
                 </StackPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock TextAlignment="Center" Text="Position" FontSize="14" FontWeight="Bold"/>
-                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="4 -4 0 0" 
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="4 -4 0 0" DataContext="{Binding I3DBackgroundInfo}"
                                       EditValue="{Binding AxisPosMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                         <dxe:ComboBoxEditItem Content="RightTop"/>
                         <dxe:ComboBoxEditItem Content="LeftTop"/>

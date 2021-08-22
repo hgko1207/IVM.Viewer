@@ -4,11 +4,8 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-            xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
-            xmlns:local="clr-namespace:IVM.Studio.Views.UserControls"
-            xmlns:models="clr-namespace:IVM.Studio.Models"
             xmlns:util="clr-namespace:IVM.Studio.Utils"
             mc:Ignorable="d" 
             xmlns:prism="http://prismlibrary.com/"
@@ -20,8 +17,10 @@
         <util:ButtonStyleConverter x:Key="ButtonStyleConverter"/>
     </UserControl.Resources>
 
-    <Grid Margin="8">
+    <Grid Margin="8 4 8 4">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -37,7 +36,7 @@
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Channel" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 0 0 4"/>
 
-                <Grid Margin="4">
+                <Grid Margin="4 0 4 0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
@@ -136,7 +135,7 @@
                 </Grid>
             </StackPanel>
 
-            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
+            <ContentControl Grid.Column="1" Template="{StaticResource VerticalLine}" Margin="8 4 8 0" />
 
             <StackPanel Grid.Column="2" Margin="0 0 8 0">
                 <TextBlock Text="Position" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 0 0 4"/>
@@ -144,11 +143,11 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="4"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="4"/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="4"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -182,19 +181,51 @@
                     </Border>
                 </Grid>
 
-                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Width="90" Height="28" HorizontalAlignment="Right" Margin="0 8 0 0" Command="{Binding SliceDepthResetCommand}" />
+                <dx:SimpleButton Content="Reset" Style="{StaticResource GrayGradientButton}" Width="80" Height="28" HorizontalAlignment="Right" Margin="0 8 0 0" Command="{Binding SliceDepthResetCommand}" />
             </StackPanel>
         </Grid>
 
-        <ContentControl Grid.Row="1" Template="{StaticResource VerticalLine}" Margin="8 8 8 0" />
+        <ContentControl Grid.Row="1" Template="{StaticResource VerticalLine}" Margin="8 4 8 0" />
 
-        <StackPanel Grid.Row="2" Margin="8">
-            <TextBlock Margin="0 0 0 8" Text="Background" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+        <StackPanel Grid.Row="2" Margin="8 4 8 2">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Left" Text="Scale Bar" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TitleText}" Margin="0 4 0 0"/>
+                <dx:SimpleButton DockPanel.Dock="Right" Style="{StaticResource ToggleButton}" Content="Display" HorizontalAlignment="Right" 
+                                 Width="80" Height="28" ButtonKind="Toggle" IsChecked="{Binding AxisVisible}" DataContext="{Binding I3DBackgroundInfo}"/>
+            </DockPanel>
+            <DockPanel Margin="0 10 0 4">
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    <TextBlock TextAlignment="Center" Text="Size" FontSize="14" FontWeight="Bold"/>
+                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisHeight, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="100" DataContext="{Binding I3DBackgroundInfo}"/>
+                    <TextBlock TextAlignment="Center" Text="Thickness" FontSize="14" FontWeight="Bold" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisThickness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="4" DataContext="{Binding I3DBackgroundInfo}"/>
+                    <TextBlock TextAlignment="Center" Text="Pixel" FontSize="14" Margin="4 0 0 0"/>
+                    <TextBlock TextAlignment="Center" Text="Label" FontSize="14" FontWeight="Bold" Margin="12 0 0 0"/>
+                    <dxe:SpinEdit Margin="4 -4 0 0" Style="{StaticResource HistogramEdit}" Value="{Binding AxisFontSize, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="8" MaxValue="18" DataContext="{Binding I3DBackgroundInfo}"/>
+                    <TextBlock TextAlignment="Center" Text="pt" FontSize="14" Margin="4 0 0 0"/>
+                </StackPanel>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBlock TextAlignment="Center" Text="Position" FontSize="14" FontWeight="Bold"/>
+                    <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="4 -4 0 0" DataContext="{Binding I3DBackgroundInfo}"
+                                      EditValue="{Binding AxisPosMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                        <dxe:ComboBoxEditItem Content="RightTop"/>
+                        <dxe:ComboBoxEditItem Content="LeftTop"/>
+                        <dxe:ComboBoxEditItem Content="RightBottom"/>
+                        <dxe:ComboBoxEditItem Content="LeftBottom"/>
+                    </dxe:ComboBoxEdit>
+                </StackPanel>
+            </DockPanel>
+        </StackPanel>
+
+        <ContentControl Grid.Row="3" Template="{StaticResource VerticalLine}" Margin="8 0 8 0" />
+
+        <StackPanel Grid.Row="4" Margin="8 4 8 0">
+            <TextBlock Margin="0 2 0 2" Text="Background" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
 
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="2"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -231,7 +262,6 @@
                               DataContext="{Binding I3DBackgroundInfo}" Style="{StaticResource HistogramEdit}" 
                               Value="{Binding GridMinor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" MinValue="1" MaxValue="1000" />
                 </StackPanel>
-
 
                 <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Label" FontSize="14" FontWeight="Bold"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" Text="Color" FontSize="14" Margin="12 0 0 0"/>
