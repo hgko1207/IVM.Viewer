@@ -233,7 +233,8 @@ namespace IVM.Studio.Models.Events
     public class I3DMainViewVisibleChangedEvent : PubSubEvent<bool> { }
     public class I3DSliceViewVisibleChangedEvent : PubSubEvent<bool> { }
     public class I3DRecordPreviewOpenEvent : PubSubEvent<string> { }
-    public class I3DRecordPreviewPlayEvent : PubSubEvent { }
+    public class I3DRecordPreviewCloseEvent : PubSubEvent { }
+    public class I3DRecordPreviewPlayEvent : PubSubEvent<string> { }
     public class I3DRecordPreviewStopEvent : PubSubEvent { }
     public class I3DRecordPreviewPauseEvent : PubSubEvent { }
     public class I3DRecordPreviewSetPosEvent : PubSubEvent<float> { }

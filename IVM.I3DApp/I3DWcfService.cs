@@ -46,6 +46,11 @@ namespace IVM.Studio.I3D
             w.vw.StopRecordVideo();
         }
 
+        public void RebuildVideo(string path)
+        {
+            w.vw.RebuildVideo(path);
+        }
+
         public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)
         {
             w.vw.param.CAMERA_POS = new vec3(px, py, pz);

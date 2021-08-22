@@ -97,6 +97,7 @@
                 <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="8 0 0 0" DataContext="{Binding I3DRecordInfo}"
                                   EditValue="{Binding ExportCodec, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     <dxe:ComboBoxEditItem Content="H264"/>
+                    <dxe:ComboBoxEditItem Content="MPEG4"/>
                 </dxe:ComboBoxEdit>
                 <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" DataContext="{Binding I3DRecordInfo}"
                                  Width="75" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding ExportCommand}" >
@@ -123,19 +124,21 @@
                                  IsChecked="{Binding IsRecording}">
                 </dx:SimpleButton>
                 <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="1" Margin="4 0 0 0" ButtonKind="Toggle" 
-                                 DataContext="{Binding I3DRecordInfo}" IsChecked="{Binding RecordTarget1}"/>
+                                 DataContext="{Binding I3DRecordInfo}" IsChecked="{Binding RecordTarget1}" IsEnabled="{Binding SceneGridEnable}"/>
                 <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="2" Margin="4 0 0 0" ButtonKind="Toggle" 
-                                 DataContext="{Binding I3DRecordInfo}" IsChecked="{Binding RecordTarget2}"/>
+                                 DataContext="{Binding I3DRecordInfo}" IsChecked="{Binding RecordTarget2}" IsEnabled="{Binding SceneGridEnable}"/>
 
                 <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Trim" FontSize="14" FontWeight="Bold" Margin="12 0 0 0"/>
                 <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Glyph="{dx:DXImage Image=ReviewingPane_16x16.png}"
-                                 Width="28" Margin="4 0 0 0" ButtonKind="Toggle" >
+                                 Width="28" Margin="4 0 0 0" ButtonKind="Toggle" IsEnabled="{Binding SceneGridEnable}"
+                                 DataContext="{Binding I3DRecordInfo}" Command="{Binding TrimLeftCommand}">
                     <Button.LayoutTransform>
                         <RotateTransform CenterX="0.5" CenterY="0.5" Angle="180"/>
                     </Button.LayoutTransform>
                 </dx:SimpleButton>
                 <dx:SimpleButton Style="{StaticResource GrayGradientButton}" Glyph="{dx:DXImage Image=ReviewingPane_16x16.png}"
-                                 Width="28" Margin="4 0 0 0" ButtonKind="Toggle" />
+                                 Width="28" Margin="4 0 0 0" ButtonKind="Toggle" IsEnabled="{Binding SceneGridEnable}"
+                                 DataContext="{Binding I3DRecordInfo}" Command="{Binding TrimRightCommand}"/>
             </StackPanel>
 
             <DockPanel Margin="0 8 0 0" >

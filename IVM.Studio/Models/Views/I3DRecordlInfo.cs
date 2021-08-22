@@ -1,14 +1,25 @@
 ﻿using DevExpress.Xpf.Docking;
+using FFMediaToolkit;
+using FFMediaToolkit.Decoding;
+using FFMediaToolkit.Encoding;
+using FFMediaToolkit.Graphics;
 using IVM.Studio.Models.Events;
 using IVM.Studio.Services;
 using IVM.Studio.Views;
+using Ookii.Dialogs.Wpf;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using WPFDrawing = System.Windows.Media;
@@ -25,6 +36,7 @@ namespace IVM.Studio.Models
 
         int sceneIdx = 1;
 
+        //bool ffmpegInit = false;
         bool ignoreStopEvent = false;
 
         const string sceneWorkingPath = @".\video\";
@@ -135,6 +147,21 @@ namespace IVM.Studio.Models
             set => SetProperty(ref sceneGridEnable, value);
         }
 
+        public enum CodecType
+        {
+            [Display(Name = "H264", Order = 0)]
+            H264 = 0,
+            [Display(Name = "MPEG4", Order = 1)]
+            MPEG4 = 1,
+        }
+
+        private CodecType exportCodec = CodecType.H264;
+        public CodecType ExportCodec
+        {
+            get => exportCodec;
+            set => SetProperty(ref exportCodec, value);
+        }
+
         public ICommand ChangedSelectedCommand { get; private set; }
         public ICommand SceneAddCommand { get; private set; }
         public ICommand SceneDeleteCommand { get; private set; }
@@ -142,6 +169,9 @@ namespace IVM.Studio.Models
         public ICommand SceneDownwardCommand { get; private set; }
         public ICommand ScenePauseCommand { get; private set; }
         public ICommand SceneStopCommand { get; private set; }
+        public ICommand TrimLeftCommand { get; private set; }
+        public ICommand TrimRightCommand { get; private set; }
+        public ICommand ExportCommand { get; private set; }
 
         private void clearFolder(string path)
         {
@@ -173,6 +203,10 @@ namespace IVM.Studio.Models
             ScenePauseCommand = new DelegateCommand(ScenePause);
             SceneStopCommand = new DelegateCommand(SceneStop);
 
+            TrimLeftCommand = new DelegateCommand(TrimLeft);
+            TrimRightCommand = new DelegateCommand(TrimRight);
+            ExportCommand = new DelegateCommand(Export);
+
             // if exist video working directory, clean up.
             if (Directory.Exists(sceneWorkingPath))
                 clearFolder(sceneWorkingPath);
@@ -183,6 +217,220 @@ namespace IVM.Studio.Models
             // recording timer
             timer = new DispatcherTimer();
             timer.Tick += UpdateTick;
+
+            //if (!ffmpegInit)
+            //{
+            //    FFmpegLoader.FFmpegPath = @".\ffmpeg";
+            //    ffmpegInit = true;
+            //}
+        }
+
+        private void Export()
+        {
+            VistaSaveFileDialog dialog = new VistaSaveFileDialog
+            {
+                DefaultExt = ".png",
+                Filter = "MP4 image file(*.mp4)|*.mp4|AVI image file(*.avi)|*.avi",
+            };
+
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                LoadingWindow loading = new LoadingWindow();
+
+                Task.Run(() =>
+                {
+                    string lstPath = Directory.GetCurrentDirectory() + sceneWorkingPath.Replace(".", "") + "lst.txt";
+                    bool valid = false;
+
+                    using (StreamWriter writer = File.CreateText(lstPath))
+                    {
+                        foreach (I3DSceneInfo info in SceneCollection)
+                        {
+                            string fn = Directory.GetCurrentDirectory() + sceneWorkingPath.Replace(".", "") + info.Id + ".mp4";
+                            if (!File.Exists(fn))
+                                continue;
+
+                            writer.WriteLine("file '{0}'", fn);
+                            valid = true;
+                        }
+                    }
+
+                    if (!valid)
+                    {
+                        loading.loading = false;
+                        return;
+                    }
+
+                    string codec = "";
+                    
+                    //string ext = Path.GetExtension(dialog.FileName);
+                    if (ExportCodec == CodecType.H264)
+                        codec = "h264";
+                    else if (ExportCodec == CodecType.MPEG4)
+                        codec = "mpeg4";
+                    else
+                    {
+                        loading.loading = false;
+                        return;
+                    }
+
+                    string arg = $@"-safe 0 -f concat -i ""{lstPath}"" -c copy -vcodec ""{codec}"" ""{dialog.FileName}""";
+                    using (Process process = Process.Start(@".\ffmpeg\ffmpeg.exe", arg))
+                    {
+                        process.WaitForExit();
+                    }
+
+                    loading.loading = false;
+                });
+
+                loading.ShowDialog();
+            }
+        }
+
+        private async void TrimLeft()
+        {
+            if (isPlaying)
+                return;
+
+            if (isRecording)
+                return;
+
+            if (SelectedSceneInfo == null)
+                return;
+
+            eventAggregator.GetEvent<I3DRecordPreviewCloseEvent>().Publish();
+
+            int sceneId = SelectedSceneInfo.Id;
+
+            string inPath = Directory.GetCurrentDirectory() + sceneWorkingPath + sceneId + ".mp4";
+            string outPath = Directory.GetCurrentDirectory() + sceneWorkingPath + sceneId + ".wrk.mp4";
+
+            TimeSpan from = TimeSpan.FromSeconds(CurrentSeconds);
+            TimeSpan to = TimeSpan.FromSeconds(TotalSeconds);
+
+            LoadingWindow loading = new LoadingWindow();
+
+            Task.Run(() => {
+                string arg = $@"-i ""{inPath}"" -ss {from:hh\:mm\:ss} -t {to - from:hh\:mm\:ss} -c copy ""{outPath}""";
+                using (Process process = Process.Start(@".\ffmpeg\ffmpeg.exe", arg))
+                {
+                    process.WaitForExit();
+                }
+
+                while (true)
+                {
+                    try
+                    {
+                        File.Delete(inPath);
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(1);
+                    }
+                }
+
+                while (true)
+                {
+                    try
+                    {
+                        File.Move(outPath, inPath);
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(1);
+                    }
+                }
+
+                loading.loading = false;
+            });
+
+            loading.ShowDialog();
+
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (!loading.loading)
+                        break;
+                }
+            });
+
+            eventAggregator.GetEvent<I3DRecordPreviewOpenEvent>().Publish(inPath);
+        }
+
+        private async void TrimRight()
+        {
+            if (isPlaying)
+                return;
+
+            if (isRecording)
+                return;
+
+            if (SelectedSceneInfo == null)
+                return;
+
+            eventAggregator.GetEvent<I3DRecordPreviewCloseEvent>().Publish();
+
+            int sceneId = SelectedSceneInfo.Id;
+
+            string inPath = Directory.GetCurrentDirectory() + sceneWorkingPath + sceneId + ".mp4";
+            string outPath = Directory.GetCurrentDirectory() + sceneWorkingPath + sceneId + ".wrk.mp4";
+
+            TimeSpan from = TimeSpan.FromSeconds(0);
+            TimeSpan to = TimeSpan.FromSeconds(CurrentSeconds);
+
+            LoadingWindow loading = new LoadingWindow();
+
+            Task.Run(() => {
+                string arg = $@"-i ""{inPath}"" -ss {from:hh\:mm\:ss} -t {to - from:hh\:mm\:ss} -c copy ""{outPath}""";
+                using (Process process = Process.Start(@".\ffmpeg\ffmpeg.exe", arg))
+                {
+                    process.WaitForExit();
+                }
+
+                while (true)
+                {
+                    try
+                    {
+                        File.Delete(inPath);
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+
+                while (true)
+                {
+                    try
+                    {
+                        File.Move(outPath, inPath);
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(1000);
+                    }
+                }
+
+                loading.loading = false;
+            });
+
+            loading.ShowDialog();
+
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (!loading.loading)
+                        break;
+                }
+            });
+
+            eventAggregator.GetEvent<I3DRecordPreviewOpenEvent>().Publish(inPath);
         }
 
         private void UpdateTick(object sender, EventArgs e)
@@ -206,6 +454,17 @@ namespace IVM.Studio.Models
             if (!File.Exists(scenePath))
                 return false;
 
+            TopmostPreview();
+
+            eventAggregator.GetEvent<I3DRecordPreviewPlayEvent>().Publish(scenePath);
+
+            SceneGridEnable = false;
+
+            return true;
+        }
+
+        public void TopmostPreview()
+        {
             MainWindow mainWindow = (IVM.Studio.Views.MainWindow)System.Windows.Application.Current.MainWindow;
 
             DocumentPanel docp = (DocumentPanel)mainWindow.i3drvdocp;
@@ -214,13 +473,6 @@ namespace IVM.Studio.Models
                 DocumentGroup docg = (DocumentGroup)docp.Parent;
                 docg.SelectedTabIndex = docg.Items.IndexOf(docp);
             }
-
-            eventAggregator.GetEvent<I3DRecordPreviewOpenEvent>().Publish(scenePath);
-            eventAggregator.GetEvent<I3DRecordPreviewPlayEvent>().Publish();
-
-            SceneGridEnable = false;
-
-            return true;
         }
 
         public void ScenePause()
@@ -266,6 +518,15 @@ namespace IVM.Studio.Models
 
             SelectedSceneInfo.Duration = CurrentSeconds;
             SceneCollection[SceneCollection.IndexOf(SelectedSceneInfo)] = SelectedSceneInfo;
+
+            if (SelectedSceneInfo == null)
+                return;
+
+            int sceneId = SelectedSceneInfo.Id;
+
+            string scenePath = Directory.GetCurrentDirectory() + sceneWorkingPath + sceneId + ".mp4";
+
+            eventAggregator.GetEvent<I3DRecordPreviewOpenEvent>().Publish(scenePath);
         }
 
         private bool SceneRecord()
@@ -280,12 +541,27 @@ namespace IVM.Studio.Models
             else if (SelectedSceneInfo == null)
                 return false;
 
+            eventAggregator.GetEvent<I3DRecordPreviewCloseEvent>().Publish();
+
             int sceneId = SelectedSceneInfo.Id;
 
             string scenePath = Directory.GetCurrentDirectory() + sceneWorkingPath + sceneId + ".mp4";
 
             if (File.Exists(scenePath))
-                File.Delete(scenePath);
+            {
+                while (true)
+                {
+                    try
+                    {
+                        File.Delete(scenePath);
+                        break;
+                    }
+                    catch
+                    {
+                        Thread.Sleep(1);
+                    }
+                }
+            }
 
             if (recordTarget1)
                 wcfserver.channel1.StartRecordVideo(scenePath);
@@ -295,6 +571,7 @@ namespace IVM.Studio.Models
             timer.Start();
             startTime = DateTime.Now;
             CurrentSeconds = 0;
+            TotalSeconds = 0;
             SceneGridEnable = false;
 
             return true;

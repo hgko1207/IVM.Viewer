@@ -22,6 +22,27 @@ using System.Drawing.Imaging;
 using FFMediaToolkit.Graphics;
 using System.Windows.Threading;
 using System.Timers;
+using FFMediaToolkit.Decoding;
+using System.Runtime.InteropServices;
+
+namespace FFMediaToolkit.Graphics
+{
+    public static class ImageDataExtension
+    {
+        public static unsafe Bitmap ToBitmap(this ImageData bitmap, ref byte[] buff)
+        {
+            fixed (byte* p = bitmap.Data)
+            {
+                buff = new byte[bitmap.ImageSize.Height * bitmap.Stride];
+                Marshal.Copy((IntPtr)p, buff, 0, bitmap.ImageSize.Height * bitmap.Stride);
+
+                //return new Bitmap(bitmap.ImageSize.Width, bitmap.ImageSize.Height, bitmap.Stride, System.Drawing.Imaging.PixelFormat.Format24bppRgb, new IntPtr(p));
+                return new Bitmap(bitmap.ImageSize.Width, bitmap.ImageSize.Height, bitmap.Stride, System.Drawing.Imaging.PixelFormat.Format24bppRgb,
+                    Marshal.UnsafeAddrOfPinnedArrayElement(buff, 0));
+            }
+        }
+    }
+}
 
 namespace IVM.Studio.I3D
 {
@@ -71,7 +92,7 @@ namespace IVM.Studio.I3D
                 Thread.Sleep((int)(msecPerFrame - frameGap));
 
             frameGap = (DateTime.Now - lastTick).TotalMilliseconds;
-            Console.WriteLine("gap {0}", frameGap);
+            //Console.WriteLine("gap {0}", frameGap);
             lastTick = DateTime.Now;
 
             UpdateRecordVideo();
@@ -157,8 +178,12 @@ namespace IVM.Studio.I3D
             return true;
         }
 
+        string videopath = "";
+
         public bool StartRecordVideo(string path)
         {
+            videopath = path;
+
             if (mediaFile != null)
                 return false;
 
@@ -236,6 +261,58 @@ namespace IVM.Studio.I3D
             mediaFile.Video.Dispose();
             mediaFile.Dispose();
             mediaFile = null;
+        }        
+
+        public void RebuildVideo(string path)
+        {
+            string dir = Path.GetDirectoryName(path);
+            string fn = Path.GetFileNameWithoutExtension(path);
+            string ext = Path.GetExtension(path);
+            string path2 = dir + @"\" + fn + ".wrk" + ext;
+
+            if (File.Exists(path2))
+                File.Delete(path2);
+
+            var inFile = MediaFile.Open(path);
+            VideoStreamInfo info = inFile.Video.Info;
+
+            int w = info.FrameSize.Width;
+            int h = info.FrameSize.Height;
+            int frate = (int)info.AvgFrameRate;
+            string codecnm = info.CodecName;
+
+            List<Bitmap> buffs = new List<Bitmap>();
+            List<byte[]> buffraws = new List<byte[]>();
+
+            while (inFile.Video.TryGetNextFrame(out var srcdata))
+            {
+                byte[] buff = null;
+                Bitmap bmpsrc = srcdata.ToBitmap(ref buff);
+                
+                buffs.Add(bmpsrc);
+                buffraws.Add(buff);
+            }
+
+            //Console.WriteLine("{0} {1}", buffs.Count, buffraws.Count);
+
+            // need minimum frame.
+            if (buffs.Count < 30)
+                return;
+
+            VideoEncoderSettings settings = new VideoEncoderSettings(w, h, frate, VideoCodec.MPEG2);
+            settings.EncoderPreset = EncoderPreset.Medium;
+            MediaOutput outFile = MediaBuilder.CreateContainer(path2).WithVideo(settings).Create();
+
+            foreach (Bitmap bmpmem in buffs)
+            {
+                BitmapData bdata = bmpmem.LockBits(new Rectangle(System.Drawing.Point.Empty, bmpmem.Size), ImageLockMode.ReadOnly, bmpmem.PixelFormat);
+                ImageData imgdata = ImageData.FromPointer(bdata.Scan0, ImagePixelFormat.Bgr24, bmpmem.Size);
+                outFile.Video.AddFrame(imgdata);
+                bmpmem.UnlockBits(bdata);
+            }
+
+            outFile.Video.Dispose();
+            outFile.Dispose();
         }
     }
 }

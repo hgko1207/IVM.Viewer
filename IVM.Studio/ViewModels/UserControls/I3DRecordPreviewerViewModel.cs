@@ -9,6 +9,8 @@ using Prism.Ioc;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using static IVM.Studio.Models.Common;
@@ -41,10 +43,11 @@ namespace IVM.Studio.ViewModels.UserControls
 
             I3DRecordInfo = datamanager.I3DRecordInfo;
 
-            MediaOpenedCommand = new DelegateCommand(MediaOpened);
+            MediaOpenedCommand = new DelegateCommand(MediaOpenedAsync);
             MediaEndedCommand = new DelegateCommand(MediaEnded);
 
             EventAggregator.GetEvent<I3DRecordPreviewOpenEvent>().Subscribe(Open);
+            EventAggregator.GetEvent<I3DRecordPreviewCloseEvent>().Subscribe(Close);
             EventAggregator.GetEvent<I3DRecordPreviewPlayEvent>().Subscribe(Play);
             EventAggregator.GetEvent<I3DRecordPreviewStopEvent>().Subscribe(Stop);
             EventAggregator.GetEvent<I3DRecordPreviewPauseEvent>().Subscribe(Pause);
@@ -52,6 +55,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
             timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(1) };
             timer.Tick += UpdateTick;
+
+            Unosquare.FFME.Library.FFmpegDirectory = @".\ffmpeg";
         }
 
         public void OnLoaded(I3DRecordPreviewer view)
@@ -63,16 +68,41 @@ namespace IVM.Studio.ViewModels.UserControls
         {
         }
 
-        private void MediaOpened()
+        private async void MediaOpenedAsync()
         {
-            float totalSeconds = (float)view.media.NaturalDuration.TimeSpan.TotalSeconds;
+            float totalSeconds = (float)view.media.NaturalDuration.Value.TotalSeconds;
 
             I3DRecordInfo.TotalSeconds = totalSeconds;
             I3DRecordInfo.SelectedSceneInfo.Duration = totalSeconds;
             I3DRecordInfo.SceneCollection[I3DRecordInfo.SceneCollection.IndexOf(I3DRecordInfo.SelectedSceneInfo)] = I3DRecordInfo.SelectedSceneInfo;
 
             loading = false;
+
+            I3DRecordInfo.TopmostPreview();
+
+            view.media.Play();
+
+            await Task.Run(() => {
+                while (true)
+                {
+                    if (view.media.IsPlaying)
+                        break;
+                }
+            });
+
+            view.media.Pause();
+
+            await Task.Run(() => {
+                while (true)
+                {
+                    if (view.media.IsPaused)
+                        break;
+                }
+            });
+
+            I3DRecordInfo.CurrentSeconds = 0;
         }
+
         private void MediaEnded()
         {
             //if (!playing)
@@ -87,8 +117,18 @@ namespace IVM.Studio.ViewModels.UserControls
 
             if (loading)
                 I3DRecordInfo.TotalSeconds = I3DRecordInfo.CurrentSeconds;
-            else if (playing && I3DRecordInfo.TotalSeconds < I3DRecordInfo.CurrentSeconds)
-                I3DRecordInfo.IsPlaying = false;
+            else if (playing && I3DRecordInfo.TotalSeconds <= I3DRecordInfo.CurrentSeconds)
+            {
+                I3DRecordInfo.SceneStop();
+            }
+        }
+
+        private void Close()
+        {
+            if (view.media.IsOpen)
+                view.media.Close();
+
+            openPath = "";
         }
 
         private void Open(string path)
@@ -96,13 +136,14 @@ namespace IVM.Studio.ViewModels.UserControls
             if (openPath == path)
                 return;
 
-            view.media.Source = new Uri(path);
+            //view.media.Source = new Uri(path);
+            view.media.Open(new Uri(path));
             view.media.Volume = 0.5;
             view.media.SpeedRatio = 1;
             view.media.ScrubbingEnabled = true;
 
-            view.media.Play();
-            view.media.Pause();
+            //view.media.Play();
+            //view.media.Pause();
 
             openPath = path;
             loading = true;
@@ -110,8 +151,11 @@ namespace IVM.Studio.ViewModels.UserControls
             timer.Start(); // 선택한 파일을 실행
         }
 
-        private void Play()
+        private void Play(string path)
         {
+            if (openPath == "" && path != "")
+                Open(path);
+
             view.media.Play();
             playing = true;
 
@@ -138,11 +182,15 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void SetPos(float s)
         {
+            if (I3DRecordInfo.IsRecording)
+                return;
+
             if (playing)
                 return;
 
             //Console.WriteLine("{0}", s);
 
+            //view.media.Seek(TimeSpan.FromSeconds(s));
             view.media.Position = TimeSpan.FromSeconds(s);
         }
     }

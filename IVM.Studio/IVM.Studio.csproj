@@ -520,6 +520,12 @@
     <Resource Include="Resources\Images\ColorMap_Winter.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FFME.Windows">
+      <Version>4.4.350</Version>
+    </PackageReference>
+    <PackageReference Include="FFMediaToolkit">
+      <Version>4.1.1</Version>
+    </PackageReference>
     <PackageReference Include="MaterialDesignThemes">
       <Version>2.6.0</Version>
     </PackageReference>

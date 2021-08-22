@@ -4,16 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:ffme="clr-namespace:Unosquare.FFME;assembly=ffme.win"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Background="#000000">
     <Grid>
-        <MediaElement x:Name="media" LoadedBehavior="Manual" UnloadedBehavior="Stop">
+        <!--<MediaElement x:Name="media" LoadedBehavior="Manual" UnloadedBehavior="Stop">
             <dxmvvm:Interaction.Behaviors>
                 <dxmvvm:EventToCommand EventName="MediaOpened" Command="{Binding MediaOpenedCommand}"/>
                 <dxmvvm:EventToCommand EventName="MediaEnded" Command="{Binding MediaEndedCommand}"/>
             </dxmvvm:Interaction.Behaviors>
-        </MediaElement>
+        </MediaElement>-->
+
+        <ffme:MediaElement x:Name="media" LoadedBehavior="Manual" UnloadedBehavior="Stop">
+            <dxmvvm:Interaction.Behaviors>
+                <dxmvvm:EventToCommand EventName="MediaOpened" Command="{Binding MediaOpenedCommand}"/>
+                <dxmvvm:EventToCommand EventName="MediaEnded" Command="{Binding MediaEndedCommand}"/>
+            </dxmvvm:Interaction.Behaviors>
+        </ffme:MediaElement>
     </Grid>
 </UserControl>

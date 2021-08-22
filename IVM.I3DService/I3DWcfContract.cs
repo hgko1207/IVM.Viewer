@@ -39,6 +39,9 @@ namespace IVM.Studio.Services
         void StopRecordVideo();
 
         [OperationContract]
+        void RebuildVideo(string path); // for test
+
+        [OperationContract]
         void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
 
         [OperationContract]
