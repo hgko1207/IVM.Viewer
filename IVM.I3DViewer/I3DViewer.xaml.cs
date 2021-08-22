@@ -35,6 +35,7 @@ namespace IVM.Studio.I3D
         public I3DParam param = null;
         public OpenGL gl = null;
 
+        bool ffmpegInit = false;
         MediaOutput mediaFile = null;
 
         DispatcherTimer timer; // 업데이트 타이머
@@ -143,7 +144,14 @@ namespace IVM.Studio.I3D
 
         public bool StartRecordVideo(string path)
         {
-            FFmpegLoader.FFmpegPath = @".\ffmpeg";
+            if (mediaFile != null)
+                return false;
+
+            if (!ffmpegInit)
+            {
+                FFmpegLoader.FFmpegPath = @".\ffmpeg";
+                ffmpegInit = true;
+            }
 
             VideoEncoderSettings settings = new VideoEncoderSettings((int)this.ActualWidth, (int)this.ActualHeight, 30, VideoCodec.H264);
             settings.EncoderPreset = EncoderPreset.Fast;
@@ -176,8 +184,11 @@ namespace IVM.Studio.I3D
 
         public void StopRecordVideo()
         {
-            mediaFile.Dispose();
-            mediaFile = null;
+            if (mediaFile != null)
+            {
+                mediaFile.Dispose();
+                mediaFile = null;
+            }
         }
     }
 }

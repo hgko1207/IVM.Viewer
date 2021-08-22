@@ -36,6 +36,16 @@ namespace IVM.Studio.I3D
             w.vw.CaptureScreen(path);
         }
 
+        public void StartRecordVideo(string path)
+        {
+            w.vw.StartRecordVideo(path);
+        }
+
+        public void StopRecordVideo()
+        {
+            w.vw.StopRecordVideo();
+        }
+
         public void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s)
         {
             w.vw.param.CAMERA_POS = new vec3(px, py, pz);

@@ -33,6 +33,12 @@ namespace IVM.Studio.Services
         void OnCaptureScreen(string path);
 
         [OperationContract]
+        void StartRecordVideo(string path);
+
+        [OperationContract]
+        void StopRecordVideo();
+
+        [OperationContract]
         void OnUpdateCamera(float px, float py, float pz, float ax, float ay, float az, float s);
 
         [OperationContract]

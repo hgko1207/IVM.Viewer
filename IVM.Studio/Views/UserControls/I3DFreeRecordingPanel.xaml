@@ -3,10 +3,150 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:util="clr-namespace:IVM.Studio.Utils"
              mc:Ignorable="d" 
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             Background="#000000">
-    <Grid>
+             Background="#30302E">
+
+    <UserControl.Resources>
+        <util:IndexFromOneConverter x:Key="IndexFromOneConverter"/>
+        <dx:Format x:Key="valueFormat" Foreground="Gray" />
+    </UserControl.Resources>
+    
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <dxg:GridControl ShowBorder="True" RenderOptions.EdgeMode="Aliased" Margin="0 2 0 0"
+                             ItemsSource="{Binding SceneCollection}" CurrentItem="{Binding SelectedSceneInfo}" SelectedItem="{Binding SelectedSceneInfo}">
+                <dxmvvm:Interaction.Behaviors>
+                    <dxmvvm:EventToCommand EventName="SelectionChanged" Command="{Binding ChangedSelectedCommand}"/>
+                    <dxmvvm:EventToCommand EventName="CurrentItemChanged" Command="{Binding ChangedSelectedCommand}"/>
+                </dxmvvm:Interaction.Behaviors>
+                <dxg:GridControl.View>
+                    <dxg:TableView />
+                </dxg:GridControl.View>
+                <dxg:GridControl.Columns>
+                    <dxg:GridColumn Width="50" Header="#">
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                                        Text="{Binding RowData.RowHandle.Value, Converter={StaticResource IndexFromOneConverter}}" />
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Header="Scene" Width="*" FieldName="Name"/>
+                    <dxg:GridColumn Header="Sec" Width="auto" FieldName="Duration">
+                        <dxg:GridColumn.EditSettings>
+                            <dxe:TextEditSettings DisplayFormat="{}{0:0.00}"/>
+                        </dxg:GridColumn.EditSettings>
+                    </dxg:GridColumn>
+                </dxg:GridControl.Columns>
+            </dxg:GridControl>
+        </Grid>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Margin="8 0 0 0">
+            <TextBlock Text="Scene Edit" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <StackPanel Margin="0 8 0 0" Orientation="Horizontal">
+                <dx:SimpleButton Content="Add" Glyph="{dx:DXImage Image=Add_16x16.png}" Style="{StaticResource GrayGradientButton}" 
+                                     Width="70" Height="28" VerticalAlignment="Center" Margin="0 0 0 0" Command="{Binding SceneAddCommand}" >
+                </dx:SimpleButton>
+                <dx:SimpleButton Glyph="{dx:DXImage Image=Prev_16x16.png}" Style="{StaticResource GrayGradientButton}" 
+                                     Width="28" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding SceneUpwardCommand}" >
+                    <Button.LayoutTransform>
+                        <RotateTransform CenterX="0.5" CenterY="0.5" Angle="90"/>
+                    </Button.LayoutTransform>
+                </dx:SimpleButton>
+                <dx:SimpleButton Glyph="{dx:DXImage Image=Next_16x16.png}" Style="{StaticResource GrayGradientButton}" 
+                                     Width="28" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding SceneDownwardCommand}" >
+                    <Button.LayoutTransform>
+                        <RotateTransform CenterX="0.5" CenterY="0.5" Angle="90"/>
+                    </Button.LayoutTransform>
+                </dx:SimpleButton>
+                <dx:SimpleButton Content="Delete" Glyph="{dx:DXImage Image=Delete_16x16.png}" GlyphWidth="18" GlyphHeight="18" Style="{StaticResource GrayGradientButton}" 
+                                    Width="90" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding SceneDeleteCommand}" >
+                </dx:SimpleButton>
+            </StackPanel>
+
+            <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 8 0 0" />
+
+            <TextBlock Margin="0 8 0 0" Text="Video Clip Trim" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <DockPanel Margin="0 8 0 0">
+                <dxe:SpinEdit DockPanel.Dock="Left" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding SceneTrimLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:SpinEdit DockPanel.Dock="Right" Margin="4 -4 4 0" Style="{StaticResource HistogramEdit}" 
+                              Value="{Binding SceneTrimUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <dxe:TrackBarEdit Style="{StaticResource HistogramSliderStyle}" Margin="5 0"
+                                  SelectionStart="{Binding SceneTrimLower, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}" 
+                                  SelectionEnd="{Binding SceneTrimUpper, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=0}">
+                    <dxe:TrackBarEdit.StyleSettings>
+                        <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}"
+                                                        SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                    </dxe:TrackBarEdit.StyleSettings>
+                </dxe:TrackBarEdit>
+            </DockPanel>
+
+            <ContentControl Grid.Row="1" Template="{StaticResource HorizontalLine}" Margin="0 8 0 0" />
+
+            <TextBlock Margin="0 8 0 0" Text="Video Export" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <StackPanel Margin="0 12 0 0" Orientation="Horizontal">
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Codec" FontSize="14" FontWeight="Bold"/>
+                <dxe:ComboBoxEdit SelectedIndex="0" Width="100" HorizontalAlignment="Right" Margin="8 0 0 0" 
+                                      EditValue="{Binding AxisPosMode, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                    <dxe:ComboBoxEditItem Content="H264"/>
+                </dxe:ComboBoxEdit>
+                <dx:SimpleButton Content="Export" Style="{StaticResource GrayGradientButton}" 
+                                     Width="75" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding ScenePlayCommand}" >
+                </dx:SimpleButton>
+            </StackPanel>
+        </StackPanel>
+
+        <ContentControl Grid.Row="1" Grid.ColumnSpan="2" Template="{StaticResource HorizontalLine}" Margin="0 8 0 0" />
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="8 0 0 0">
+            <StackPanel Margin="0 8 0 0" Orientation="Horizontal">
+                <dx:SimpleButton Content="Play" Glyph="{dx:DXImage Image=Play_16x16.png}" Style="{StaticResource ToggleButton}" 
+                                 Width="70" Height="28" VerticalAlignment="Center" Margin="0 0 0 0" ButtonKind="Toggle"
+                                 Command="{Binding ScenePlayCommand}" IsChecked="{Binding IsPlaying}">
+                </dx:SimpleButton>
+                <dx:SimpleButton Glyph="{dx:DXImage Image=Pause_16x16.png}" Style="{StaticResource GrayGradientButton}" 
+                                 Width="28" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding ScenePauseCommand}" >
+                </dx:SimpleButton>
+                <dx:SimpleButton Glyph="{dx:DXImage Image=Stop_16x16.png}" Style="{StaticResource GrayGradientButton}" 
+                                 Width="28" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" Command="{Binding SceneStopCommand}" >
+                </dx:SimpleButton>
+                <dx:SimpleButton Content="Record" Glyph="{dx:DXImage Image=Record_16x16.png}" GlyphWidth="20" GlyphHeight="20" Style="{StaticResource ToggleButton}" 
+                                 Width="90" Height="28" VerticalAlignment="Center" Margin="4 0 0 0" ButtonKind="Toggle"
+                                 IsChecked="{Binding IsRecording}">
+                </dx:SimpleButton>
+                <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="1" Margin="4 0 0 0" ButtonKind="Toggle" IsChecked="{Binding RecordTarget1}"/>
+                <dx:SimpleButton Style="{StaticResource ToggleButton}" Content="2" Margin="4 0 0 0" ButtonKind="Toggle" IsChecked="{Binding RecordTarget2}"/>
+            </StackPanel>
+
+            <DockPanel Margin="0 8 0 0" >
+                <Border DockPanel.Dock="Right" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                    <TextBlock Style="{StaticResource GeneralTextBlock}" Text="{Binding CurrentSeconds, StringFormat={}{0:0.00}}" Width="70" />
+                </Border>
+                <Slider Margin="5 0" TickFrequency="0.001" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" 
+                        SelectionStart="0" Value="{Binding ScenePlayPosValue}" Minimum="0" Maximum="1" />
+            </DockPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

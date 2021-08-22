@@ -164,6 +164,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Enums.cs" />
+    <Compile Include="Models\I3DSceneInfo.cs" />
     <Compile Include="Models\I3DPathInfo.cs" />
     <Compile Include="Models\MeasurementInfo.cs" />
     <Compile Include="Models\Thumb.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="ViewModels\MainHistogramWindowViewModel.cs" />
     <Compile Include="ViewModels\MainViewerWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\DispatchTimer.cs" />
     <Compile Include="ViewModels\UserControls\I3D3DDisplayPanelViewModel.cs" />
     <Compile Include="ViewModels\UserControls\I3DSceneRecordingPanel.cs" />
     <Compile Include="ViewModels\UserControls\I3DFreeRecordingPanel.cs" />
