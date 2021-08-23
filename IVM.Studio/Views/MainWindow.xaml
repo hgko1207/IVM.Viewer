@@ -35,7 +35,7 @@
         <dxdo:LayoutPanel Grid.Row="0" Grid.Column="0" ShowCaption="False" ShowBorder="False">
             <DockPanel>
                 <dxb:MainMenuControl FontSize="14">
-                    <dxb:BarSubItem Content=" File " Command="{Binding OpenFolderCommand}"/>
+                    <dxb:BarSubItem Content=" Open " Command="{Binding OpenFolderCommand}"/>
                     <dxb:BarSubItem Content=" Edit " Command="{Binding RefreshCommand}"/>
                 </dxb:MainMenuControl>
 
