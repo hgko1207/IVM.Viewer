@@ -24,11 +24,19 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="8"/>
+                <RowDefinition Height="5"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="8"/>
+                <RowDefinition Height="10"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="8"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="5"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -47,79 +55,99 @@
             <Slider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}" IsMoveToPointEnabled="True"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" Value="{Binding ZSSliderValue, Delay=500}" IsEnabled="{Binding ZSSliderEnabled}"/>
 
-            <!--<Slider Grid.Row="0" Grid.Column="2" Margin="10 0" Name="ZStackSlider" Value="{Binding ZSSliderValue, Delay=200}"
-                                                                    Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}"
-                                                                    SelectionStart="{Binding ZSSliderStart}" SelectionEnd="{Binding ZSSliderEnd}" 
-                                                                    TickFrequency="1"
-                                                                    IsMoveToPointEnabled="True"
-                                                                    IsSelectionRangeEnabled="True"
-                                                                    IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="ValueChanged"/>-->
-
-            <!--<telerik:RadSlider Grid.Row="0" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
-                                                    Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}" IsEnabled="{Binding ZSSliderEnabled}">
-                                        <telerik:RadSlider.Thumbs>
-                                            -->
-            <!--<telerik:RangeSliderThumb RangeStart="{Binding ZSSliderStart, Mode=TwoWay}" RangeEnd="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Lock"
-                                                                    ThumbStyle="{StaticResource TrackBarEditThumbStyle}" 
-                                                                    AlternateThumbStyle="{StaticResource TrackBarEditThumbStyle}"
-                                                                    MiddleThumbStyle="{StaticResource SelectedMiddleThumbStyle}"/>-->
-
-            <!--<telerik:SliderThumb Value="{Binding ZSSliderStart, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>-->
-            <!--
-                                            <telerik:SliderThumb Value="{Binding ZSSliderValue, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>
-                                            -->
-            <!--<telerik:SliderThumb Value="{Binding ZSSliderEnd, Mode=TwoWay}" InteractionMode="Push" ThumbStyle="{StaticResource TrackBarEditThumbStyle}"/>-->
-            <!--
-                                        </telerik:RadSlider.Thumbs>
-                                    </telerik:RadSlider>-->
-
             <Border Grid.Row="0" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock Style="{StaticResource GeneralTextBlock}" DataContext="{Binding SliderControlInfo}" Text="{Binding ZSSliderText}"/>
             </Border>
 
-            <!-- Mosaic -->
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
-
-            <dx:SimpleButton Grid.Row="2" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MSSliderPlaying, Mode=OneWay}" 
-                             Command="{Binding PlaySlideShowCommand}" CommandParameter="Mosaic" IsEnabled="{Binding MSSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
-
-            <Slider Grid.Row="2" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
-                    DataContext="{Binding SliderControlInfo}" Minimum="{Binding MSSliderMinimum}" Maximum="{Binding MSSliderMaximum}" Value="{Binding MSSliderValue, Delay=500}" IsEnabled="{Binding MSSliderEnabled}"/>
+            <dxe:TrackBarEdit Grid.Row="2" Grid.Column="2" Style="{StaticResource CustomTrackBarStyle}" Margin="10 0"
+                              DataContext="{Binding SliderControlInfo}" Minimum="{Binding ZSSliderMinimum}" Maximum="{Binding ZSSliderMaximum}"
+                              SelectionStart="{Binding ZSSliderStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
+                              SelectionEnd="{Binding ZSSliderEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
+                <dxe:TrackBarEdit.StyleSettings>
+                    <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}" SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                </dxe:TrackBarEdit.StyleSettings>
+            </dxe:TrackBarEdit>
 
             <Border Grid.Row="2" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                <TextBlock Style="{StaticResource GeneralTextBlock}" DataContext="{Binding SliderControlInfo}" Text="{Binding ZSSliderRangeText}"/>
+            </Border>
+
+            <!-- Mosaic -->
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Mosaic" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <dx:SimpleButton Grid.Row="4" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MSSliderPlaying, Mode=OneWay}" 
+                             Command="{Binding PlaySlideShowCommand}" CommandParameter="Mosaic" IsEnabled="{Binding MSSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
+
+            <Slider Grid.Row="4" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+                    DataContext="{Binding SliderControlInfo}" Minimum="{Binding MSSliderMinimum}" Maximum="{Binding MSSliderMaximum}" Value="{Binding MSSliderValue, Delay=500}" IsEnabled="{Binding MSSliderEnabled}"/>
+
+            <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock DataContext="{Binding SliderControlInfo}" Text="{Binding MSSliderText}" Style="{StaticResource GeneralTextBlock}"/>
             </Border>
 
-            <!-- Multi-Spot(Multi Position) -->
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Multi-Position" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Style="{StaticResource CustomTrackBarStyle}" Margin="10 0"
+                              DataContext="{Binding SliderControlInfo}" Minimum="{Binding MSSliderMinimum}" Maximum="{Binding MSSliderMaximum}"
+                              SelectionStart="{Binding MSSliderStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
+                              SelectionEnd="{Binding MSSliderEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
+                <dxe:TrackBarEdit.StyleSettings>
+                    <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}" SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                </dxe:TrackBarEdit.StyleSettings>
+            </dxe:TrackBarEdit>
 
-            <dx:SimpleButton Grid.Row="4" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" 
+            <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                <TextBlock Style="{StaticResource GeneralTextBlock}" DataContext="{Binding SliderControlInfo}" Text="{Binding MSSliderRangeText}"/>
+            </Border>
+
+            <!-- Multi-Spot(Multi Position) -->
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Multi-Position" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <dx:SimpleButton Grid.Row="8" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding MPSliderPlaying, Mode=OneWay}" 
                              Command="{Binding PlaySlideShowCommand}" CommandParameter="MultiPosition" IsEnabled="{Binding MPSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
 
-            <Slider Grid.Row="4" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+            <Slider Grid.Row="8" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding MPSliderMinimum}" Maximum="{Binding MPSliderMaximum}" Value="{Binding MPSliderValue, Delay=500}" IsEnabled="{Binding MPSliderEnabled}"/>
 
-            <Border Grid.Row="4" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+            <Border Grid.Row="8" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock DataContext="{Binding SliderControlInfo}" Text="{Binding MPSliderText}" Style="{StaticResource GeneralTextBlock}"/>
             </Border>
 
-            <!-- Time-lapse -->
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="Time-lapse" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+            <dxe:TrackBarEdit Grid.Row="10" Grid.Column="2" Style="{StaticResource CustomTrackBarStyle}" Margin="10 0"
+                              DataContext="{Binding SliderControlInfo}" Minimum="{Binding MPSliderMinimum}" Maximum="{Binding MPSliderMaximum}"
+                              SelectionStart="{Binding MPSliderStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
+                              SelectionEnd="{Binding MPSliderEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
+                <dxe:TrackBarEdit.StyleSettings>
+                    <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}" SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                </dxe:TrackBarEdit.StyleSettings>
+            </dxe:TrackBarEdit>
 
-            <dx:SimpleButton Grid.Row="6" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding TLSliderPlaying, Mode=OneWay}"
+            <Border Grid.Row="10" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                <TextBlock Style="{StaticResource GeneralTextBlock}" DataContext="{Binding SliderControlInfo}" Text="{Binding MPSliderRangeText}"/>
+            </Border>
+
+            <!-- Time-lapse -->
+            <TextBlock Grid.Row="12" Grid.Column="0" Text="Time-lapse" VerticalAlignment="Center" Style="{StaticResource TitleText}"/>
+
+            <dx:SimpleButton Grid.Row="12" Grid.Column="1" DataContext="{Binding SliderControlInfo}" IsChecked="{Binding TLSliderPlaying, Mode=OneWay}"
                              Command="{Binding PlaySlideShowCommand}" CommandParameter="TimeLapse" IsEnabled="{Binding TLSliderEnabled}" Style="{StaticResource PlayAndPauseButton}"/>
 
-            <Slider Grid.Row="6" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
+            <Slider Grid.Row="12" Grid.Column="2" Margin="10 0" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                     DataContext="{Binding SliderControlInfo}" Minimum="{Binding TLSliderMinimum}" Maximum="{Binding TLSliderMaximum}" Value="{Binding TLSliderValue, Delay=500}" IsEnabled="{Binding TLSliderEnabled}"/>
 
-            <!--<dxe:TrackBarEdit Grid.Row="6" Grid.Column="2" Margin="15 0" Minimum="1" Maximum="300" SelectionStart="35" SelectionEnd="285" TickPlacement="None">
-                                    <dxe:TrackBarEdit.StyleSettings>
-                                        <dxe:TrackBarRangeStyleSettings/>
-                                    </dxe:TrackBarEdit.StyleSettings>
-                                </dxe:TrackBarEdit>-->
-
-            <Border Grid.Row="6" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+            <Border Grid.Row="12" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
                 <TextBlock DataContext="{Binding SliderControlInfo}" Text="{Binding TLSliderText}" Style="{StaticResource GeneralTextBlock}"/>
+            </Border>
+
+            <dxe:TrackBarEdit Grid.Row="14" Grid.Column="2" Style="{StaticResource CustomTrackBarStyle}" Margin="10 0"
+                              DataContext="{Binding SliderControlInfo}" Minimum="{Binding TLSliderMinimum}" Maximum="{Binding TLSliderMaximum}"
+                              SelectionStart="{Binding TLSliderStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}" 
+                              SelectionEnd="{Binding TLSliderEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}">
+                <dxe:TrackBarEdit.StyleSettings>
+                    <dxe:TrackBarRangeStyleSettings FarThumbStyle="{StaticResource TrackBarEditThumbStyle}" NearThumbStyle="{StaticResource TrackBarEditThumbStyle}" SelectedRangeBackgroundStyle="{StaticResource SelectedRangeStyle}"/>
+                </dxe:TrackBarEdit.StyleSettings>
+            </dxe:TrackBarEdit>
+
+            <Border Grid.Row="14" Grid.Column="3" Style="{StaticResource GeneralBorder}" VerticalAlignment="Stretch">
+                <TextBlock Style="{StaticResource GeneralTextBlock}" DataContext="{Binding SliderControlInfo}" Text="{Binding TLSliderRangeText}"/>
             </Border>
         </Grid>
 

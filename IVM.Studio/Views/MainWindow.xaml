@@ -167,7 +167,7 @@
                     </dxdo:DocumentGroup>
 
                     <dxdo:DocumentGroup ClosePageButtonShowMode="NoWhere">
-                        <dxdo:DocumentPanel Caption="Display Control" ItemHeight="320">
+                        <dxdo:DocumentPanel Caption="Display Control" ItemHeight="460">
                             <ContentControl prism:RegionManager.RegionName="DisplayControlPanel"/>
                         </dxdo:DocumentPanel>
 

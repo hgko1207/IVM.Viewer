@@ -8,7 +8,7 @@ using System.Threading.Tasks;
  * @Class Name : SlideShowService.cs
  * @Description : 슬라이드 표시 서비스
  * @author 고형균
- * @since 2021.03.29
+ * @since 2021.06.06
  * @version 1.0
  */
 namespace IVM.Studio.Services
@@ -91,8 +91,6 @@ namespace IVM.Studio.Services
                     }
                     else
                         currentCount--;
-
-                    Console.WriteLine(currentCount);
 
                     eventAggregator.GetEvent<PlaySlideShowEvent>().Publish();
                 });

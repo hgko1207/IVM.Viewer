@@ -124,6 +124,7 @@ namespace IVM.Studio.Models
                         DrawRectangleEnabled = false;
                         DrawCircleEnabled = false;
                         DrawTriangleEnabled = false;
+                        DrawLineEnabled = false;
                         CropCrosshairEnabled = true;
                         eventAggregator.GetEvent<EnableCropEvent>().Publish();
                     }
@@ -551,6 +552,17 @@ namespace IVM.Studio.Models
         /// </summary>
         public void ResetChecked()
         {
+            if (PenEnabled)
+            {
+                PenEnabled = false;
+                PenEnabled = true;
+            }    
+            if (EraserEnabled)
+            {
+                EraserEnabled = false;
+                EraserEnabled = true;
+            }
+
             if (DrawRectangleEnabled)
             {
                 DrawRectangleEnabled = false;
@@ -580,7 +592,7 @@ namespace IVM.Studio.Models
         }
 
         /// <summary>
-        /// Export Crop
+        /// Crop 영역으로 잘라 저장
         /// </summary>
         private void ExportCrop()
         {
@@ -588,6 +600,9 @@ namespace IVM.Studio.Models
                 eventAggregator.GetEvent<ExportCropEvent>().Publish();
         }
 
+        /// <summary>
+        /// 폴더 안의 전체 이미지를 설정한 Crop 영역으로 잘라 저장
+        /// </summary>
         private void ExportAllCrop()
         {
             if (CropEnabled)

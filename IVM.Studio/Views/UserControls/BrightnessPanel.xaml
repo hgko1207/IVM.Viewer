@@ -74,7 +74,7 @@
                         SelectionStart="-50" Minimum="-50" Maximum="50" Value="{Binding AllBrightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="2" Width="52" Height="30" Increment="1" MinValue="-50" MaxValue="50" IsFloatValue="True"
-                              Value="{Binding AllBrightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding AllBrightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
             </Grid>
 
             <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="10 8 10 0" />
@@ -108,7 +108,7 @@
                         SelectionStart="0" Minimum="0" Maximum="100" Value="{Binding AllContrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="2" Width="50" Height="30" Increment="1" MinValue="0" MaxValue="100" IsFloatValue="True"
-                              Value="{Binding AllContrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding AllContrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
             </Grid>
         </Grid>
 
@@ -179,27 +179,27 @@
                         SelectionStart="-50" Minimum="-50" Maximum="50" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Column="2" DataContext="{Binding DAPIChannel}" Width="52" Height="30" Increment="1" MinValue="-50" MaxValue="50" IsFloatValue="True"
-                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
                 <!-- GFP -->
                 <Slider Grid.Row="2" DataContext="{Binding GFPChannel}" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="-50" Minimum="-50" Maximum="50" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="2" DataContext="{Binding GFPChannel}" Width="52" Height="30" Increment="1" MinValue="-50" MaxValue="50" IsFloatValue="True"
-                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <!-- RFP -->
                 <Slider Grid.Row="4" DataContext="{Binding RFPChannel}" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="-50" Minimum="-50" Maximum="50" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="2" DataContext="{Binding RFPChannel}" Width="52" Height="30" Increment="1" MinValue="-50" MaxValue="50" IsFloatValue="True"
-                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <!-- NIR -->
                 <Slider Grid.Row="6" DataContext="{Binding NIRChannel}" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="-50" Minimum="-50" Maximum="50" Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="6" Grid.Column="2" DataContext="{Binding NIRChannel}" Width="52" Height="30" Increment="1" MinValue="-50" MaxValue="50" IsFloatValue="True"
-                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Brightness, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
             </Grid>
 
             <ContentControl Grid.Column="3" Template="{StaticResource VerticalLine}" Margin="10 2" />
@@ -225,28 +225,28 @@
                         SelectionStart="0" Minimum="0" Maximum="100" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Column="2" DataContext="{Binding DAPIChannel}" Width="50" Height="30" Increment="1" MinValue="0" MaxValue="100" IsFloatValue="True"
-                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <!-- GFP -->
                 <Slider Grid.Row="2" DataContext="{Binding GFPChannel}" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="0" Minimum="0" Maximum="100" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="2" Grid.Column="2" DataContext="{Binding GFPChannel}" Width="50" Height="30" Increment="1" MinValue="0" MaxValue="100" IsFloatValue="True"
-                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <!-- RFP -->
                 <Slider Grid.Row="4" DataContext="{Binding RFPChannel}" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="0" Minimum="0" Maximum="100" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="4" Grid.Column="2" DataContext="{Binding RFPChannel}" Width="50" Height="30" Increment="1" MinValue="0" MaxValue="100" IsFloatValue="True"
-                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <!-- NIR -->
                 <Slider Grid.Row="6" DataContext="{Binding NIRChannel}" TickFrequency="1" IsSnapToTickEnabled="True" Style="{StaticResource CustomSliderStyle}"
                         SelectionStart="0" Minimum="0" Maximum="100" Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
 
                 <dxe:SpinEdit Grid.Row="6" Grid.Column="2" DataContext="{Binding NIRChannel}" Width="50" Height="30" Increment="1" MinValue="0" MaxValue="100" IsFloatValue="True"
-                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                              Value="{Binding Contrast, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=500}"/>
             </Grid>
         </Grid>
     </Grid>

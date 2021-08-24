@@ -259,6 +259,16 @@
         <Setter Property="Cursor" Value="Hand" />
     </Style>
 
+    <Style x:Key="CustomTrackBarStyle" TargetType="{x:Type dxe:TrackBarEdit}">
+        <Setter Property="TickFrequency" Value="1" />
+        <Setter Property="TickPlacement" Value="None" />
+        <Setter Property="TrackHeight" Value="7" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="dxe:EditorAppearanceProperties.FocusedBorderBrush" Value="{StaticResource CustomSliderBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
     <!-- SingleSlider Style -->
     <Style x:Key="SelectedRangeStyle" TargetType="ContentControl">
         <Setter Property="Template">
