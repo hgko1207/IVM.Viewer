@@ -14,12 +14,12 @@ namespace IVM.Studio.Services
         public void OnMetaLoaded(int width, int height, int depth, float umWidth, float umHeight, float umPerPixelZ)
         {
             I3DMetaLoadedParam p = new I3DMetaLoadedParam();
-            p.width = width;
-            p.height = height;
-            p.depth = depth;
-            p.umWidth = umWidth;
-            p.umHeight = umHeight;
-            p.umPerPixelZ = umPerPixelZ;
+            p.Width = width;
+            p.Height = height;
+            p.Depth = depth;
+            p.UmWidth = umWidth;
+            p.UmHeight = umHeight;
+            p.UmPerPixelZ = umPerPixelZ;
 
             EventAggregator.GetEvent<I3DMetaLoadedEvent>().Publish(p);
         }
@@ -27,7 +27,7 @@ namespace IVM.Studio.Services
         public void OnUpdateCamera(int viewtype, float px, float py, float pz, float ax, float ay, float az, float s)
         {
             I3DCameraUpdateParam p = new I3DCameraUpdateParam();
-            p.viewtype = viewtype;
+            p.Viewtype = viewtype;
             p.px = px;
             p.py = py;
             p.pz = pz;

@@ -203,20 +203,20 @@ namespace IVM.Studio.Models.Events
 
     public class I3DMetaLoadedParam
     {
-        public int width { get; set; }
-        public int height { get; set; }
-        public int depth { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Depth { get; set; }
 
-        public float umWidth { get; set; }
-        public float umHeight { get; set; }
-        public float umPerPixelZ { get; set; }
+        public float UmWidth { get; set; }
+        public float UmHeight { get; set; }
+        public float UmPerPixelZ { get; set; }
     }
 
     public class I3DMetaLoadedEvent : PubSubEvent<I3DMetaLoadedParam> { }
 
     public class I3DCameraUpdateParam
     {
-        public int viewtype { get; set; }
+        public int Viewtype { get; set; }
         public float px { get; set; }
         public float py { get; set; }
         public float pz { get; set; }

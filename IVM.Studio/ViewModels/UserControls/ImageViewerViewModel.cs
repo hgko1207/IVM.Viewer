@@ -71,8 +71,6 @@ namespace IVM.Studio.ViewModels.UserControls
         private Bitmap displayingImageGDI;
 
         private int displayWidth;
-        private int originalImageWidth;
-        private int originalImageHeight;
 
         /// <summary>뷰에서 표시 될 현재 이미지의 줌 배율입니다. 단위는 퍼센트입니다.</summary>
         /// <remarks>이미지의 표시 배율을 뷰모델에서 조정할 경우 <see cref="DisplayingImageWidth"/>를 사용합니다.</remarks>
@@ -105,7 +103,7 @@ namespace IVM.Studio.ViewModels.UserControls
         private readonly ImageService imageService;
 
         private readonly DataManager dataManager;
-        private Dictionary<ChannelType, ColorChannelModel> colorChannelInfoMap { get; }
+        private Dictionary<ChannelType, ColorChannelModel> ColorChannelInfoMap { get; }
         private readonly AnnotationInfo annotationInfo;
 
         private System.Windows.Point? imagePreviousPoint;
@@ -118,8 +116,8 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private System.Windows.Shapes.Line drawMeasurementLine;
 
-        private List<Bitmap> annotationBitmapList { get; set; }
-        private List<Bitmap> tempBitmapList { get; set; }
+        private List<Bitmap> bitmapList;
+        private List<Bitmap> tempBitmapList;
 
         private bool measurementEnabled;
 
@@ -153,10 +151,10 @@ namespace IVM.Studio.ViewModels.UserControls
             imageService = Container.Resolve<ImageService>();
             dataManager = Container.Resolve<DataManager>();
 
-            colorChannelInfoMap = dataManager.ColorChannelInfoMap;
+            ColorChannelInfoMap = dataManager.ColorChannelInfoMap;
             annotationInfo = dataManager.AnnotationInfo;
 
-            annotationBitmapList = new List<Bitmap>();
+            bitmapList = new List<Bitmap>();
             tempBitmapList = new List<Bitmap>();
         }
 
@@ -234,7 +232,7 @@ namespace IVM.Studio.ViewModels.UserControls
         /// <returns></returns>
         private List<ColorChannelModel> OrderByColor()
         {
-            return colorChannelInfoMap.Values.OrderBy(c => c.InitColor).ToList();
+            return ColorChannelInfoMap.Values.OrderBy(c => c.InitColor).ToList();
         }
 
         /// <summary>
@@ -280,7 +278,7 @@ namespace IVM.Studio.ViewModels.UserControls
             if (view != null && view.WindowId == dataManager.MainWindowId)
             {
                 if (param.SlideChanged)
-                    annotationBitmapList.Clear();
+                    bitmapList.Clear();
 
                 // 디스플레이
                 DisplayImage(dataManager.MainWindowId);
@@ -303,14 +301,12 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 originalImage?.Dispose();
                 originalImage = imageService.LoadImage(fileToDisplay.FullName);
-                originalImageWidth = originalImage.Width;
-                originalImageHeight = originalImage.Height;
 
-                using (Bitmap bitmap = imageService.LoadImage(fileToDisplay.FullName))
+                using (Bitmap bitmap = new Bitmap(fileToDisplay.FullName))
                 {
                     // 주 이미지 변경
                     {
-                        List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
+                        List<ColorMap?> colormaps = ColorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
                         {
                             if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
                             else return null;
@@ -330,9 +326,9 @@ namespace IVM.Studio.ViewModels.UserControls
                     foreach (ChannelType type in Enum.GetValues(typeof(ChannelType)))
                     {
                         if (type == ChannelType.ALL)
-                            continue;
+                        continue;
 
-                        ColorChannelModel colorChannelModel = colorChannelInfoMap[type];
+                        ColorChannelModel colorChannelModel = ColorChannelInfoMap[type];
 
                         if (colorChannelModel.Display)
                         {
@@ -348,33 +344,30 @@ namespace IVM.Studio.ViewModels.UserControls
                                 visibilityByChannel: visibilityByChannel
                             );
 
-                            using (Bitmap originalBitmap = imageService.LoadImage(fileToDisplay.FullName))
+                            if (colorChannelModel.ColorMapEnabled)
                             {
-                                if (colorChannelModel.ColorMapEnabled)
+                                using (Bitmap img1 = imageService.TranslateColor(originalImage, colorMatrix))
+                                using (Bitmap img2 = imageService.ApplyColorMapGDI(img1, CurrentTranslationByChannel[(int)type], colorChannelModel.ColorMap))
                                 {
-                                    using (Bitmap img1 = imageService.TranslateColor(originalBitmap, colorMatrix))
-                                    using (Bitmap img2 = imageService.ApplyColorMapGDI(img1, CurrentTranslationByChannel[(int)type], colorChannelModel.ColorMap))
+                                    BitmapSource img = imageService.ConvertGDIBitmapToWPF(img2);
+                                    Container.Resolve<WindowByChannelService>().DisplayImage((int)type, img);
+                                    using (Bitmap hist = imageService.CreateHistogram(img2, CurrentTranslationByChannel, new bool[4] { true, true, true, false }))
                                     {
-                                        BitmapSource img = imageService.ConvertGDIBitmapToWPF(img2);
-                                        Container.Resolve<WindowByChannelService>().DisplayImage((int)type, img);
-                                        using (Bitmap hist = imageService.CreateHistogram(img2, CurrentTranslationByChannel, new bool[4] { true, true, true, false }))
-                                        {
-                                            colorChannelModel.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
-                                            EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
-                                        }
+                                        colorChannelModel.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
+                                        EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
-                                else
+                            }
+                            else
+                            {
+                                using (Bitmap img = imageService.TranslateColor(originalImage, colorMatrix))
                                 {
-                                    using (Bitmap img = imageService.TranslateColor(originalBitmap, colorMatrix))
+                                    BitmapSource imgwpf = imageService.ConvertGDIBitmapToWPF(img);
+                                    Container.Resolve<WindowByChannelService>().DisplayImage((int)type, imgwpf);
+                                    using (Bitmap hist = imageService.CreateHistogram(img, CurrentTranslationByChannel, visibilityByChannel))
                                     {
-                                        BitmapSource imgwpf = imageService.ConvertGDIBitmapToWPF(img);
-                                        Container.Resolve<WindowByChannelService>().DisplayImage((int)type, imgwpf);
-                                        using (Bitmap hist = imageService.CreateHistogram(img, CurrentTranslationByChannel, visibilityByChannel))
-                                        {
-                                            colorChannelModel.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
-                                            EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
-                                        }
+                                        colorChannelModel.HistogramImage = imageService.ConvertGDIBitmapToWPF(hist);
+                                        EventAggregator.GetEvent<RefreshChHistogramEvent>().Publish(type);
                                     }
                                 }
                             }
@@ -436,7 +429,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
                     displayWidth = bitmap.Width;
 
-                    annotationBitmapList.Add(new Bitmap(bitmap));
+                    bitmapList.Add(new Bitmap(bitmap));
                 }
             }
         }
@@ -523,7 +516,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 System.Windows.Point currntPoint = e.GetPosition(view.ImageView);
 
                 if (annotationImage == null)
-                    annotationImage = imageService.MakeEmptyImage(originalImageWidth, originalImageHeight);
+                    annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
 
                 if (annotationInfo.PenEnabled)
                 {
@@ -543,7 +536,6 @@ namespace IVM.Studio.ViewModels.UserControls
                 {
                     imageService.DrawEraser(
                         annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
-                        colorMatrix: CurrentColorMatrix,
                         x: (int)Math.Round(currntPoint.X / currentZoomRatio * 100),
                         y: (int)Math.Round(currntPoint.Y / currentZoomRatio * 100),
                         thickness: annotationInfo.EraserThickness,
@@ -568,7 +560,7 @@ namespace IVM.Studio.ViewModels.UserControls
                 if (annotationInfo.PenEnabled || annotationInfo.EraserEnabled || annotationInfo.TextEnabled)
                 {
                     if (annotationImage == null)
-                        annotationImage = imageService.MakeEmptyImage(originalImageWidth, originalImageHeight);
+                        annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
 
                     if (annotationInfo.PenEnabled && imagePreviousPoint != null)
                     {
@@ -584,7 +576,6 @@ namespace IVM.Studio.ViewModels.UserControls
                     {
                         imageService.DrawEraser(
                             annotationImage: annotationImage, displayImage: displayingImageGDI, originalImage: flippedOriginalImage,
-                            colorMatrix: CurrentColorMatrix,
                             x: (int)Math.Round(currentPoint.X / currentZoomRatio * 100), y: (int)Math.Round(currentPoint.Y / currentZoomRatio * 100),
                             thickness: annotationInfo.EraserThickness,
                             horizontalReflect: horizontalReflect, verticalReflect: verticalReflect, rotate: currentRotate
@@ -611,7 +602,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
 
                     if (view != null && view.WindowId == dataManager.MainWindowId)
-                        annotationBitmapList.Add(new Bitmap(displayingImageGDI));
+                        bitmapList.Add(new Bitmap(displayingImageGDI));
                 }
 
                 imagePreviousPoint = null;
@@ -783,7 +774,7 @@ namespace IVM.Studio.ViewModels.UserControls
                     || annotationInfo.DrawTriangleEnabled || annotationInfo.DrawLineEnabled)
                 {
                     if (annotationImage == null)
-                        annotationImage = imageService.MakeEmptyImage(originalImageWidth, originalImageHeight);
+                        annotationImage = imageService.MakeEmptyImage(originalImage.Width, originalImage.Height);
 
                     System.Windows.Point currentPoint = e.GetPosition(view.ImageView);
 
@@ -820,7 +811,7 @@ namespace IVM.Studio.ViewModels.UserControls
                             view.ImageOverlayCanvas.Children.Remove(drawTriangle);
                             drawTriangle = null;
 
-                            System.Drawing.Point[] points = new System.Drawing.Point[] {
+                            System.Drawing.Point[] points = new System.Drawing.Point[] { 
                                 new System.Drawing.Point(x1 + (x2 - x1) / 2, y1),
                                 new System.Drawing.Point(x2, y2),
                                 new System.Drawing.Point(x1, y2),
@@ -841,7 +832,7 @@ namespace IVM.Studio.ViewModels.UserControls
                         DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
 
                         if (view != null && view.WindowId == dataManager.MainWindowId)
-                            annotationBitmapList.Add(new Bitmap(displayingImageGDI));
+                            bitmapList.Add(new Bitmap(displayingImageGDI));
                     }
                 }
                 else if (measurementEnabled && drawMeasurementLine != null)
@@ -868,13 +859,13 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (view != null && view.WindowId == dataManager.MainWindowId)
             {
-                if (annotationBitmapList.Count > 0)
+                if (bitmapList.Count > 0)
                 {
                     annotationImage = null;
-                    displayingImageGDI = new Bitmap(annotationBitmapList[0]);
+                    displayingImageGDI = new Bitmap(bitmapList[0]);
                     DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
 
-                    annotationBitmapList.RemoveRange(1, annotationBitmapList.Count - 1);
+                    bitmapList.RemoveRange(1, bitmapList.Count - 1);
                     tempBitmapList.Clear();
                 }
             }
@@ -887,10 +878,10 @@ namespace IVM.Studio.ViewModels.UserControls
         {
             if (view != null && view.WindowId == dataManager.MainWindowId)
             {
-                if (annotationBitmapList.Count > 1)
+                if (bitmapList.Count > 1)
                 {
-                    tempBitmapList.Add(annotationBitmapList[annotationBitmapList.Count - 1]);
-                    annotationBitmapList.RemoveAt(annotationBitmapList.Count - 1);
+                    tempBitmapList.Add(bitmapList[bitmapList.Count - 1]);
+                    bitmapList.RemoveAt(bitmapList.Count - 1);
 
                     RefreshDisplay();
                 }
@@ -906,7 +897,7 @@ namespace IVM.Studio.ViewModels.UserControls
             {
                 if (tempBitmapList.Count > 0)
                 {
-                    annotationBitmapList.Add(tempBitmapList[tempBitmapList.Count - 1]);
+                    bitmapList.Add(tempBitmapList[tempBitmapList.Count - 1]);
                     tempBitmapList.RemoveAt(tempBitmapList.Count - 1);
 
                     RefreshDisplay();
@@ -919,8 +910,8 @@ namespace IVM.Studio.ViewModels.UserControls
         /// </summary>
         private void RefreshDisplay()
         {
-            annotationImage = new Bitmap(annotationBitmapList[annotationBitmapList.Count - 1]);
-            displayingImageGDI = new Bitmap(annotationBitmapList[annotationBitmapList.Count - 1]);
+            annotationImage = new Bitmap(bitmapList[bitmapList.Count - 1]);
+            displayingImageGDI = new Bitmap(bitmapList[bitmapList.Count - 1]);
             DisplayingImage = imageService.ConvertGDIBitmapToWPF(displayingImageGDI);
         }
 
@@ -1095,10 +1086,10 @@ namespace IVM.Studio.ViewModels.UserControls
             if (originalImage != null)
             {
                 int newScale = (int)Math.Floor(currentZoomRatio / 10d) * 10 + 10;
-                double newWidth = originalImageWidth * (newScale / 100d);
+                double newWidth = originalImage.Width * (newScale / 100d);
                 if (newScale <= 300 && newScale >= 10 && newWidth >= 20)
                 {
-                    DisplayingImageWidth = originalImageWidth * (newScale / 100d);
+                    DisplayingImageWidth = originalImage.Width * (newScale / 100d);
                 }
             }
         }
@@ -1111,10 +1102,10 @@ namespace IVM.Studio.ViewModels.UserControls
             if (originalImage != null)
             {
                 int newScale = (int)Math.Ceiling(currentZoomRatio / 10d) * 10 - 10;
-                double newWidth = originalImageWidth * (newScale / 100d);
+                double newWidth = originalImage.Width * (newScale / 100d);
                 if (newScale <= 300 && newScale >= 10 && newWidth >= 20)
                 {
-                    DisplayingImageWidth = originalImageWidth * (newScale / 100d);
+                    DisplayingImageWidth = originalImage.Width * (newScale / 100d);
                 }
             }
         }
@@ -1217,15 +1208,15 @@ namespace IVM.Studio.ViewModels.UserControls
             else
                 fileToDisplay = fileInfo;
 
-            using (Bitmap originalBitmap = new Bitmap(fileToDisplay.FullName))
+            using (Bitmap originalImage = new Bitmap(fileToDisplay.FullName))
             {
-                List<ColorMap?> colormaps = colorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
+                List<ColorMap?> colormaps = ColorChannelInfoMap.Values.Select<ColorChannelModel, ColorMap?>(c =>
                 {
                     if (c.Visible && c.ColorMapEnabled) return c.ColorMap;
                     else return null;
                 }).ToList();
 
-                using (Bitmap img1 = imageService.TranslateColor(originalBitmap, CurrentColorMatrix))
+                using (Bitmap img1 = imageService.TranslateColor(originalImage, CurrentColorMatrix))
                 using (Bitmap img2 = imageService.ApplyColorMaps(img1, colormaps))
                 using (Bitmap workingImage = new Bitmap(img2))
                 {

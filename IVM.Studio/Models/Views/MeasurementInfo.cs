@@ -1,10 +1,8 @@
 ﻿using IVM.Studio.Models.Events;
 using IVM.Studio.Services;
-using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
-using System.Windows.Input;
 
 /**
  * @Class Name : MeasurementInfo.cs
@@ -39,8 +37,8 @@ namespace IVM.Studio.Models.Views
 
         }
 
-        private IContainerExtension container;
-        private IEventAggregator eventAggregator;
+        private readonly IContainerExtension container;
+        private readonly IEventAggregator eventAggregator;
 
         public MeasurementInfo(IContainerExtension container, IEventAggregator eventAggregator)
         {

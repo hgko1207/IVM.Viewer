@@ -205,19 +205,19 @@ namespace IVM.Studio.Services
                                 }
 
                                 // 모자이크 결과 이미지 쓰기
-                                DirectoryInfo di = ContainerExtension.Resolve<FileService>().GetDirectoryWithImageMode(dstSlideRootDir, tlIndex, mpIndex, 1, zsIndex);
-                                di.Create();
+                                DirectoryInfo directoryInfo = ContainerExtension.Resolve<FileService>().GetDirectoryWithImageMode(dstSlideRootDir, tlIndex, mpIndex, 1, zsIndex);
+                                directoryInfo.Create();
 
                                 string fileName32, fileName24;
                                 if (zsIndex == 0)
                                 {
-                                    fileName32 = Path.Combine(di.FullName, "Mosaic.ivm");
-                                    fileName24 = Path.Combine(di.FullName, "Mosaic.png");
+                                    fileName32 = Path.Combine(directoryInfo.FullName, "Mosaic.ivm");
+                                    fileName24 = Path.Combine(directoryInfo.FullName, "Mosaic.png");
                                 }
                                 else
                                 {
-                                    fileName32 = Path.Combine(di.FullName, $"ZS{zsIndex:D4}.ivm");
-                                    fileName24 = Path.Combine(di.FullName, $"ZS{zsIndex:D4}.png");
+                                    fileName32 = Path.Combine(directoryInfo.FullName, $"ZS{zsIndex:D4}.ivm");
+                                    fileName24 = Path.Combine(directoryInfo.FullName, $"ZS{zsIndex:D4}.png");
                                 }
                                 ContainerExtension.Resolve<ImageService>().SaveOpenCvImage(resultImg, fileName32, fileName24);
                             }
@@ -252,7 +252,7 @@ namespace IVM.Studio.Services
         }
 
         /// <summary>
-        /// 
+        /// Enumerate ModeCount
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>

@@ -173,7 +173,7 @@ namespace IVM.Studio.Models
         public ICommand TrimRightCommand { get; private set; }
         public ICommand ExportCommand { get; private set; }
 
-        private void clearFolder(string path)
+        private void ClearFolder(string path)
         {
             DirectoryInfo dir = new DirectoryInfo(path);
 
@@ -184,7 +184,7 @@ namespace IVM.Studio.Models
             // remove dir recursive
             foreach (DirectoryInfo di in dir.GetDirectories())
             {
-                clearFolder(di.FullName);
+                ClearFolder(di.FullName);
                 di.Delete();
             }
         }
@@ -209,7 +209,7 @@ namespace IVM.Studio.Models
 
             // if exist video working directory, clean up.
             if (Directory.Exists(sceneWorkingPath))
-                clearFolder(sceneWorkingPath);
+                ClearFolder(sceneWorkingPath);
 
             // remake working dir.
             Directory.CreateDirectory(sceneWorkingPath);

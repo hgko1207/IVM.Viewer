@@ -368,10 +368,10 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void OnMetaLoaded(I3DMetaLoadedParam p)
         {
-            width = p.width;
-            height = p.height;
-            umWidth = p.umWidth;
-            umHeight = p.umHeight;
+            width = p.Width;
+            height = p.Height;
+            umWidth = p.UmWidth;
+            umHeight = p.UmHeight;
 
             SlicePosFreq = 1.0f / width;
             SliceUmPix = string.Format("{0:0.00} um", (float)umWidth / (float)width);

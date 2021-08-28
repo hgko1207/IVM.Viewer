@@ -30,9 +30,9 @@ namespace IVM.Studio.Models
 
         public int Sequence { get; set; }
 
-        public ImageSequence(int Sequence)
+        public ImageSequence(int sequence)
         {
-            this.Sequence = Sequence;
+            this.Sequence = sequence;
             Mode = false;
         }
 

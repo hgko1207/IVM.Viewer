@@ -1,4 +1,5 @@
 ﻿using IVM.Studio.Models;
+using IVM.Studio.Utils;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
@@ -297,14 +298,13 @@ namespace IVM.Studio.Services
         /// <param name="annotationImage">어노테이션 이미지입니다. 지우개 작업시 이 이미지의 지울 범위는 투명색으로 칠하며, 주어진 변환에 따라 좌표계를 변환합니다.</param>
         /// <param name="displayImage">디스플레이 이미지입니다. 지우개 작업시 이 이미지의 지울 범위는 컬러 매트릭스를 적용한 원본 이미지로 칠합니다.</param>
         /// <param name="originalImage">원본 이미지입니다. 지우개 작업 전후 이 이미지는 변화하지 않습니다. 좌표계 변환은 미리 적용되어 있어야 합니다.</param>
-        /// <param name="colorMatrix"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="thickness"></param>
         /// <param name="horizontalReflect"></param>
         /// <param name="verticalReflect"></param>
         /// <param name="rotate"></param>
-        public void DrawEraser(Bitmap annotationImage, Bitmap displayImage, Bitmap originalImage, float[][] colorMatrix, int x, int y, int thickness,
+        public void DrawEraser(Bitmap annotationImage, Bitmap displayImage, Bitmap originalImage, int x, int y, int thickness,
                                bool horizontalReflect, bool verticalReflect, int rotate)
         {
             int left = (int)(x - thickness / 2d);

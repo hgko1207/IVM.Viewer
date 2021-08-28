@@ -1,6 +1,4 @@
-﻿using Prism.Mvvm;
-
-/**
+﻿/**
  * @Class Name : MeasurementInfo.cs
  * @Description : Measurement 모델
  * @

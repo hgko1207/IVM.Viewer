@@ -197,7 +197,8 @@ namespace IVM.Studio.Models
         {
             this.containerExtension = containerExtension;
             this.eventAggregator = eventAggregator;
-            this.dataManager = containerExtension.Resolve<DataManager>();
+
+            dataManager = containerExtension.Resolve<DataManager>();
 
             this.Index = (int) type;
             this.ChannelType = type;

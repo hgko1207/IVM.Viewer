@@ -15,5 +15,4 @@ namespace IVM.Studio.Models.Views
     public class PostProcessingInfo
     {
     }
-
 }

@@ -118,18 +118,18 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void OnMetaLoaded(I3DMetaLoadedParam p)
         {
-            if (p.width > 0 && p.height > 0 && p.depth > 0)
+            if (p.Width > 0 && p.Height > 0 && p.Depth > 0)
             {
-                width = p.width;
-                height = p.height;
-                depth = p.depth;
+                width = p.Width;
+                height = p.Height;
+                depth = p.Depth;
             }
 
-            if (p.umWidth > 0 && p.umHeight > 0 && p.umPerPixelZ > 0)
+            if (p.UmWidth > 0 && p.UmHeight > 0 && p.UmPerPixelZ > 0)
             {
-                umWidth = p.umWidth;
-                umHeight = p.umHeight;
-                umPerPixelZ = p.umPerPixelZ;
+                umWidth = p.UmWidth;
+                umHeight = p.UmHeight;
+                umPerPixelZ = p.UmPerPixelZ;
             }
 
             SliceDepthX = -1;

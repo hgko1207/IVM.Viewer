@@ -40,7 +40,7 @@ namespace IVM.Studio.ViewModels.UserControls
 
         private void UpdateCamera(I3DCameraUpdateParam p)
         {
-            if (p.viewtype == (int)I3DViewType.MAIN_VIEW)
+            if (p.Viewtype == (int)I3DViewType.MAIN_VIEW)
                 return;
 
             wcfserver.channel1.OnUpdateCamera(p.px, p.py, p.pz, p.ax, p.ay, p.az, p.s);
